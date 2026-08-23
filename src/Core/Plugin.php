@@ -8,6 +8,7 @@
 namespace WOWStudio\AccessibilityKit\Core;
 
 use WOWStudio\AccessibilityKit\Admin\Menu;
+use WOWStudio\AccessibilityKit\Rest\ScanController;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -130,6 +131,7 @@ final class Plugin {
 		$services = array(
 			'installer'  => new Installer(),
 			'admin.menu' => new Menu(),
+			'rest.scan'  => new ScanController(),
 		);
 
 		/**

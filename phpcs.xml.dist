@@ -60,6 +60,27 @@
 		</properties>
 	</rule>
 
+	<!--
+		The DOM extension's property names are fixed by PHP. They are not ours to
+		rename, and the sniff has no way to know that.
+	-->
+	<rule ref="WordPress.NamingConventions.ValidVariableName">
+		<properties>
+			<property name="allowed_custom_properties" type="array">
+				<element value="nodeName"/>
+				<element value="nodeValue"/>
+				<element value="nodeType"/>
+				<element value="textContent"/>
+				<element value="parentNode"/>
+				<element value="childNodes"/>
+				<element value="firstChild"/>
+				<element value="ownerDocument"/>
+				<element value="documentElement"/>
+				<element value="numFiles"/>
+			</property>
+		</properties>
+	</rule>
+
 	<!-- All user-facing strings use the plugin text domain. -->
 	<rule ref="WordPress.WP.I18n">
 		<properties>

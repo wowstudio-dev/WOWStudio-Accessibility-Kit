@@ -27,6 +27,11 @@ abstract class TestCase extends PHPUnitTestCase {
 		Monkey\setUp();
 		Monkey\Functions\stubTranslationFunctions();
 		Monkey\Functions\stubEscapeFunctions();
+
+		// WordPress helpers the scanner uses that Brain Monkey does not stub.
+		Monkey\Functions\when( 'wp_basename' )->alias(
+			static fn( string $path ): string => basename( str_replace( '\\', '/', $path ) )
+		);
 	}
 
 	/**

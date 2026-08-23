@@ -6,6 +6,44 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-08-23
+
+Phase 1, step 3: the scanner. Findings are stored and available over REST; the
+dashboard that shows them is step 4.
+
+### Added
+
+- PHP `DOMDocument`/`DOMXPath` scan engine, with a `Document` wrapper that
+  handles parsing, UTF-8, accessible-name computation, and XPath escaping so no
+  rule has to.
+- Twelve MVP rules covering images, form labels, link and button names, frame
+  titles, page language, document title, heading order, multiple top-level
+  headings, table headers, and the main landmark.
+- `RuleRegistry`, filterable through `wsak_rules`, exposing a `coverage()`
+  report that says what each rule checks and whether it can settle the question
+  automatically.
+- `POST /wsak/v1/scan` and `GET /wsak/v1/coverage`, gated on `wsak_run_scan` and
+  `wsak_view_reports` respectively.
+- `PageSource`, which fetches the whole rendered page over a loopback request so
+  the theme's markup is scanned, not just post content.
+
+### Notes on honesty
+
+- Eight of the twelve rules are auto-detected; four report `needs manual review`
+  because confirming them takes human judgement. Vague link text, tables without
+  headers, a missing main landmark, and multiple top-level headings are all
+  cases where the markup alone does not settle the question.
+- Only auto-detected findings reduce the score. Counting unconfirmed items as
+  failures would report a page as worse than we know it to be, so the number is
+  always shown next to the review count rather than on its own.
+- When loopback requests are blocked, the scan falls back to post content and
+  says so. The document-level rules detect the fragment and stay silent instead
+  of reporting a missing page title that a fragment never had, and the response
+  carries `full_page: false` with a `coverage_notice` explaining what was
+  skipped and why.
+- A rule that throws is logged and skipped rather than losing the findings of
+  the other eleven.
+
 ## [0.2.0] - 2026-08-23
 
 Phase 1, step 2: the storage layer. Still nothing user-facing beyond a holding

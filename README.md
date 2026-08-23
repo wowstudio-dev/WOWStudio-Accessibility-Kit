@@ -9,7 +9,7 @@ It is not an overlay, and it never tells a user their site is compliant. See
 
 ## Status
 
-Phase 1, step 2 of 9: storage layer. The scanner that fills these tables is step 3.
+Phase 1, step 3 of 9: scanner and REST API. The dashboard is step 4.
 
 ## Requirements
 
@@ -132,7 +132,8 @@ wowstudio-accessibility-kit.php   Bootstrap: headers, constants, Freemius init
 uninstall.php                     Entry point for src/Uninstaller.php
 src/Core/                         Orchestrator, activation, installation
 src/Db/                           Schema, repositories, typed records
-src/Scanner/                      Domain enums (rules and engine land in step 3)
+src/Scanner/                      Engine, rules, registry, page fetching
+src/Rest/                         REST controllers
 src/Admin/                        Admin menu
 src/Support/                      Shared helpers (capabilities)
 bin/build.sh                      Release build (honours .distignore)
@@ -142,8 +143,26 @@ docs/RELEASE-CHECKLIST.md         What a human must verify before release
 ```
 
 Later steps add `src/Remediation/`, `src/AI/`, `src/AltText/`,
-`src/Conformance/`, `src/Rest/`, and the React admin app under `assets/src/`.
-See `SPEC.md`.
+`src/Conformance/`, and the React admin app under `assets/src/`. See `SPEC.md`.
+
+## Scanning
+
+```
+POST /wp-json/wsak/v1/scan     { "post_id": 12 }    requires wsak_run_scan
+GET  /wp-json/wsak/v1/coverage                      requires wsak_view_reports
+```
+
+The scanner fetches the whole rendered page over a loopback request, because the
+page language, title, landmarks, and most of the theme's markup live outside
+post content. If loopback requests are blocked — many hosts block them, and
+`wp-env` cannot reach its own mapped port — the scan falls back to post content
+alone and labels the result: `full_page` is `false` and `coverage_notice`
+explains what was skipped. The document-level rules recognise a fragment and
+stay quiet, so a reduced scan under-reports rather than inventing failures.
+
+To supply markup yourself, or to test the full-page path locally, filter
+`wsak_page_html`. To make a loopback failure a hard error instead, return false
+from `wsak_allow_content_fallback`.
 
 ## License
 

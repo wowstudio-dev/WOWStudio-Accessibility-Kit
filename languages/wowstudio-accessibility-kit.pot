@@ -2,14 +2,14 @@
 # This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: WOWStudio Accessibility Kit 0.2.0\n"
+"Project-Id-Version: WOWStudio Accessibility Kit 0.3.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wowstudio-accessibility-kit\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-08-23T04:48:57+00:00\n"
+"POT-Creation-Date: 2026-08-23T13:52:19+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: wowstudio-accessibility-kit\n"
@@ -46,6 +46,7 @@ msgid "Accessibility"
 msgstr ""
 
 #: src/Admin/Menu.php:93
+#: src/Rest/ScanController.php:125
 msgid "You do not have permission to view accessibility reports."
 msgstr ""
 
@@ -71,6 +72,31 @@ msgstr ""
 msgid "Version %s"
 msgstr ""
 
+#: src/Rest/ScanController.php:70
+msgid "The post or page to scan."
+msgstr ""
+
+#: src/Rest/ScanController.php:106
+msgid "You do not have permission to run accessibility scans."
+msgstr ""
+
+#: src/Rest/ScanController.php:149
+#: src/Scanner/PageSource.php:150
+msgid "That content could not be found."
+msgstr ""
+
+#: src/Rest/ScanController.php:157
+msgid "You do not have permission to read that content."
+msgstr ""
+
+#: src/Rest/ScanController.php:183
+msgid "The scan could not be recorded. Check that the plugin tables exist."
+msgstr ""
+
+#: src/Rest/ScanController.php:206
+msgid "The page could not be parsed as HTML, so it could not be scanned."
+msgstr ""
+
 #: src/Scanner/Detection.php:42
 msgid "Auto-detected"
 msgstr ""
@@ -89,6 +115,196 @@ msgstr ""
 
 #: src/Scanner/IssueStatus.php:45
 msgid "Ignored"
+msgstr ""
+
+#: src/Scanner/PageSource.php:70
+msgid "that content has no public address"
+msgstr ""
+
+#. translators: %d: HTTP status code.
+#: src/Scanner/PageSource.php:95
+#, php-format
+msgid "the page returned HTTP %d"
+msgstr ""
+
+#: src/Scanner/PageSource.php:104
+msgid "the page returned no content"
+msgstr ""
+
+#. translators: %s: the underlying reason.
+#: src/Scanner/PageSource.php:138
+#, php-format
+msgid "The page could not be fetched for scanning because %s. This usually means the site cannot make requests to itself; ask your host about loopback requests."
+msgstr ""
+
+#. translators: %s: the underlying reason the whole page could not be fetched.
+#: src/Scanner/PageSource.php:165
+#, php-format
+msgid "Only this content was scanned, not the whole page, because %s. Checks that depend on the surrounding page — its language, its title, its landmarks — were skipped, so this scan covers less than usual. Ask your host about loopback requests to enable full-page scanning."
+msgstr ""
+
+#: src/Scanner/Rules/ButtonNameMissing.php:81
+msgid "Button has no accessible name"
+msgstr ""
+
+#: src/Scanner/Rules/ButtonNameMissing.php:92
+msgid "Someone using a screen reader hears only \"button\" and cannot tell what it does. Icon-only buttons need an aria-label, or visually hidden text describing the action."
+msgstr ""
+
+#: src/Scanner/Rules/ButtonNameMissing.php:120
+msgid "This button has no text or label, so its purpose is not announced."
+msgstr ""
+
+#: src/Scanner/Rules/DocumentTitleMissing.php:80
+msgid "Page has no title"
+msgstr ""
+
+#: src/Scanner/Rules/DocumentTitleMissing.php:91
+msgid "The page title is the first thing a screen reader announces, and the label people see in browser tabs, bookmarks, and search results. Give the page a title that describes what is on it."
+msgstr ""
+
+#: src/Scanner/Rules/DocumentTitleMissing.php:120
+msgid "The page has no title element."
+msgstr ""
+
+#: src/Scanner/Rules/DocumentTitleMissing.php:121
+msgid "The page title is empty."
+msgstr ""
+
+#: src/Scanner/Rules/FormControlLabelMissing.php:82
+msgid "Form field has no label"
+msgstr ""
+
+#: src/Scanner/Rules/FormControlLabelMissing.php:93
+msgid "This field is not labelled, so someone using a screen reader cannot tell what to type into it. Add a <label for> pointing at the field, or an aria-label. Placeholder text does not count."
+msgstr ""
+
+#. translators: %s: form field name attribute, or the element name.
+#: src/Scanner/Rules/FormControlLabelMissing.php:140
+#, php-format
+msgid "The form field \"%s\" has no label."
+msgstr ""
+
+#: src/Scanner/Rules/HeadingLevelSkipped.php:82
+msgid "Heading level is skipped"
+msgstr ""
+
+#: src/Scanner/Rules/HeadingLevelSkipped.php:93
+msgid "People using a screen reader navigate by moving through headings, so the levels need to descend one step at a time. Jumping a level makes the page outline look like a section is missing. Change the heading level, or add the missing intermediate heading."
+msgstr ""
+
+#. translators: 1: previous heading level, 2: this heading level.
+#: src/Scanner/Rules/HeadingLevelSkipped.php:123
+#, php-format
+msgid "This heading jumps from level %1$d to level %2$d."
+msgstr ""
+
+#: src/Scanner/Rules/HtmlLangMissing.php:81
+msgid "Page language is not set"
+msgstr ""
+
+#: src/Scanner/Rules/HtmlLangMissing.php:92
+msgid "The page does not say what language it is written in, so a screen reader may read it with the wrong pronunciation. Set a lang attribute on the html element, such as lang=\"en\"."
+msgstr ""
+
+#: src/Scanner/Rules/HtmlLangMissing.php:124
+msgid "The page does not declare a language."
+msgstr ""
+
+#: src/Scanner/Rules/IframeTitleMissing.php:81
+msgid "Frame has no title"
+msgstr ""
+
+#: src/Scanner/Rules/IframeTitleMissing.php:92
+msgid "Screen readers let people jump between frames on a page, but an untitled frame shows up in that list with no name. Add a title attribute describing what the frame contains, such as the name of an embedded video."
+msgstr ""
+
+#: src/Scanner/Rules/IframeTitleMissing.php:120
+msgid "This frame has no title, so it is announced without a name."
+msgstr ""
+
+#: src/Scanner/Rules/ImageAltMissing.php:84
+msgid "Image has no alt attribute"
+msgstr ""
+
+#: src/Scanner/Rules/ImageAltMissing.php:95
+msgid "Someone using a screen reader gets nothing useful from this image, and often hears the file name read out instead. Add alt text describing what the image conveys, or alt=\"\" if it is purely decorative and should be skipped."
+msgstr ""
+
+#: src/Scanner/Rules/ImageAltMissing.php:122
+msgid "This image has no alt attribute."
+msgstr ""
+
+#. translators: %s: image file name.
+#: src/Scanner/Rules/ImageAltMissing.php:125
+#, php-format
+msgid "The image \"%s\" has no alt attribute."
+msgstr ""
+
+#: src/Scanner/Rules/LinkNameMissing.php:82
+msgid "Link has no accessible name"
+msgstr ""
+
+#: src/Scanner/Rules/LinkNameMissing.php:93
+msgid "This link announces nothing, so someone using a screen reader hears only \"link\" and cannot tell where it goes. Add visible text, an aria-label, or alt text on the image inside it."
+msgstr ""
+
+#. translators: %s: link target.
+#: src/Scanner/Rules/LinkNameMissing.php:123
+#, php-format
+msgid "The link to \"%s\" has no text or label."
+msgstr ""
+
+#: src/Scanner/Rules/LinkTextNotDescriptive.php:84
+msgid "Link text may not make sense on its own"
+msgstr ""
+
+#: src/Scanner/Rules/LinkTextNotDescriptive.php:95
+msgid "Screen reader users often browse a list of every link on the page, with no surrounding text. Phrases like 'read more' or 'click here' give them nothing to go on. Consider rewriting the link to name its destination. If the wording is genuinely clear in context, mark this as reviewed."
+msgstr ""
+
+#. translators: %s: the link text.
+#: src/Scanner/Rules/LinkTextNotDescriptive.php:150
+#, php-format
+msgid "The link text \"%s\" may not make sense when read on its own."
+msgstr ""
+
+#: src/Scanner/Rules/MainLandmarkMissing.php:81
+msgid "Page has no main landmark"
+msgstr ""
+
+#: src/Scanner/Rules/MainLandmarkMissing.php:92
+msgid "Landmarks let someone using a screen reader jump straight to the content instead of listening through the header and navigation on every page. Wrap the primary content of the page in a main element."
+msgstr ""
+
+#: src/Scanner/Rules/MainLandmarkMissing.php:118
+msgid "The page has no main landmark, so there is no quick way to skip to the content."
+msgstr ""
+
+#: src/Scanner/Rules/MultipleTopHeadings.php:82
+msgid "Page has more than one top-level heading"
+msgstr ""
+
+#: src/Scanner/Rules/MultipleTopHeadings.php:93
+msgid "A page normally has one h1 naming what the page is about. More than one gives it competing titles and muddles the outline people navigate by. Check whether the extra headings should be h2 instead."
+msgstr ""
+
+#. translators: %d: position of this top-level heading on the page.
+#: src/Scanner/Rules/MultipleTopHeadings.php:126
+#, php-format
+msgid "This is top-level heading number %d on the page."
+msgstr ""
+
+#: src/Scanner/Rules/TableHeadersMissing.php:83
+msgid "Table has no header cells"
+msgstr ""
+
+#: src/Scanner/Rules/TableHeadersMissing.php:94
+msgid "If this is a data table, someone using a screen reader cannot tell which column or row a cell belongs to, so the numbers lose their meaning. Mark the header cells up as th with a scope attribute. If the table is only being used for layout, it needs no headers and you can mark this as reviewed."
+msgstr ""
+
+#: src/Scanner/Rules/TableHeadersMissing.php:126
+msgid "This table has no header cells. If it presents data rather than layout, its headers need marking up."
 msgstr ""
 
 #: src/Scanner/ScanScope.php:38
