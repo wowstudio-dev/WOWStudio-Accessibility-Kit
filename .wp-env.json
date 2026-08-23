@@ -1,0 +1,19 @@
+{
+	"core": null,
+	"phpVersion": "8.1",
+	"mappings": {
+		"wp-content/plugins/wowstudio-accessibility-kit": "."
+	},
+	"plugins": [
+		"https://downloads.wordpress.org/plugin/plugin-check.zip"
+	],
+	"config": {
+		"WP_DEBUG": true,
+		"WP_DEBUG_LOG": true,
+		"WP_DEBUG_DISPLAY": true,
+		"SCRIPT_DEBUG": true
+	},
+	"lifecycleScripts": {
+		"afterStart": "wp-env run cli wp plugin activate wowstudio-accessibility-kit"
+	}
+}

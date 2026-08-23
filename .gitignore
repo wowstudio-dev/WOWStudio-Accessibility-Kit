@@ -1,0 +1,19 @@
+# Dependencies (rebuilt at release time; the Freemius SDK is vendored and committed).
+/vendor/
+/node_modules/
+
+# Build output.
+/build/
+/dist/
+/languages/*.mo
+/languages/*.l10n.php
+
+# Tool caches.
+.phpunit.result.cache
+.phpcs-cache
+/wp-env/
+
+# OS and editor noise.
+.DS_Store
+Thumbs.db
+*.log

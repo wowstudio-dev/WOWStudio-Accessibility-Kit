@@ -1,0 +1,102 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  php:
+    name: PHP ${{ matrix.php }}
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # 8.1 is the declared floor; 8.4 is the current release. Brain Monkey
+        # (Patchwork) does not support 8.5 yet, so the suite stops at 8.4.
+        php: ['8.1', '8.2', '8.3', '8.4']
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+          tools: composer:v2
+
+      - name: Install dependencies
+        uses: ramsey/composer-install@v3
+
+      - name: Coding standards
+        run: composer phpcs
+
+      - name: Static analysis
+        run: composer phpstan
+
+      - name: Unit tests
+        run: composer test
+
+  guards:
+    name: Product guards
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+
+      - name: No unqualified compliance claims
+        run: php bin/check-claims.php --verbose
+
+      - name: No premium code in the free build
+        run: php bin/check-free-build.php
+
+  plugin-check:
+    name: Plugin Check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+          tools: composer:v2
+
+      - name: Install dependencies
+        run: |
+          composer install --no-interaction --prefer-dist
+          npm ci
+
+      - name: Start WordPress
+        run: npx wp-env start
+
+      # Checks the built plugin, not the dev tree, so tooling config and dev
+      # dependencies are not mistaken for shipped files. freemius/ is excluded:
+      # it is the vendored Freemius SDK, which we cannot modify. See
+      # docs/RELEASE-CHECKLIST.md.
+      - name: Run Plugin Check
+        run: npm run plugin-check
+
+      - name: Confirm the translation template is up to date
+        run: |
+          npm run makepot
+          git diff --exit-code -- languages/wowstudio-accessibility-kit.pot \
+            || (echo "::error::languages/*.pot is stale. Run 'npm run makepot' and commit." && exit 1)

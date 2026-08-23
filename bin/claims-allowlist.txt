@@ -1,0 +1,9 @@
+# Reviewed wording that contains a forbidden claim word for a legitimate reason.
+#
+# Each entry is the exact trimmed source line. Adding a line here is a deliberate
+# decision that the wording does NOT assert compliance to a user. Read product
+# rule #1 in CLAUDE.md before adding anything, and prefer rewording.
+#
+# readme.txt — FAQ heading. This is the question users actually search for; the
+# answer directly below it is "No, and be careful of any tool that says it will."
+= Will this make my site compliant? =

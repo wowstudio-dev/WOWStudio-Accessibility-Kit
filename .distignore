@@ -1,0 +1,26 @@
+# Everything here is development-only and must not reach the shipped zip.
+.git
+.github
+.gitignore
+.editorconfig
+.distignore
+.nvmrc
+.wp-env.json
+.phpcs-cache
+.phpunit.result.cache
+node_modules
+tests
+bin
+assets/src
+composer.lock
+package.json
+package-lock.json
+phpcs.xml.dist
+phpstan.neon.dist
+phpunit.xml.dist
+CLAUDE.md
+SPEC.md
+PROMPT.md
+README.md
+CHANGELOG.md
+docs

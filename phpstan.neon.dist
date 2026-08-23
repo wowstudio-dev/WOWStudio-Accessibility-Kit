@@ -1,0 +1,18 @@
+includes:
+	- vendor/szepeviktor/phpstan-wordpress/extension.neon
+
+parameters:
+	level: 6
+	paths:
+		- src
+		- bin
+		- wowstudio-accessibility-kit.php
+		- uninstall.php
+	bootstrapFiles:
+		- tests/constants.php
+	# Loads Freemius SDK symbols without analysing the vendored SDK itself.
+	scanDirectories:
+		- freemius/includes
+	scanFiles:
+		- freemius/start.php
+	treatPhpDocTypesAsCertain: false

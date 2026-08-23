@@ -1,0 +1,71 @@
+{
+	"name": "wowstudio/wowstudio-accessibility-kit",
+	"description": "Helps you find, fix, document, and monitor WCAG accessibility issues in WordPress at the code level.",
+	"type": "wordpress-plugin",
+	"license": "GPL-2.0-or-later",
+	"homepage": "https://wowstudio.dev/",
+	"authors": [
+		{
+			"name": "WOWStudio",
+			"homepage": "https://wowstudio.dev/"
+		}
+	],
+	"require": {
+		"php": ">=8.1"
+	},
+	"require-dev": {
+		"brain/monkey": "^2.6",
+		"dealerdirect/phpcodesniffer-composer-installer": "^1.0",
+		"php-stubs/wordpress-stubs": "^6.7",
+		"phpcompatibility/phpcompatibility-wp": "^2.1",
+		"phpstan/phpstan": "^2.1",
+		"phpunit/phpunit": "^9.6",
+		"squizlabs/php_codesniffer": "^3.13",
+		"szepeviktor/phpstan-wordpress": "^2.0",
+		"wp-coding-standards/wpcs": "^3.1"
+	},
+	"autoload": {
+		"psr-4": {
+			"WOWStudio\\AccessibilityKit\\": "src/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"WOWStudio\\AccessibilityKit\\Tests\\": "tests/"
+		}
+	},
+	"config": {
+		"platform": {
+			"php": "8.1.0"
+		},
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		},
+		"optimize-autoloader": true,
+		"sort-packages": true
+	},
+	"scripts": {
+		"phpcs": "phpcs",
+		"phpcbf": "phpcbf",
+		"phpstan": "phpstan analyse --memory-limit=1G",
+		"test": "phpunit",
+		"check-free-build": "@php bin/check-free-build.php",
+		"check-claims": "@php bin/check-claims.php",
+		"lint": [
+			"@phpcs",
+			"@phpstan",
+			"@test",
+			"@check-claims",
+			"@check-free-build"
+		]
+	},
+	"scripts-descriptions": {
+		"phpcs": "Check the codebase against the WordPress Coding Standards.",
+		"phpcbf": "Auto-fix what the WordPress Coding Standards can fix.",
+		"phpstan": "Run static analysis at level 6.",
+		"test": "Run the PHPUnit suite. Requires PHP 8.1-8.4; Brain Monkey does not run on PHP 8.5.",
+		"check-free-build": "Assert no premium-only code or Freemius secret would ship in the free build.",
+		"check-claims": "Assert nothing shipped claims the user's site is compliant or certified.",
+		"lint": "Run the full quality gate."
+	}
+}
