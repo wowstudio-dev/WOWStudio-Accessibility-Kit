@@ -17,3 +17,6 @@
 .DS_Store
 Thumbs.db
 *.log
+
+# Freemius caches the downloaded plugin icon into the SDK directory at runtime.
+/freemius/assets/img/wowstudio-accessibility-kit.png
