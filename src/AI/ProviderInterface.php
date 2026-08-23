@@ -66,6 +66,18 @@ interface ProviderInterface {
 	public function default_model(): string;
 
 	/**
+	 * Generates text from a prompt.
+	 *
+	 * @since 0.6.0
+	 *
+	 * @param string $prompt  The instruction.
+	 * @param string $api_key The user's API key.
+	 * @param string $model   Model identifier.
+	 * @return string|WP_Error The generated text, or an error to show the user.
+	 */
+	public function generate_text( string $prompt, string $api_key, string $model );
+
+	/**
 	 * Describes an image.
 	 *
 	 * @since 0.5.0

@@ -6,13 +6,58 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
-### Not yet done in this step
+### Still outstanding
 
 - Capped **bulk** alt-text generation. Single-image generation is complete and
   the cap is enforced, but a bulk run means many multi-second provider calls in
   one request, which is exactly the kind of work CLAUDE.md says must go through
   Action Scheduler. Shipping a synchronous loop that times out halfway would be
   worse than not shipping it, so bulk lands with the queue.
+
+## [0.6.0] - 2026-08-23
+
+Phase 1, step 6: one fix at a time, with preview, diff, apply, and undo.
+
+### Added
+
+- `wp_wsak_fixes` table, applied to an existing install by the versioned
+  migration added in 0.2.0 — schema 1.0.0 to 1.1.0 with the other tables
+  untouched.
+- `Remediation\FixManager`: asks the configured provider for a corrected
+  fragment, refuses proposals that change nothing or that balloon to several
+  times the original, and records the result only when a person approves it.
+- `Remediation\OverrideStore`: a non-destructive override layer. Applying a fix
+  never edits post content. The correction is substituted as the page renders,
+  so undo is a flag rather than a restore, and deactivating the plugin returns
+  every page to its original markup by simply ceasing to filter.
+- `Remediation\Diff`: a word-level comparison, returned as structured segments
+  so the interface can label additions and removals in text rather than relying
+  on colour.
+- `generate_text()` on every provider, alongside the existing vision call.
+- REST: preview, apply, revert, and list, all gated on `wsak_apply_fix`.
+
+### Fixed during development
+
+- The override layer was written as a string replacement, and it did not work.
+  A scan reads the **rendered** page, where WordPress has already added
+  attributes such as `decoding="async"`; the same element in post content
+  carries fewer. The recorded markup therefore never matched byte-for-byte, and
+  overrides stored cleanly and then silently did nothing. Caught by fetching a
+  real page and looking at the img tag, not by any test.
+
+  Matching now happens in the DOM (`Remediation\Substitution`) and is tolerant
+  in one direction: a candidate matches when it is the same element and every
+  attribute *it* carries also appears, with the same value, in the recorded
+  markup. That accepts "WordPress added something on the way out" while still
+  refusing to touch a genuinely different element. The filter also moved to
+  priority 5, ahead of `wp_filter_content_tags`.
+
+### Security
+
+- Proposed markup is passed through `wp_kses` before it is stored. It came from
+  a language model and will be substituted into a public page, so it is
+  untrusted regardless of how carefully it was reviewed. Verified: a `<script>`
+  tag in a proposal is stripped rather than stored.
 
 ## [0.5.1] - 2026-08-23
 

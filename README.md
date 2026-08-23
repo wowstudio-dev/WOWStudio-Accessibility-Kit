@@ -9,7 +9,7 @@ It is not an overlay, and it never tells a user their site is compliant. See
 
 ## Status
 
-Phase 1, step 5 of 9: scanner, dashboard, and AI alt text. One-at-a-time AI fixes are step 6.
+Phase 1, step 6 of 9: scanner, dashboard, AI alt text, and reviewable fixes. The accessibility statement generator is step 7.
 
 ## Requirements
 
@@ -135,6 +135,7 @@ src/Db/                           Schema, repositories, typed records
 src/Scanner/                      Engine, rules, registry, page fetching
 src/AI/                           Providers, key storage, WP AI Client bridge
 src/AltText/                      Alt-text generation and the daily cap
+src/Remediation/                  The override layer, diffing, and fix review
 src/Rest/                         REST controllers
 assets/src/                       React admin app (source)
 build/                            Compiled admin app (generated, not tracked)
@@ -160,7 +161,24 @@ GET  /wp-json/wsak/v1/ai/settings                   requires wsak_manage_setting
 POST /wp-json/wsak/v1/ai/settings                   requires wsak_manage_settings
 POST /wp-json/wsak/v1/alt-text                      requires wsak_apply_fix
 POST /wp-json/wsak/v1/alt-text/apply                requires wsak_apply_fix
+POST /wp-json/wsak/v1/fixes/preview                 requires wsak_apply_fix
+POST /wp-json/wsak/v1/fixes/apply                   requires wsak_apply_fix
+POST /wp-json/wsak/v1/fixes/<id>/revert             requires wsak_apply_fix
+GET  /wp-json/wsak/v1/fixes?post_id=<id>            requires wsak_view_reports
 ```
+
+## The override layer
+
+Applying a fix never edits post content. The correction is stored as a pair of
+"this element" and "this element instead", and substituted as the page renders.
+Undo is a flag, not a restore, and deactivating the plugin returns every page to
+its original markup by ceasing to filter.
+
+Matching happens in the DOM, not on the string, because a scan reads the
+rendered page — where WordPress has already added attributes like
+`decoding="async"` — while the override runs over post content, which has
+fewer. See `Remediation\Substitution` for the direction that tolerance runs in
+and why.
 
 No route returns an API key. Reading the AI settings tells you whether a key is
 stored and shows a masked hint; that is the most any caller can learn.

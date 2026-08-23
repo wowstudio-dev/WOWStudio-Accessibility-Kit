@@ -631,3 +631,65 @@
 	margin: 8px 0 0;
 	font-size: 13px;
 }
+
+/* Fixes -------------------------------------------------------------------- */
+
+.wsak-fix {
+	margin: 10px 0;
+	padding: 12px;
+	background: var(--wsak-raised);
+	border-radius: var(--wsak-radius);
+}
+
+.wsak-fix__note {
+	max-width: 74ch;
+	color: var(--wsak-muted);
+	font-size: 13px;
+}
+
+.wsak-fix__actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+
+.wsak-fix__applied p {
+	margin: 0 0 8px;
+	color: var(--wsak-muted);
+}
+
+.wsak-diff__title {
+	margin: 0 0 6px;
+	font-size: 13px;
+	color: var(--wsak-ink);
+}
+
+.wsak-diff__body {
+	margin: 0 0 10px;
+	padding: 10px 12px;
+	overflow-x: auto;
+	background: var(--wsak-ink);
+	color: #e7eaf3;
+	border-radius: 6px;
+	font-size: 12px;
+	line-height: 1.6;
+	white-space: pre-wrap;
+	word-break: break-word;
+}
+
+.wsak-diff__added {
+	background: #10391f;
+	color: #a7f3c4;
+	text-decoration: underline;
+	text-decoration-style: solid;
+	padding: 1px 2px;
+	border-radius: 3px;
+}
+
+.wsak-diff__removed {
+	background: #451319;
+	color: #fecdd3;
+	text-decoration: line-through;
+	padding: 1px 2px;
+	border-radius: 3px;
+}

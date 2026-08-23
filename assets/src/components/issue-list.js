@@ -5,6 +5,7 @@
 import { __, _n, sprintf } from '@wordpress/i18n';
 
 import AltTextAction from './alt-text-action';
+import FixAction from './fix-action';
 import { DetectionTag, SeverityTag } from './tags';
 import { EmptyState } from './states';
 
@@ -47,11 +48,13 @@ function IssueCard( { issue, postId } ) {
 				</pre>
 			) }
 
-			{ 'img-alt-missing' === issue.rule_id && (
+			{ 'img-alt-missing' === issue.rule_id ? (
 				<AltTextAction
 					attachmentId={ issue.attachment_id }
 					postId={ postId }
 				/>
+			) : (
+				issue.detection === 'auto' && <FixAction issueId={ issue.id } />
 			) }
 
 			{ issue.how_to_fix && (

@@ -42,6 +42,55 @@ abstract class OpenAiCompatible extends AbstractProvider {
 	/**
 	 * {@inheritDoc}
 	 *
+	 * @since 0.6.0
+	 *
+	 * @param string $prompt  The instruction.
+	 * @param string $api_key The user's API key.
+	 * @param string $model   Model identifier.
+	 * @return string|WP_Error
+	 */
+	public function generate_text( string $prompt, string $api_key, string $model ) {
+		$decoded = $this->post_json(
+			$this->endpoint(),
+			array(
+				'model'      => '' !== $model ? $model : $this->default_model(),
+				'max_tokens' => 1500,
+				'messages'   => array(
+					array(
+						'role'    => 'user',
+						'content' => $prompt,
+					),
+				),
+			),
+			array_merge(
+				array( 'Authorization' => 'Bearer ' . $api_key ),
+				$this->extra_headers()
+			)
+		);
+
+		if ( is_wp_error( $decoded ) ) {
+			return $decoded;
+		}
+
+		$text = $decoded['choices'][0]['message']['content'] ?? '';
+
+		if ( ! is_string( $text ) || '' === trim( $text ) ) {
+			return new WP_Error(
+				'wsak_ai_empty',
+				sprintf(
+					/* translators: %s: provider name. */
+					__( '%s returned nothing.', 'wowstudio-accessibility-kit' ),
+					$this->label()
+				)
+			);
+		}
+
+		return trim( $text );
+	}
+
+	/**
+	 * {@inheritDoc}
+	 *
 	 * @since 0.5.0
 	 *
 	 * @param ImageContext $image   The image and its minimal context.

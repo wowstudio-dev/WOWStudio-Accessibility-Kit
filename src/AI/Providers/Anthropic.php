@@ -89,6 +89,51 @@ final class Anthropic extends AbstractProvider {
 	/**
 	 * {@inheritDoc}
 	 *
+	 * @since 0.6.0
+	 *
+	 * @param string $prompt  The instruction.
+	 * @param string $api_key The user's API key.
+	 * @param string $model   Model identifier.
+	 * @return string|WP_Error
+	 */
+	public function generate_text( string $prompt, string $api_key, string $model ) {
+		$decoded = $this->post_json(
+			'https://api.anthropic.com/v1/messages',
+			array(
+				'model'      => '' !== $model ? $model : $this->default_model(),
+				'max_tokens' => 1500,
+				'messages'   => array(
+					array(
+						'role'    => 'user',
+						'content' => $prompt,
+					),
+				),
+			),
+			array(
+				'x-api-key'         => $api_key,
+				'anthropic-version' => self::API_VERSION,
+			)
+		);
+
+		if ( is_wp_error( $decoded ) ) {
+			return $decoded;
+		}
+
+		foreach ( (array) ( $decoded['content'] ?? array() ) as $block ) {
+			if ( is_array( $block ) && 'text' === ( $block['type'] ?? '' ) ) {
+				return trim( (string) ( $block['text'] ?? '' ) );
+			}
+		}
+
+		return new WP_Error(
+			'wsak_ai_empty',
+			__( 'Claude returned nothing.', 'wowstudio-accessibility-kit' )
+		);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 *
 	 * @since 0.5.0
 	 *
 	 * @param ImageContext $image   The image and its minimal context.

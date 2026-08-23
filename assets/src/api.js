@@ -132,3 +132,45 @@ export function applyAltText( attachmentId, text ) {
 		data: { attachment_id: attachmentId, text },
 	} );
 }
+
+/**
+ * Asks for a proposed correction, without changing anything.
+ *
+ * @param {number} issueId Issue to fix.
+ * @return {Promise<Object>} Before, after, and the diff between them.
+ */
+export function previewFix( issueId ) {
+	return apiFetch( {
+		path: `/${ namespace }/fixes/preview`,
+		method: 'POST',
+		data: { issue_id: issueId },
+	} );
+}
+
+/**
+ * Applies a reviewed correction as a reversible override.
+ *
+ * @param {number} issueId Issue being fixed.
+ * @param {string} after   The reviewed markup.
+ * @return {Promise<Object>} The stored override.
+ */
+export function applyFix( issueId, after ) {
+	return apiFetch( {
+		path: `/${ namespace }/fixes/apply`,
+		method: 'POST',
+		data: { issue_id: issueId, after },
+	} );
+}
+
+/**
+ * Undoes an applied override.
+ *
+ * @param {number} fixId Override to undo.
+ * @return {Promise<Object>} The override, now marked undone.
+ */
+export function revertFix( fixId ) {
+	return apiFetch( {
+		path: `/${ namespace }/fixes/${ fixId }/revert`,
+		method: 'POST',
+	} );
+}

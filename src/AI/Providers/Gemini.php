@@ -80,6 +80,46 @@ final class Gemini extends AbstractProvider {
 	/**
 	 * {@inheritDoc}
 	 *
+	 * @since 0.6.0
+	 *
+	 * @param string $prompt  The instruction.
+	 * @param string $api_key The user's API key.
+	 * @param string $model   Model identifier.
+	 * @return string|WP_Error
+	 */
+	public function generate_text( string $prompt, string $api_key, string $model ) {
+		$model = '' !== $model ? $model : $this->default_model();
+
+		$decoded = $this->post_json(
+			sprintf( 'https://generativelanguage.googleapis.com/v1beta/models/%s:generateContent', rawurlencode( $model ) ),
+			array(
+				'contents'         => array(
+					array( 'parts' => array( array( 'text' => $prompt ) ) ),
+				),
+				'generationConfig' => array( 'maxOutputTokens' => 1500 ),
+			),
+			array( 'x-goog-api-key' => $api_key )
+		);
+
+		if ( is_wp_error( $decoded ) ) {
+			return $decoded;
+		}
+
+		$text = $decoded['candidates'][0]['content']['parts'][0]['text'] ?? '';
+
+		if ( ! is_string( $text ) || '' === trim( $text ) ) {
+			return new WP_Error(
+				'wsak_ai_empty',
+				__( 'Gemini returned nothing.', 'wowstudio-accessibility-kit' )
+			);
+		}
+
+		return trim( $text );
+	}
+
+	/**
+	 * {@inheritDoc}
+	 *
 	 * Gemini takes the key as a header rather than a bearer token, and nests
 	 * the image beside the prompt as inline data.
 	 *

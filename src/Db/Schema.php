@@ -27,7 +27,7 @@ final class Schema {
 	 * @since 0.2.0
 	 * @var string
 	 */
-	public const VERSION = '1.0.0';
+	public const VERSION = '1.1.0';
 
 	/**
 	 * Option holding the installed schema version.
@@ -64,6 +64,19 @@ final class Schema {
 	}
 
 	/**
+	 * Returns the fixes table name, including the site prefix.
+	 *
+	 * @since 0.6.0
+	 *
+	 * @return string
+	 */
+	public static function fixes_table(): string {
+		global $wpdb;
+
+		return $wpdb->prefix . 'wsak_fixes';
+	}
+
+	/**
 	 * Returns every table this plugin owns on the current site.
 	 *
 	 * @since 0.2.0
@@ -74,6 +87,7 @@ final class Schema {
 		return array(
 			self::scans_table(),
 			self::issues_table(),
+			self::fixes_table(),
 		);
 	}
 
@@ -91,6 +105,7 @@ final class Schema {
 
 		dbDelta( self::scans_sql() );
 		dbDelta( self::issues_sql() );
+		dbDelta( self::fixes_sql() );
 
 		update_option( self::VERSION_OPTION, self::VERSION, true );
 	}
@@ -152,6 +167,44 @@ final class Schema {
 			KEY scope_target (scope,target_id),
 			KEY status (status),
 			KEY started_at (started_at)
+		) {$wpdb->get_charset_collate()};";
+	}
+
+	/**
+	 * Returns the fixes table definition.
+	 *
+	 * The markup columns are named before_markup and after_markup because
+	 * "before" is a reserved word in MySQL and would need quoting everywhere it
+	 * appeared.
+	 *
+	 * @since 0.6.0
+	 *
+	 * @return string
+	 */
+	private static function fixes_sql(): string {
+		global $wpdb;
+
+		$table = self::fixes_table();
+
+		return "CREATE TABLE {$table} (
+			id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+			issue_id bigint(20) unsigned NOT NULL DEFAULT 0,
+			post_id bigint(20) unsigned NOT NULL DEFAULT 0,
+			rule_id varchar(100) NOT NULL DEFAULT '',
+			engine varchar(30) NOT NULL DEFAULT '',
+			provider varchar(50) NOT NULL DEFAULT '',
+			model varchar(100) NOT NULL DEFAULT '',
+			before_markup longtext NOT NULL,
+			after_markup longtext NOT NULL,
+			status varchar(20) NOT NULL DEFAULT 'applied',
+			applied_at datetime NOT NULL,
+			applied_by bigint(20) unsigned NOT NULL DEFAULT 0,
+			reverted_at datetime DEFAULT NULL,
+			reverted_by bigint(20) unsigned NOT NULL DEFAULT 0,
+			PRIMARY KEY  (id),
+			KEY post_status (post_id,status),
+			KEY issue_id (issue_id),
+			KEY status (status)
 		) {$wpdb->get_charset_collate()};";
 	}
 

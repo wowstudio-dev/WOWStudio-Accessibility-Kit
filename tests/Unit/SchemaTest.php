@@ -58,12 +58,24 @@ final class SchemaTest extends TestCase {
 	/**
 	 * Every table the plugin owns is listed, so uninstall cannot miss one.
 	 *
+	 * A table added without being listed here would survive uninstall and be
+	 * left orphaned in the database, which is the failure this guards against.
+	 *
 	 * @return void
 	 */
-	public function test_tables_lists_both_tables(): void {
+	public function test_tables_lists_every_table(): void {
 		$this->assertSame(
-			array( 'wp_wsak_scans', 'wp_wsak_issues' ),
+			array( 'wp_wsak_scans', 'wp_wsak_issues', 'wp_wsak_fixes' ),
 			Schema::tables()
 		);
+	}
+
+	/**
+	 * The fixes table carries the site prefix too.
+	 *
+	 * @return void
+	 */
+	public function test_fixes_table_is_prefixed(): void {
+		$this->assertSame( 'wp_wsak_fixes', Schema::fixes_table() );
 	}
 }
