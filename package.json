@@ -21,7 +21,10 @@
 		"makepot": "bin/build.sh && wp-env run cli --env-cwd=wp-content/plugins/wowstudio-accessibility-kit wp i18n make-pot dist/wowstudio-accessibility-kit languages/wowstudio-accessibility-kit.pot --domain=wowstudio-accessibility-kit --exclude=vendor,freemius",
 		"plugin-check": "bin/build.sh && wp-env run cli --env-cwd=wp-content/plugins/wowstudio-accessibility-kit wp plugin check dist/wowstudio-accessibility-kit --exclude-directories=freemius --format=table",
 		"dist": "bin/build.sh",
-		"dist:zip": "bin/build.sh --zip"
+		"dist:zip": "bin/build.sh --zip",
+		"dist:free": "bin/build.sh --free",
+		"dist:free:zip": "bin/build.sh --free --zip",
+		"fs:reset": "bin/reset-freemius.sh"
 	},
 	"devDependencies": {
 		"@wordpress/env": "^11.13.0",

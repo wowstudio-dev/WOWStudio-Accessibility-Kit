@@ -6,6 +6,22 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- `bin/build.sh --free` builds a locally installable free flavour, so the free
+  experience can be tested without a Freemius deploy. It refuses to run if the
+  code contains Pro-only markers, rather than guessing at Freemius's stripping.
+- `bin/reset-freemius.sh` (`npm run fs:reset`) clears stale Freemius activation
+  state, which otherwise shows a licence prompt that cannot be dismissed.
+- `WP_FS__DEV_MODE` in the wp-env config.
+
+### Fixed
+
+- `bin/check-free-build.php` skipped no directories when auditing a **zip**,
+  only when auditing a directory. The Freemius SDK contains `__premium_only`
+  and `@fs_premium_only` as part of its own machinery and is not stripped by
+  Freemius, so every genuine free zip would have failed the guard.
+
 ## [0.1.0] - 2026-08-23
 
 Phase 1, step 1: tooling and plugin scaffold. Nothing user-facing yet.

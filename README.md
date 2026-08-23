@@ -60,6 +60,40 @@ Build the release artifact with:
 npm run dist:zip
 ```
 
+## Testing the free experience
+
+The working tree is the **premium** codebase (`is_premium => true`), because
+Freemius generates the WordPress.org build from it on deploy. Installing it
+locally therefore shows you the Pro install, not what a free user sees.
+
+To install and test the free flavour without deploying:
+
+```bash
+npm run dist:free:zip
+```
+
+That writes `dist/wowstudio-accessibility-kit-free.zip` with `is_premium` set to
+`false` and the gatekeeper secret removed. Install it and confirm for yourself
+that it activates with no licence and no blocking screen.
+
+Freemius's own deploy output remains authoritative. This local build applies
+only the header transformations; it deliberately **refuses to run** if our code
+ever contains `__premium_only` or `@fs_premium_only`, because guessing at that
+stripping would give false confidence. When that day comes, test the zip
+Freemius generates.
+
+### A licence prompt that will not go away
+
+No licence is required for the free plan, and none is required to *use* the
+premium codebase either — Pro features simply stay locked. If you do see a
+prompt that never clears, the cause is almost certainly stale Freemius state:
+if a request dies part-way through activation, Freemius can be left believing an
+opt-in is still in flight. Clear it with:
+
+```bash
+npm run fs:reset
+```
+
 ### Running tests locally
 
 Brain Monkey depends on Patchwork, which does not support PHP 8.5. If your host

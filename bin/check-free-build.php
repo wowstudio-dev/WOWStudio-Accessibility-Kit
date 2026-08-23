@@ -46,7 +46,13 @@ const WSAK_FORBIDDEN_MARKERS = array(
 const WSAK_FORBIDDEN_FILES = array( '*-premium.php' );
 
 /**
- * Directories that are never part of a build and are always skipped.
+ * Directories excluded from the marker scan.
+ *
+ * The freemius/ directory is deliberately here. The SDK contains "__premium_only" and
+ * "@fs_premium_only" as part of its own machinery, and Freemius does not strip
+ * its own SDK, so a genuine Freemius-generated free zip contains those strings.
+ * Scanning it would fail every real release and teach everyone to ignore this
+ * guard. What matters is our code, which is what Freemius actually strips.
  *
  * @var string[]
  */
@@ -70,6 +76,27 @@ const WSAK_SOURCE_ONLY_DIRS = array( 'bin', 'tests', '.github' );
  */
 function wsak_say( string $message ): void {
 	fwrite( STDOUT, $message . PHP_EOL );
+}
+
+/**
+ * Reports whether a path sits inside a skipped directory.
+ *
+ * Applies to zip entries, which have no filesystem iterator to filter them.
+ *
+ * @param string   $path Path relative to the build root.
+ * @param string[] $skip Directory names to skip.
+ * @return bool
+ */
+function wsak_is_skipped_path( string $path, array $skip ): bool {
+	$segments = explode( '/', str_replace( '\\', '/', $path ) );
+
+	foreach ( $segments as $segment ) {
+		if ( in_array( $segment, $skip, true ) ) {
+			return true;
+		}
+	}
+
+	return false;
 }
 
 /**
@@ -141,6 +168,11 @@ function wsak_read_target( string $target, array $skip = array() ): array {
 		$name = (string) $zip->getNameIndex( $i );
 
 		if ( 'php' !== strtolower( (string) pathinfo( $name, PATHINFO_EXTENSION ) ) ) {
+			continue;
+		}
+
+		// Merge in the base list, exactly as wsak_php_files() does for directories.
+		if ( wsak_is_skipped_path( $name, array_merge( WSAK_SKIP_DIRS, $skip ) ) ) {
 			continue;
 		}
 
