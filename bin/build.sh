@@ -48,6 +48,18 @@ OUT="${ROOT}/dist/${NAME}"
 
 cd "${ROOT}"
 
+echo "==> Compiling the admin app"
+# build/ is generated and not in version control, so a release build has to
+# compile it. Shipping a plugin whose admin screen is blank because nobody ran
+# npm run build is a mistake worth making impossible.
+npm run build --silent > /dev/null
+
+if [ ! -f "${ROOT}/build/index.js" ] || [ ! -f "${ROOT}/build/index.asset.php" ]; then
+	echo "    ERROR: the admin app did not compile" >&2
+	exit 1
+fi
+echo "    build/index.js and build/index.asset.php present"
+
 echo "==> Building the ${FLAVOUR} flavour"
 rm -rf "${OUT}" "${ROOT}/dist/${NAME}.zip"
 mkdir -p "${OUT}"
@@ -107,6 +119,12 @@ fi
 echo "==> Verifying the build"
 php "${ROOT}/bin/check-claims.php" > /dev/null
 echo "    no unqualified compliance claims"
+
+if [ ! -f "${OUT}/build/index.js" ]; then
+	echo "    ERROR: the compiled admin app is missing from the build" >&2
+	exit 1
+fi
+echo "    compiled admin app included"
 
 if [ -d "${OUT}/tests" ] || [ -d "${OUT}/node_modules" ] || [ -f "${OUT}/phpcs.xml.dist" ]; then
 	echo "    ERROR: development files leaked into the build" >&2

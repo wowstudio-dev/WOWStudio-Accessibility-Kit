@@ -1,11 +1,11 @@
 <?php
 /**
- * Minimal WordPress class stubs for unit tests.
+ * WP_Error stub.
  *
  * Unit tests do not load WordPress. Brain Monkey covers functions; these are the
- * few classes the plugin constructs directly. They are deliberately the smallest
- * shape the code under test relies on, so a test cannot pass by leaning on
- * behaviour the real class does not have.
+ * few classes the plugin constructs directly, kept to the smallest shape the
+ * code under test relies on so a test cannot pass by leaning on behaviour the
+ * real class does not have.
  *
  * @package WOWStudio\AccessibilityKit
  */

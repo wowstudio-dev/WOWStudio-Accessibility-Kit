@@ -78,11 +78,11 @@ final class Menu implements Registrable {
 	}
 
 	/**
-	 * Renders the screen.
+	 * Renders the mount point for the admin app.
 	 *
-	 * A holding screen until the React dashboard lands. It still carries the
-	 * coverage disclaimer, because every screen that talks about accessibility
-	 * findings has to be honest about what automation can and cannot see.
+	 * The heading is rendered by the app rather than here, so the page has
+	 * exactly one h1. A noscript block carries a heading of its own for the
+	 * case where the app never runs.
 	 *
 	 * @since 0.1.0
 	 *
@@ -93,32 +93,18 @@ final class Menu implements Registrable {
 			wp_die( esc_html__( 'You do not have permission to view accessibility reports.', 'wowstudio-accessibility-kit' ) );
 		}
 		?>
-		<div class="wrap">
-			<h1><?php esc_html_e( 'WOWStudio Accessibility Kit', 'wowstudio-accessibility-kit' ); ?></h1>
-
-			<p>
-				<?php esc_html_e( 'Helps you find, fix, document, and monitor accessibility issues in your site at the code level.', 'wowstudio-accessibility-kit' ); ?>
-			</p>
-
-			<div class="notice notice-info inline">
-				<p>
-					<?php esc_html_e( 'Automated testing detects only part of WCAG. This plugin always separates what it checked automatically from what still needs a person, and it does not decide whether your site meets any legal requirement.', 'wowstudio-accessibility-kit' ); ?>
+		<div class="wrap wsak-wrap">
+			<div id="wsak-app" class="wsak-app">
+				<p class="wsak-boot" role="status">
+					<?php esc_html_e( 'Loading the accessibility dashboard…', 'wowstudio-accessibility-kit' ); ?>
 				</p>
 			</div>
-
-			<h2><?php esc_html_e( 'Not ready yet', 'wowstudio-accessibility-kit' ); ?></h2>
-			<p>
-				<?php esc_html_e( 'Scanning, alt text, and the accessibility statement generator are still being built. This screen is where they will appear.', 'wowstudio-accessibility-kit' ); ?>
-			</p>
-			<p>
-				<?php
-				printf(
-					/* translators: %s: plugin version number. */
-					esc_html__( 'Version %s', 'wowstudio-accessibility-kit' ),
-					esc_html( WSAK_VERSION )
-				);
-				?>
-			</p>
+			<noscript>
+				<h1><?php esc_html_e( 'WOWStudio Accessibility Kit', 'wowstudio-accessibility-kit' ); ?></h1>
+				<p>
+					<?php esc_html_e( 'This dashboard needs JavaScript to run a scan and show results. Everything it does is also available through the REST API if you would rather not enable it.', 'wowstudio-accessibility-kit' ); ?>
+				</p>
+			</noscript>
 		</div>
 		<?php
 	}

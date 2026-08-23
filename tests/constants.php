@@ -12,7 +12,7 @@
 declare( strict_types = 1 );
 
 defined( 'ABSPATH' ) || define( 'ABSPATH', __DIR__ . '/fixtures/wordpress/' );
-defined( 'WSAK_VERSION' ) || define( 'WSAK_VERSION', '0.3.0' );
+defined( 'WSAK_VERSION' ) || define( 'WSAK_VERSION', '0.4.0' );
 defined( 'WSAK_FILE' ) || define( 'WSAK_FILE', __DIR__ . '/../wowstudio-accessibility-kit.php' );
 defined( 'WSAK_PATH' ) || define( 'WSAK_PATH', dirname( __DIR__ ) . '/' );
 defined( 'WSAK_URL' ) || define( 'WSAK_URL', 'https://example.test/wp-content/plugins/wowstudio-accessibility-kit/' );

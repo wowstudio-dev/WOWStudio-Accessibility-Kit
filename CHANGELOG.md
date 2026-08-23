@@ -6,6 +6,47 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.4.0] - 2026-08-23
+
+Phase 1, step 4: the dashboard. The scanner now has a face.
+
+### Added
+
+- React admin app built with `@wordpress/scripts`, mounted on a single admin
+  screen and loaded only there.
+- Pick a page, run a scan, read the findings. Results are split into what the
+  scanner settled and what still needs a person, with a count on each group.
+- Score card that never shows the number alone: it sits beside the count of
+  items awaiting review and a plain statement that it is not a measure of
+  compliance.
+- Coverage panel listing all twelve checks and what each can decide, with the
+  limitation stated in the summary even when the detail is collapsed.
+- `GET /wsak/v1/scans/<id>` and `GET /wsak/v1/scannable`.
+- A design system in the WOWStudio palette. Contrast was measured rather than
+  assumed: Indigo 6.31:1, Iris 5.70:1, Ink 17.9:1 all pass AA for body text.
+  Cyan measures 1.80:1, so it is used only as a decorative accent and never for
+  text or for information carried by colour alone.
+
+### Fixed
+
+- `wp i18n make-pot` ran against the built plugin, which excludes `assets/src`.
+  Every string in the admin app — 61 of them — would have shipped
+  untranslatable. `bin/makepot.sh` now copies the JavaScript sources in for the
+  duration of the extraction.
+- `bin/build.sh` now compiles the admin app and refuses to produce a build
+  without it. `build/` is not in version control, so a release could otherwise
+  ship a plugin whose admin screen is blank.
+- `POST /wsak/v1/scan` did not return the post title, so the results heading
+  read "Scan results" instead of naming the page.
+
+### Accessibility
+
+The dashboard was checked against the rules the plugin itself ships: zero
+findings across 146 elements, one h1, and a heading outline that descends one
+level at a time. Focus moves to the results heading when a scan finishes,
+progress is announced through a live region, `prefers-reduced-motion` is
+respected, and the layout reflows to a single column on small screens.
+
 ## [0.3.0] - 2026-08-23
 
 Phase 1, step 3: the scanner. Findings are stored and available over REST; the

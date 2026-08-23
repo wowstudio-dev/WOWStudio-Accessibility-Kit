@@ -79,4 +79,9 @@ benign.
 
 - [ ] The plugin's own admin UI passes WCAG 2.2 AA: keyboard operability,
       visible focus, `prefers-reduced-motion`, semantic markup.
+- [ ] Re-run the dogfood check after any change to the admin app: load the
+      dashboard and run the plugin's own rules against its rendered DOM. Last
+      run 2026-08-23 against 146 elements with zero findings. This is manual
+      today because it needs a real browser; automating it needs the Playwright
+      harness, which is Phase 2.
 - [ ] Tested with at least one screen reader.

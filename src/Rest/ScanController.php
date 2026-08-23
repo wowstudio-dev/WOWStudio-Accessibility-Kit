@@ -78,6 +78,50 @@ final class ScanController implements Registrable {
 
 		register_rest_route(
 			self::REST_NAMESPACE,
+			'/scans/(?P<id>\d+)',
+			array(
+				array(
+					'methods'             => WP_REST_Server::READABLE,
+					'callback'            => array( $this, 'get_scan' ),
+					'permission_callback' => array( $this, 'can_view' ),
+					'args'                => array(
+						'id' => array(
+							'required'          => true,
+							'type'              => 'integer',
+							'description'       => __( 'The scan to read.', 'wowstudio-accessibility-kit' ),
+							'sanitize_callback' => 'absint',
+						),
+					),
+				),
+			)
+		);
+
+		register_rest_route(
+			self::REST_NAMESPACE,
+			'/scannable',
+			array(
+				array(
+					'methods'             => WP_REST_Server::READABLE,
+					'callback'            => array( $this, 'scannable' ),
+					'permission_callback' => array( $this, 'can_view' ),
+					'args'                => array(
+						'search'   => array(
+							'type'              => 'string',
+							'description'       => __( 'Filter the list by title.', 'wowstudio-accessibility-kit' ),
+							'sanitize_callback' => 'sanitize_text_field',
+						),
+						'per_page' => array(
+							'type'              => 'integer',
+							'default'           => 20,
+							'sanitize_callback' => 'absint',
+						),
+					),
+				),
+			)
+		);
+
+		register_rest_route(
+			self::REST_NAMESPACE,
 			'/coverage',
 			array(
 				array(
@@ -225,6 +269,7 @@ final class ScanController implements Registrable {
 			array(
 				'scan_id'         => $scan_id,
 				'post_id'         => $post_id,
+				'post_title'      => get_the_title( $post_id ),
 				'score'           => $result->score(),
 				'summary'         => $summary,
 				'full_page'       => $result->full_page,
@@ -256,6 +301,110 @@ final class ScanController implements Registrable {
 	}
 
 	/**
+	 * Returns a stored scan and its findings.
+	 *
+	 * @since 0.4.0
+	 *
+	 * @param WP_REST_Request $request Incoming request.
+	 * @return WP_REST_Response|WP_Error
+	 */
+	public function get_scan( WP_REST_Request $request ) {
+		$scan_id = absint( $request->get_param( 'id' ) );
+		$scan    = ( new ScanRepository() )->find( $scan_id );
+
+		if ( null === $scan ) {
+			return new WP_Error(
+				'wsak_unknown_scan',
+				__( 'That scan could not be found.', 'wowstudio-accessibility-kit' ),
+				array( 'status' => 404 )
+			);
+		}
+
+		if ( $scan->target_id > 0 && ! current_user_can( 'read_post', $scan->target_id ) ) {
+			return new WP_Error(
+				'wsak_forbidden_post',
+				__( 'You do not have permission to read that content.', 'wowstudio-accessibility-kit' ),
+				array( 'status' => rest_authorization_required_code() )
+			);
+		}
+
+		$issues = new IssueRepository();
+
+		return new WP_REST_Response(
+			array(
+				'scan_id'         => $scan->id,
+				'post_id'         => $scan->target_id,
+				'post_title'      => $scan->target_id > 0 ? get_the_title( $scan->target_id ) : '',
+				'status'          => $scan->status->value,
+				'score'           => $scan->score,
+				'summary'         => $scan->summary,
+				'started_at'      => $scan->started_at,
+				'finished_at'     => $scan->finished_at,
+				'full_page'       => (bool) ( $scan->summary['full_page'] ?? true ),
+				'coverage_notice' => (string) ( $scan->summary['coverage_notice'] ?? '' ),
+				'issues'          => $this->present_issues( $scan->id, $issues ),
+			)
+		);
+	}
+
+	/**
+	 * Lists content that can be scanned, newest first.
+	 *
+	 * Each entry carries its most recent completed scan so the dashboard can
+	 * show what is already known without a request per row.
+	 *
+	 * @since 0.4.0
+	 *
+	 * @param WP_REST_Request $request Incoming request.
+	 * @return WP_REST_Response
+	 */
+	public function scannable( WP_REST_Request $request ): WP_REST_Response {
+		$per_page = max( 1, min( 50, absint( $request->get_param( 'per_page' ) ) ) );
+		$search   = (string) $request->get_param( 'search' );
+
+		$query = array(
+			'post_type'        => array( 'post', 'page' ),
+			'post_status'      => 'publish',
+			'posts_per_page'   => $per_page,
+			'orderby'          => 'modified',
+			'order'            => 'DESC',
+			'suppress_filters' => false,
+			'no_found_rows'    => true,
+		);
+
+		if ( '' !== $search ) {
+			$query['s'] = $search;
+		}
+
+		$scans = new ScanRepository();
+		$items = array();
+
+		foreach ( get_posts( $query ) as $post ) {
+			if ( ! current_user_can( 'read_post', $post->ID ) ) {
+				continue;
+			}
+
+			$latest = $scans->latest_for_post( $post->ID );
+
+			$items[] = array(
+				'id'        => $post->ID,
+				'title'     => get_the_title( $post ),
+				'type'      => $post->post_type,
+				'url'       => (string) get_permalink( $post ),
+				'edit_url'  => (string) get_edit_post_link( $post->ID, 'raw' ),
+				'last_scan' => null === $latest ? null : array(
+					'scan_id'     => $latest->id,
+					'score'       => $latest->score,
+					'finished_at' => $latest->finished_at,
+					'summary'     => $latest->summary,
+				),
+			);
+		}
+
+		return new WP_REST_Response( array( 'items' => $items ) );
+	}
+
+	/**
 	 * Shapes stored issues for the response.
 	 *
 	 * @since 0.3.0
@@ -266,9 +415,14 @@ final class ScanController implements Registrable {
 	 */
 	private function present_issues( int $scan_id, IssueRepository $issues ): array {
 		$presented = array();
+		$registry  = ( new Engine() )->registry();
 
 		foreach ( $issues->find_by_scan( $scan_id ) as $issue ) {
+			$rule = $registry->get( $issue->rule_id );
+
 			$presented[] = array(
+				'rule_title'      => null === $rule ? $issue->rule_id : $rule->title(),
+				'how_to_fix'      => null === $rule ? '' : $rule->description(),
 				'id'              => $issue->id,
 				'rule_id'         => $issue->rule_id,
 				'wcag_sc'         => $issue->wcag_sc,

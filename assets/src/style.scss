@@ -1,0 +1,554 @@
+/**
+ * WOWStudio Accessibility Kit — admin styles.
+ *
+ * Palette: Ink #0E1525, Indigo #4F46E5, Iris #7C3AED, Cyan #22D3EE.
+ *
+ * Contrast, measured against white:
+ *   Indigo 6.31:1, Iris 5.70:1, Ink 17.9:1 — all pass AA for body text.
+ *   Cyan 1.80:1 — fails, so it is used only as a decorative accent, never for
+ *   text or for any information carried by colour alone.
+ *
+ * We dogfood: this file has to hold up to the checks the plugin itself runs.
+ */
+
+:root {
+	--wsak-ink: #0e1525;
+	--wsak-indigo: #4f46e5;
+	--wsak-iris: #7c3aed;
+	--wsak-cyan: #22d3ee;
+
+	--wsak-text: #1e232e;
+	--wsak-muted: #4a5162;
+	--wsak-line: #d6dae3;
+	--wsak-surface: #fff;
+	--wsak-raised: #f6f7fb;
+
+	--wsak-critical: #b42318;
+	--wsak-serious: #b54708;
+	--wsak-moderate: #854d0e;
+	--wsak-minor: #3f3f46;
+
+	--wsak-critical-bg: #fef3f2;
+	--wsak-serious-bg: #fff6ed;
+	--wsak-moderate-bg: #fefbe8;
+	--wsak-minor-bg: #f4f4f5;
+
+	--wsak-radius: 8px;
+	--wsak-gap: 16px;
+}
+
+.wsak {
+	max-width: 1100px;
+	color: var(--wsak-text);
+	font-size: 14px;
+	line-height: 1.6;
+}
+
+.wsak *:focus-visible {
+	outline: 2px solid var(--wsak-indigo);
+	outline-offset: 2px;
+	border-radius: 3px;
+}
+
+/* Header ------------------------------------------------------------------ */
+
+.wsak__header {
+	position: relative;
+	padding: 24px 0 20px 20px;
+	margin: 8px 0 24px;
+}
+
+.wsak__header::before {
+	content: "";
+	position: absolute;
+	inset-inline-start: 0;
+	top: 0;
+	bottom: 0;
+	width: 5px;
+	border-radius: 3px;
+	background: linear-gradient(to bottom, var(--wsak-indigo), var(--wsak-iris) 55%, var(--wsak-cyan));
+}
+
+.wsak__title {
+	margin: 0 0 4px;
+	font-size: 26px;
+	font-weight: 650;
+	line-height: 1.2;
+	color: var(--wsak-ink);
+}
+
+.wsak__lede {
+	margin: 0;
+	max-width: 62ch;
+	color: var(--wsak-muted);
+}
+
+.wsak__footer {
+	margin-top: 32px;
+	padding-top: 16px;
+	border-top: 1px solid var(--wsak-line);
+	color: var(--wsak-muted);
+	font-size: 13px;
+	max-width: 78ch;
+}
+
+/* Sections ---------------------------------------------------------------- */
+
+.wsak-picker,
+.wsak-result,
+.wsak-coverage {
+	margin-bottom: 28px;
+	padding: 20px;
+	background: var(--wsak-surface);
+	border: 1px solid var(--wsak-line);
+	border-radius: var(--wsak-radius);
+}
+
+.wsak-picker__title,
+.wsak-result__title,
+.wsak-coverage__title {
+	margin: 0 0 12px;
+	font-size: 17px;
+	font-weight: 600;
+	color: var(--wsak-ink);
+}
+
+.wsak-result__head {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--wsak-gap);
+	align-items: baseline;
+	justify-content: space-between;
+}
+
+.wsak-result__title:focus-visible {
+	outline: 2px solid var(--wsak-indigo);
+	outline-offset: 4px;
+}
+
+/* Score ------------------------------------------------------------------- */
+
+.wsak-score {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 24px;
+	align-items: flex-start;
+	padding: 20px;
+	margin: 16px 0 24px;
+	background: var(--wsak-raised);
+	border-radius: var(--wsak-radius);
+}
+
+.wsak-score__figure {
+	display: flex;
+	align-items: baseline;
+	gap: 4px;
+	min-width: 130px;
+}
+
+.wsak-score__value {
+	font-size: 46px;
+	font-weight: 700;
+	line-height: 1;
+	color: var(--wsak-ink);
+	font-variant-numeric: tabular-nums;
+}
+
+.wsak-score__outof {
+	font-size: 16px;
+	color: var(--wsak-muted);
+}
+
+.wsak-score__detail {
+	flex: 1 1 320px;
+}
+
+.wsak-score__band {
+	margin: 0 0 8px;
+	font-weight: 600;
+	color: var(--wsak-ink);
+}
+
+.wsak-score__counts {
+	margin: 0 0 10px;
+	padding-inline-start: 18px;
+	list-style: disc;
+}
+
+.wsak-score__caveat {
+	margin: 0;
+	max-width: 68ch;
+	color: var(--wsak-muted);
+	font-size: 13px;
+}
+
+/* Tags -------------------------------------------------------------------- */
+
+.wsak-tag {
+	display: inline-flex;
+	align-items: center;
+	gap: 5px;
+	padding: 2px 9px;
+	border-radius: 999px;
+	font-size: 12px;
+	font-weight: 600;
+	line-height: 1.7;
+	white-space: nowrap;
+}
+
+.wsak-tag__mark {
+	font-size: 11px;
+}
+
+.wsak-tag--auto {
+	background: #eef2ff;
+	color: #3730a3;
+}
+
+.wsak-tag--manual {
+	background: #f3e8ff;
+	color: #6b21a8;
+}
+
+.wsak-tag--sc {
+	background: var(--wsak-raised);
+	color: var(--wsak-muted);
+	font-weight: 500;
+}
+
+.wsak-tag--critical {
+	background: var(--wsak-critical-bg);
+	color: var(--wsak-critical);
+}
+
+.wsak-tag--serious {
+	background: var(--wsak-serious-bg);
+	color: var(--wsak-serious);
+}
+
+.wsak-tag--moderate {
+	background: var(--wsak-moderate-bg);
+	color: var(--wsak-moderate);
+}
+
+.wsak-tag--minor {
+	background: var(--wsak-minor-bg);
+	color: var(--wsak-minor);
+}
+
+/* Table ------------------------------------------------------------------- */
+
+.wsak-table {
+	width: 100%;
+	margin-top: 16px;
+	border-collapse: collapse;
+}
+
+.wsak-table th,
+.wsak-table td {
+	padding: 10px 12px;
+	text-align: start;
+	border-bottom: 1px solid var(--wsak-line);
+	vertical-align: middle;
+}
+
+.wsak-table thead th {
+	font-size: 12px;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	color: var(--wsak-muted);
+}
+
+.wsak-table__title {
+	font-weight: 600;
+	color: var(--wsak-ink);
+}
+
+.wsak-table__type {
+	display: block;
+	font-size: 12px;
+	font-weight: 400;
+	color: var(--wsak-muted);
+}
+
+.wsak-table__never {
+	color: var(--wsak-muted);
+}
+
+.wsak-table__action {
+	text-align: end;
+}
+
+/* Findings ---------------------------------------------------------------- */
+
+.wsak-group {
+	margin-top: 24px;
+}
+
+.wsak-group__title {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px;
+	margin: 0 0 4px;
+	font-size: 15px;
+	color: var(--wsak-ink);
+}
+
+.wsak-group__blurb {
+	margin: 0 0 12px;
+	color: var(--wsak-muted);
+	max-width: 70ch;
+}
+
+.wsak-issues {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.wsak-issue {
+	padding: 16px;
+	margin-bottom: 10px;
+	background: var(--wsak-surface);
+	border: 1px solid var(--wsak-line);
+	border-inline-start: 4px solid var(--wsak-line);
+	border-radius: var(--wsak-radius);
+}
+
+.wsak-issue:has(.wsak-tag--critical) {
+	border-inline-start-color: var(--wsak-critical);
+}
+
+.wsak-issue:has(.wsak-tag--serious) {
+	border-inline-start-color: var(--wsak-serious);
+}
+
+.wsak-issue:has(.wsak-tag--moderate) {
+	border-inline-start-color: var(--wsak-moderate);
+}
+
+.wsak-issue__head {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	align-items: baseline;
+	justify-content: space-between;
+}
+
+.wsak-issue__title {
+	margin: 0;
+	font-size: 14px;
+	font-weight: 650;
+	color: var(--wsak-ink);
+}
+
+.wsak-issue__tags {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+}
+
+.wsak-issue__message {
+	margin: 6px 0 10px;
+	max-width: 76ch;
+}
+
+.wsak-issue__context {
+	margin: 0 0 10px;
+	padding: 10px 12px;
+	overflow-x: auto;
+	background: var(--wsak-ink);
+	color: #e7eaf3;
+	border-radius: 6px;
+	font-size: 12px;
+	line-height: 1.5;
+}
+
+.wsak-issue__fix summary {
+	cursor: pointer;
+	font-weight: 600;
+	color: var(--wsak-indigo);
+}
+
+.wsak-issue__fix p {
+	max-width: 76ch;
+}
+
+.wsak-issue__selector code {
+	word-break: break-all;
+}
+
+.wsak-issue__selector-label {
+	font-weight: 600;
+}
+
+/* Coverage ---------------------------------------------------------------- */
+
+.wsak-coverage__lede {
+	max-width: 78ch;
+	margin: 0 0 14px;
+	color: var(--wsak-muted);
+}
+
+.wsak-coverage__lists {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+	gap: 28px;
+	margin-top: 20px;
+}
+
+.wsak-coverage__group-title {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px;
+	margin: 0 0 10px;
+	font-size: 14px;
+	color: var(--wsak-ink);
+}
+
+.wsak-coverage__rules {
+	margin: 0;
+}
+
+.wsak-coverage__rule {
+	padding: 10px 0;
+	border-top: 1px solid var(--wsak-line);
+}
+
+.wsak-coverage__rule dt {
+	font-weight: 600;
+	color: var(--wsak-ink);
+	margin-bottom: 2px;
+}
+
+.wsak-coverage__rule dd {
+	margin: 0;
+	color: var(--wsak-muted);
+	font-size: 13px;
+	max-width: 60ch;
+}
+
+/* States ------------------------------------------------------------------ */
+
+.wsak-empty {
+	padding: 28px 20px;
+	margin-top: 16px;
+	text-align: center;
+	background: var(--wsak-raised);
+	border-radius: var(--wsak-radius);
+}
+
+.wsak-empty__title {
+	margin: 0 0 6px;
+	font-size: 15px;
+	color: var(--wsak-ink);
+}
+
+.wsak-empty__body {
+	margin: 0 auto;
+	max-width: 60ch;
+	color: var(--wsak-muted);
+}
+
+.wsak-skeleton {
+	margin-top: 16px;
+}
+
+.wsak-skeleton__row {
+	height: 42px;
+	margin-bottom: 8px;
+	border-radius: 6px;
+	background: linear-gradient(90deg, var(--wsak-raised) 25%, #eceef5 37%, var(--wsak-raised) 63%);
+	background-size: 400% 100%;
+	animation: wsak-shimmer 1.4s ease infinite;
+}
+
+@keyframes wsak-shimmer {
+
+	0% {
+		background-position: 100% 50%;
+	}
+
+	100% {
+		background-position: 0 50%;
+	}
+}
+
+.wsak-busy {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	color: var(--wsak-muted);
+}
+
+.wsak-error {
+	margin: 16px 0;
+}
+
+.wsak-boot {
+	color: var(--wsak-muted);
+}
+
+/* Motion ------------------------------------------------------------------ */
+
+@media (prefers-reduced-motion: reduce) {
+
+	.wsak-skeleton__row {
+		animation: none;
+		background: var(--wsak-raised);
+	}
+
+	.wsak *,
+	.wsak *::before,
+	.wsak *::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+	}
+}
+
+/* Small screens ------------------------------------------------------------ */
+
+@media screen and (max-width: 782px) {
+
+	.wsak-picker,
+	.wsak-result,
+	.wsak-coverage {
+		padding: 16px;
+	}
+
+	.wsak__title {
+		font-size: 22px;
+	}
+
+	.wsak-score {
+		gap: 14px;
+	}
+
+	.wsak-score__value {
+		font-size: 38px;
+	}
+
+	.wsak-table thead {
+		display: none;
+	}
+
+	.wsak-table tr {
+		display: block;
+		padding: 10px 0;
+		border-bottom: 1px solid var(--wsak-line);
+	}
+
+	.wsak-table th,
+	.wsak-table td {
+		display: block;
+		padding: 4px 0;
+		border: 0;
+	}
+
+	.wsak-table__action {
+		text-align: start;
+	}
+}

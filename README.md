@@ -9,7 +9,7 @@ It is not an overlay, and it never tells a user their site is compliant. See
 
 ## Status
 
-Phase 1, step 3 of 9: scanner and REST API. The dashboard is step 4.
+Phase 1, step 4 of 9: scanner, REST API, and admin dashboard. AI alt text is step 5.
 
 ## Requirements
 
@@ -134,6 +134,8 @@ src/Core/                         Orchestrator, activation, installation
 src/Db/                           Schema, repositories, typed records
 src/Scanner/                      Engine, rules, registry, page fetching
 src/Rest/                         REST controllers
+assets/src/                       React admin app (source)
+build/                            Compiled admin app (generated, not tracked)
 src/Admin/                        Admin menu
 src/Support/                      Shared helpers (capabilities)
 bin/build.sh                      Release build (honours .distignore)
@@ -148,7 +150,9 @@ Later steps add `src/Remediation/`, `src/AI/`, `src/AltText/`,
 ## Scanning
 
 ```
-POST /wp-json/wsak/v1/scan     { "post_id": 12 }    requires wsak_run_scan
+POST /wp-json/wsak/v1/scan       { "post_id": 12 }  requires wsak_run_scan
+GET  /wp-json/wsak/v1/scans/<id>                    requires wsak_view_reports
+GET  /wp-json/wsak/v1/scannable                     requires wsak_view_reports
 GET  /wp-json/wsak/v1/coverage                      requires wsak_view_reports
 ```
 
@@ -163,6 +167,22 @@ stay quiet, so a reduced scan under-reports rather than inventing failures.
 To supply markup yourself, or to test the full-page path locally, filter
 `wsak_page_html`. To make a loopback failure a hard error instead, return false
 from `wsak_allow_content_fallback`.
+
+## The admin app
+
+Source lives in `assets/src`, compiled output in `build/`. `build/` is generated
+and not tracked, so `bin/build.sh` compiles it and refuses to produce a release
+without it.
+
+```bash
+npm run start     # watch
+npm run build     # one-off
+```
+
+Translatable strings live in the JavaScript sources, not the minified bundle, so
+`npm run makepot` copies `assets/src` into the build for the duration of the
+extraction. Running `wp i18n make-pot` against the build alone silently drops
+every string in the app.
 
 ## License
 

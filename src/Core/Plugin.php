@@ -130,6 +130,7 @@ final class Plugin {
 		 */
 		$services = array(
 			'installer'  => new Installer(),
+			'assets'     => new Assets(),
 			'admin.menu' => new Menu(),
 			'rest.scan'  => new ScanController(),
 		);
