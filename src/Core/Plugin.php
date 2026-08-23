@@ -7,6 +7,8 @@
 
 namespace WOWStudio\AccessibilityKit\Core;
 
+use WOWStudio\AccessibilityKit\Admin\Menu;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -119,13 +121,15 @@ final class Plugin {
 	 */
 	private function default_services(): array {
 		/*
-		 * Empty by design at this stage. Translations are deliberately absent:
-		 * the "Domain Path: /languages" header lets WordPress load the bundled
+		 * Translations are deliberately absent from this list: the
+		 * "Domain Path: /languages" header lets WordPress load the bundled
 		 * catalogue just in time, and calling load_plugin_textdomain() as well
 		 * is what Plugin Check flags as discouraged since WordPress 4.6.
-		 * Scanner, REST, and admin services are added in later steps.
+		 * Scanner and REST services are added in later steps.
 		 */
-		$services = array();
+		$services = array(
+			'admin.menu' => new Menu(),
+		);
 
 		/**
 		 * Filters the services the plugin boots.

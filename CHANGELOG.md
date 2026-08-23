@@ -17,6 +17,14 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- The plugin vanished from the admin sidebar as soon as a user opted in or
+  skipped the Freemius opt-in. Freemius shows a temporary top-level menu of its
+  own while the opt-in is pending, then removes it and expects the plugin's real
+  menu at the configured slug. We had pointed Freemius at
+  `wowstudio-accessibility-kit` without ever registering that menu, so it
+  disappeared and the Freemius Account, Upgrade, and Contact pages were left
+  orphaned. `Admin\Menu` now registers it, and a test asserts the slug stays in
+  sync with the one handed to Freemius.
 - `bin/check-free-build.php` skipped no directories when auditing a **zip**,
   only when auditing a directory. The Freemius SDK contains `__premium_only`
   and `@fs_premium_only` as part of its own machinery and is not stripped by
