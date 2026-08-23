@@ -4,6 +4,7 @@
 
 import { __, _n, sprintf } from '@wordpress/i18n';
 
+import AltTextAction from './alt-text-action';
 import { DetectionTag, SeverityTag } from './tags';
 import { EmptyState } from './states';
 
@@ -13,11 +14,12 @@ import { EmptyState } from './states';
  * How to fix it is behind a disclosure rather than always open: a page with
  * thirty findings would otherwise be a wall of text nobody reads.
  *
- * @param {Object} props       Component props.
- * @param {Object} props.issue The finding.
+ * @param {Object} props        Component props.
+ * @param {Object} props.issue  The finding.
+ * @param {number} props.postId Page the finding is on.
  * @return {Element} The card.
  */
-function IssueCard( { issue } ) {
+function IssueCard( { issue, postId } ) {
 	return (
 		<li className="wsak-issue">
 			<div className="wsak-issue__head">
@@ -43,6 +45,13 @@ function IssueCard( { issue } ) {
 				<pre className="wsak-issue__context" tabIndex="0">
 					<code>{ issue.context }</code>
 				</pre>
+			) }
+
+			{ 'img-alt-missing' === issue.rule_id && (
+				<AltTextAction
+					attachmentId={ issue.attachment_id }
+					postId={ postId }
+				/>
 			) }
 
 			{ issue.how_to_fix && (
@@ -79,9 +88,10 @@ function IssueCard( { issue } ) {
  * @param {string} props.title  Group heading.
  * @param {string} props.blurb  What this group means.
  * @param {Array}  props.issues Findings in the group.
+ * @param {number} props.postId Page the findings are on.
  * @return {?Element} The group, or nothing when empty.
  */
-function IssueGroup( { id, title, blurb, issues } ) {
+function IssueGroup( { id, title, blurb, issues, postId } ) {
 	if ( ! issues.length ) {
 		return null;
 	}
@@ -106,7 +116,11 @@ function IssueGroup( { id, title, blurb, issues } ) {
 			<p className="wsak-group__blurb">{ blurb }</p>
 			<ul className="wsak-issues">
 				{ issues.map( ( issue ) => (
-					<IssueCard issue={ issue } key={ issue.id } />
+					<IssueCard
+						issue={ issue }
+						postId={ postId }
+						key={ issue.id }
+					/>
 				) ) }
 			</ul>
 		</section>
@@ -122,9 +136,10 @@ function IssueGroup( { id, title, blurb, issues } ) {
  *
  * @param {Object} props        Component props.
  * @param {Array}  props.issues Findings.
+ * @param {number} props.postId Page the findings are on.
  * @return {Element} The list.
  */
-export default function IssueList( { issues } ) {
+export default function IssueList( { issues, postId } ) {
 	const auto = issues.filter( ( issue ) => issue.detection === 'auto' );
 	const manual = issues.filter( ( issue ) => issue.detection !== 'auto' );
 
@@ -161,6 +176,7 @@ export default function IssueList( { issues } ) {
 					'wowstudio-accessibility-kit'
 				) }
 				issues={ auto }
+				postId={ postId }
 			/>
 
 			<IssueGroup
@@ -179,6 +195,7 @@ export default function IssueList( { issues } ) {
 					'wowstudio-accessibility-kit'
 				) }
 				issues={ manual }
+				postId={ postId }
 			/>
 		</div>
 	);

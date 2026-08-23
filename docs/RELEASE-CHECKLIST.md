@@ -59,6 +59,21 @@ an injection attempt in a rule ID lands in the bound values and never in the SQL
 If either method is edited, re-read it before assuming the warning is still
 benign.
 
+Five further warnings are `PluginCheck.CodeAnalysis.AIProvider.DirectIntegration`
+on the provider adapters in `src/AI/Providers/`. Plugin Check now nudges plugins
+towards the AI client WordPress 7.0 ships rather than calling providers
+directly, and that nudge is right. We already follow it: `AI\AiClientBridge`
+prefers `WordPress\AiClient\AiClient` whenever it is present and configured,
+and only falls back to the direct adapters otherwise.
+
+The adapters exist because the plugin supports WordPress 6.6, and the AI client
+does not exist before 7.0. They are the documented graceful degradation, not a
+shortcut around the core API.
+
+- [ ] **TODO(human)** Be ready to explain this to a WordPress.org reviewer, and
+      revisit once the supported floor rises to 7.0 — at that point the direct
+      adapters can be dropped entirely.
+
 ## Tooling debt
 
 - [ ] Drop the `PHPCompatibility.Variables.ForbiddenThisUseContexts` exclusion in

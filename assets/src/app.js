@@ -7,6 +7,7 @@ import { useCallback, useEffect, useRef, useState } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
 
 import { fetchScan, readableError, runScan } from './api';
+import AiSettings from './components/ai-settings';
 import CoveragePanel from './components/coverage-panel';
 import IssueList from './components/issue-list';
 import ScanPicker from './components/scan-picker';
@@ -27,6 +28,7 @@ export default function App() {
 	const [ loading, setLoading ] = useState( false );
 	const [ error, setError ] = useState( '' );
 	const [ announcement, setAnnouncement ] = useState( '' );
+	const [ view, setView ] = useState( 'scan' );
 
 	const resultHeading = useRef( null );
 
@@ -95,6 +97,30 @@ export default function App() {
 				</p>
 			</header>
 
+			<nav
+				className="wsak__nav"
+				aria-label={ __( 'Sections', 'wowstudio-accessibility-kit' ) }
+			>
+				<Button
+					variant={ view === 'scan' ? 'primary' : 'tertiary' }
+					aria-current={ view === 'scan' ? 'page' : undefined }
+					onClick={ () => setView( 'scan' ) }
+				>
+					{ __( 'Scan', 'wowstudio-accessibility-kit' ) }
+				</Button>
+				{ capabilities.manage && (
+					<Button
+						variant={ view === 'settings' ? 'primary' : 'tertiary' }
+						aria-current={
+							view === 'settings' ? 'page' : undefined
+						}
+						onClick={ () => setView( 'settings' ) }
+					>
+						{ __( 'AI settings', 'wowstudio-accessibility-kit' ) }
+					</Button>
+				) }
+			</nav>
+
 			<p className="screen-reader-text" role="status" aria-live="polite">
 				{ announcement }
 			</p>
@@ -115,7 +141,9 @@ export default function App() {
 				</Notice>
 			) }
 
-			{ loading && (
+			{ view === 'settings' && <AiSettings /> }
+
+			{ view === 'scan' && loading && (
 				<Skeleton
 					label={ __(
 						'Loading the scan…',
@@ -124,7 +152,7 @@ export default function App() {
 				/>
 			) }
 
-			{ scan && ! loading && (
+			{ view === 'scan' && scan && ! loading && (
 				<section
 					className="wsak-result"
 					aria-labelledby="wsak-result-title"
@@ -179,11 +207,14 @@ export default function App() {
 						manual={ byDetection.manual ?? 0 }
 					/>
 
-					<IssueList issues={ scan.issues ?? [] } />
+					<IssueList
+						issues={ scan.issues ?? [] }
+						postId={ scan.post_id }
+					/>
 				</section>
 			) }
 
-			{ ! scan && ! loading && (
+			{ view === 'scan' && ! scan && ! loading && (
 				<ScanPicker
 					onScan={ startScan }
 					onOpen={ openScan }
@@ -192,7 +223,7 @@ export default function App() {
 				/>
 			) }
 
-			<CoveragePanel />
+			{ view === 'scan' && <CoveragePanel /> }
 
 			<footer className="wsak__footer">
 				<p>

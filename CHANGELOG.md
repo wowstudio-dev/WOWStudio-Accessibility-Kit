@@ -6,6 +6,46 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Not yet done in this step
+
+- Capped **bulk** alt-text generation. Single-image generation is complete and
+  the cap is enforced, but a bulk run means many multi-second provider calls in
+  one request, which is exactly the kind of work CLAUDE.md says must go through
+  Action Scheduler. Shipping a synchronous loop that times out halfway would be
+  worse than not shipping it, so bulk lands with the queue.
+
+## [0.5.0] - 2026-08-23
+
+Phase 1, step 5: AI providers, encrypted credentials, and alt text.
+
+### Added
+
+- Bring-your-own-key providers for Anthropic, OpenAI, Google Gemini, and
+  OpenRouter, behind a single `ProviderInterface`.
+- `AI\AiClientBridge`, which prefers the AI client WordPress 7.0 ships when the
+  site has one configured, so credentials do not have to be entered twice. The
+  bridge is built against the real API, read from a WordPress 7.1 install.
+- `AI\KeyStore`: keys encrypted with libsodium before they reach the database,
+  with a fresh nonce per write. If libsodium is missing, storage is **refused**
+  rather than silently downgraded to plaintext.
+- Alt-text generation with a review step. The suggestion always lands in an
+  editable field; nothing is written to the media library until a person saves
+  it.
+- The free allowance of 20 images a day, enforced in the generation path rather
+  than in the interface, and consumed only after a provider actually answered.
+- AI settings screen: provider, model, write-only key field, a plain statement
+  of what is sent, and today's allowance.
+
+### Privacy
+
+- What leaves the site is the image, its file name, and — if the site leaves the
+  toggle on — the page title and up to 300 characters of surrounding text. That
+  list is the whole of `AI\ImageContext`; there is no other path out.
+- A resized copy is sent rather than the original: cheaper, faster, and less
+  data.
+- Individual posts can be excluded with the `_wsak_skip_ai` post meta, checked
+  before any work is done.
+
 ## [0.4.0] - 2026-08-23
 
 Phase 1, step 4: the dashboard. The scanner now has a face.

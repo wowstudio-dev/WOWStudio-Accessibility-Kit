@@ -15,4 +15,6 @@ parameters:
 		- freemius/includes
 	scanFiles:
 		- freemius/start.php
+		# WordPress 7.0's AI Client; the bundled WP stubs still describe 6.9.
+		- stubs/wp-ai-client.php
 	treatPhpDocTypesAsCertain: false

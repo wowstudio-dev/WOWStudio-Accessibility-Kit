@@ -405,6 +405,39 @@ final class ScanController implements Registrable {
 	}
 
 	/**
+	 * Resolves the media item an image finding refers to.
+	 *
+	 * Returns 0 for anything that is not an image finding, and for images that
+	 * are not in the media library — a hotlinked or theme-bundled image has no
+	 * attachment to write alt text onto.
+	 *
+	 * @since 0.5.0
+	 *
+	 * @param string $rule_id Rule that produced the finding.
+	 * @param string $context The offending markup.
+	 * @return int
+	 */
+	private function attachment_for( string $rule_id, string $context ): int {
+		if ( 'img-alt-missing' !== $rule_id || '' === $context ) {
+			return 0;
+		}
+
+		if ( 1 !== preg_match( '/\ssrc=["\']([^"\']+)["\']/i', $context, $matches ) ) {
+			return 0;
+		}
+
+		$url = $matches[1];
+
+		// Relative sources are common in rendered markup; make them absolute so
+		// the lookup can match what WordPress stored.
+		if ( 0 === strpos( $url, '/' ) && 0 !== strpos( $url, '//' ) ) {
+			$url = home_url( $url );
+		}
+
+		return (int) attachment_url_to_postid( $url );
+	}
+
+	/**
 	 * Shapes stored issues for the response.
 	 *
 	 * @since 0.3.0
@@ -423,6 +456,10 @@ final class ScanController implements Registrable {
 			$presented[] = array(
 				'rule_title'      => null === $rule ? $issue->rule_id : $rule->title(),
 				'how_to_fix'      => null === $rule ? '' : $rule->description(),
+				// Only findings about a specific image can be handed to the
+				// alt-text generator, so resolve the media item here rather than
+				// making the interface guess.
+				'attachment_id'   => $this->attachment_for( $issue->rule_id, $issue->context ),
 				'id'              => $issue->id,
 				'rule_id'         => $issue->rule_id,
 				'wcag_sc'         => $issue->wcag_sc,

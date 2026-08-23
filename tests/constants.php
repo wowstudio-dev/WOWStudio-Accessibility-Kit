@@ -12,10 +12,16 @@
 declare( strict_types = 1 );
 
 defined( 'ABSPATH' ) || define( 'ABSPATH', __DIR__ . '/fixtures/wordpress/' );
-defined( 'WSAK_VERSION' ) || define( 'WSAK_VERSION', '0.4.0' );
+defined( 'WSAK_VERSION' ) || define( 'WSAK_VERSION', '0.5.0' );
 defined( 'WSAK_FILE' ) || define( 'WSAK_FILE', __DIR__ . '/../wowstudio-accessibility-kit.php' );
 defined( 'WSAK_PATH' ) || define( 'WSAK_PATH', dirname( __DIR__ ) . '/' );
 defined( 'WSAK_URL' ) || define( 'WSAK_URL', 'https://example.test/wp-content/plugins/wowstudio-accessibility-kit/' );
 defined( 'WSAK_BASENAME' ) || define( 'WSAK_BASENAME', 'wowstudio-accessibility-kit/wowstudio-accessibility-kit.php' );
 defined( 'WSAK_MIN_PHP' ) || define( 'WSAK_MIN_PHP', '8.1' );
 defined( 'WSAK_MIN_WP' ) || define( 'WSAK_MIN_WP', '6.6' );
+
+// WordPress time constants the plugin uses.
+defined( 'MINUTE_IN_SECONDS' ) || define( 'MINUTE_IN_SECONDS', 60 );
+defined( 'HOUR_IN_SECONDS' ) || define( 'HOUR_IN_SECONDS', 3600 );
+defined( 'DAY_IN_SECONDS' ) || define( 'DAY_IN_SECONDS', 86400 );
+defined( 'WEEK_IN_SECONDS' ) || define( 'WEEK_IN_SECONDS', 604800 );

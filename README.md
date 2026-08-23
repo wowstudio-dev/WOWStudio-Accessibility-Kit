@@ -9,7 +9,7 @@ It is not an overlay, and it never tells a user their site is compliant. See
 
 ## Status
 
-Phase 1, step 4 of 9: scanner, REST API, and admin dashboard. AI alt text is step 5.
+Phase 1, step 5 of 9: scanner, dashboard, and AI alt text. One-at-a-time AI fixes are step 6.
 
 ## Requirements
 
@@ -133,6 +133,8 @@ uninstall.php                     Entry point for src/Uninstaller.php
 src/Core/                         Orchestrator, activation, installation
 src/Db/                           Schema, repositories, typed records
 src/Scanner/                      Engine, rules, registry, page fetching
+src/AI/                           Providers, key storage, WP AI Client bridge
+src/AltText/                      Alt-text generation and the daily cap
 src/Rest/                         REST controllers
 assets/src/                       React admin app (source)
 build/                            Compiled admin app (generated, not tracked)
@@ -154,7 +156,14 @@ POST /wp-json/wsak/v1/scan       { "post_id": 12 }  requires wsak_run_scan
 GET  /wp-json/wsak/v1/scans/<id>                    requires wsak_view_reports
 GET  /wp-json/wsak/v1/scannable                     requires wsak_view_reports
 GET  /wp-json/wsak/v1/coverage                      requires wsak_view_reports
+GET  /wp-json/wsak/v1/ai/settings                   requires wsak_manage_settings
+POST /wp-json/wsak/v1/ai/settings                   requires wsak_manage_settings
+POST /wp-json/wsak/v1/alt-text                      requires wsak_apply_fix
+POST /wp-json/wsak/v1/alt-text/apply                requires wsak_apply_fix
 ```
+
+No route returns an API key. Reading the AI settings tells you whether a key is
+stored and shows a masked hint; that is the most any caller can learn.
 
 The scanner fetches the whole rendered page over a loopback request, because the
 page language, title, landmarks, and most of the theme's markup live outside

@@ -8,6 +8,7 @@
 namespace WOWStudio\AccessibilityKit\Core;
 
 use WOWStudio\AccessibilityKit\Admin\Menu;
+use WOWStudio\AccessibilityKit\Rest\AiController;
 use WOWStudio\AccessibilityKit\Rest\ScanController;
 
 defined( 'ABSPATH' ) || exit;
@@ -133,6 +134,7 @@ final class Plugin {
 			'assets'     => new Assets(),
 			'admin.menu' => new Menu(),
 			'rest.scan'  => new ScanController(),
+			'rest.ai'    => new AiController(),
 		);
 
 		/**

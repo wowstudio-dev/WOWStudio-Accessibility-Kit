@@ -77,3 +77,58 @@ export function fetchScan( scanId ) {
 export function fetchCoverage() {
 	return apiFetch( { path: `/${ namespace }/coverage` } );
 }
+
+/**
+ * Reads the AI configuration.
+ *
+ * Never returns an API key: only whether one is stored, and a masked hint.
+ *
+ * @return {Promise<Object>} The configuration.
+ */
+export function fetchAiSettings() {
+	return apiFetch( { path: `/${ namespace }/ai/settings` } );
+}
+
+/**
+ * Saves AI configuration, and optionally a key.
+ *
+ * @param {Object} data Fields to change.
+ * @return {Promise<Object>} The configuration as it now stands.
+ */
+export function saveAiSettings( data ) {
+	return apiFetch( {
+		path: `/${ namespace }/ai/settings`,
+		method: 'POST',
+		data,
+	} );
+}
+
+/**
+ * Asks for a description of one image.
+ *
+ * @param {number} attachmentId Media item to describe.
+ * @param {number} postId       Page it appears on, for context.
+ * @return {Promise<Object>} The suggestion and the remaining allowance.
+ */
+export function generateAltText( attachmentId, postId = 0 ) {
+	return apiFetch( {
+		path: `/${ namespace }/alt-text`,
+		method: 'POST',
+		data: { attachment_id: attachmentId, post_id: postId },
+	} );
+}
+
+/**
+ * Saves reviewed alt text onto a media item.
+ *
+ * @param {number} attachmentId Media item to update.
+ * @param {string} text         The reviewed alt text.
+ * @return {Promise<Object>} The saved value and what it replaced.
+ */
+export function applyAltText( attachmentId, text ) {
+	return apiFetch( {
+		path: `/${ namespace }/alt-text/apply`,
+		method: 'POST',
+		data: { attachment_id: attachmentId, text },
+	} );
+}

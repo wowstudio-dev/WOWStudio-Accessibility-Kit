@@ -11,6 +11,7 @@
 node_modules
 tests
 bin
+stubs
 assets/src
 composer.lock
 package.json
