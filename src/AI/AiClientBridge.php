@@ -29,6 +29,29 @@ defined( 'ABSPATH' ) || exit;
 final class AiClientBridge {
 
 	/**
+	 * Reports whether this site permits AI features at all.
+	 *
+	 * WordPress 7.0 added wp_supports_ai(), which a site owner or host can turn
+	 * off with the WP_AI_SUPPORT constant or the wp_supports_ai filter. That is
+	 * a deliberate decision about the site, and it outranks anything configured
+	 * in this plugin: a site that has switched AI off must not have a provider
+	 * called on its behalf.
+	 *
+	 * Older WordPress has no such switch, so there is nothing to disobey.
+	 *
+	 * @since 0.5.1
+	 *
+	 * @return bool
+	 */
+	public function site_permits_ai(): bool {
+		if ( ! function_exists( 'wp_supports_ai' ) ) {
+			return true;
+		}
+
+		return (bool) wp_supports_ai();
+	}
+
+	/**
 	 * Reports whether WordPress ships an AI client at all.
 	 *
 	 * @since 0.5.0
@@ -51,7 +74,7 @@ final class AiClientBridge {
 	 * @return bool
 	 */
 	public function is_configured_for( string $provider_id ): bool {
-		if ( ! $this->is_available() || '' === $provider_id ) {
+		if ( ! $this->is_available() || '' === $provider_id || ! $this->site_permits_ai() ) {
 			return false;
 		}
 

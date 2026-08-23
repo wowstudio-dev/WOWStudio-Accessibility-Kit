@@ -83,6 +83,7 @@ export default function AiSettings() {
 		encryption,
 		usage,
 		wp_ai_client: wpAi,
+		ai_permitted: aiPermitted,
 	} = state.data;
 	const active = providers.find(
 		( provider ) => provider.id === settings.provider
@@ -107,6 +108,15 @@ export default function AiSettings() {
 			{ notice && (
 				<Notice status="info" onRemove={ () => setNotice( '' ) }>
 					{ notice }
+				</Notice>
+			) }
+
+			{ ! aiPermitted && (
+				<Notice status="warning" isDismissible={ false }>
+					{ __(
+						'AI features are switched off for this site, so no suggestions can be generated. That switch belongs to the site or its host — the WP_AI_SUPPORT constant, or the wp_supports_ai filter — and this plugin will not work around it.',
+						'wowstudio-accessibility-kit'
+					) }
 				</Notice>
 			) }
 

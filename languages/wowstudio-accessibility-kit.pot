@@ -2,14 +2,14 @@
 # This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: WOWStudio Accessibility Kit 0.5.0\n"
+"Project-Id-Version: WOWStudio Accessibility Kit 0.5.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wowstudio-accessibility-kit\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-08-23T14:49:28+00:00\n"
+"POT-Creation-Date: 2026-08-23T15:05:11+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: wowstudio-accessibility-kit\n"
@@ -59,18 +59,18 @@ msgstr ""
 msgid "This dashboard needs JavaScript to run a scan and show results. Everything it does is also available through the REST API if you would rather not enable it."
 msgstr ""
 
-#: src/AI/AiClientBridge.php:80
-#: src/AltText/Generator.php:338
+#: src/AI/AiClientBridge.php:103
+#: src/AltText/Generator.php:348
 msgid "The image file could not be read."
 msgstr ""
 
 #. translators: %s: the underlying error message.
-#: src/AI/AiClientBridge.php:100
+#: src/AI/AiClientBridge.php:123
 #, php-format
 msgid "The WordPress AI client could not describe this image: %s"
 msgstr ""
 
-#: src/AI/AiClientBridge.php:109
+#: src/AI/AiClientBridge.php:132
 msgid "The WordPress AI client returned no description for this image."
 msgstr ""
 
@@ -114,46 +114,50 @@ msgstr ""
 msgid "%s returned no description for this image."
 msgstr ""
 
-#: src/AltText/Generator.php:130
+#: src/AltText/Generator.php:132
+msgid "AI features are switched off for this site, so nothing was sent to a provider."
+msgstr ""
+
+#: src/AltText/Generator.php:140
 msgid "This content is marked as not to be sent to an AI provider."
 msgstr ""
 
 #. translators: %d: number of images allowed per day.
-#: src/AltText/Generator.php:142
+#: src/AltText/Generator.php:152
 #, php-format
 msgid "You have used today's %d free alt-text generations. The allowance resets at midnight UTC, and Pro removes it."
 msgstr ""
 
-#: src/AltText/Generator.php:207
+#: src/AltText/Generator.php:217
 msgid "No AI provider is set up yet. Choose one in the Accessibility settings and add your API key."
 msgstr ""
 
 #. translators: %s: provider name.
-#: src/AltText/Generator.php:235
+#: src/AltText/Generator.php:245
 #, php-format
 msgid "No API key is stored for %s. Add one in the Accessibility settings."
 msgstr ""
 
-#: src/AltText/Generator.php:293
-#: src/Rest/AiController.php:315
+#: src/AltText/Generator.php:303
+#: src/Rest/AiController.php:316
 msgid "That is not an image in the media library."
 msgstr ""
 
 #. translators: %s: the file's MIME type.
-#: src/AltText/Generator.php:305
+#: src/AltText/Generator.php:315
 #, php-format
 msgid "Images of type %s cannot be described. JPEG, PNG, GIF, and WebP are supported."
 msgstr ""
 
-#: src/AltText/Generator.php:306
+#: src/AltText/Generator.php:316
 msgid "unknown"
 msgstr ""
 
-#: src/AltText/Generator.php:317
+#: src/AltText/Generator.php:327
 msgid "The image file could not be found on disk."
 msgstr ""
 
-#: src/AltText/Generator.php:327
+#: src/AltText/Generator.php:337
 msgid "This image is too large to send. Regenerate the site's image sizes, or use a smaller original."
 msgstr ""
 
@@ -181,19 +185,19 @@ msgstr ""
 msgid "This server has no libsodium support, so keys cannot be stored securely. Storing a key is disabled rather than saving it unencrypted."
 msgstr ""
 
-#: src/Rest/AiController.php:236
+#: src/Rest/AiController.php:237
 msgid "This server cannot encrypt secrets, so the key was not stored. Ask your host to enable the sodium extension."
 msgstr ""
 
-#: src/Rest/AiController.php:247
+#: src/Rest/AiController.php:248
 msgid "That AI provider is not one this plugin knows about."
 msgstr ""
 
-#: src/Rest/AiController.php:255
+#: src/Rest/AiController.php:256
 msgid "The key could not be stored."
 msgstr ""
 
-#: src/Rest/AiController.php:323
+#: src/Rest/AiController.php:324
 msgid "You do not have permission to edit that image."
 msgstr ""
 
@@ -535,7 +539,7 @@ msgid "Scan"
 msgstr ""
 
 #: assets/src/app.js:119
-#: assets/src/components/ai-settings.js:97
+#: assets/src/components/ai-settings.js:98
 msgid "AI settings"
 msgstr ""
 
@@ -573,108 +577,112 @@ msgstr ""
 msgid "Loading AI settings…"
 msgstr ""
 
-#: assets/src/components/ai-settings.js:101
+#: assets/src/components/ai-settings.js:102
 msgid "Alt-text generation uses your own account with an AI provider. You pay them directly, we never see your key after it is stored, and nothing is sent anywhere until you ask for a suggestion."
 msgstr ""
 
-#: assets/src/components/ai-settings.js:122
+#: assets/src/components/ai-settings.js:116
+msgid "AI features are switched off for this site, so no suggestions can be generated. That switch belongs to the site or its host — the WP_AI_SUPPORT constant, or the wp_supports_ai filter — and this plugin will not work around it."
+msgstr ""
+
+#: assets/src/components/ai-settings.js:132
 msgid "WordPress has its own AI provider configured, and it will be used before the key stored here."
 msgstr ""
 
-#: assets/src/components/ai-settings.js:126
+#: assets/src/components/ai-settings.js:136
 msgid "This WordPress version has a built-in AI client. If you configure a provider there, it will be used before the key stored here."
 msgstr ""
 
-#: assets/src/components/ai-settings.js:135
+#: assets/src/components/ai-settings.js:145
 msgid "Provider"
 msgstr ""
 
-#: assets/src/components/ai-settings.js:139
+#: assets/src/components/ai-settings.js:149
 msgid "Not set"
 msgstr ""
 
 #. translators: 1: provider name, 2: masked key hint.
-#: assets/src/components/ai-settings.js:146
+#: assets/src/components/ai-settings.js:156
 #, js-format
 msgid "%1$s — key stored (%2$s)"
 msgstr ""
 
-#: assets/src/components/ai-settings.js:160
+#: assets/src/components/ai-settings.js:170
 msgid "Provider saved."
 msgstr ""
 
-#: assets/src/components/ai-settings.js:169
+#: assets/src/components/ai-settings.js:179
 msgid "Model"
 msgstr ""
 
-#: assets/src/components/ai-settings.js:170
+#: assets/src/components/ai-settings.js:180
 msgid "Larger models describe images more carefully and cost more per image at your provider."
 msgstr ""
 
-#: assets/src/components/ai-settings.js:184
+#: assets/src/components/ai-settings.js:194
 msgid "Model saved."
 msgstr ""
 
 #. translators: %s: provider name.
-#: assets/src/components/ai-settings.js:199
+#: assets/src/components/ai-settings.js:209
 #, js-format
 msgid "API key for %s"
 msgstr ""
 
 #. translators: %s: masked key hint.
-#: assets/src/components/ai-settings.js:209
+#: assets/src/components/ai-settings.js:219
 #, js-format
 msgid "A key ending %s is stored. Enter a new one to replace it."
 msgstr ""
 
-#: assets/src/components/ai-settings.js:215
+#: assets/src/components/ai-settings.js:225
 msgid "Stored encrypted. It is never shown again, and never sent to your browser."
 msgstr ""
 
-#: assets/src/components/ai-settings.js:230
+#: assets/src/components/ai-settings.js:240
 msgid "Key stored."
 msgstr ""
 
-#: assets/src/components/ai-settings.js:237
+#: assets/src/components/ai-settings.js:247
 msgid "Store key"
 msgstr ""
 
 #. translators: %s: provider name.
-#: assets/src/components/ai-settings.js:247
+#: assets/src/components/ai-settings.js:257
 #, js-format
 msgid "Get a key from %s"
 msgstr ""
 
-#: assets/src/components/ai-settings.js:260
+#: assets/src/components/ai-settings.js:270
 msgid "What gets sent"
 msgstr ""
 
-#: assets/src/components/ai-settings.js:265
+#: assets/src/components/ai-settings.js:275
 msgid "Send the page title and a little surrounding text"
 msgstr ""
 
-#: assets/src/components/ai-settings.js:269
+#: assets/src/components/ai-settings.js:279
 msgid "Context makes alt text markedly better, because the same photograph means different things on different pages. Turn this off to send the image alone."
 msgstr ""
 
-#: assets/src/components/ai-settings.js:277
+#: assets/src/components/ai-settings.js:287
 msgid "Privacy setting saved."
 msgstr ""
 
-#: assets/src/components/ai-settings.js:286
+#: assets/src/components/ai-settings.js:296
 msgid "Nothing else leaves your site: not the rest of the page, not other images, not your visitors’ data. Individual posts can be excluded entirely with the _wsak_skip_ai post meta."
 msgstr ""
 
-#: assets/src/components/ai-settings.js:293
+#: assets/src/components/ai-settings.js:303
 msgid "Your allowance today"
 msgstr ""
 
-#: assets/src/components/ai-settings.js:298
+#: assets/src/components/ai-settings.js:308
 msgid "Unlimited alt-text generation."
 msgstr ""
 
 #. translators: 1: number used, 2: daily cap.
-#: assets/src/components/ai-settings.js:304
+#: assets/src/components/ai-settings.js:314
 #, js-format
 msgid "%1$d of %2$d used. The allowance resets at midnight UTC."
 msgstr ""

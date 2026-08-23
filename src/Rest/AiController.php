@@ -195,6 +195,7 @@ final class AiController implements Registrable {
 					'available'  => $bridge->is_available(),
 					'configured' => $bridge->is_configured_for( (string) $current['provider'] ),
 				),
+				'ai_permitted' => $bridge->site_permits_ai(),
 				'usage'        => array(
 					'cap'       => $usage->cap(),
 					'used'      => $usage->used_today(),

@@ -124,6 +124,16 @@ final class Generator {
 	 * @return Suggestion|WP_Error
 	 */
 	public function for_attachment( int $attachment_id, int $post_id = 0 ) {
+		// Checked before anything else. A site that has switched AI off has made
+		// a decision that outranks this plugin's own configuration.
+		if ( ! $this->bridge->site_permits_ai() ) {
+			return new WP_Error(
+				'wsak_ai_disabled',
+				__( 'AI features are switched off for this site, so nothing was sent to a provider.', 'wowstudio-accessibility-kit' ),
+				array( 'status' => 403 )
+			);
+		}
+
 		if ( $this->settings->is_opted_out( $post_id ) ) {
 			return new WP_Error(
 				'wsak_ai_opted_out',

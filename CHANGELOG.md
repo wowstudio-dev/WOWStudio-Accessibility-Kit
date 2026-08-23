@@ -14,6 +14,21 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   Action Scheduler. Shipping a synchronous loop that times out halfway would be
   worse than not shipping it, so bulk lands with the queue.
 
+## [0.5.1] - 2026-08-23
+
+### Fixed
+
+- The plugin ignored `wp_supports_ai()`. WordPress 7.0 lets a site owner or host
+  switch AI off through the `WP_AI_SUPPORT` constant or the `wp_supports_ai`
+  filter, and we would have called a paid provider on a site that had explicitly
+  said not to. The check now runs before any other work in the generation path,
+  the settings screen explains the situation rather than silently failing, and
+  the plugin does not work around the switch.
+
+  WordPress before 7.0 has no such function, so its absence is treated as
+  permission rather than refusal — otherwise AI would break on every site
+  between 6.6 and 6.9.
+
 ## [0.5.0] - 2026-08-23
 
 Phase 1, step 5: AI providers, encrypted credentials, and alt text.
