@@ -128,6 +128,7 @@ final class Plugin {
 		 * Scanner and REST services are added in later steps.
 		 */
 		$services = array(
+			'installer'  => new Installer(),
 			'admin.menu' => new Menu(),
 		);
 

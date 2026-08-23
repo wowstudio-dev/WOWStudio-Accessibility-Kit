@@ -9,7 +9,7 @@ It is not an overlay, and it never tells a user their site is compliant. See
 
 ## Status
 
-Phase 1, step 1 of 9: tooling and scaffold. Nothing user-facing yet.
+Phase 1, step 2 of 9: storage layer. The scanner that fills these tables is step 3.
 
 ## Requirements
 
@@ -130,7 +130,10 @@ php bin/check-free-build.php dist/free.zip
 ```
 wowstudio-accessibility-kit.php   Bootstrap: headers, constants, Freemius init
 uninstall.php                     Entry point for src/Uninstaller.php
-src/Core/                         Plugin orchestrator, activation, deactivation
+src/Core/                         Orchestrator, activation, installation
+src/Db/                           Schema, repositories, typed records
+src/Scanner/                      Domain enums (rules and engine land in step 3)
+src/Admin/                        Admin menu
 src/Support/                      Shared helpers (capabilities)
 bin/build.sh                      Release build (honours .distignore)
 bin/                              Product guards
@@ -138,9 +141,9 @@ freemius/                         Freemius SDK (vendored, committed)
 docs/RELEASE-CHECKLIST.md         What a human must verify before release
 ```
 
-Later steps add `src/Scanner/`, `src/Remediation/`, `src/AI/`, `src/AltText/`,
-`src/Conformance/`, `src/Rest/`, `src/Admin/`, `src/Db/`, and the React admin app
-under `assets/src/`. See `SPEC.md`.
+Later steps add `src/Remediation/`, `src/AI/`, `src/AltText/`,
+`src/Conformance/`, `src/Rest/`, and the React admin app under `assets/src/`.
+See `SPEC.md`.
 
 ## License
 

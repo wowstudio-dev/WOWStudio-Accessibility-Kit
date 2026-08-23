@@ -7,32 +7,17 @@
 
 namespace WOWStudio\AccessibilityKit\Core;
 
-use WOWStudio\AccessibilityKit\Support\Capabilities;
-
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Prepares a site the first time the plugin is activated.
+ * Prepares sites when the plugin is activated.
+ *
+ * The per-site work lives in Installer, which is also reached when a site joins
+ * a network or a schema change lands without an activation.
  *
  * @since 0.1.0
  */
 final class Activator {
-
-	/**
-	 * Option holding the plugin settings.
-	 *
-	 * @since 0.1.0
-	 * @var string
-	 */
-	public const SETTINGS_OPTION = 'wsak_settings';
-
-	/**
-	 * Option holding the installed plugin version.
-	 *
-	 * @since 0.1.0
-	 * @var string
-	 */
-	public const VERSION_OPTION = 'wsak_version';
 
 	/**
 	 * Runs activation for one site or, on a network activation, for every site.
@@ -49,15 +34,22 @@ final class Activator {
 			return;
 		}
 
-		self::activate_site();
+		Installer::install_site();
+
+		/**
+		 * Fires after the plugin finishes activating on a site.
+		 *
+		 * @since 0.1.0
+		 */
+		do_action( 'wsak_activated' );
 	}
 
 	/**
 	 * Runs activation across a network.
 	 *
 	 * Very large networks are skipped deliberately: looping thousands of sites
-	 * inside an activation request would time out. Those sites are set up on
-	 * first admin load instead.
+	 * inside an activation request would time out. Those sites install on their
+	 * first admin load instead, through Installer::maybe_upgrade().
 	 *
 	 * @since 0.1.0
 	 *
@@ -80,37 +72,9 @@ final class Activator {
 
 		foreach ( $site_ids as $site_id ) {
 			switch_to_blog( (int) $site_id );
-			self::activate_site();
+			Installer::install_site();
 			restore_current_blog();
 		}
-	}
-
-	/**
-	 * Runs activation for the current site.
-	 *
-	 * Written to be safe to run more than once.
-	 *
-	 * @since 0.1.0
-	 *
-	 * @return void
-	 */
-	public static function activate_site(): void {
-		Capabilities::grant();
-
-		$settings = get_option( self::SETTINGS_OPTION, array() );
-
-		if ( ! is_array( $settings ) ) {
-			$settings = array();
-		}
-
-		// Data is kept on uninstall unless the site owner opts in. Losing a scan
-		// history to an accidental uninstall is not a recoverable mistake.
-		if ( ! array_key_exists( 'delete_data_on_uninstall', $settings ) ) {
-			$settings['delete_data_on_uninstall'] = false;
-		}
-
-		update_option( self::SETTINGS_OPTION, $settings, false );
-		update_option( self::VERSION_OPTION, WSAK_VERSION, true );
 
 		/**
 		 * Fires after the plugin finishes activating on a site.

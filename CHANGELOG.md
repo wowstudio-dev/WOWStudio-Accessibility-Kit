@@ -6,6 +6,39 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+## [0.2.0] - 2026-08-23
+
+Phase 1, step 2: the storage layer. Still nothing user-facing beyond a holding
+screen; the scanner that fills these tables arrives in step 3.
+
+### Added
+
+- `wp_wsak_scans` and `wp_wsak_issues` tables, created through `dbDelta` and
+  versioned so later changes apply without an activation.
+- `ScanRepository` and `IssueRepository`, with findings written as a single
+  multi-row INSERT rather than one query per issue.
+- Typed domain vocabulary as PHP 8.1 enums: `Severity`, `Detection`,
+  `IssueStatus`, `ScanScope`, `ScanStatus`. The auto/manual honesty tag is a
+  type rather than a loose string, because the UI has to keep the two apart
+  everywhere it shows findings.
+- `Scan` and `Issue` readonly records. An unrecognised value from a newer
+  version degrades to a safe default instead of throwing, and an unrecognised
+  detection degrades to "needs manual review" — when we cannot tell whether a
+  machine settled something, the honest answer is that a person should look.
+- `Core\Installer`, which installs on activation, on a site joining a network,
+  and on a schema change. This closes the multisite gap left open in 0.1.0.
+- Uninstall now drops the plugin's tables, still only when the site owner has
+  opted in.
+
+### Changed
+
+- Every query uses `prepare()`'s `%i` identifier placeholder for table and
+  column names, so no SQL in the plugin is assembled by string interpolation.
+  The only exceptions are the `CREATE TABLE` statements, which `dbDelta` has to
+  parse as literals.
+- `Activator` now delegates per-site work to `Installer` so the activation and
+  non-activation paths cannot drift apart.
+
 ### Added
 
 - `bin/build.sh --free` builds a locally installable free flavour, so the free

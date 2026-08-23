@@ -41,6 +41,32 @@ by a human before any public release. Items marked **TODO(human)** are open.
       privacy policy. Submitting without it is a rejection.
 - [ ] Screenshots and banner assets prepared.
 
+## Known, accepted Plugin Check warnings
+
+Plugin Check reports **0 errors**. Two warnings remain, both in
+`src/Db/IssueRepository.php`, and both are the same finding:
+`PluginCheck.Security.DirectDB.UnescapedDBParameter` on `add_many()` and
+`find_by_scan()`.
+
+Those two statements genuinely cannot be written as a fixed literal: one builds a
+multi-row INSERT whose placeholder count depends on the batch size, the other
+builds a WHERE clause from the filters the caller passed. In both cases the
+assembled string contains **only** placeholder fragments, and every value —
+including the table name, via the `%i` identifier placeholder — goes through
+`$wpdb->prepare()`. `IssueRepositoryTest` asserts this directly, including that
+an injection attempt in a rule ID lands in the bound values and never in the SQL.
+
+If either method is edited, re-read it before assuming the warning is still
+benign.
+
+## Tooling debt
+
+- [ ] Drop the `PHPCompatibility.Variables.ForbiddenThisUseContexts` exclusion in
+      `phpcs.xml.dist` once PHPCompatibility 10 is stable. The stable release is
+      9.3.5, which predates PHP 8.1 enums and flags every `match ( $this )` in an
+      enum method as a false positive. Until then that sniff is off, so a genuine
+      `$this` in a plain function would not be caught by PHPCS.
+
 ## Legal and product
 
 - [ ] `composer check-claims` passes, and every entry in

@@ -7,7 +7,8 @@
 
 namespace WOWStudio\AccessibilityKit;
 
-use WOWStudio\AccessibilityKit\Core\Activator;
+use WOWStudio\AccessibilityKit\Core\Installer;
+use WOWStudio\AccessibilityKit\Db\Schema;
 use WOWStudio\AccessibilityKit\Support\Capabilities;
 
 defined( 'ABSPATH' ) || exit;
@@ -82,8 +83,12 @@ final class Uninstaller {
 			Capabilities::revoke();
 		}
 
-		delete_option( Activator::SETTINGS_OPTION );
-		delete_option( Activator::VERSION_OPTION );
+		if ( class_exists( Schema::class ) ) {
+			Schema::drop();
+		}
+
+		delete_option( Installer::SETTINGS_OPTION );
+		delete_option( Installer::VERSION_OPTION );
 
 		self::delete_transients();
 		self::delete_post_meta();
@@ -100,7 +105,7 @@ final class Uninstaller {
 	 * @return bool
 	 */
 	private static function owner_opted_in(): bool {
-		$settings = get_option( Activator::SETTINGS_OPTION, array() );
+		$settings = get_option( Installer::SETTINGS_OPTION, array() );
 
 		if ( ! is_array( $settings ) ) {
 			return false;

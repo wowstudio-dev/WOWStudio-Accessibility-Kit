@@ -29,6 +29,17 @@
 	<rule ref="PHPCompatibilityWP"/>
 
 	<!--
+		PHPCompatibility's stable release (9.3.5) predates PHP 8.1 enums and does
+		not recognise an enum as an object scope, so it reports every
+		"match ( $this )" inside an enum method as $this used outside an object.
+		These are false positives, not findings. Remove this exclusion once
+		PHPCompatibility 10 is stable; see docs/RELEASE-CHECKLIST.md.
+	-->
+	<rule ref="PHPCompatibility.Variables.ForbiddenThisUseContexts.OutsideObjectContext">
+		<severity>0</severity>
+	</rule>
+
+	<!--
 		PSR-4 autoloading uses StudlyCaps class files (src/Core/Plugin.php), which is
 		incompatible with WPCS's class-my-thing.php convention. SPEC.md mandates PSR-4,
 		so the filename sniff is dropped rather than the autoloader.
