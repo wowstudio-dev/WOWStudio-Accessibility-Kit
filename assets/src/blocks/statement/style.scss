@@ -1,0 +1,36 @@
+/**
+ * Accessibility statement — front-end styles.
+ *
+ * Deliberately restrained. This renders inside somebody's theme, so it inherits
+ * their typography and colours rather than imposing ours. The only thing styled
+ * assertively is the draft notice, which has to be impossible to miss.
+ */
+
+.wsak-statement {
+	max-width: 70ch;
+}
+
+.wsak-statement h3 {
+	margin-top: 1.5em;
+}
+
+.wsak-statement ul {
+	padding-inline-start: 1.4em;
+	list-style: disc;
+}
+
+.wsak-statement__draft {
+	padding: 1em 1.2em;
+	margin-bottom: 1.5em;
+	border: 2px solid currentcolor;
+	border-inline-start-width: 6px;
+	border-radius: 4px;
+}
+
+.wsak-statement__draft p {
+	margin: 0 0 0.5em;
+}
+
+.wsak-statement__draft p:last-child {
+	margin-bottom: 0;
+}

@@ -9,7 +9,7 @@ It is not an overlay, and it never tells a user their site is compliant. See
 
 ## Status
 
-Phase 1, step 6 of 9: scanner, dashboard, AI alt text, and reviewable fixes. The accessibility statement generator is step 7.
+Phase 1, step 7 of 9: scanner, dashboard, AI alt text, reviewable fixes, and the accessibility statement. Disclaimer review and the QA gate remain.
 
 ## Requirements
 
@@ -136,6 +136,7 @@ src/Scanner/                      Engine, rules, registry, page fetching
 src/AI/                           Providers, key storage, WP AI Client bridge
 src/AltText/                      Alt-text generation and the daily cap
 src/Remediation/                  The override layer, diffing, and fix review
+src/Conformance/                  The accessibility statement and its sign-off
 src/Rest/                         REST controllers
 assets/src/                       React admin app (source)
 build/                            Compiled admin app (generated, not tracked)
@@ -165,7 +166,23 @@ POST /wp-json/wsak/v1/fixes/preview                 requires wsak_apply_fix
 POST /wp-json/wsak/v1/fixes/apply                   requires wsak_apply_fix
 POST /wp-json/wsak/v1/fixes/<id>/revert             requires wsak_apply_fix
 GET  /wp-json/wsak/v1/fixes?post_id=<id>            requires wsak_view_reports
+GET  /wp-json/wsak/v1/statement                     requires wsak_view_reports
+POST /wp-json/wsak/v1/statement                     requires wsak_manage_settings
+POST /wp-json/wsak/v1/statement/attest              requires wsak_manage_settings
+POST /wp-json/wsak/v1/statement/withdraw            requires wsak_manage_settings
 ```
+
+## The accessibility statement
+
+Published with the `wowstudio/accessibility-statement` block or the
+`[wsak_accessibility_statement]` shortcode. Both render on the server from
+current settings, so what visitors see is always the statement as it now stands.
+
+The plugin never claims conformance on anybody's behalf: every conformance
+sentence is attributed to the organisation by name. An unsigned statement
+publishes as a draft saying nobody has checked it, sign-off is refused while the
+statement is unfinished, and **editing it withdraws the sign-off** so an approved
+statement cannot come to say something its approver never read.
 
 ## The override layer
 

@@ -1,0 +1,22 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "wowstudio/accessibility-statement",
+	"title": "Accessibility statement",
+	"category": "text",
+	"icon": "universal-access-alt",
+	"description": "Shows the accessibility statement you have written in the Accessibility settings, including the route for reporting a problem.",
+	"textdomain": "wowstudio-accessibility-kit",
+	"supports": {
+		"html": false,
+		"multiple": false,
+		"align": [ "wide", "full" ]
+	},
+	"attributes": {
+		"align": {
+			"type": "string"
+		}
+	},
+	"editorScript": "file:./index.js",
+	"style": "file:./style-index.css"
+}

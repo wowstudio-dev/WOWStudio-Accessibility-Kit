@@ -174,3 +174,56 @@ export function revertFix( fixId ) {
 		method: 'POST',
 	} );
 }
+
+/**
+ * Reads the accessibility statement and its settings.
+ *
+ * @return {Promise<Object>} Settings, preview, and what is still missing.
+ */
+export function fetchStatement() {
+	return apiFetch( { path: `/${ namespace }/statement` } );
+}
+
+/**
+ * Saves statement settings.
+ *
+ * Any change withdraws an existing sign-off, so the caller should expect
+ * `attested` to come back false.
+ *
+ * @param {Object} data Fields to change.
+ * @return {Promise<Object>} The statement as it now stands.
+ */
+export function saveStatement( data ) {
+	return apiFetch( {
+		path: `/${ namespace }/statement`,
+		method: 'POST',
+		data,
+	} );
+}
+
+/**
+ * Records that a named person stands behind the statement.
+ *
+ * @param {string} name Person taking responsibility.
+ * @param {string} role Their role.
+ * @return {Promise<Object>} The statement as it now stands.
+ */
+export function attestStatement( name, role ) {
+	return apiFetch( {
+		path: `/${ namespace }/statement/attest`,
+		method: 'POST',
+		data: { name, role },
+	} );
+}
+
+/**
+ * Withdraws sign-off, returning the statement to a draft.
+ *
+ * @return {Promise<Object>} The statement as it now stands.
+ */
+export function withdrawStatement() {
+	return apiFetch( {
+		path: `/${ namespace }/statement/withdraw`,
+		method: 'POST',
+	} );
+}

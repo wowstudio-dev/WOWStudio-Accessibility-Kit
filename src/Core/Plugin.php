@@ -8,9 +8,11 @@
 namespace WOWStudio\AccessibilityKit\Core;
 
 use WOWStudio\AccessibilityKit\Admin\Menu;
+use WOWStudio\AccessibilityKit\Conformance\StatementBlock;
 use WOWStudio\AccessibilityKit\Remediation\OverrideStore;
 use WOWStudio\AccessibilityKit\Rest\AiController;
 use WOWStudio\AccessibilityKit\Rest\FixController;
+use WOWStudio\AccessibilityKit\Rest\StatementController;
 use WOWStudio\AccessibilityKit\Rest\ScanController;
 
 defined( 'ABSPATH' ) || exit;
@@ -132,13 +134,15 @@ final class Plugin {
 		 * Scanner and REST services are added in later steps.
 		 */
 		$services = array(
-			'installer'  => new Installer(),
-			'assets'     => new Assets(),
-			'admin.menu' => new Menu(),
-			'rest.scan'  => new ScanController(),
-			'rest.ai'    => new AiController(),
-			'rest.fix'   => new FixController(),
-			'overrides'  => new OverrideStore(),
+			'installer'      => new Installer(),
+			'assets'         => new Assets(),
+			'admin.menu'     => new Menu(),
+			'rest.scan'      => new ScanController(),
+			'rest.ai'        => new AiController(),
+			'rest.fix'       => new FixController(),
+			'overrides'      => new OverrideStore(),
+			'statement'      => new StatementBlock(),
+			'rest.statement' => new StatementController(),
 		);
 
 		/**

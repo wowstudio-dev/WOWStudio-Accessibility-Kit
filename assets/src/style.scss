@@ -693,3 +693,43 @@
 	padding: 1px 2px;
 	border-radius: 3px;
 }
+
+/* Statement panel ---------------------------------------------------------- */
+
+.wsak-statement-panel {
+	margin-bottom: 28px;
+	padding: 20px;
+	background: var(--wsak-surface);
+	border: 1px solid var(--wsak-line);
+	border-radius: var(--wsak-radius);
+	max-width: 780px;
+}
+
+.wsak-statement-panel__missing {
+	margin: 6px 0 0;
+	padding-inline-start: 1.2em;
+	list-style: disc;
+}
+
+.wsak-statement-panel__preview {
+	padding: 20px;
+	margin-top: 12px;
+	background: var(--wsak-raised);
+	border-radius: var(--wsak-radius);
+}
+
+.wsak-statement-panel__preview h2 {
+	margin-top: 0;
+	font-size: 20px;
+}
+
+.wsak-statement-panel__preview h3 {
+	margin-top: 1.4em;
+	font-size: 15px;
+}
+
+.wsak-statement-panel__preview .wsak-statement__draft {
+	background: var(--wsak-moderate-bg);
+	color: var(--wsak-moderate);
+	border-color: currentcolor;
+}

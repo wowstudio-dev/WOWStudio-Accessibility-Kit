@@ -8,6 +8,7 @@ import { __, sprintf } from '@wordpress/i18n';
 
 import { fetchScan, readableError, runScan } from './api';
 import AiSettings from './components/ai-settings';
+import StatementSettings from './components/statement-settings';
 import CoveragePanel from './components/coverage-panel';
 import IssueList from './components/issue-list';
 import ScanPicker from './components/scan-picker';
@@ -119,6 +120,19 @@ export default function App() {
 						{ __( 'AI settings', 'wowstudio-accessibility-kit' ) }
 					</Button>
 				) }
+				{ capabilities.viewReports && (
+					<Button
+						variant={
+							view === 'statement' ? 'primary' : 'tertiary'
+						}
+						aria-current={
+							view === 'statement' ? 'page' : undefined
+						}
+						onClick={ () => setView( 'statement' ) }
+					>
+						{ __( 'Statement', 'wowstudio-accessibility-kit' ) }
+					</Button>
+				) }
 			</nav>
 
 			<p className="screen-reader-text" role="status" aria-live="polite">
@@ -142,6 +156,8 @@ export default function App() {
 			) }
 
 			{ view === 'settings' && <AiSettings /> }
+
+			{ view === 'statement' && <StatementSettings /> }
 
 			{ view === 'scan' && loading && (
 				<Skeleton

@@ -14,6 +14,46 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   Action Scheduler. Shipping a synchronous loop that times out halfway would be
   worse than not shipping it, so bulk lands with the queue.
 
+## [0.7.0] - 2026-08-23
+
+Phase 1, step 7: the accessibility statement generator.
+
+### Added
+
+- A statement generator covering what the site owner says about their own site,
+  the known problems, how to report a barrier, who to escalate to, and how the
+  assessment was made.
+- A `wowstudio/accessibility-statement` block and a
+  `[wsak_accessibility_statement]` shortcode. Both render on the server from
+  current settings, so a published statement can never be a stale copy of one.
+- Sign-off: a named person records that they have read the statement and stand
+  behind it.
+- REST routes for reading, writing, signing off, and withdrawing.
+
+### The honesty model
+
+- **Nothing claims conformance on the owner's behalf.** Every conformance
+  sentence begins with the organisation's name — "Example Ltd considers this
+  website to be…" — because the plugin cannot verify any of it and should not
+  appear to.
+- **An unsigned statement publishes as a draft**, with a notice saying nobody
+  has checked it. A document a plugin wrote is not a statement anybody made.
+- **Editing withdraws the sign-off automatically.** An approved statement can
+  never quietly come to say something its approver never read. Saving unchanged
+  values does not withdraw it.
+- **Sign-off is refused while the statement is unfinished** — no contact route,
+  or a claim of partial conformance with no account of what falls short.
+- **The limits of automated testing are stated in every rendering** and cannot
+  be switched off, whatever status the owner selects.
+
+### Fixed during development
+
+- Adding the block silently stopped the admin app being built. wp-scripts
+  discovers entry points from `block.json`, and once one existed it became the
+  only entry — a successful build producing a blank dashboard. `webpack.config.js`
+  now declares both entries explicitly. The `bin/build.sh` guard added in 0.4.0
+  would have caught this at release; it is better caught here.
+
 ## [0.6.0] - 2026-08-23
 
 Phase 1, step 6: one fix at a time, with preview, diff, apply, and undo.
