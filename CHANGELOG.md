@@ -6,6 +6,23 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Fixed
+
+- **Static analysis failed on a fresh checkout, including CI's first ever run.**
+  `Core\Assets` require()s `build/index.asset.php`. The runtime behaviour is
+  correct — the require is guarded by `file_exists()` and an admin notice
+  explains a missing build — but PHPStan resolves the path statically and errors
+  when the file is absent. `build/` is generated and gitignored, so it is absent
+  on any fresh clone; the check only ever passed locally because a build was
+  already sitting there. The `php` job now builds the admin bundle before
+  analysing, so PHPStan sees the plugin as it actually ships. Reproduced by
+  moving `build/` aside and confirming the same error, then confirming it clears
+  when the build is restored.
+
+  Worth knowing when reproducing this: PHPStan caches results, so a stale cache
+  reports the error after the build is back. `vendor/bin/phpstan
+  clear-result-cache` first.
+
 ### Still outstanding
 
 - Capped **bulk** alt-text generation. Single-image generation is complete and

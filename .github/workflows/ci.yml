@@ -35,6 +35,23 @@ jobs:
       - name: Install dependencies
         uses: ramsey/composer-install@v3
 
+      # The admin bundle has to exist before static analysis. Assets.php
+      # require()s build/index.asset.php — guarded by file_exists(), so the
+      # runtime behaviour is correct — but PHPStan resolves the path statically
+      # and fails when the file is absent. build/ is generated and gitignored,
+      # so it is absent on any fresh checkout: this broke CI on its very first
+      # run, and breaks `composer phpstan` on a fresh clone too. Building here
+      # means the analysis sees the plugin as it actually ships.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Build the admin bundle
+        run: |
+          npm ci
+          npm run build
+
       - name: Coding standards
         run: composer phpcs
 
