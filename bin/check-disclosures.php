@@ -69,6 +69,7 @@ const WSAK_SURFACES = array(
 		'the refusal to point at the wrong element' => '/Rather than point at the wrong one, we are pointing at none/i',
 		'the blocked-preview caveat'                => '/nothing that depends on seeing the page — colour, text size, layout — was checked/iu',
 		'the unplaceable-findings note'             => '/findings from the markup cannot be pointed at here/i',
+		'the no-markup-to-rewrite note'             => '/there is no markup to rewrite/i',
 	),
 	'assets/src/components/tags.js'               => array(
 		'the auto-detected honesty tag'       => '/Auto-detected/',

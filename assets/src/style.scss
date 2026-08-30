@@ -912,3 +912,16 @@
 	color: var(--wsak-muted);
 	font-size: 13px;
 }
+
+.wsak-inspector__actions {
+	margin-top: 8px;
+}
+
+.wsak-inspector__no-fix {
+	margin: 0;
+	padding: 8px 10px;
+	background: var(--wsak-raised);
+	border-radius: 6px;
+	color: var(--wsak-muted);
+	font-size: 13px;
+}

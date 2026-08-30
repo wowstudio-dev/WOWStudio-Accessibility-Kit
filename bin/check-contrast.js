@@ -156,6 +156,7 @@ const PAIRINGS = [
 	[ '.wsak-coverage__group-note', 'muted', 'surface', 13, false ],
 	[ '.wsak-inspector__hint', 'muted', 'surface', 13, false ],
 	[ '.wsak-inspector__pass', 'muted', 'surface', 13, false ],
+	[ '.wsak-inspector__no-fix', 'muted', 'raised', 13, false ],
 	[ '.wsak-inspector__unplaceable-note', 'muted', 'surface', 13, false ],
 	[ '.wsak-result__unplaceable', 'muted', 'surface', 13, false ],
 	[ '.wsak-inspector__issue-title', 'ink', 'surface', 14, true ],

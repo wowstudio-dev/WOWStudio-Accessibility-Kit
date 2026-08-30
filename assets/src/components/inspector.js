@@ -16,6 +16,8 @@ import {
 import { frameDocument, highlight, clearHighlight } from '../scanner/highlight';
 import { runBrowserPass } from '../scanner/run';
 import { recordBrowserPass, readableError } from '../api';
+import AltTextAction from './alt-text-action';
+import FixAction from './fix-action';
 import { DetectionTag, SeverityTag } from './tags';
 
 /**
@@ -362,6 +364,43 @@ export default function Inspector( {
 									<p className="wsak-inspector__unplaced">
 										{ locateMessage( locateStatus ) }
 									</p>
+								) }
+
+								{ /*
+								 * Remediation lives with the selected finding
+								 * rather than on every row: thirty open fix
+								 * panels would bury the list this pane exists
+								 * to make readable. It sits outside the button
+								 * because a button cannot contain buttons.
+								 */ }
+								{ activeId === issue.id && (
+									<div className="wsak-inspector__actions">
+										{ issue.rule_id ===
+										'img-alt-missing' ? (
+											<AltTextAction
+												attachmentId={
+													issue.attachment_id
+												}
+												postId={ issue.post_id }
+											/>
+										) : (
+											issue.detection === 'auto' &&
+											issue.found_by !== 'browser' && (
+												<FixAction
+													issueId={ issue.id }
+												/>
+											)
+										) }
+
+										{ issue.found_by === 'browser' && (
+											<p className="wsak-inspector__no-fix">
+												{ __(
+													'This one is about how the page is styled rather than how it is written, so there is no markup to rewrite. It has to be changed in your theme or customiser.',
+													'wowstudio-accessibility-kit'
+												) }
+											</p>
+										) }
+									</div>
 								) }
 							</li>
 						) ) }
