@@ -124,6 +124,12 @@ jobs:
       - name: Stylesheet standards
         run: npm run lint:css
 
+      # The browser pass's colour engine. Its arithmetic is cross-checked
+      # against bin/check-contrast.js, and its uncertainty rules are the reason
+      # we own the code rather than bundling somebody else's.
+      - name: JavaScript unit tests
+        run: npm run test:js
+
       - name: Start WordPress
         run: npx wp-env start
 

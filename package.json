@@ -14,6 +14,7 @@
 		"lint:js": "wp-scripts lint-js assets/src",
 		"lint:css": "wp-scripts lint-style \"assets/src/**/*.scss\"",
 		"lint:contrast": "node bin/check-contrast.js",
+		"test:js": "wp-scripts test-unit-js",
 		"format": "wp-scripts format",
 		"packages-update": "wp-scripts packages-update",
 		"env:start": "wp-env start",
