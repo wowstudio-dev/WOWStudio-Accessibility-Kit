@@ -376,13 +376,27 @@ real limitation, stated plainly, not hidden.
 **D6 — Contrast is Free.** The incumbent gives it away; gating it would make our
 free tier visibly worse than theirs on the most-searched check in the category.
 
-### Data model
+### Data model *(built — schema 1.2.0)*
 
-- `wp_wsak_issues`: `engine varchar(10) NOT NULL DEFAULT 'php'`, indexed.
-- `wp_wsak_scans`: `css_pass varchar(20) NOT NULL DEFAULT 'skipped'`; the reason
-  travels in the existing summary JSON.
-- Bump `Schema::DB_VERSION`; migrate with `dbDelta`. Existing rows keep `php`,
-  which is accurate — they were produced by the PHP engine.
+- `wp_wsak_issues`: `found_by varchar(10) NOT NULL DEFAULT 'server'`, indexed.
+  Values `server` | `browser`, modelled as `Scanner\ScanPass`.
+- `wp_wsak_scans`: `browser_pass varchar(20) NOT NULL DEFAULT 'skipped'`. Values
+  `ran` | `blocked` | `skipped`, modelled as `Scanner\BrowserPassStatus`; the
+  reason travels in the existing summary JSON.
+- `Schema::VERSION` 1.1.0 → 1.2.0; `Installer::maybe_upgrade()` migrates on
+  `admin_init` via `dbDelta`.
+
+**Naming, changed during implementation.** The plan said `engine` with values
+`php`/`css`. Both were wrong in practice. `wp_wsak_fixes` already has an `engine`
+column meaning *which AI path produced this fix*, so a join between issues and
+fixes would have carried two `engine` columns meaning different things. And
+`php`/`css` names our implementation rather than what the user is told —
+the surfaces say "found in the markup" and "found in the rendered page", so the
+stored values say `server` and `browser` to match. Defaults are chosen to be
+*true* of existing rows, not merely safe: every finding already in the table was
+produced by the server pass, and no scan already recorded ever had a browser
+pass. Verified against the live database — 36 existing findings and 10 existing
+scans migrated with accurate values.
 
 ### Build order
 

@@ -9,6 +9,7 @@ namespace WOWStudio\AccessibilityKit\Db;
 
 use WOWStudio\AccessibilityKit\Scanner\Detection;
 use WOWStudio\AccessibilityKit\Scanner\IssueStatus;
+use WOWStudio\AccessibilityKit\Scanner\ScanPass;
 use WOWStudio\AccessibilityKit\Scanner\Severity;
 
 defined( 'ABSPATH' ) || exit;
@@ -62,8 +63,9 @@ final class IssueRepository {
 		foreach ( $issues as $issue ) {
 			$severity  = $issue['severity'] ?? Severity::Moderate;
 			$detection = $issue['detection'] ?? Detection::Manual;
+			$found_by  = $issue['found_by'] ?? ScanPass::Server;
 
-			$placeholders[] = '(%d, %d, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)';
+			$placeholders[] = '(%d, %d, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)';
 
 			array_push(
 				$values,
@@ -73,6 +75,7 @@ final class IssueRepository {
 				(string) ( $issue['wcag_sc'] ?? '' ),
 				$severity instanceof Severity ? $severity->value : (string) $severity,
 				$detection instanceof Detection ? $detection->value : (string) $detection,
+				$found_by instanceof ScanPass ? $found_by->value : (string) $found_by,
 				IssueStatus::Open->value,
 				(string) ( $issue['selector'] ?? '' ),
 				(string) ( $issue['context'] ?? '' ),
@@ -86,7 +89,7 @@ final class IssueRepository {
 		array_unshift( $values, Schema::issues_table() );
 
 		$sql = 'INSERT INTO %i'
-			. ' (scan_id, post_id, rule_id, wcag_sc, severity, detection, status, selector, context, message, note, created_at, updated_at)'
+			. ' (scan_id, post_id, rule_id, wcag_sc, severity, detection, found_by, status, selector, context, message, note, created_at, updated_at)'
 			. ' VALUES ' . implode( ', ', $placeholders );
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared -- Assembled from placeholders only; the table and every value go through prepare().

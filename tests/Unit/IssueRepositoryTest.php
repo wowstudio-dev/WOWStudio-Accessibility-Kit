@@ -12,6 +12,7 @@ namespace WOWStudio\AccessibilityKit\Tests\Unit;
 use Mockery;
 use WOWStudio\AccessibilityKit\Db\IssueRepository;
 use WOWStudio\AccessibilityKit\Scanner\Detection;
+use WOWStudio\AccessibilityKit\Scanner\ScanPass;
 use WOWStudio\AccessibilityKit\Scanner\Severity;
 use WOWStudio\AccessibilityKit\Tests\TestCase;
 
@@ -111,8 +112,14 @@ final class IssueRepositoryTest extends TestCase {
 		$this->assertSame( 2, $written );
 		$this->assertSame( 1, substr_count( $this->sql, 'INSERT INTO' ), 'Should be a single INSERT.' );
 		$this->assertSame( 2, substr_count( $this->sql, '(%d, %d, %s' ), 'Should carry one value group per issue.' );
-		$this->assertCount( 27, $this->values, 'Thirteen columns times two rows, plus the table identifier.' );
+		$this->assertCount( 29, $this->values, 'Fourteen columns times two rows, plus the table identifier.' );
 		$this->assertSame( 'wp_wsak_issues', $this->values[0], 'The table goes through prepare(), not into the SQL.' );
+
+		// A finding that does not say which pass produced it is recorded as a
+		// server finding, never left empty: found_by drives what the coverage
+		// surfaces claim was checked, and an empty value there would quietly
+		// misreport what the scan actually looked at.
+		$this->assertContains( ScanPass::Server->value, $this->values, 'An unattributed finding defaults to the server pass.' );
 	}
 
 	/**

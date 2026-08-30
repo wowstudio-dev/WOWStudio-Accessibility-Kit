@@ -31,6 +31,9 @@ final class Finding {
 	 * @param string    $message   Plain-language description of this occurrence.
 	 * @param string    $selector  XPath locating the element.
 	 * @param string    $context   The offending markup.
+	 * @param ScanPass  $pass      Which engine produced this. Defaults to the
+	 *                             server pass, because every rule that existed
+	 *                             before the browser pass was a server rule.
 	 */
 	public function __construct(
 		public readonly string $rule_id,
@@ -39,7 +42,8 @@ final class Finding {
 		public readonly Detection $detection,
 		public readonly string $message,
 		public readonly string $selector = '',
-		public readonly string $context = ''
+		public readonly string $context = '',
+		public readonly ScanPass $pass = ScanPass::Server
 	) {}
 
 	/**
@@ -60,6 +64,7 @@ final class Finding {
 			'message'   => $this->message,
 			'selector'  => $this->selector,
 			'context'   => $this->context,
+			'found_by'  => $this->pass,
 		);
 	}
 }

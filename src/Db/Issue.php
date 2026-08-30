@@ -9,6 +9,7 @@ namespace WOWStudio\AccessibilityKit\Db;
 
 use WOWStudio\AccessibilityKit\Scanner\Detection;
 use WOWStudio\AccessibilityKit\Scanner\IssueStatus;
+use WOWStudio\AccessibilityKit\Scanner\ScanPass;
 use WOWStudio\AccessibilityKit\Scanner\Severity;
 
 defined( 'ABSPATH' ) || exit;
@@ -32,6 +33,7 @@ final class Issue {
 	 * @param string      $wcag_sc    WCAG success criterion, e.g. "1.1.1".
 	 * @param Severity    $severity   How much it hurts.
 	 * @param Detection   $detection  Whether a machine or a person decides this.
+	 * @param ScanPass    $found_by   Which engine produced this finding.
 	 * @param IssueStatus $status     Where it sits in the workflow.
 	 * @param string      $selector   XPath or CSS selector for the element.
 	 * @param string      $context    The offending markup, for preview and diff.
@@ -48,6 +50,7 @@ final class Issue {
 		public readonly string $wcag_sc,
 		public readonly Severity $severity,
 		public readonly Detection $detection,
+		public readonly ScanPass $found_by,
 		public readonly IssueStatus $status,
 		public readonly string $selector,
 		public readonly string $context,
@@ -74,6 +77,7 @@ final class Issue {
 			(string) $row->wcag_sc,
 			Severity::tryFrom( (string) $row->severity ) ?? Severity::Moderate,
 			Detection::tryFrom( (string) $row->detection ) ?? Detection::Manual,
+			ScanPass::tryFrom( (string) ( $row->found_by ?? '' ) ) ?? ScanPass::Server,
 			IssueStatus::tryFrom( (string) $row->status ) ?? IssueStatus::Open,
 			(string) ( $row->selector ?? '' ),
 			(string) ( $row->context ?? '' ),

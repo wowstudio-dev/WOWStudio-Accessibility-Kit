@@ -27,7 +27,7 @@ final class Schema {
 	 * @since 0.2.0
 	 * @var string
 	 */
-	public const VERSION = '1.1.0';
+	public const VERSION = '1.2.0';
 
 	/**
 	 * Option holding the installed schema version.
@@ -159,6 +159,7 @@ final class Schema {
 			target_id bigint(20) unsigned NOT NULL DEFAULT 0,
 			status varchar(20) NOT NULL DEFAULT 'running',
 			score tinyint(3) unsigned DEFAULT NULL,
+			browser_pass varchar(20) NOT NULL DEFAULT 'skipped',
 			summary longtext NULL,
 			started_at datetime NOT NULL,
 			finished_at datetime DEFAULT NULL,
@@ -228,6 +229,7 @@ final class Schema {
 			wcag_sc varchar(20) NOT NULL DEFAULT '',
 			severity varchar(20) NOT NULL DEFAULT 'moderate',
 			detection varchar(10) NOT NULL DEFAULT 'auto',
+			found_by varchar(10) NOT NULL DEFAULT 'server',
 			status varchar(20) NOT NULL DEFAULT 'open',
 			selector text NULL,
 			context longtext NULL,
@@ -240,7 +242,8 @@ final class Schema {
 			KEY post_status (post_id,status),
 			KEY rule_id (rule_id),
 			KEY severity_status (severity,status),
-			KEY detection (detection)
+			KEY detection (detection),
+			KEY found_by (found_by)
 		) {$wpdb->get_charset_collate()};";
 	}
 }

@@ -7,6 +7,7 @@
 
 namespace WOWStudio\AccessibilityKit\Db;
 
+use WOWStudio\AccessibilityKit\Scanner\BrowserPassStatus;
 use WOWStudio\AccessibilityKit\Scanner\ScanScope;
 use WOWStudio\AccessibilityKit\Scanner\ScanStatus;
 
@@ -29,6 +30,7 @@ final class Scan {
 	 * @param int                  $target_id   Post ID for a page scan, 0 for a site scan.
 	 * @param ScanStatus           $status      Where the run got to.
 	 * @param int|null             $score       Score out of 100, or null while running.
+	 * @param BrowserPassStatus    $browser_pass Whether the render-dependent checks ran.
 	 * @param array<string, mixed> $summary     Decoded summary payload.
 	 * @param string               $started_at  MySQL datetime, site timezone.
 	 * @param string|null          $finished_at MySQL datetime, or null while running.
@@ -40,6 +42,7 @@ final class Scan {
 		public readonly int $target_id,
 		public readonly ScanStatus $status,
 		public readonly ?int $score,
+		public readonly BrowserPassStatus $browser_pass,
 		public readonly array $summary,
 		public readonly string $started_at,
 		public readonly ?string $finished_at,
@@ -66,6 +69,7 @@ final class Scan {
 			(int) $row->target_id,
 			ScanStatus::tryFrom( (string) $row->status ) ?? ScanStatus::Running,
 			null === $row->score ? null : (int) $row->score,
+			BrowserPassStatus::tryFrom( (string) ( $row->browser_pass ?? '' ) ) ?? BrowserPassStatus::Skipped,
 			is_array( $summary ) ? $summary : array(),
 			(string) $row->started_at,
 			null === $row->finished_at ? null : (string) $row->finished_at,

@@ -7,6 +7,7 @@
 
 namespace WOWStudio\AccessibilityKit\Db;
 
+use WOWStudio\AccessibilityKit\Scanner\BrowserPassStatus;
 use WOWStudio\AccessibilityKit\Scanner\ScanScope;
 use WOWStudio\AccessibilityKit\Scanner\ScanStatus;
 
@@ -64,9 +65,13 @@ final class ScanRepository {
 	 * @param int                  $scan_id Scan to update.
 	 * @param int|null             $score   Score out of 100.
 	 * @param array<string, mixed> $summary Summary payload, stored as JSON.
+	 * @param BrowserPassStatus    $browser_pass Whether the render-dependent checks ran.
+	 *                                           Defaults to Skipped, so a caller that
+	 *                                           forgets to say records the honest answer
+	 *                                           rather than implying coverage it never had.
 	 * @return bool
 	 */
-	public function complete( int $scan_id, ?int $score, array $summary = array() ): bool {
+	public function complete( int $scan_id, ?int $score, array $summary = array(), BrowserPassStatus $browser_pass = BrowserPassStatus::Skipped ): bool {
 		global $wpdb;
 
 		$encoded = wp_json_encode( $summary );
@@ -75,13 +80,14 @@ final class ScanRepository {
 		$updated = $wpdb->update(
 			Schema::scans_table(),
 			array(
-				'status'      => ScanStatus::Complete->value,
-				'score'       => $score,
-				'summary'     => false === $encoded ? '' : $encoded,
-				'finished_at' => gmdate( 'Y-m-d H:i:s' ),
+				'status'       => ScanStatus::Complete->value,
+				'score'        => $score,
+				'browser_pass' => $browser_pass->value,
+				'summary'      => false === $encoded ? '' : $encoded,
+				'finished_at'  => gmdate( 'Y-m-d H:i:s' ),
 			),
 			array( 'id' => $scan_id ),
-			array( '%s', '%d', '%s', '%s' ),
+			array( '%s', '%d', '%s', '%s', '%s' ),
 			array( '%d' )
 		);
 
