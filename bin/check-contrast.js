@@ -153,6 +153,7 @@ const PAIRINGS = [
 	[ '.wsak-issue__fix summary', 'indigo', 'surface', 14, true ],
 	[ '.wsak-coverage__lede', 'muted', 'surface', 14, false ],
 	[ '.wsak-coverage__rule dd', 'muted', 'surface', 13, false ],
+	[ '.wsak-coverage__group-note', 'muted', 'surface', 13, false ],
 	[ '.wsak-empty__body', 'muted', 'raised', 14, false ],
 	[ '.wsak-alt__unavailable', 'muted', 'raised', 13, false ],
 	[ '.wsak-alt__saved', 'muted', 'raised', 13, false ],

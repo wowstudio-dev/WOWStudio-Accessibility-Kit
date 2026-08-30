@@ -52,8 +52,14 @@ export default function CoveragePanel() {
 			);
 	}, [ open, state.status ] );
 
-	const auto = state.rules.filter( ( rule ) => rule.detection === 'auto' );
-	const manual = state.rules.filter( ( rule ) => rule.detection !== 'auto' );
+	// Grouped by what decides the check, not by what it checks. The three
+	// groups answer three different questions a reader has: what did a machine
+	// settle, what still needs your eyes, and what could only be measured if
+	// your page was open in a browser.
+	const browser = state.rules.filter( ( rule ) => rule.pass === 'browser' );
+	const server = state.rules.filter( ( rule ) => rule.pass !== 'browser' );
+	const auto = server.filter( ( rule ) => rule.detection === 'auto' );
+	const manual = server.filter( ( rule ) => rule.detection !== 'auto' );
 
 	return (
 		<section
@@ -128,6 +134,18 @@ export default function CoveragePanel() {
 							detection="manual"
 							rules={ manual }
 						/>
+						<CoverageGroup
+							title={ __(
+								'Only when your page is open in a browser',
+								'wowstudio-accessibility-kit'
+							) }
+							detection="auto"
+							rules={ browser }
+							note={ __(
+								'Colour, text size and layout can only be measured on a page that has actually been drawn. These checks run when you scan from this dashboard. A scheduled scan, or a scan of a page that will not open in a frame, does not include them — and says so on the result.',
+								'wowstudio-accessibility-kit'
+							) }
+						/>
 					</div>
 				) }
 			</div>
@@ -142,9 +160,10 @@ export default function CoveragePanel() {
  * @param {string} props.title     Group heading.
  * @param {string} props.detection Detection slug for the tag.
  * @param {Array}  props.rules     Rules in this group.
+ * @param {string} props.note      Optional caveat about when this group runs.
  * @return {Element} The group.
  */
-function CoverageGroup( { title, detection, rules } ) {
+function CoverageGroup( { title, detection, rules, note } ) {
 	return (
 		<div className="wsak-coverage__group">
 			<h3 className="wsak-coverage__group-title">
@@ -157,6 +176,7 @@ function CoverageGroup( { title, detection, rules } ) {
 					) }
 				</span>
 			</h3>
+			{ note && <p className="wsak-coverage__group-note">{ note }</p> }
 			<dl className="wsak-coverage__rules">
 				{ rules.map( ( rule ) => (
 					<div className="wsak-coverage__rule" key={ rule.id }>

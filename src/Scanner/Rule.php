@@ -15,69 +15,18 @@ defined( 'ABSPATH' ) || exit;
  * Rules are deliberately small and independent so that new ones can be added,
  * and existing ones disabled or reweighted, without touching the engine.
  *
+ * A Rule is specifically a check the *server pass* can run: it is handed a
+ * parsed document and returns findings. Checks that need a rendered page cannot
+ * satisfy that contract and are described by BrowserRule instead. Both are
+ * RuleDescriptors, so both appear in the coverage panel.
+ *
+ * A rule must report Detection::Manual whenever confirming the problem needs
+ * human judgement. Overstating what automation settled is the one thing this
+ * plugin must never do.
+ *
  * @since 0.3.0
  */
-interface Rule {
-
-	/**
-	 * Returns the stable rule identifier.
-	 *
-	 * Stored on every issue, so it must not change once released.
-	 *
-	 * @since 0.3.0
-	 *
-	 * @return string
-	 */
-	public function id(): string;
-
-	/**
-	 * Returns the WCAG success criterion this rule relates to.
-	 *
-	 * @since 0.3.0
-	 *
-	 * @return string
-	 */
-	public function wcag_sc(): string;
-
-	/**
-	 * Returns the default severity for findings from this rule.
-	 *
-	 * @since 0.3.0
-	 *
-	 * @return Severity
-	 */
-	public function severity(): Severity;
-
-	/**
-	 * Returns whether this rule decides an issue or only flags it for review.
-	 *
-	 * A rule must report Manual whenever confirming the problem needs human
-	 * judgement. Overstating what automation settled is the one thing this
-	 * plugin must never do.
-	 *
-	 * @since 0.3.0
-	 *
-	 * @return Detection
-	 */
-	public function detection(): Detection;
-
-	/**
-	 * Returns the short human-readable name of the check.
-	 *
-	 * @since 0.3.0
-	 *
-	 * @return string
-	 */
-	public function title(): string;
-
-	/**
-	 * Returns an explanation of what fails, who it affects, and how to fix it.
-	 *
-	 * @since 0.3.0
-	 *
-	 * @return string
-	 */
-	public function description(): string;
+interface Rule extends RuleDescriptor {
 
 	/**
 	 * Runs the check.

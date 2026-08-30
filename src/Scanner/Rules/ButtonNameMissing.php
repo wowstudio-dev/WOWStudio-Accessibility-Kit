@@ -12,6 +12,7 @@ use WOWStudio\AccessibilityKit\Scanner\Detection;
 use WOWStudio\AccessibilityKit\Scanner\Document;
 use WOWStudio\AccessibilityKit\Scanner\Finding;
 use WOWStudio\AccessibilityKit\Scanner\Rule;
+use WOWStudio\AccessibilityKit\Scanner\RunsOnServer;
 use WOWStudio\AccessibilityKit\Scanner\Severity;
 
 defined( 'ABSPATH' ) || exit;
@@ -25,6 +26,8 @@ defined( 'ABSPATH' ) || exit;
  * @since 0.3.0
  */
 final class ButtonNameMissing implements Rule {
+
+	use RunsOnServer;
 
 	/**
 	 * {@inheritDoc}

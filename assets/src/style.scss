@@ -408,6 +408,13 @@
 	color: var(--wsak-ink);
 }
 
+.wsak-coverage__group-note {
+	margin: 0 0 12px;
+	color: var(--wsak-muted);
+	font-size: 13px;
+	max-width: 60ch;
+}
+
 .wsak-coverage__rules {
 	margin: 0;
 }

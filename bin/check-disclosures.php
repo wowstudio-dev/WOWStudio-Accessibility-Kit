@@ -50,6 +50,7 @@ const WSAK_SURFACES = array(
 	'assets/src/components/coverage-panel.js'     => array(
 		'the partial-coverage lede'        => '/finds a portion of accessibility problems, not all of them/i',
 		'the clean-scan-means-little line' => '/a clean scan means the automated checks passed, and nothing more/i',
+		'the browser-pass caveat'          => '/A scheduled scan, or a scan of a page that will not open in a frame, does not include them/i',
 	),
 	'assets/src/components/issue-list.js'         => array(
 		'the nothing-found caveat' => '/not the same as the page being accessible/i',

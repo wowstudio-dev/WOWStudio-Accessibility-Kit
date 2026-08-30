@@ -136,10 +136,25 @@ final class RuleRegistry {
 	}
 
 	/**
+	 * Returns every check this plugin performs, of either pass.
+	 *
+	 * @since 0.10.0
+	 *
+	 * @return RuleDescriptor[]
+	 */
+	public function descriptors(): array {
+		return array_merge( array_values( $this->rules ), BrowserRules::all() );
+	}
+
+	/**
 	 * Describes the rule set for the coverage panel.
 	 *
 	 * The UI is required to tell people what automation can and cannot settle,
-	 * and this is the data behind that promise.
+	 * and this is the data behind that promise. It therefore lists the browser
+	 * pass's checks alongside the server pass's, whether or not a browser pass
+	 * has ever run: a coverage list that only showed the checks that happened
+	 * to be available would answer "what did you look at" when the question
+	 * being asked is "what can you look at".
 	 *
 	 * @since 0.3.0
 	 *
@@ -148,7 +163,7 @@ final class RuleRegistry {
 	public function coverage(): array {
 		$coverage = array();
 
-		foreach ( $this->rules as $rule ) {
+		foreach ( $this->descriptors() as $rule ) {
 			$coverage[] = array(
 				'id'          => $rule->id(),
 				'title'       => $rule->title(),
@@ -156,6 +171,7 @@ final class RuleRegistry {
 				'wcag_sc'     => $rule->wcag_sc(),
 				'severity'    => $rule->severity()->value,
 				'detection'   => $rule->detection()->value,
+				'pass'        => $rule->pass()->value,
 			);
 		}
 

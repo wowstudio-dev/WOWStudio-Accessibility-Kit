@@ -10,7 +10,9 @@ declare( strict_types = 1 );
 namespace WOWStudio\AccessibilityKit\Tests\Unit;
 
 use Brain\Monkey\Filters;
+use WOWStudio\AccessibilityKit\Scanner\BrowserRules;
 use WOWStudio\AccessibilityKit\Scanner\Detection;
+use WOWStudio\AccessibilityKit\Scanner\ScanPass;
 use WOWStudio\AccessibilityKit\Scanner\Rule;
 use WOWStudio\AccessibilityKit\Scanner\RuleRegistry;
 use WOWStudio\AccessibilityKit\Scanner\Rules\ImageAltMissing;
@@ -87,9 +89,10 @@ final class RuleRegistryTest extends TestCase {
 	public function test_coverage_reports_detection_for_every_rule(): void {
 		$coverage = RuleRegistry::with_defaults()->coverage();
 
-		$this->assertCount( 12, $coverage );
+		$this->assertCount( 17, $coverage, '12 server checks plus 5 browser checks.' );
 
-		$valid = array( Detection::Auto->value, Detection::Manual->value );
+		$valid  = array( Detection::Auto->value, Detection::Manual->value );
+		$passes = array( ScanPass::Server->value, ScanPass::Browser->value );
 
 		foreach ( $coverage as $row ) {
 			$this->assertNotSame( '', $row['id'] );
@@ -97,7 +100,70 @@ final class RuleRegistryTest extends TestCase {
 			$this->assertNotSame( '', $row['description'] );
 			$this->assertMatchesRegularExpression( '/^\d+\.\d+\.\d+$/', $row['wcag_sc'] );
 			$this->assertContains( $row['detection'], $valid );
+			$this->assertContains( $row['pass'], $passes, $row['id'] . ' does not say which pass performs it.' );
 		}
+	}
+
+	/**
+	 * The coverage list describes the browser checks even though PHP cannot run them.
+	 *
+	 * The panel answers "what can this plugin look at", not "what did it manage
+	 * to look at this time". Listing only the checks that happened to be
+	 * available would quietly shrink the stated coverage on exactly the scans
+	 * where the user most needs to know something was missed.
+	 *
+	 * @return void
+	 */
+	public function test_coverage_includes_browser_checks_that_php_cannot_run(): void {
+		$coverage = RuleRegistry::with_defaults()->coverage();
+
+		$browser = array_values(
+			array_filter(
+				$coverage,
+				static fn( array $row ): bool => ScanPass::Browser->value === $row['pass']
+			)
+		);
+
+		$this->assertCount( 5, $browser );
+
+		$ids = array_column( $browser, 'id' );
+		$this->assertContains( 'colour-contrast', $ids, 'Contrast is the whole point of the browser pass.' );
+
+		// Executable rules are still only the server ones — the engine must not
+		// try to evaluate a check that has no PHP implementation.
+		$this->assertCount( 12, RuleRegistry::with_defaults()->all() );
+	}
+
+	/**
+	 * No check is claimed by both passes.
+	 *
+	 * Identity is the rule ID, not the success criterion. Two engines reporting
+	 * the same *check* twice would make the findings list untrustworthy and let
+	 * the score punish one fault repeatedly — that is what this guards.
+	 *
+	 * Sharing a success criterion is expected and fine. 4.1.2 covers name, role
+	 * and value for every control on a page; "this button has no accessible
+	 * name" and "this aria-hidden element can still take focus" both live there
+	 * and are entirely different faults with entirely different fixes.
+	 *
+	 * @return void
+	 */
+	public function test_no_check_is_claimed_by_both_passes(): void {
+		$coverage = RuleRegistry::with_defaults()->coverage();
+
+		$ids = array_column( $coverage, 'id' );
+
+		$this->assertSame(
+			array_unique( $ids ),
+			$ids,
+			'A rule ID is claimed by more than one check, so one fault would be reported and scored twice.'
+		);
+
+		// Each browser check maps from exactly one axe rule, and no two map from
+		// the same one — otherwise a single axe finding would fan out into
+		// several of ours.
+		$axe = array_keys( BrowserRules::axe_map() );
+		$this->assertCount( count( BrowserRules::all() ), $axe, 'Two browser checks map from the same axe rule.' );
 	}
 
 	/**
