@@ -127,9 +127,10 @@ final class RuleRegistry {
 	/**
 	 * Returns any check by ID, of either pass.
 	 *
-	 * get() deliberately returns only executable rules, so the engine cannot be
-	 * handed a check it has no way to run. Presentation needs the other kind
-	 * too — a browser finding still has a title and remediation advice to show.
+	 * The get() method deliberately returns only executable rules, so the engine
+	 * cannot be handed a check it has no way to run. Presentation needs the
+	 * other kind too — a browser finding still has a title and remediation
+	 * advice to show.
 	 *
 	 * @since 0.10.0
 	 *
