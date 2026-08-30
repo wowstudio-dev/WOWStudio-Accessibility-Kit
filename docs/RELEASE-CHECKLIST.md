@@ -70,6 +70,22 @@ by a human before any public release. Items marked **TODO(human)** are open.
       any of this works, and shipping an accessibility tool that has never been
       near one is the criticism this product exists to avoid.
 
+## Third-party code (from Phase 2 onward)
+
+- [ ] **TODO(human)** Sign off on bundling **axe-core** (MPL-2.0) inside a GPLv2+
+      plugin. My reading: the Exhibit B "Incompatible With Secondary Licenses"
+      notice is not asserted — checked against the shipped v4.11.1 headers and
+      the upstream `LICENSE`, neither of which contains the phrase — so plain
+      MPL-2.0 is GPL-compatible under § 3.3, and Equalize Digital already ships
+      it in a GPL plugin on wordpress.org. But there is an open upstream
+      discussion about whether the SPDX identifier should be
+      `MPL-2.0-no-copyleft-exception`, and if that is ever asserted the answer
+      flips. This is a licensing judgement, not an engineering one; it needs a
+      human before release. SPEC.md records the fallback.
+- [ ] Attribution for every bundled library appears in readme.txt and the source
+      headers survive the build (wp-scripts writes `*.LICENSE.txt` alongside each
+      bundle — confirm those files are not stripped by `.distignore`).
+
 ## Known, accepted Plugin Check warnings
 
 Plugin Check reports **0 errors** and 9 warnings. Two are in
