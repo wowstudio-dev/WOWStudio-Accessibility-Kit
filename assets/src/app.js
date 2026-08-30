@@ -94,15 +94,35 @@ export default function App() {
 	return (
 		<div className="wsak">
 			<header className="wsak__header">
-				<h1 className="wsak__title">
-					{ __( 'Accessibility', 'wowstudio-accessibility-kit' ) }
-				</h1>
-				<p className="wsak__lede">
-					{ __(
-						'Find, fix, document, and monitor accessibility problems in your site at the code level.',
-						'wowstudio-accessibility-kit'
-					) }
-				</p>
+				{ /*
+				 * Decorative: the heading beside it already names the screen,
+				 * so announcing the mark as well would just be noise.
+				 */ }
+				<span className="wsak__mark" aria-hidden="true">
+					<svg viewBox="0 0 24 24" fill="none" focusable="false">
+						<path
+							d="M3 7.6 L7.2 16.6 L12 9.4 L16.8 16.6 L21 7.6"
+							stroke="#fff"
+							strokeWidth="2.6"
+							strokeLinecap="round"
+							strokeLinejoin="round"
+						/>
+					</svg>
+				</span>
+				<div className="wsak__titles">
+					<h1 className="wsak__title">
+						{ __(
+							'Accessibility Kit',
+							'wowstudio-accessibility-kit'
+						) }
+					</h1>
+					<p className="wsak__lede">
+						{ __(
+							'Find, fix, document, and monitor accessibility problems at the code level.',
+							'wowstudio-accessibility-kit'
+						) }
+					</p>
+				</div>
 			</header>
 
 			<nav

@@ -41,8 +41,8 @@ msgid "https://wowstudio.dev/"
 msgstr ""
 
 #: src/Admin/Menu.php:71
-#: assets/src/app.js:98
-msgid "Accessibility"
+#: assets/src/app.js:114
+msgid "Accessibility Kit"
 msgstr ""
 
 #: src/Admin/Menu.php:93
@@ -859,63 +859,63 @@ msgstr ""
 msgid "The scan failed."
 msgstr ""
 
-#: assets/src/app.js:101
-msgid "Find, fix, document, and monitor accessibility problems in your site at the code level."
+#: assets/src/app.js:120
+msgid "Find, fix, document, and monitor accessibility problems at the code level."
 msgstr ""
 
-#: assets/src/app.js:110
+#: assets/src/app.js:130
 msgid "Sections"
 msgstr ""
 
-#: assets/src/app.js:117
+#: assets/src/app.js:137
 #: assets/src/components/scan-picker.js:222
 msgid "Scan"
 msgstr ""
 
-#: assets/src/app.js:127
+#: assets/src/app.js:147
 #: assets/src/components/ai-settings.js:98
 msgid "AI settings"
 msgstr ""
 
-#: assets/src/app.js:140
+#: assets/src/app.js:160
 msgid "Statement"
 msgstr ""
 
-#: assets/src/app.js:158
+#: assets/src/app.js:178
 msgid "You can read results here but not start a scan. An administrator can grant that."
 msgstr ""
 
-#: assets/src/app.js:171
+#: assets/src/app.js:191
 msgid "Loading the scan…"
 msgstr ""
 
 #. translators: %s: content title.
-#: assets/src/app.js:193
+#: assets/src/app.js:213
 #, js-format
 msgid "Results for “%s”"
 msgstr ""
 
-#: assets/src/app.js:199
+#: assets/src/app.js:219
 msgid "Scan results"
 msgstr ""
 
-#: assets/src/app.js:222
+#: assets/src/app.js:242
 msgid "Show as a list"
 msgstr ""
 
-#: assets/src/app.js:226
+#: assets/src/app.js:246
 msgid "Show on the page"
 msgstr ""
 
-#: assets/src/app.js:235
+#: assets/src/app.js:255
 msgid "Back to your content"
 msgstr ""
 
-#: assets/src/app.js:246
+#: assets/src/app.js:266
 msgid "This scan covered less than usual."
 msgstr ""
 
-#: assets/src/app.js:299
+#: assets/src/app.js:319
 msgid "This plugin helps you find, fix, document, and monitor accessibility problems. It does not determine whether your site meets the ADA, the European Accessibility Act, Section 508, or any other legal requirement, and nothing here is legal advice."
 msgstr ""
 
@@ -1409,13 +1409,13 @@ msgid "Many automated issues found"
 msgstr ""
 
 #. translators: %d: score out of 100.
-#: assets/src/components/score-card.js:63
+#: assets/src/components/score-card.js:73
 #, js-format
 msgid "%d out of 100"
 msgstr ""
 
 #. translators: %d: number of auto-detected issues.
-#: assets/src/components/score-card.js:75
+#: assets/src/components/score-card.js:85
 #, js-format
 msgid "%d issue detected automatically"
 msgid_plural "%d issues detected automatically"
@@ -1423,14 +1423,14 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %d: number of issues needing human review.
-#: assets/src/components/score-card.js:87
+#: assets/src/components/score-card.js:97
 #, js-format
 msgid "%d item still needs a person to check"
 msgid_plural "%d items still need a person to check"
 msgstr[0] ""
 msgstr[1] ""
 
-#: assets/src/components/score-card.js:98
+#: assets/src/components/score-card.js:108
 msgid "This score counts only what automated testing can settle, which is a part of WCAG rather than all of it. It does not tell you whether your site meets any legal requirement."
 msgstr ""
 

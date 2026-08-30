@@ -52,7 +52,17 @@ function band( score ) {
 export default function ScoreCard( { score, auto, manual } ) {
 	return (
 		<div className="wsak-score">
-			<div className="wsak-score__figure">
+			{ /*
+			 * The dial is drawn from this custom property. It is decoration
+			 * over a number that is already written out beside it, so nothing
+			 * here is the only way to read the score.
+			 */ }
+			<div
+				className="wsak-score__figure"
+				style={ {
+					'--wsak-score': Math.max( 0, Math.min( 100, score ) ),
+				} }
+			>
 				<span className="wsak-score__value">{ score }</span>
 				<span className="wsak-score__outof" aria-hidden="true">
 					/ 100

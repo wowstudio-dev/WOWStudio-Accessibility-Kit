@@ -129,64 +129,86 @@ function ratio( a, b ) {
  * group static content that is not interactive and carries none.
  */
 const PAIRINGS = [
-	[ '.wsak body text', 'text', 'surface', 14, false ],
-	[ '.wsak__lede', 'muted', 'surface', 14, false ],
-	[ '.wsak__footer disclaimer', 'muted', 'surface', 13, false ],
-	[ '.wsak__title', 'ink', 'surface', 26, true ],
-	[ '.wsak-score__value', 'ink', 'raised', 46, true ],
-	[ '.wsak-score__outof', 'muted', 'raised', 16, false ],
-	[ '.wsak-score__band', 'ink', 'raised', 14, true ],
-	[ '.wsak-score__caveat', 'muted', 'raised', 13, false ],
-	[ '.wsak-tag--auto', '#3730a3', '#eef2ff', 12, true ],
-	[ '.wsak-tag--manual', '#6b21a8', '#f3e8ff', 12, true ],
-	[ '.wsak-tag--sc on raised', 'muted', 'raised', 12, false ],
-	[ '.wsak-tag--sc on surface', 'muted', 'surface', 12, false ],
-	[ '.wsak-tag--critical', 'critical', 'critical-bg', 12, true ],
-	[ '.wsak-tag--serious', 'serious', 'serious-bg', 12, true ],
-	[ '.wsak-tag--moderate', 'moderate', 'moderate-bg', 12, true ],
-	[ '.wsak-tag--minor', 'minor', 'minor-bg', 12, true ],
-	[ '.wsak-table thead th', 'muted', 'surface', 12, false ],
-	[ '.wsak-table__type', 'muted', 'surface', 12, false ],
-	[ '.wsak-table__never', 'muted', 'surface', 14, false ],
+	// Shell and headings.
+	[ '.wsak body text', 'text', 'ground', 14.5, false ],
+	[ '.wsak__title', 'ink', 'ground', 23, true ],
+	[ '.wsak__lede', 'muted', 'ground', 13.5, false ],
+	[ '.wsak__footer', 'muted', 'ground', 12.5, false ],
+	[ '.wsak-boot', 'muted', 'ground', 14, false ],
+
+	// Navigation. The resting state sits on the raised pill track; the
+	// selected one sits on white.
+	[ 'nav, resting', 'muted', 'raised', 14, false ],
+	[ 'nav, selected', 'ink', 'surface', 14, false ],
+
+	// Card headings and body.
+	[ 'card titles', 'ink', 'surface', 16, true ],
 	[ '.wsak-issue__title', 'ink', 'surface', 14, true ],
-	[ '.wsak-issue__context', '#e7eaf3', 'ink', 12, false ],
-	[ '.wsak-issue__fix summary', 'indigo', 'surface', 14, true ],
-	[ '.wsak-coverage__lede', 'muted', 'surface', 14, false ],
-	[ '.wsak-coverage__rule dd', 'muted', 'surface', 13, false ],
-	[ '.wsak-coverage__group-note', 'muted', 'surface', 13, false ],
-	[ '.wsak-inspector__hint', 'muted', 'surface', 13, false ],
-	[ '.wsak-inspector__pass', 'muted', 'surface', 13, false ],
-	[ '.wsak-inspector__no-fix', 'muted', 'raised', 13, false ],
-	[ '.wsak-inspector__unplaceable-note', 'muted', 'surface', 13, false ],
+	[ '.wsak-issue__message', 'text', 'surface', 13.5, false ],
+	[ '.wsak-group__blurb', 'muted', 'surface', 13, false ],
+	[ '.wsak-coverage__lede', 'muted', 'surface', 13.5, false ],
+	[ '.wsak-coverage__rule dd', 'muted', 'surface', 12.5, false ],
+	[ '.wsak-coverage__group-note', 'muted', 'surface', 12.5, false ],
+	[ '.wsak-settings__lede', 'muted', 'surface', 13.5, false ],
 	[ '.wsak-result__unplaceable', 'muted', 'surface', 13, false ],
-	[ '.wsak-inspector__issue-title', 'ink', 'surface', 14, true ],
-	[ '.wsak-inspector__issue-title, selected', 'ink', 'raised', 14, true ],
-	[ '.wsak-inspector__issue-message', 'muted', 'surface', 13, false ],
-	[ '.wsak-inspector__issue-message, selected', 'muted', 'raised', 13, false ],
-	[ '.wsak-inspector__unplaced', 'moderate', 'moderate-bg', 13, false ],
-	// The selected finding's leading rule carries state, so 1.4.11 applies.
-	[ '.wsak-inspector__issue selected rule', 'indigo', 'raised', 0, false, true ],
-	[ '.wsak-empty__body', 'muted', 'raised', 14, false ],
-	[ '.wsak-alt__unavailable', 'muted', 'raised', 13, false ],
-	[ '.wsak-alt__saved', 'muted', 'raised', 13, false ],
-	[ '.wsak-fix__note', 'muted', 'raised', 13, false ],
-	[ '.wsak-fix__applied p', 'muted', 'raised', 14, false ],
-	[ '.wsak-diff__body', '#e7eaf3', 'ink', 12, false ],
+
+	// Score.
+	[ '.wsak-score__value', 'ink', 'raised', 34, true ],
+	[ '.wsak-score__band', 'ink', 'raised', 15, true ],
+	[ '.wsak-score__counts', 'muted', 'raised', 13.5, false ],
+	[ '.wsak-score__caveat', 'muted', 'raised', 12.5, false ],
+	[ '.wsak-score__outof', 'muted', 'raised', 11, false ],
+
+	// Tags. All small and semibold, so all held to the 4.5 threshold.
+	[ '.wsak-tag--auto', '#4c31c4', '#efecfe', 11.5, true ],
+	[ '.wsak-tag--manual', 'moderate', 'moderate-bg', 11.5, true ],
+	[ '.wsak-tag--sc', 'muted', 'raised', 11.5, false ],
+	[ '.wsak-tag--critical', 'critical', 'critical-bg', 11.5, true ],
+	[ '.wsak-tag--serious', 'serious', 'serious-bg', 11.5, true ],
+	[ '.wsak-tag--moderate', 'moderate', 'moderate-bg', 11.5, true ],
+	[ '.wsak-tag--minor', 'minor', 'minor-bg', 11.5, true ],
+
+	// Table.
+	[ '.wsak-table thead th', 'muted', 'surface', 11, false ],
+	[ '.wsak-table__title', 'ink', 'surface', 14, true ],
+	[ '.wsak-table__type', 'muted', 'surface', 11.5, false ],
+	[ '.wsak-table__never', 'muted', 'surface', 13, false ],
+	[ '.wsak-table row hover', 'ink', 'raised', 14, true ],
+
+	// Code and diffs, light on the brand navy.
+	[ '.wsak-issue__context', '#e9e6fb', 'ink', 12, false ],
+	[ '.wsak-diff__body', '#e9e6fb', 'ink', 12, false ],
 	[ '.wsak-diff__added', '#a7f3c4', '#10391f', 12, false ],
 	[ '.wsak-diff__removed', '#fecdd3', '#451319', 12, false ],
-	[ '.wsak-settings__lede', 'muted', 'surface', 14, false ],
-	[ '.wsak-settings__usage', 'muted', 'surface', 14, false ],
-	[ '.wsak-boot', 'muted', 'surface', 14, false ],
+	[ '.wsak-issue__fix summary', 'indigo', 'surface', 13, true ],
+
+	// Empty, busy and remediation panels.
+	[ '.wsak-empty__title', 'ink', 'raised', 15, true ],
+	[ '.wsak-empty__body', 'muted', 'raised', 13.5, false ],
+	[ '.wsak-busy', 'muted', 'surface', 13, false ],
+	[ '.wsak-alt__unavailable', 'muted', 'raised', 12.5, false ],
+	[ '.wsak-fix__note', 'muted', 'raised', 12.5, false ],
+	[ '.wsak-settings__usage', 'muted', 'surface', 13.5, false ],
+
+	// Inspector.
+	[ '.wsak-inspector__hint', 'muted', 'surface', 12.5, false ],
+	[ '.wsak-inspector__issue-title', 'ink', 'surface', 13.5, true ],
+	[ '.wsak-inspector__issue-title, selected', 'ink', 'raised', 13.5, true ],
+	[ '.wsak-inspector__issue-message', 'muted', 'surface', 12.5, false ],
+	[ '.wsak-inspector__issue-message, selected', 'muted', 'raised', 12.5, false ],
+	[ '.wsak-inspector__unplaced', 'moderate', 'moderate-bg', 12.5, false ],
+	[ '.wsak-inspector__no-fix', 'muted', 'raised', 12.5, false ],
 	[ 'statement draft, admin preview', 'moderate', 'moderate-bg', 14, false ],
-	// SC 1.4.11. The focus ring sits in the 2px outline-offset gap, so the
-	// colour behind it is the parent's background, never the element's own.
-	[ 'focus ring on a light panel', 'indigo', 'surface', 0, false, true ],
+
+	// SC 1.4.11 — the focus ring, and borders that carry state.
+	[ 'focus ring on white', 'indigo', 'surface', 0, false, true ],
 	[ 'focus ring on a raised panel', 'indigo', 'raised', 0, false, true ],
-	// Severity is also carried by the card's leading border, so that border
-	// does convey state and is held to 1.4.11.
+	[ 'focus ring on the ground', 'indigo', 'ground', 0, false, true ],
+	[ 'selected finding rule', 'indigo', 'raised', 0, false, true ],
 	[ 'issue border, critical', 'critical', 'surface', 0, false, true ],
 	[ 'issue border, serious', 'serious', 'surface', 0, false, true ],
 	[ 'issue border, moderate', 'moderate', 'surface', 0, false, true ],
+	[ 'score dial arc', 'indigo', 'raised', 0, false, true ],
 ];
 
 const verbose = process.argv.includes( '--verbose' ) || process.argv.includes( '-v' );

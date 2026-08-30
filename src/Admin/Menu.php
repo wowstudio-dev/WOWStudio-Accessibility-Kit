@@ -68,7 +68,7 @@ final class Menu implements Registrable {
 
 		add_menu_page(
 			__( 'WOWStudio Accessibility Kit', 'wowstudio-accessibility-kit' ),
-			__( 'Accessibility', 'wowstudio-accessibility-kit' ),
+			__( 'Accessibility Kit', 'wowstudio-accessibility-kit' ),
 			Capabilities::VIEW_REPORTS,
 			self::SLUG,
 			array( $this, 'render' ),
