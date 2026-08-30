@@ -159,11 +159,14 @@ final class RuleRegistryTest extends TestCase {
 			'A rule ID is claimed by more than one check, so one fault would be reported and scored twice.'
 		);
 
-		// Each browser check maps from exactly one axe rule, and no two map from
-		// the same one — otherwise a single axe finding would fan out into
-		// several of ours.
-		$axe = array_keys( BrowserRules::axe_map() );
-		$this->assertCount( count( BrowserRules::all() ), $axe, 'Two browser checks map from the same axe rule.' );
+		// The allowlist the browser pass is validated against carries every
+		// browser check and nothing else. A finding naming anything outside it
+		// is dropped, so a short list here would silently discard real findings.
+		$this->assertSame(
+			array_column( array_filter( $coverage, static fn( $r ) => 'browser' === $r['pass'] ), 'id' ),
+			BrowserRules::ids(),
+			'The browser allowlist and the browser coverage rows have drifted apart.'
+		);
 	}
 
 	/**

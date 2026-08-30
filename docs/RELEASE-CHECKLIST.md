@@ -72,16 +72,15 @@ by a human before any public release. Items marked **TODO(human)** are open.
 
 ## Third-party code (from Phase 2 onward)
 
-- [ ] **TODO(human)** Sign off on bundling **axe-core** (MPL-2.0) inside a GPLv2+
-      plugin. My reading: the Exhibit B "Incompatible With Secondary Licenses"
-      notice is not asserted — checked against the shipped v4.11.1 headers and
-      the upstream `LICENSE`, neither of which contains the phrase — so plain
-      MPL-2.0 is GPL-compatible under § 3.3, and Equalize Digital already ships
-      it in a GPL plugin on wordpress.org. But there is an open upstream
-      discussion about whether the SPDX identifier should be
-      `MPL-2.0-no-copyleft-exception`, and if that is ever asserted the answer
-      flips. This is a licensing judgement, not an engineering one; it needs a
-      human before release. SPEC.md records the fallback.
+- [x] **No third-party runtime code ships.** The browser pass was going to bundle
+      axe-core (MPL-2.0), which would have been the only third-party licence
+      question in the plugin and the only item here needing a legal opinion
+      rather than an engineering one. Reversed on 2026-08-30: we write the five
+      browser checks ourselves. The licence question is not answered, it is
+      *gone*. Decision and reasoning in SPEC.md under D1.
+- [ ] Re-check this if any third-party runtime library is ever added. The
+      standing rule: PHP dev dependencies and build tooling do not ship, so they
+      are not a licensing question; anything that reaches the zip is.
 - [ ] Attribution for every bundled library appears in readme.txt and the source
       headers survive the build (wp-scripts writes `*.LICENSE.txt` alongside each
       bundle — confirm those files are not stripped by `.distignore`).

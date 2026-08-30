@@ -17,12 +17,13 @@ defined( 'ABSPATH' ) || exit;
  * the check in the coverage panel, to recognise its ID when a finding arrives,
  * and to decide the severity and wording that finding is stored with.
  *
- * That last point is deliberate. Findings come back from axe, but axe's rule
- * IDs, severities and phrasing are not what we show anyone. Each browser check
- * is declared here with our own identifier, our own severity, and our own
- * plain-language description, and the incoming axe ID is mapped onto it. A
- * finding whose axe ID is not claimed by any rule here is discarded rather than
- * stored, so the browser pass cannot introduce checks we never described.
+ * That last point is deliberate. The browser is an untrusted caller like any
+ * other: it reports which check failed and where, and PHP decides what that
+ * means. Severity, WCAG criterion and remediation wording are fixed here and
+ * never taken from the payload, and a finding whose rule ID is not claimed by
+ * any rule in BrowserRules is discarded rather than stored. So the browser pass
+ * cannot introduce checks we never described, nor inflate the severity of one
+ * we did.
  *
  * @since 0.10.0
  */
@@ -34,16 +35,14 @@ final class BrowserRule implements RuleDescriptor {
 	 * @since 0.10.0
 	 *
 	 * @param string    $id          Our stable rule identifier.
-	 * @param string    $axe_id      The axe-core rule ID this maps from.
 	 * @param string    $wcag_sc     WCAG success criterion.
-	 * @param Severity  $severity    Severity we assign, independent of axe's impact.
+	 * @param Severity  $severity    How much this fault hurts.
 	 * @param Detection $detection   Whether this settles the issue or flags it.
 	 * @param string    $title       Short human-readable name.
 	 * @param string    $description What fails, who it affects, how to fix it.
 	 */
 	public function __construct(
 		private readonly string $id,
-		private readonly string $axe_id,
 		private readonly string $wcag_sc,
 		private readonly Severity $severity,
 		private readonly Detection $detection,
@@ -60,17 +59,6 @@ final class BrowserRule implements RuleDescriptor {
 	 */
 	public function id(): string {
 		return $this->id;
-	}
-
-	/**
-	 * Returns the axe-core rule ID this check maps from.
-	 *
-	 * @since 0.10.0
-	 *
-	 * @return string
-	 */
-	public function axe_id(): string {
-		return $this->axe_id;
 	}
 
 	/**

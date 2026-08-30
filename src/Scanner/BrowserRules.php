@@ -16,12 +16,18 @@ defined( 'ABSPATH' ) || exit;
  * was actually painted, a box that was actually laid out. Nothing here could be
  * moved into PHP by writing a cleverer parser.
  *
- * The set is scoped rather than "everything axe offers", for two reasons. Two
- * engines reporting the same problem twice would be worse than useless to the
- * person reading the list. And every check we run is a check we have to be able
- * to explain in our own words and stand behind in the coverage panel — a rule
- * we merely forwarded from axe without deciding its severity or writing its
- * remediation advice is not one we can honestly claim to have made.
+ * The set is small on purpose, and we implement it rather than importing an
+ * engine. Two passes reporting the same problem twice would be worse than
+ * useless to the person reading the list. And every check we run has to be one
+ * we can explain in our own words and stand behind in the coverage panel — a
+ * rule forwarded from someone else's library, with their severity and their
+ * phrasing, is not one we could honestly claim to have made.
+ *
+ * Owning the implementation also buys the thing the product is actually for.
+ * The hard part of contrast is not the arithmetic, it is the cases where the
+ * effective background cannot be determined — an image behind the text, a
+ * gradient, stacked translucency. Those get reported as needing a person, which
+ * is the honest answer and the one a borrowed engine would not give.
  *
  * @since 0.10.0
  */
@@ -38,7 +44,6 @@ final class BrowserRules {
 		$rules = array(
 			new BrowserRule(
 				'colour-contrast',
-				'color-contrast',
 				'1.4.3',
 				Severity::Serious,
 				Detection::Auto,
@@ -47,7 +52,6 @@ final class BrowserRules {
 			),
 			new BrowserRule(
 				'link-marked-by-colour-alone',
-				'link-in-text-block',
 				'1.4.1',
 				Severity::Moderate,
 				Detection::Auto,
@@ -56,7 +60,6 @@ final class BrowserRules {
 			),
 			new BrowserRule(
 				'target-too-small',
-				'target-size',
 				'2.5.8',
 				Severity::Moderate,
 				Detection::Auto,
@@ -65,7 +68,6 @@ final class BrowserRules {
 			),
 			new BrowserRule(
 				'scrolling-region-not-reachable',
-				'scrollable-region-focusable',
 				'2.1.1',
 				Severity::Serious,
 				Detection::Auto,
@@ -74,7 +76,6 @@ final class BrowserRules {
 			),
 			new BrowserRule(
 				'hidden-element-still-focusable',
-				'aria-hidden-focus',
 				'4.1.2',
 				Severity::Serious,
 				Detection::Auto,
@@ -94,24 +95,20 @@ final class BrowserRules {
 	}
 
 	/**
-	 * Returns the map from axe rule ID to our rule ID.
+	 * Returns the rule IDs the browser pass is allowed to report.
 	 *
-	 * Used to validate incoming findings. An axe ID that is not a key here is
-	 * one we never asked for and cannot describe, so its findings are dropped.
+	 * The browser is an untrusted caller. A finding naming anything outside this
+	 * list is dropped rather than stored, so the pass cannot invent checks that
+	 * were never described in the coverage panel.
 	 *
 	 * @since 0.10.0
 	 *
-	 * @return array<string, string>
+	 * @return string[]
 	 */
-	public static function axe_map(): array {
-		$map = array();
-
-		foreach ( self::all() as $rule ) {
-			if ( $rule instanceof BrowserRule ) {
-				$map[ $rule->axe_id() ] = $rule->id();
-			}
-		}
-
-		return $map;
+	public static function ids(): array {
+		return array_map(
+			static fn( RuleDescriptor $rule ): string => $rule->id(),
+			self::all()
+		);
 	}
 }

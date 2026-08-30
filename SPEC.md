@@ -325,22 +325,47 @@ this one is a matter of kind.
 
 ### Decisions
 
-**D1 — Bundle axe-core; run a deliberately scoped subset.**
-Deque's axe is the engine auditors actually use, and re-implementing contrast
-means owning gradients, background images, opacity stacking and pseudo-elements
-forever. We run **only the rules our PHP engine cannot do**, so the two engines
-never produce competing findings and the coverage story stays legible.
+**D1 — Write our own browser pass. Do not bundle axe-core.** *(reversed
+2026-08-30, on an explicit "best and risk-free" instruction.)*
 
-*Licensing.* axe-core is MPL-2.0. The Exhibit B "Incompatible With Secondary
-Licenses" notice is **not** asserted — verified against the shipped v4.11.1
-headers and the upstream `LICENSE`, neither of which contains the phrase. Plain
-MPL-2.0 is GPL-compatible via § 3.3, so bundling it in a GPLv2+ plugin is sound,
-and the incumbent already ships it inside a GPL plugin on wordpress.org. There
-is an open upstream discussion about whether `package.json` should carry
-`MPL-2.0-no-copyleft-exception` instead; if that were ever asserted the position
-changes. **Get a human sign-off before release** — recorded in the release
-checklist. Fallback if it goes the wrong way: our own contrast checker, roughly
-5 KB, covering 1.4.3 and 1.4.11 only, at the cost of the rest of the pass.
+The original decision was to bundle axe-core and run a scoped subset. That trade
+does not survive contact with the scope we actually chose. We run **five**
+checks. axe ships around a hundred, at roughly 600 KB, under a licence that
+would be the only third-party legal question anywhere in this plugin — and the
+only thing standing between us and a WordPress.org submission that requires no
+legal judgement call at all.
+
+For the record, the licence itself is almost certainly fine: axe-core is plain
+MPL-2.0 with the Exhibit B "Incompatible With Secondary Licenses" notice **not**
+asserted, verified against the shipped v4.11.1 headers and the upstream
+`LICENSE`, neither of which contains the phrase; MPL-2.0 is GPL-compatible via
+§ 3.3; and the incumbent already ships it inside a GPL plugin on wordpress.org.
+But "almost certainly fine, pending a legal read" is a different thing from
+risk-free, and there is an open upstream question about whether the SPDX
+identifier should be `MPL-2.0-no-copyleft-exception`. Carrying that tail risk to
+gain breadth we deliberately are not shipping is a bad bargain.
+
+Three further reasons the reversal is not merely defensive:
+
+1. **The maths is not the hard part, and we already own it.** The WCAG relative
+   luminance and contrast-ratio formulae are ~30 lines and already implemented
+   and validated in `bin/check-contrast.js`, where they check 42 pairings of our
+   own UI on every CI run.
+2. **Uncertainty is our product.** The genuinely hard part of contrast is the
+   cases where the effective background cannot be determined — image
+   backgrounds, gradients, stacked translucency. axe marks those "incomplete",
+   and most tools built on it quietly drop them. We report them as **needs
+   manual review**, which is the honest answer and the thing this plugin exists
+   to do. Owning the checker is what makes that possible.
+3. **It is the competitor's engine.** Shipping the same 600 KB of axe makes
+   "architecturally different" a harder claim to make and an easier one to
+   dismiss.
+
+*Accepted cost, stated plainly.* Our checker will be less battle-tested than
+axe on exotic CSS. The mitigation is the honesty fallback in point 2: where we
+cannot determine a background with confidence we say so rather than guessing,
+so the failure mode is an unnecessary manual review, never a false pass. Breadth
+beyond the five checks is a later decision, not a licence we have to take now.
 
 **D2 — Admin-only, in a hidden same-origin iframe. Never the front end.**
 The scanner script is enqueued on our admin screen and nowhere else. This is a
@@ -403,7 +428,7 @@ scans migrated with accurate values.
 1. Schema migration, `Engine` enum, repository plumbing, `SchemaTest` coverage.
 2. Rule registry declares an engine per rule; `/coverage` payload and the
    coverage panel grow the third group.
-3. Vendor axe-core through npm; build a scoped runner in `assets/src/scanner/`.
+3. Build the browser runner in `assets/src/scanner/` — no third-party runtime.
    Admin-only enqueue, loaded on demand rather than on every admin page.
 4. Iframe harness: preview URL for non-public statuses, hard timeout, and an
    explicit result for every failure mode rather than a silent empty array.
@@ -411,9 +436,9 @@ scans migrated with accurate values.
    against the registry so the route cannot be used to write arbitrary findings.
 6. Merge and dedupe; persist with `engine = 'css'`.
 7. Partial-coverage surfaces: score annotation, results notice, coverage panel.
-8. Map axe rule IDs to ours, with our own WCAG SC, severity and remediation
-   copy. We do not pass axe's wording through to users — the voice and the
-   honesty framing are ours.
+8. Each browser check reports our own rule ID, WCAG SC, severity and
+   remediation copy, and reports *uncertain* rather than *pass* whenever it
+   cannot determine the answer.
 9. Tests: merge/dedupe, blocked-iframe degradation, score honesty, and a guard
    that no scanner script is enqueued for visitors.
 
@@ -421,9 +446,9 @@ scans migrated with accurate values.
 
 | Risk | Handling |
 | --- | --- |
-| ~600 KB bundle | Admin-only, loaded on demand, never on every screen. |
+| Our contrast checker is less battle-tested than axe on exotic CSS | Where the effective background cannot be determined, report *needs manual review* rather than guessing. The failure mode is an unnecessary review, never a false pass. |
 | Iframe blocked by `X-Frame-Options` / CSP | Detected and reported as `blocked` with a plain-language reason. Degrades to a partial scan, never a false clean one. |
-| wp.org review of a minified third-party library | Source available via npm and the build is reproducible from it; note it for the reviewer up front. |
+| wp.org review of a bundled third-party library | No longer applicable: the browser pass ships no third-party runtime code. |
 | Admin bar or logged-in styles contaminating results | Scan the preview URL in a logged-out-equivalent context; verify against a known page before trusting output. |
 | Duplicate findings across engines | Scope the axe ruleset to what PHP cannot do; assert non-overlap in a test. |
 
