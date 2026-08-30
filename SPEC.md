@@ -74,7 +74,7 @@
   - `[Pro]` Descriptive link text ("read more" → meaningful).
   - `[Pro]` Table header/scope fixes.
   - `[Pro]` Language attribute & document-title fixes.
-  - `[Pro]` Contrast fixes with compliant color proposals (preview swatches).
+  - `[Free]` Contrast fixes with compliant colour proposals (preview swatches), one page at a time; `[Pro]` in bulk. See Phase 2 step 2, decision E8.
   - `[Pro]` Skip-links / keyboard-focus fixes.
 - `[Free]` **Preview + diff** for every fix; apply / reject; full undo.
 - `[Pro]` Non-destructive apply: fixes stored as overrides/filters where possible; optional "write to source" mode with backup.
@@ -580,11 +580,18 @@ fixes behind — they are not lost, but they stop applying. That is core's
 behaviour and not something to hide: the statement and the fix list both say so,
 and switching themes is a good moment to re-scan.
 
-**E8 — Free or Pro.** SPEC's module C lists contrast fixes as `[Pro]`. That was
-written before contrast detection existed. Revisit against the same reasoning as
-D6: detection is table stakes because the free competitor has it, but *fixing*
-is our differentiator and has no free equivalent anywhere. Recommendation: the
-first CSS fix on a page is Free, bulk and site-wide application are Pro.
+**E8 — Free to fix one page, Pro to fix a site.** *(Resolved 2026-08-30.)*
+Module C listed contrast fixes as `[Pro]`, written before contrast detection
+existed. That is now the wrong line. Detection is table stakes — the free
+competitor has it — so a free tier that finds contrast problems and then refuses
+to help with any of them is worse than the thing it is competing against.
+
+Fixing, meanwhile, has no free equivalent anywhere, which makes it the thing
+worth paying for rather than the thing worth withholding. So: applying CSS fixes
+one at a time on a page is **Free**, and bulk application across a site is
+**Pro** — the same shape as the markup fixes, and the same shape as D6. Somebody
+evaluating the plugin can fix a real problem on a real page before paying, which
+is the only convincing demonstration this product has.
 
 ### Build order
 

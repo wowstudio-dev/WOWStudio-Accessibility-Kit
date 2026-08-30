@@ -9,6 +9,7 @@ namespace WOWStudio\AccessibilityKit;
 
 use WOWStudio\AccessibilityKit\Core\Installer;
 use WOWStudio\AccessibilityKit\Db\Schema;
+use WOWStudio\AccessibilityKit\Remediation\CustomCss;
 use WOWStudio\AccessibilityKit\Support\Capabilities;
 
 defined( 'ABSPATH' ) || exit;
@@ -92,6 +93,36 @@ final class Uninstaller {
 
 		self::delete_transients();
 		self::delete_post_meta();
+		self::remove_managed_css();
+	}
+
+	/**
+	 * Takes our rules out of the site's Additional CSS, and nothing else.
+	 *
+	 * Only reached when the owner opted in to data removal. Even then this
+	 * removes the block we wrote and leaves every other line exactly as it was:
+	 * Additional CSS is the site's own stylesheet, which happens to contain some
+	 * of our work, not a place we own. Uninstalling a plugin should not be able
+	 * to take somebody's brand colours with it.
+	 *
+	 * Without the opt-in the CSS stays entirely. Applied fixes are real changes
+	 * the owner approved, and removing the plugin is not a reason to silently
+	 * undo them and regress the site.
+	 *
+	 * @since 0.11.0
+	 *
+	 * @return void
+	 */
+	private static function remove_managed_css(): void {
+		if ( ! class_exists( CustomCss::class ) || ! function_exists( 'wp_get_custom_css' ) ) {
+			return;
+		}
+
+		$css = new CustomCss();
+
+		foreach ( array_keys( $css->rules() ) as $issue_id ) {
+			$css->remove( (int) $issue_id );
+		}
 	}
 
 	/**
