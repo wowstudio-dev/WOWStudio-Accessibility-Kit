@@ -1207,74 +1207,74 @@ msgstr ""
 msgid "Undo this fix"
 msgstr ""
 
-#: assets/src/components/inspector.js:44
+#: assets/src/components/inspector.js:54
 msgid "This one is about the page as a whole rather than one spot on it, so there is nowhere in particular to point."
 msgstr ""
 
-#: assets/src/components/inspector.js:49
+#: assets/src/components/inspector.js:59
 msgid "This element is not in the page any more. It may have been edited since the scan, or it may only appear for some visitors."
 msgstr ""
 
-#: assets/src/components/inspector.js:54
+#: assets/src/components/inspector.js:64
 msgid "The page has changed shape since the scan, so we cannot be sure which element this refers to. Rather than point at the wrong one, we are pointing at none. Re-scan to place it again."
 msgstr ""
 
-#: assets/src/components/inspector.js:59
+#: assets/src/components/inspector.js:69
 msgid "This element is in the page but is not being displayed, so there is nothing to point at."
 msgstr ""
 
-#: assets/src/components/inspector.js:143
-#: assets/src/components/inspector.js:259
+#: assets/src/components/inspector.js:155
+#: assets/src/components/inspector.js:281
 msgid "Checking colour, size and layout on the page…"
 msgstr ""
 
 #. translators: %d: number of additional findings.
-#: assets/src/components/inspector.js:162
+#: assets/src/components/inspector.js:174
 #, js-format
 msgid "Page checks finished. %d further findings."
 msgstr ""
 
 #. translators: %s: name of the accessibility check.
-#: assets/src/components/inspector.js:206
+#: assets/src/components/inspector.js:228
 #, js-format
 msgid "Showing: %s"
 msgstr ""
 
-#: assets/src/components/inspector.js:215
+#: assets/src/components/inspector.js:237
 msgid "This content has no public address, so it cannot be shown here. The findings below still apply."
 msgstr ""
 
 #. translators: %s: content title.
-#: assets/src/components/inspector.js:233
+#: assets/src/components/inspector.js:255
 #, js-format
 msgid "Inspecting “%s”"
 msgstr ""
 
-#: assets/src/components/inspector.js:239
+#: assets/src/components/inspector.js:261
 msgid "Inspecting"
 msgstr ""
 
-#: assets/src/components/inspector.js:243
+#: assets/src/components/inspector.js:265
 msgid "Back to results"
 msgstr ""
 
-#: assets/src/components/inspector.js:273
+#: assets/src/components/inspector.js:295
 msgid "Choose a finding to see it on the page. Moving through this list with the keyboard works the same way."
 msgstr ""
 
-#: assets/src/components/inspector.js:281
+#: assets/src/components/inspector.js:303
 msgid "This scan read only your content, not the whole page, so findings from the markup cannot be pointed at here. Anything found on the page itself — colour, size, layout — still can be."
 msgstr ""
 
-#: assets/src/components/inspector.js:340
+#: assets/src/components/inspector.js:375
 msgid "Your page would not open here."
 msgstr ""
 
-#: assets/src/components/inspector.js:345
+#: assets/src/components/inspector.js:380
 msgid "Some sites refuse to be shown inside another page, which is a reasonable security setting and not a fault. Findings from the markup are still listed, but nothing that depends on seeing the page — colour, text size, layout — was checked on this scan."
 msgstr ""
 
-#: assets/src/components/inspector.js:356
+#: assets/src/components/inspector.js:391
 msgid "Preview of the page being inspected"
 msgstr ""
 

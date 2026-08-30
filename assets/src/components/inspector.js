@@ -28,6 +28,16 @@ import { DetectionTag, SeverityTag } from './tags';
 const LOAD_TIMEOUT_MS = 15000;
 
 /**
+ * How long the pointer has to rest on a finding before the page reacts.
+ *
+ * Sweeping the mouse down the list crosses every finding on the way, and
+ * reacting to each one turns a glance into a slideshow. Waiting for the pointer
+ * to settle means only a finding somebody actually paused on is shown. Keyboard
+ * focus and clicks are deliberate, so they act at once.
+ */
+const HOVER_SETTLE_MS = 180;
+
+/**
  * Explains why an element could not be marked.
  *
  * Each of these is a real thing that happens to real pages, and each gets its
@@ -92,6 +102,8 @@ export default function Inspector( {
 	const [ announcement, setAnnouncement ] = useState( '' );
 	const [ passState, setPassState ] = useState( 'idle' );
 	const [ passError, setPassError ] = useState( '' );
+
+	const hoverTimer = useRef( null );
 
 	// A frame that a security policy refused leaves an empty document behind
 	// rather than raising an error, so silence is the failure signal and has to
@@ -172,6 +184,16 @@ export default function Inspector( {
 				setPassError( readableError( error ) );
 			} );
 	}, [ frameState, passState, scanId, onFindings ] );
+
+	const cancelPendingHover = useCallback( () => {
+		if ( hoverTimer.current ) {
+			clearTimeout( hoverTimer.current );
+			hoverTimer.current = null;
+		}
+	}, [] );
+
+	// Nothing should still be pending once the inspector is gone.
+	useEffect( () => cancelPendingHover, [ cancelPendingHover ] );
 
 	const show = useCallback( ( issue ) => {
 		const doc = frameDocument( frameRef.current );
@@ -301,9 +323,22 @@ export default function Inspector( {
 											: undefined
 									}
 									disabled={ frameState !== 'ready' }
-									onClick={ () => show( issue ) }
-									onFocus={ () => show( issue ) }
-									onMouseEnter={ () => show( issue ) }
+									onClick={ () => {
+										cancelPendingHover();
+										show( issue );
+									} }
+									onFocus={ () => {
+										cancelPendingHover();
+										show( issue );
+									} }
+									onMouseEnter={ () => {
+										cancelPendingHover();
+										hoverTimer.current = setTimeout(
+											() => show( issue ),
+											HOVER_SETTLE_MS
+										);
+									} }
+									onMouseLeave={ cancelPendingHover }
 								>
 									<span className="wsak-inspector__issue-title">
 										{ issue.rule_title }

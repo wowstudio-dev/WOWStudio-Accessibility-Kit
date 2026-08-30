@@ -85,13 +85,66 @@ export function clearHighlight( doc ) {
 }
 
 /**
- * Marks an element and scrolls it into view.
+ * Reports whether an element is already comfortably visible in the frame.
  *
- * @param {Document} doc     The framed document.
- * @param {Element}  element Element to mark.
+ * Used to avoid scrolling for the sake of it. Moving the page when the thing
+ * being pointed at is already on screen is pure disruption — the reader loses
+ * their place and gains nothing.
+ *
+ * @param {Element} element Element to test.
+ * @param {Window}  view    The frame's window.
+ * @return {boolean} True when no scrolling is needed.
+ */
+export function isInView( element, view ) {
+	const rect = element.getBoundingClientRect();
+	const height = view.innerHeight || 0;
+	const margin = 40;
+
+	return rect.top >= margin && rect.bottom <= height - margin;
+}
+
+/**
+ * Brings an element into view by scrolling the frame, and only the frame.
+ *
+ * Deliberately not scrollIntoView(). That method scrolls every scrollable
+ * ancestor of the element, and this element lives in an iframe — so it also
+ * scrolls the admin page underneath, dragging the whole interface around to
+ * bring the frame into view. The preview pane is sticky, which makes that
+ * especially disorienting: the page lurches and the thing you were reading
+ * moves out from under you.
+ *
+ * Setting the frame window's own scroll position affects the frame and nothing
+ * else.
+ *
+ * @param {Element} element Element to reveal.
+ * @param {Window}  view    The frame's window.
+ * @return {void}
+ */
+function scrollFrameTo( element, view ) {
+	const rect = element.getBoundingClientRect();
+	const height = view.innerHeight || 0;
+	const target = view.scrollY + rect.top - height / 2 + rect.height / 2;
+
+	const reduced = view.matchMedia
+		? view.matchMedia( '(prefers-reduced-motion: reduce)' ).matches
+		: false;
+
+	view.scrollTo( {
+		top: Math.max( 0, target ),
+		behavior: reduced ? 'auto' : 'smooth',
+	} );
+}
+
+/**
+ * Marks an element, and brings it into view only if it is not already.
+ *
+ * @param {Document} doc            The framed document.
+ * @param {Element}  element        Element to mark.
+ * @param {Object}   options        Options.
+ * @param {boolean}  options.scroll Whether scrolling is allowed at all.
  * @return {boolean} True when the element could be marked.
  */
-export function highlight( doc, element ) {
+export function highlight( doc, element, { scroll = true } = {} ) {
 	if ( ! doc || ! element || ! element.isConnected ) {
 		return false;
 	}
@@ -126,15 +179,9 @@ export function highlight( doc, element ) {
 
 	doc.body.appendChild( marker );
 
-	const reduced = view.matchMedia
-		? view.matchMedia( '(prefers-reduced-motion: reduce)' ).matches
-		: false;
-
-	element.scrollIntoView( {
-		block: 'center',
-		inline: 'nearest',
-		behavior: reduced ? 'auto' : 'smooth',
-	} );
+	if ( scroll && ! isInView( element, view ) ) {
+		scrollFrameTo( element, view );
+	}
 
 	return true;
 }

@@ -39,6 +39,7 @@ module.exports = [
 		languageOptions: {
 			globals: {
 				DOMParser: 'readonly',
+				Element: 'readonly',
 				XPathResult: 'readonly',
 				document: 'readonly',
 				window: 'readonly',
