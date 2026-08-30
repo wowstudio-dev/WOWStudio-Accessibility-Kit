@@ -503,6 +503,115 @@ equivalent and it strengthens attestation), `affected_disabilities` on every rul
 and the richer per-rule metadata the incumbent carries (`why_it_matters`,
 `references[]`).
 
+## Phase 2, step 2 — remediating what CSS causes
+
+**Goal:** the findings the browser pass made possible become fixable, not just
+visible.
+
+**Why now:** contrast, target size and link-marked-by-colour are the most
+valuable checks the plugin has, and every one of them currently ends in a
+sentence telling the user to go and edit their theme. The markup override layer
+cannot help: it substitutes markup, and none of these are markup faults. Left
+alone, the browser pass is a better *reporter* and no better a *fixer*, which is
+the wrong half of the product to have improved.
+
+### Decisions
+
+**E1 — Write to WordPress's own Additional CSS.**
+Approved rules go into the Customiser's Additional CSS (`wp_update_custom_css_post()`),
+not into a stylesheet of ours. Three reasons, in order of weight:
+
+1. **It keeps the "nothing for visitors" line intact.** A stylesheet we enqueue
+   ourselves would be this plugin outputting to the front end — the line the
+   incumbent crosses and we have refused to. Additional CSS is the site's own
+   CSS, which the site was already serving.
+2. **It is somewhere the user already owns and can see.** Appearance →
+   Customise → Additional CSS. They can read it, edit it, or delete it without
+   us, including after uninstalling the plugin. A fix that only our plugin can
+   undo is a fix that holds the site hostage.
+3. **It is what a developer would actually do.** Which is the whole positioning:
+   real changes at the code level, not a runtime patch.
+
+**E2 — Write only inside a delimited block, and never outside it.**
+Our rules live between marker comments. On every write the existing CSS is
+parsed, our block replaced, and everything else preserved byte for byte. If the
+markers are missing or malformed, we append a fresh block rather than guessing —
+we would rather leave a duplicate for a human to reconcile than eat somebody's
+stylesheet. The user's own CSS is never reformatted, reordered or touched.
+
+**E3 — Require the capability the change actually needs.**
+Applying needs `wsak_apply_fix` **and** core's `edit_css`. Our own capability is
+not enough on its own: `edit_css` is what gates the Customiser, and this must
+never become a way for someone to change site-wide CSS who could not already do
+it by hand. Capabilities are a floor, not a shortcut.
+
+**E4 — The selector is part of the fix, and part of the review.**
+A markup override affects one element in one post. A CSS rule affects everything
+the selector matches, site-wide, forever. That is a categorically larger blast
+radius and the interface has to treat it as one.
+
+So the proposed selector is shown, editable, and explained: how many elements on
+this page it currently matches, and that it will also apply to pages we have not
+scanned. Selector preference, most stable first: an `id`; then a class
+combination that is not obviously generated; then, only as a last resort, a
+positional selector — which is offered with a warning that it will break the
+next time the content around it changes.
+
+Often the right rule is broader than the element that triggered it. One
+paragraph failing contrast usually means a colour is wrong everywhere it is
+used, and fixing `.entry-content a` beats fixing one link. The proposal should
+lean towards the class rather than the instance, and say which it chose.
+
+**E5 — Close the loop in the frame.**
+The preview frame is already open and the checks already run there, so an
+applied fix can be re-measured immediately: apply, re-run contrast on that
+element, show the new ratio next to the old one. Most tools tell you what to
+change; this can show you it worked, in the page, seconds later. This is the
+most persuasive thing in the feature and it costs almost nothing, because both
+halves already exist.
+
+**E6 — Undo removes the rule, not the block.**
+Reverting a single fix removes its rule and leaves the rest of the managed block
+intact, exactly as reverting one markup override leaves the others.
+
+**E7 — Say that it is theme-scoped.**
+WordPress stores Additional CSS per theme. Switching themes silently leaves the
+fixes behind — they are not lost, but they stop applying. That is core's
+behaviour and not something to hide: the statement and the fix list both say so,
+and switching themes is a good moment to re-scan.
+
+**E8 — Free or Pro.** SPEC's module C lists contrast fixes as `[Pro]`. That was
+written before contrast detection existed. Revisit against the same reasoning as
+D6: detection is table stakes because the free competitor has it, but *fixing*
+is our differentiator and has no free equivalent anywhere. Recommendation: the
+first CSS fix on a page is Free, bulk and site-wide application are Pro.
+
+### Build order
+
+1. `Remediation\CustomCss` — read, parse the managed block, write it back with
+   everything else preserved. Tests first, including malformed and missing
+   markers, and CSS containing our marker text inside a string.
+2. Selector proposal with the stability ranking, and a match count from the live
+   frame.
+3. `POST /wsak/v1/fixes/css` — capability pair, validated rule, rejects any rule
+   whose finding did not come from the browser pass.
+4. Contrast fix generation: propose a compliant colour closest to the original
+   rather than a stock one, so the design survives the fix.
+5. Review UI: the rule, the selector, its blast radius, the before and after
+   swatches, and the measured ratio each way.
+6. Apply, then re-measure in the frame and show the result.
+7. Uninstall leaves the CSS in place unless data removal was opted into — it is
+   the user's stylesheet now.
+
+### Risks
+
+| Risk | Handling |
+| --- | --- |
+| Damaging existing Additional CSS | Only ever rewrite between our markers; preserve the remainder byte for byte; append rather than guess when markers are malformed. Tested against hostile input. |
+| A selector matching far more than intended | Show the match count before applying, prefer the narrowest stable selector, and make the selector editable. |
+| Specificity losing to the theme | Verify by re-measuring after applying, and report honestly when the rule did not take effect rather than claiming success. |
+| Fixes silently stopping on a theme switch | Stated in the interface; a theme switch prompts a re-scan. |
+
 ## Open decisions (updated)
 1. **Scanning engine** — ✅ *Resolved and specified.* PHP DOM static analysis is the spine; a scoped client-side axe-core pass adds the render-dependent checks in Phase 2, step 1. Full decision record above. The one open sub-question is the axe-core licence sign-off, tracked in the release checklist.
 2. **Fix storage model** — 🟡 *Recommended:* override/filter layer first (safe, reversible); add optional write-to-source in Phase 2 with backups. *(confirm)*
