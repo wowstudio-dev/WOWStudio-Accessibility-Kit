@@ -10,6 +10,7 @@ namespace WOWStudio\AccessibilityKit\Core;
 use WOWStudio\AccessibilityKit\Admin\Menu;
 use WOWStudio\AccessibilityKit\Conformance\StatementBlock;
 use WOWStudio\AccessibilityKit\Remediation\OverrideStore;
+use WOWStudio\AccessibilityKit\Scanner\Preview;
 use WOWStudio\AccessibilityKit\Rest\AiController;
 use WOWStudio\AccessibilityKit\Rest\FixController;
 use WOWStudio\AccessibilityKit\Rest\StatementController;
@@ -141,6 +142,7 @@ final class Plugin {
 			'rest.ai'        => new AiController(),
 			'rest.fix'       => new FixController(),
 			'overrides'      => new OverrideStore(),
+			'preview'        => new Preview(),
 			'statement'      => new StatementBlock(),
 			'rest.statement' => new StatementController(),
 		);

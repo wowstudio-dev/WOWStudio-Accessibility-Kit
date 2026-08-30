@@ -401,6 +401,49 @@ real limitation, stated plainly, not hidden.
 **D6 — Contrast is Free.** The incumbent gives it away; gating it would make our
 free tier visibly worse than theirs on the most-searched check in the category.
 
+### The inspector *(supersedes the hidden-iframe design)*
+
+The browser pass needs the page open in a frame. The original plan hid that
+frame, which made it pure cost — infrastructure the user pays for in complexity
+and never sees. Instead the frame becomes the primary interface:
+
+**Issues on the left, the live page on the right.** Selecting or focusing an
+issue highlights the element it refers to, inside the preview. The same frame
+runs the browser pass. One piece of machinery, two jobs.
+
+This also fixes the weakest part of the existing results screen. A finding
+currently ends at a selector like `/html/body/div[3]/p[2]`, which is unusable by
+anyone who does not read XPath for a living — the difference between a report
+and a tool is being shown the thing.
+
+And it turns the honesty surface from words into evidence. A blocked frame is
+currently a notice people skim; an empty preview pane carrying the reason is
+impossible to miss.
+
+**Four problems this design has to solve, all verified against the code.**
+
+1. **The admin bar shifts every selector.** `PageSource` fetches logged out, so
+   the scanned HTML has no admin bar. An iframe loading the same permalink while
+   the user is logged in gets `<div id="wpadminbar">` as the body's first child,
+   and every positional XPath after it is off by one — so every highlight would
+   point confidently at the wrong element. The preview therefore loads with the
+   admin bar suppressed, so the two DOMs agree.
+2. **Resolving is not the same as resolving correctly.** JavaScript can reshape
+   the page before we look, so a selector can resolve to a different element than
+   the one scanned. Findings already store the offending markup in `context`; the
+   preview verifies the resolved element against it and reports *could not locate
+   this on the live page* rather than highlighting the wrong thing. Highlighting
+   the wrong element is worse than highlighting nothing, because it teaches the
+   user to distrust every highlight.
+3. **Hover alone is a mouse-only affordance.** For this product that is
+   indefensible. Highlighting fires on focus as well as hover, issues are real
+   buttons in the tab order, and nothing is reachable only by pointer.
+4. **wp-admin is narrow.** The two panes stack below a breakpoint, and the
+   preview can be widened.
+
+**Non-negotiable, restated because the frame is now visible:** the preview and
+its scanner run in the admin only. Nothing is enqueued for visitors, ever.
+
 ### Data model *(built — schema 1.2.0)*
 
 - `wp_wsak_issues`: `found_by varchar(10) NOT NULL DEFAULT 'server'`, indexed.
