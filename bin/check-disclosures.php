@@ -65,6 +65,10 @@ const WSAK_SURFACES = array(
 		'the plugin-cannot-verify-this note' => '/Nothing in this plugin can verify it/i',
 		'the sign-off-is-yours note'         => '/not that the plugin has, because it cannot/i',
 	),
+	'assets/src/components/inspector.js'          => array(
+		'the refusal to point at the wrong element' => '/Rather than point at the wrong one, we are pointing at none/i',
+		'the blocked-preview caveat'                => '/nothing that depends on seeing the page — colour, text size, layout — was checked/iu',
+	),
 	'assets/src/components/tags.js'               => array(
 		'the auto-detected honesty tag'       => '/Auto-detected/',
 		'the needs-manual-review honesty tag' => '/Needs manual review/',

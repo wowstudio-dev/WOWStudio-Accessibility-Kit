@@ -740,3 +740,168 @@
 	color: var(--wsak-moderate);
 	border-color: currentcolor;
 }
+
+/* Inspector --------------------------------------------------------------- */
+
+.wsak-inspector {
+	margin-bottom: 28px;
+	padding: 20px;
+	background: var(--wsak-surface);
+	border: 1px solid var(--wsak-line);
+	border-radius: var(--wsak-radius);
+}
+
+.wsak-inspector__head {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--wsak-gap);
+	align-items: baseline;
+	justify-content: space-between;
+	margin-bottom: 12px;
+}
+
+.wsak-inspector__title {
+	margin: 0;
+	font-size: 17px;
+	font-weight: 600;
+	color: var(--wsak-ink);
+}
+
+.wsak-inspector__hint {
+	margin: 0 0 12px;
+	color: var(--wsak-muted);
+	font-size: 13px;
+}
+
+/*
+ * Two panes side by side, with the list narrower than the page it describes.
+ * minmax(0, …) on both tracks stops a wide finding message from forcing the
+ * grid wider than the screen.
+ */
+.wsak-inspector__panes {
+	display: grid;
+	grid-template-columns: minmax(0, 22rem) minmax(0, 1fr);
+	gap: 20px;
+	align-items: start;
+}
+
+.wsak-inspector__list {
+	max-height: 70vh;
+	overflow-y: auto;
+}
+
+.wsak-inspector__issues {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+}
+
+.wsak-inspector__issue {
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+	width: 100%;
+	padding: 12px;
+	text-align: start;
+	background: var(--wsak-surface);
+	border: 1px solid var(--wsak-line);
+	border-inline-start: 4px solid var(--wsak-line);
+	border-radius: var(--wsak-radius);
+	cursor: pointer;
+	color: var(--wsak-text);
+	font: inherit;
+}
+
+.wsak-inspector__issue:disabled {
+	cursor: default;
+	opacity: 0.6;
+}
+
+.wsak-inspector__issue:hover:not(:disabled) {
+	background: var(--wsak-raised);
+}
+
+/*
+ * The selected finding is marked by a thick leading rule and a raised
+ * background, not by colour alone — the same requirement this plugin reports
+ * on. aria-current carries it for anyone not looking at the screen.
+ */
+.wsak-inspector__issue.is-active {
+	background: var(--wsak-raised);
+	border-inline-start-color: var(--wsak-indigo);
+	border-inline-start-width: 6px;
+}
+
+.wsak-inspector__issue-title {
+	font-weight: 650;
+	color: var(--wsak-ink);
+}
+
+.wsak-inspector__issue-tags {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+}
+
+.wsak-inspector__issue-message {
+	color: var(--wsak-muted);
+	font-size: 13px;
+}
+
+.wsak-inspector__unplaced {
+	margin: 6px 0 0;
+	padding: 8px 10px;
+	background: var(--wsak-moderate-bg);
+	color: var(--wsak-moderate);
+	border-radius: 6px;
+	font-size: 13px;
+}
+
+.wsak-inspector__preview {
+	position: sticky;
+	top: 46px;
+}
+
+.wsak-inspector__frame {
+	width: 100%;
+	height: 70vh;
+	min-height: 420px;
+	border: 1px solid var(--wsak-line-strong, var(--wsak-line));
+	border-radius: var(--wsak-radius);
+	background: #fff;
+}
+
+@media screen and (max-width: 1100px) {
+
+	.wsak-inspector__panes {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.wsak-inspector__list {
+		max-height: none;
+	}
+
+	.wsak-inspector__preview {
+		position: static;
+	}
+
+	.wsak-inspector__frame {
+		height: 60vh;
+	}
+}
+
+.wsak-result__actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+
+.wsak-result__unplaceable {
+	margin: 0 0 12px;
+	color: var(--wsak-muted);
+	font-size: 13px;
+	max-width: 74ch;
+}

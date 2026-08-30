@@ -30,6 +30,24 @@ module.exports = [
 	// sprintf placeholder validity, no variables as translatable strings.
 	...wpPlugin.configs.i18n,
 
+	// The browser pass runs inside the preview frame, not in the admin app, so
+	// it touches DOM APIs the shared config does not declare. Scoped to that
+	// directory rather than declared globally, so a stray DOMParser in a React
+	// component is still caught.
+	{
+		files: [ 'assets/src/scanner/**/*.js' ],
+		languageOptions: {
+			globals: {
+				DOMParser: 'readonly',
+				XPathResult: 'readonly',
+				document: 'readonly',
+				window: 'readonly',
+				setTimeout: 'readonly',
+				clearTimeout: 'readonly',
+			},
+		},
+	},
+
 	{
 		rules: {
 			'@wordpress/i18n-text-domain': [

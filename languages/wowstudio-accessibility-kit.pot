@@ -41,13 +41,13 @@ msgid "https://wowstudio.dev/"
 msgstr ""
 
 #: src/Admin/Menu.php:71
-#: assets/src/app.js:91
+#: assets/src/app.js:98
 msgid "Accessibility"
 msgstr ""
 
 #: src/Admin/Menu.php:93
 #: src/Rest/FixController.php:163
-#: src/Rest/ScanController.php:169
+#: src/Rest/ScanController.php:170
 #: src/Rest/StatementController.php:116
 msgid "You do not have permission to view accessibility reports."
 msgstr ""
@@ -437,41 +437,41 @@ msgid "The reviewed markup. Sanitised again before it is stored."
 msgstr ""
 
 #: src/Rest/FixController.php:246
-#: src/Rest/ScanController.php:208
-#: src/Rest/ScanController.php:340
+#: src/Rest/ScanController.php:209
+#: src/Rest/ScanController.php:346
 msgid "You do not have permission to read that content."
 msgstr ""
 
-#: src/Rest/ScanController.php:71
+#: src/Rest/ScanController.php:72
 msgid "The post or page to scan."
 msgstr ""
 
-#: src/Rest/ScanController.php:91
+#: src/Rest/ScanController.php:92
 msgid "The scan to read."
 msgstr ""
 
-#: src/Rest/ScanController.php:110
+#: src/Rest/ScanController.php:111
 msgid "Filter the list by title."
 msgstr ""
 
-#: src/Rest/ScanController.php:150
+#: src/Rest/ScanController.php:151
 msgid "You do not have permission to run accessibility scans."
 msgstr ""
 
-#: src/Rest/ScanController.php:200
+#: src/Rest/ScanController.php:201
 #: src/Scanner/PageSource.php:150
 msgid "That content could not be found."
 msgstr ""
 
-#: src/Rest/ScanController.php:241
+#: src/Rest/ScanController.php:242
 msgid "The scan could not be recorded. Check that the plugin tables exist."
 msgstr ""
 
-#: src/Rest/ScanController.php:264
+#: src/Rest/ScanController.php:265
 msgid "The page could not be parsed as HTML, so it could not be scanned."
 msgstr ""
 
-#: src/Rest/ScanController.php:332
+#: src/Rest/ScanController.php:338
 msgid "That scan could not be found."
 msgstr ""
 
@@ -835,69 +835,81 @@ msgstr ""
 msgid "Something went wrong and we could not say what. Please try again."
 msgstr ""
 
-#: assets/src/app.js:49
+#: assets/src/app.js:56
 msgid "Scanning the page…"
 msgstr ""
 
 #. translators: %d: number of findings.
-#: assets/src/app.js:58
+#: assets/src/app.js:65
 #, js-format
 msgid "Scan finished. %d findings."
 msgstr ""
 
-#: assets/src/app.js:69
+#: assets/src/app.js:76
 msgid "The scan failed."
 msgstr ""
 
-#: assets/src/app.js:94
+#: assets/src/app.js:101
 msgid "Find, fix, document, and monitor accessibility problems in your site at the code level."
 msgstr ""
 
-#: assets/src/app.js:103
+#: assets/src/app.js:110
 msgid "Sections"
 msgstr ""
 
-#: assets/src/app.js:110
+#: assets/src/app.js:117
 #: assets/src/components/scan-picker.js:222
 msgid "Scan"
 msgstr ""
 
-#: assets/src/app.js:120
+#: assets/src/app.js:127
 #: assets/src/components/ai-settings.js:98
 msgid "AI settings"
 msgstr ""
 
-#: assets/src/app.js:133
+#: assets/src/app.js:140
 msgid "Statement"
 msgstr ""
 
-#: assets/src/app.js:151
+#: assets/src/app.js:158
 msgid "You can read results here but not start a scan. An administrator can grant that."
 msgstr ""
 
-#: assets/src/app.js:164
+#: assets/src/app.js:171
 msgid "Loading the scan…"
 msgstr ""
 
 #. translators: %s: content title.
-#: assets/src/app.js:186
+#: assets/src/app.js:193
 #, js-format
 msgid "Results for “%s”"
 msgstr ""
 
-#: assets/src/app.js:192
+#: assets/src/app.js:199
 msgid "Scan results"
 msgstr ""
 
-#: assets/src/app.js:201
+#: assets/src/app.js:222
+msgid "Show as a list"
+msgstr ""
+
+#: assets/src/app.js:226
+msgid "Show on the page"
+msgstr ""
+
+#: assets/src/app.js:235
 msgid "Back to your content"
 msgstr ""
 
-#: assets/src/app.js:211
+#: assets/src/app.js:246
 msgid "This scan covered less than usual."
 msgstr ""
 
-#: assets/src/app.js:246
+#: assets/src/app.js:263
+msgid "This scan read only the content, not the whole page, so its findings cannot be located on the live page. Showing them side by side needs a full-page scan."
+msgstr ""
+
+#: assets/src/app.js:299
 msgid "This plugin helps you find, fix, document, and monitor accessibility problems. It does not determine whether your site meets the ADA, the European Accessibility Act, Section 508, or any other legal requirement, and nothing here is legal advice."
 msgstr ""
 
@@ -1187,6 +1199,62 @@ msgstr ""
 
 #: assets/src/components/fix-action.js:256
 msgid "Undo this fix"
+msgstr ""
+
+#: assets/src/components/inspector.js:42
+msgid "This one is about the page as a whole rather than one spot on it, so there is nowhere in particular to point."
+msgstr ""
+
+#: assets/src/components/inspector.js:47
+msgid "This element is not in the page any more. It may have been edited since the scan, or it may only appear for some visitors."
+msgstr ""
+
+#: assets/src/components/inspector.js:52
+msgid "The page has changed shape since the scan, so we cannot be sure which element this refers to. Rather than point at the wrong one, we are pointing at none. Re-scan to place it again."
+msgstr ""
+
+#: assets/src/components/inspector.js:57
+msgid "This element is in the page but is not being displayed, so there is nothing to point at."
+msgstr ""
+
+#. translators: %s: name of the accessibility check.
+#: assets/src/components/inspector.js:134
+#, js-format
+msgid "Showing: %s"
+msgstr ""
+
+#: assets/src/components/inspector.js:143
+msgid "This content has no public address, so it cannot be shown here. The findings below still apply."
+msgstr ""
+
+#. translators: %s: content title.
+#: assets/src/components/inspector.js:161
+#, js-format
+msgid "Inspecting “%s”"
+msgstr ""
+
+#: assets/src/components/inspector.js:167
+msgid "Inspecting"
+msgstr ""
+
+#: assets/src/components/inspector.js:171
+msgid "Back to results"
+msgstr ""
+
+#: assets/src/components/inspector.js:186
+msgid "Choose a finding to see it on the page. Moving through this list with the keyboard works the same way."
+msgstr ""
+
+#: assets/src/components/inspector.js:244
+msgid "Your page would not open here."
+msgstr ""
+
+#: assets/src/components/inspector.js:249
+msgid "Some sites refuse to be shown inside another page, which is a reasonable security setting and not a fault. Findings from the markup are still listed, but nothing that depends on seeing the page — colour, text size, layout — was checked on this scan."
+msgstr ""
+
+#: assets/src/components/inspector.js:260
+msgid "Preview of the page being inspected"
 msgstr ""
 
 #. translators: %s: name of the accessibility check.

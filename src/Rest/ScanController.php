@@ -12,6 +12,7 @@ use WOWStudio\AccessibilityKit\Db\IssueRepository;
 use WOWStudio\AccessibilityKit\Db\ScanRepository;
 use WOWStudio\AccessibilityKit\Scanner\Engine;
 use WOWStudio\AccessibilityKit\Scanner\PageSource;
+use WOWStudio\AccessibilityKit\Scanner\Preview;
 use WOWStudio\AccessibilityKit\Scanner\ScanScope;
 use WOWStudio\AccessibilityKit\Support\Capabilities;
 use WP_Error;
@@ -284,6 +285,11 @@ final class ScanController implements Registrable {
 				'scan_id'         => $scan_id,
 				'post_id'         => $post_id,
 				'post_title'      => get_the_title( $post_id ),
+				'preview_url'     => Preview::url_for( $post_id ),
+				// Findings can only be placed on the live page when the scan
+				// read that same page. A content-only fallback produces
+				// selectors relative to a fragment, which resolve to nothing.
+				'placeable'       => $markup->from_loopback && '' !== Preview::url_for( $post_id ),
 				'score'           => $result->score(),
 				'summary'         => $summary,
 				'full_page'       => $result->full_page,
@@ -349,6 +355,9 @@ final class ScanController implements Registrable {
 				'scan_id'         => $scan->id,
 				'post_id'         => $scan->target_id,
 				'post_title'      => $scan->target_id > 0 ? get_the_title( $scan->target_id ) : '',
+				'preview_url'     => $scan->target_id > 0 ? Preview::url_for( $scan->target_id ) : '',
+				'browser_pass'    => $scan->browser_pass->value,
+				'placeable'       => ! empty( $scan->summary['from_loopback'] ) && $scan->target_id > 0,
 				'status'          => $scan->status->value,
 				'score'           => $scan->score,
 				'summary'         => $scan->summary,

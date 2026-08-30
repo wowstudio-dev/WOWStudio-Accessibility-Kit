@@ -1,0 +1,271 @@
+/**
+ * The inspector: findings beside the page they were found on.
+ */
+
+import { Button, Notice } from '@wordpress/components';
+import { useCallback, useEffect, useRef, useState } from '@wordpress/element';
+import { __, sprintf } from '@wordpress/i18n';
+
+import {
+	locate,
+	FOUND,
+	NOT_FOUND,
+	MISMATCH,
+	PAGE_LEVEL,
+} from '../scanner/locate';
+import { frameDocument, highlight, clearHighlight } from '../scanner/highlight';
+import { DetectionTag, SeverityTag } from './tags';
+
+/**
+ * How long to wait for the preview to load before calling it blocked.
+ *
+ * Generous, because a cold cache on a slow host is not the same thing as a
+ * refusal, and calling it one when it is the other would put a false warning in
+ * front of someone whose page is fine.
+ */
+const LOAD_TIMEOUT_MS = 15000;
+
+/**
+ * Explains why an element could not be marked.
+ *
+ * Each of these is a real thing that happens to real pages, and each gets its
+ * own sentence rather than a shared "something went wrong" — the whole value of
+ * the inspector is telling somebody where a problem is, so when we cannot, the
+ * least we owe them is an accurate account of why.
+ *
+ * @param {string} status Result from locate().
+ * @return {string} A sentence for the reader.
+ */
+function locateMessage( status ) {
+	switch ( status ) {
+		case PAGE_LEVEL:
+			return __(
+				'This one is about the page as a whole rather than one spot on it, so there is nowhere in particular to point.',
+				'wowstudio-accessibility-kit'
+			);
+		case NOT_FOUND:
+			return __(
+				'This element is not in the page any more. It may have been edited since the scan, or it may only appear for some visitors.',
+				'wowstudio-accessibility-kit'
+			);
+		case MISMATCH:
+			return __(
+				'The page has changed shape since the scan, so we cannot be sure which element this refers to. Rather than point at the wrong one, we are pointing at none. Re-scan to place it again.',
+				'wowstudio-accessibility-kit'
+			);
+		default:
+			return __(
+				'This element is in the page but is not being displayed, so there is nothing to point at.',
+				'wowstudio-accessibility-kit'
+			);
+	}
+}
+
+/**
+ * Findings on the left, the page they came from on the right.
+ *
+ * @param {Object}   props            Component props.
+ * @param {Array}    props.issues     Findings to list.
+ * @param {string}   props.previewUrl URL to frame.
+ * @param {string}   props.title      Title of the content being inspected.
+ * @param {Function} props.onExit     Called when the user leaves the inspector.
+ * @return {Element} The inspector.
+ */
+export default function Inspector( { issues, previewUrl, title, onExit } ) {
+	const frameRef = useRef( null );
+	const [ frameState, setFrameState ] = useState( 'loading' );
+	const [ activeId, setActiveId ] = useState( null );
+	const [ locateStatus, setLocateStatus ] = useState( '' );
+	const [ announcement, setAnnouncement ] = useState( '' );
+
+	// A frame that a security policy refused leaves an empty document behind
+	// rather than raising an error, so silence is the failure signal and has to
+	// be timed rather than caught.
+	useEffect( () => {
+		if ( frameState !== 'loading' ) {
+			return undefined;
+		}
+
+		const timer = setTimeout( () => {
+			setFrameState( ( current ) =>
+				current === 'loading' ? 'blocked' : current
+			);
+		}, LOAD_TIMEOUT_MS );
+
+		return () => clearTimeout( timer );
+	}, [ frameState ] );
+
+	const onFrameLoad = useCallback( () => {
+		setFrameState(
+			frameDocument( frameRef.current ) ? 'ready' : 'blocked'
+		);
+	}, [] );
+
+	const show = useCallback( ( issue ) => {
+		const doc = frameDocument( frameRef.current );
+
+		if ( ! doc ) {
+			return;
+		}
+
+		setActiveId( issue.id );
+
+		const found = locate( doc, issue );
+
+		if ( found.status !== FOUND ) {
+			clearHighlight( doc );
+			setLocateStatus( found.status );
+			setAnnouncement( locateMessage( found.status ) );
+
+			return;
+		}
+
+		if ( ! highlight( doc, found.element ) ) {
+			setLocateStatus( 'not-visible' );
+			setAnnouncement( locateMessage( 'not-visible' ) );
+
+			return;
+		}
+
+		setLocateStatus( '' );
+		setAnnouncement(
+			sprintf(
+				/* translators: %s: name of the accessibility check. */
+				__( 'Showing: %s', 'wowstudio-accessibility-kit' ),
+				issue.rule_title
+			)
+		);
+	}, [] );
+
+	if ( ! previewUrl ) {
+		return (
+			<Notice status="warning" isDismissible={ false }>
+				{ __(
+					'This content has no public address, so it cannot be shown here. The findings below still apply.',
+					'wowstudio-accessibility-kit'
+				) }
+			</Notice>
+		);
+	}
+
+	return (
+		<section
+			className="wsak-inspector"
+			aria-labelledby="wsak-inspector-title"
+		>
+			<div className="wsak-inspector__head">
+				<h2 className="wsak-inspector__title" id="wsak-inspector-title">
+					{ title
+						? sprintf(
+								/* translators: %s: content title. */
+								__(
+									'Inspecting “%s”',
+									'wowstudio-accessibility-kit'
+								),
+								title
+						  )
+						: __( 'Inspecting', 'wowstudio-accessibility-kit' ) }
+				</h2>
+				{ onExit && (
+					<Button variant="secondary" onClick={ onExit }>
+						{ __(
+							'Back to results',
+							'wowstudio-accessibility-kit'
+						) }
+					</Button>
+				) }
+			</div>
+
+			<p className="screen-reader-text" role="status" aria-live="polite">
+				{ announcement }
+			</p>
+
+			<div className="wsak-inspector__panes">
+				<div className="wsak-inspector__list">
+					<p className="wsak-inspector__hint">
+						{ __(
+							'Choose a finding to see it on the page. Moving through this list with the keyboard works the same way.',
+							'wowstudio-accessibility-kit'
+						) }
+					</p>
+
+					<ul className="wsak-inspector__issues">
+						{ issues.map( ( issue ) => (
+							<li key={ issue.id }>
+								<button
+									type="button"
+									className={ `wsak-inspector__issue${
+										activeId === issue.id
+											? ' is-active'
+											: ''
+									}` }
+									aria-current={
+										activeId === issue.id
+											? 'true'
+											: undefined
+									}
+									disabled={ frameState !== 'ready' }
+									onClick={ () => show( issue ) }
+									onFocus={ () => show( issue ) }
+									onMouseEnter={ () => show( issue ) }
+								>
+									<span className="wsak-inspector__issue-title">
+										{ issue.rule_title }
+									</span>
+									<span className="wsak-inspector__issue-tags">
+										<SeverityTag
+											severity={ issue.severity }
+											label={ issue.severity_label }
+										/>
+										<DetectionTag
+											detection={ issue.detection }
+											label={ issue.detection_label }
+										/>
+									</span>
+									<span className="wsak-inspector__issue-message">
+										{ issue.message }
+									</span>
+								</button>
+
+								{ activeId === issue.id && locateStatus && (
+									<p className="wsak-inspector__unplaced">
+										{ locateMessage( locateStatus ) }
+									</p>
+								) }
+							</li>
+						) ) }
+					</ul>
+				</div>
+
+				<div className="wsak-inspector__preview">
+					{ frameState === 'blocked' && (
+						<Notice status="warning" isDismissible={ false }>
+							<strong>
+								{ __(
+									'Your page would not open here.',
+									'wowstudio-accessibility-kit'
+								) }
+							</strong>{ ' ' }
+							{ __(
+								'Some sites refuse to be shown inside another page, which is a reasonable security setting and not a fault. Findings from the markup are still listed, but nothing that depends on seeing the page — colour, text size, layout — was checked on this scan.',
+								'wowstudio-accessibility-kit'
+							) }
+						</Notice>
+					) }
+
+					<iframe
+						ref={ frameRef }
+						className="wsak-inspector__frame"
+						src={ previewUrl }
+						title={ __(
+							'Preview of the page being inspected',
+							'wowstudio-accessibility-kit'
+						) }
+						onLoad={ onFrameLoad }
+						hidden={ frameState === 'blocked' }
+					/>
+				</div>
+			</div>
+		</section>
+	);
+}

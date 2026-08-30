@@ -10,6 +10,7 @@ import { fetchScan, readableError, runScan } from './api';
 import AiSettings from './components/ai-settings';
 import StatementSettings from './components/statement-settings';
 import CoveragePanel from './components/coverage-panel';
+import Inspector from './components/inspector';
 import IssueList from './components/issue-list';
 import ScanPicker from './components/scan-picker';
 import ScoreCard from './components/score-card';
@@ -30,6 +31,12 @@ export default function App() {
 	const [ error, setError ] = useState( '' );
 	const [ announcement, setAnnouncement ] = useState( '' );
 	const [ view, setView ] = useState( 'scan' );
+
+	// How a finished scan is presented. The inspector puts each finding beside
+	// the page it came from, which is the more useful of the two whenever the
+	// page can actually be framed; the list stays available because a scan that
+	// ran without a browser has nothing to show beside it.
+	const [ resultView, setResultView ] = useState( 'inspect' );
 
 	const resultHeading = useRef( null );
 
@@ -194,15 +201,43 @@ export default function App() {
 										'wowstudio-accessibility-kit'
 								  ) }
 						</h2>
-						<Button
-							variant="secondary"
-							onClick={ () => setScan( null ) }
-						>
-							{ __(
-								'Back to your content',
-								'wowstudio-accessibility-kit'
-							) }
-						</Button>
+						<div className="wsak-result__actions">
+							<Button
+								variant={
+									resultView === 'inspect'
+										? 'primary'
+										: 'secondary'
+								}
+								aria-pressed={ resultView === 'inspect' }
+								disabled={ ! scan.placeable }
+								onClick={ () =>
+									setResultView(
+										resultView === 'inspect'
+											? 'list'
+											: 'inspect'
+									)
+								}
+							>
+								{ resultView === 'inspect'
+									? __(
+											'Show as a list',
+											'wowstudio-accessibility-kit'
+									  )
+									: __(
+											'Show on the page',
+											'wowstudio-accessibility-kit'
+									  ) }
+							</Button>
+							<Button
+								variant="secondary"
+								onClick={ () => setScan( null ) }
+							>
+								{ __(
+									'Back to your content',
+									'wowstudio-accessibility-kit'
+								) }
+							</Button>
+						</div>
 					</div>
 
 					{ scan.coverage_notice && (
@@ -223,10 +258,28 @@ export default function App() {
 						manual={ byDetection.manual ?? 0 }
 					/>
 
-					<IssueList
-						issues={ scan.issues ?? [] }
-						postId={ scan.post_id }
-					/>
+					{ ! scan.placeable && (
+						<p className="wsak-result__unplaceable">
+							{ __(
+								'This scan read only the content, not the whole page, so its findings cannot be located on the live page. Showing them side by side needs a full-page scan.',
+								'wowstudio-accessibility-kit'
+							) }
+						</p>
+					) }
+
+					{ resultView === 'inspect' && scan.placeable ? (
+						<Inspector
+							issues={ scan.issues ?? [] }
+							previewUrl={ scan.preview_url }
+							title={ scan.post_title }
+							onExit={ () => setResultView( 'list' ) }
+						/>
+					) : (
+						<IssueList
+							issues={ scan.issues ?? [] }
+							postId={ scan.post_id }
+						/>
+					) }
 				</section>
 			) }
 
