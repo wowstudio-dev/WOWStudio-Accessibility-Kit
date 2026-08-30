@@ -97,6 +97,16 @@ jobs:
           composer install --no-interaction --prefer-dist
           npm ci
 
+      # Cheap and fast, so they run before the WordPress container starts.
+      # lint:js carries the i18n rules (see eslint.config.cjs): a translator
+      # call missing its text domain is dropped from the .pot without a word,
+      # and the string is then untranslatable for good.
+      - name: JavaScript standards
+        run: npm run lint:js
+
+      - name: Stylesheet standards
+        run: npm run lint:css
+
       - name: Start WordPress
         run: npx wp-env start
 

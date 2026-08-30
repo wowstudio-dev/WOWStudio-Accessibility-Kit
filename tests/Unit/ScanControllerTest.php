@@ -88,6 +88,59 @@ final class ScanControllerTest extends TestCase {
 	}
 
 	/**
+	 * No argument carries an authorisation check.
+	 *
+	 * WordPress validates arguments before it runs permission_callback, so any
+	 * capability or existence check placed in a validate_callback answers
+	 * anonymous callers too. /scan used to check post readability there, which
+	 * let anyone on the internet tell an existing draft ("you do not have
+	 * permission to read that content") from a post id that was never used
+	 * ("that content could not be found") — an oracle for private post ids,
+	 * served without authentication. The check now runs in the handler, behind
+	 * can_scan().
+	 *
+	 * Asserting the absence of a callback is blunt, but the ordering is a
+	 * property of WordPress rather than of this plugin, and the safe rule is
+	 * simply not to authorise anything from an argument validator.
+	 *
+	 * @return void
+	 */
+	public function test_no_argument_validator_performs_authorisation(): void {
+		$registered = array();
+
+		Functions\when( 'register_rest_route' )->alias(
+			static function ( string $rest_namespace, string $route, array $handlers ) use ( &$registered ): bool {
+				$registered[] = array(
+					'route'    => $route,
+					'handlers' => $handlers,
+				);
+
+				return true;
+			}
+		);
+
+		( new ScanController() )->register_routes();
+
+		foreach ( $registered as $entry ) {
+			foreach ( $entry['handlers'] as $handler ) {
+				foreach ( $handler['args'] ?? array() as $name => $spec ) {
+					$this->assertArrayNotHasKey(
+						'validate_callback',
+						$spec,
+						sprintf(
+							'Argument "%s" on %s has a validate_callback. Validators run before permission_callback, so anything they decide is decided for anonymous callers too — keep authorisation in the handler.',
+							$name,
+							$entry['route']
+						)
+					);
+				}
+			}
+		}
+
+		$this->addToAssertionCount( 1 );
+	}
+
+	/**
 	 * Running a scan needs the scan capability, not merely being logged in.
 	 *
 	 * @return void

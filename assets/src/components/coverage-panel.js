@@ -151,7 +151,7 @@ function CoverageGroup( { title, detection, rules } ) {
 				<DetectionTag detection={ detection } /> { title }{ ' ' }
 				<span className="wsak-coverage__count">
 					{ sprintf(
-						/* translators: %d: number of checks in this group. */
+						/* translators: %d: number of items in this group. */
 						__( '(%d)', 'wowstudio-accessibility-kit' ),
 						rules.length
 					) }

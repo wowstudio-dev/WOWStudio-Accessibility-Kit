@@ -111,10 +111,13 @@ distinction from section 1 stays visible:
 This is the honest part, and it is the section to read before quoting any of the
 above.
 
-1. **No live DOM audit of the running React admin UI.** Everything in section 1
-   was computed from source or from server-rendered output. The dashboard has
-   not been driven in a browser with axe-core, and section 3 is source review
-   rather than observed behaviour.
+1. **No current live DOM audit of the running React admin UI.** One was run on
+   2026-08-23 (recorded in the release checklist: 146 elements, zero findings),
+   but that was against the step 4 dashboard. The AI settings panel, the fix
+   preview and diff, the statement panel, and every change in this audit landed
+   afterwards and have never been in a live run. Everything in section 1 was
+   computed from source or from server-rendered output; section 3 is source
+   review rather than observed behaviour.
 2. **No assistive-technology testing.** Nothing here has been through NVDA,
    JAWS, VoiceOver, TalkBack, Dragon, or a switch device. Live-region behaviour
    in particular varies between screen readers, and finding 3 above is a fix

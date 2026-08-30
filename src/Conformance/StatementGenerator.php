@@ -286,7 +286,7 @@ final class StatementGenerator {
 
 		if ( '' !== $url ) {
 			$html .= '<p>' . sprintf(
-				/* translators: %s: link to the enforcement body. */
+				/* translators: %s: name of the enforcement body, linked when a URL was given. */
 				esc_html__( 'You can contact %s.', 'wowstudio-accessibility-kit' ),
 				sprintf( '<a href="%s">%s</a>', esc_url( $url ), esc_html( $body ) )
 			) . '</p>';
@@ -296,7 +296,7 @@ final class StatementGenerator {
 
 		return $html . '<p>' . esc_html(
 			sprintf(
-				/* translators: %s: name of the enforcement body. */
+				/* translators: %s: name of the enforcement body, linked when a URL was given. */
 				__( 'You can contact %s.', 'wowstudio-accessibility-kit' ),
 				$body
 			)

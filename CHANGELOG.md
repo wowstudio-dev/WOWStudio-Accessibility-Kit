@@ -14,6 +14,87 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   Action Scheduler. Shipping a synchronous loop that times out halfway would be
   worse than not shipping it, so bulk lands with the queue.
 
+## [0.9.0] - 2026-08-30
+
+Phase 1, step 9: the QA gate. One real security finding, the i18n hole that let
+it hide, and the WordPress.org disclosure that should have shipped in 0.5.0.
+
+### Security
+
+- **An unauthenticated caller could enumerate which post IDs existed, drafts
+  included.** `POST /wsak/v1/scan` checked post existence and readability in the
+  argument's `validate_callback`. WordPress runs argument validation *before*
+  `permission_callback`, so that check answered anonymous callers — and answered
+  them differently: "you do not have permission to read that content" for a post
+  that existed, "that content could not be found" for an ID that did not. Titles
+  and content were never exposed, only existence, but walking the integers
+  mapped every private and draft post on the site.
+
+  The check now runs in the handler, behind `can_scan()`. Anonymous callers get
+  an identical 401 for every ID; a subscriber gets an identical 403; only a
+  caller already entitled to scan can tell 404 from 422.
+  `ScanControllerTest::test_no_argument_validator_performs_authorisation` fails
+  the build if any route argument regains a `validate_callback`, because the
+  rule worth encoding is the blunt one: validators check shape, handlers decide
+  access.
+- Full review recorded in `docs/security-review.md` — authorisation, SQL,
+  secrets, escaping, CSRF, transport, uninstall, and a list of what was not
+  checked.
+
+### Fixed
+
+- **JavaScript translator strings were not linted at all.** The i18n rules ship
+  with `@wordpress/eslint-plugin` but are not in the config `wp-scripts lint-js`
+  loads by default, and CI never ran `lint:js` in the first place. A translator
+  call missing its text domain passed lint, passed the build, and was then
+  dropped from the `.pot` in silence, because `make-pot` extracts only calls
+  carrying the domain it was given — leaving the string permanently
+  untranslatable with nothing anywhere saying so. Confirmed by removing a domain
+  and watching the string vanish from the template. `eslint.config.cjs` now
+  enables the i18n rules with the plugin's domain, and CI runs `lint:js` and
+  `lint:css`.
+- `(%d)` was declared with `_n()` and identical singular and plural forms, which
+  costs every translator a plural form that can never differ, and carried two
+  different translator comments for one string. Now a single `__()` with one
+  comment. Same for "You can contact %s.", which had two comments.
+- The translation template was stale. Regenerated: 311 strings, no warnings.
+- **The CI check for a stale translation template could never pass.** It ran
+  `make-pot` and then `git diff --exit-code`, but WP-CLI stamps
+  `POT-Creation-Date` with the current time on every run, so the file always
+  differed from the committed one whether or not a string had changed. The step
+  would have failed on the first push — it has not bitten yet only because
+  nothing has been pushed. `bin/makepot.sh` now strips that header, which makes
+  the template reproducible; verified both ways, that two consecutive runs agree
+  and that a changed string is still caught.
+
+### Added
+
+- `== External services ==` in readme.txt. Required by WordPress.org whenever a
+  plugin contacts a third party, and missing since the provider adapters landed
+  in 0.5.0 — submitting without it is a rejection. Covers all four providers,
+  the exact endpoint each request goes to, what is sent and when, the
+  300-character cap on page context, the `_wsak_skip_ai` opt-out, the site's own
+  AI switch, and Freemius telemetry.
+
+### Verified
+
+- PHPCS clean across 94 files; PHPStan level 6 clean; 132 tests, 361 assertions.
+- Plugin Check: **0 errors** against the built plugin. All 9 warnings are known:
+  2 assembled-SQL statements and 7 direct-provider calls, both re-read for this
+  review and documented in the release checklist. (The checklist had recorded
+  five provider warnings; there are seven.)
+- Free zip audited as a **zip**, not just as a source tree: 70 PHP files, no
+  premium-only code, no Freemius gatekeeper secret.
+- Every route called unauthenticated and as a subscriber; none returned data.
+
+### Notes
+
+- The terms and privacy-policy links in the new readme section were written from
+  knowledge and have not been fetched. The endpoint URLs come from the adapters
+  and are correct. Checking the policy links is a release-checklist item.
+- `composer test` needs PHP 8.1–8.4; Brain Monkey does not run on 8.5, which is
+  what a current Homebrew PHP installs.
+
 ## [0.8.0] - 2026-08-30
 
 Phase 1, step 8: dogfooding. No new features — this step holds the plugin's own

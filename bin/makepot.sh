@@ -32,6 +32,18 @@ npx wp-env run cli --env-cwd="wp-content/plugins/${SLUG}" \
 	--exclude=vendor,freemius,build \
 	> /dev/null
 
+# Drop POT-Creation-Date. WP-CLI stamps it with the current time on every run,
+# so leaving it in means the file differs from the committed one after every
+# regeneration whether or not a single string changed — which makes the diff
+# noisy for developers and makes the CI staleness check unable to pass at all.
+# gettext does not require the header, and nothing reads it.
+echo "==> Normalising the header so the template is reproducible"
+if [[ "$(uname)" == "Darwin" ]]; then
+	sed -i '' '/^"POT-Creation-Date:/d' "${ROOT}/languages/${SLUG}.pot"
+else
+	sed -i '/^"POT-Creation-Date:/d' "${ROOT}/languages/${SLUG}.pot"
+fi
+
 echo "==> Removing the extraction-only copy"
 rm -rf "${OUT}/assets/src"
 

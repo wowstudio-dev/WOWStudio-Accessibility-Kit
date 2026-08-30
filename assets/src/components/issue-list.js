@@ -2,7 +2,7 @@
  * The findings, split by whether a machine settled them.
  */
 
-import { __, _n, sprintf } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 
 import AltTextAction from './alt-text-action';
 import FixAction from './fix-action';
@@ -119,13 +119,8 @@ function IssueGroup( { id, title, blurb, issues, postId } ) {
 				{ title }{ ' ' }
 				<span className="wsak-group__count">
 					{ sprintf(
-						/* translators: %d: number of findings in this group. */
-						_n(
-							'(%d)',
-							'(%d)',
-							issues.length,
-							'wowstudio-accessibility-kit'
-						),
+						/* translators: %d: number of items in this group. */
+						__( '(%d)', 'wowstudio-accessibility-kit' ),
 						issues.length
 					) }
 				</span>

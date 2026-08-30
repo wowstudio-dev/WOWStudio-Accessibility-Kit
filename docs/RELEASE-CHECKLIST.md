@@ -37,12 +37,17 @@ by a human before any public release. Items marked **TODO(human)** are open.
       modify, and it ships inside a large number of plugins already on
       WordPress.org. Our own code is clean. If a reviewer raises the SDK, the
       answer is that it is unmodified upstream Freemius, not our output.
-- [ ] **External services disclosure** — required by WordPress.org whenever the
-      plugin contacts a third party. Not yet written, because no AI provider
-      calls exist yet. **This must be added to readme.txt in Phase 1 step 5**,
-      when the BYOK provider adapters land, listing every provider the user can
-      configure, what data is sent, when, and links to each provider's terms and
-      privacy policy. Submitting without it is a rejection.
+- [x] **External services disclosure** — written in 0.9.0. readme.txt now has an
+      `== External services ==` section covering all four providers, the exact
+      endpoint each request goes to, what is sent and when, the 300-character
+      cap on page context, the `_wsak_skip_ai` opt-out, and Freemius. It landed
+      four steps later than planned: the item said "step 5" and the adapters
+      shipped in 0.5.0 without it.
+- [ ] **TODO(human)** Open every link in that section and confirm it resolves.
+      The endpoint URLs were read out of the provider adapters and are correct;
+      the terms and privacy-policy URLs were written from knowledge and have
+      **not** been fetched. Providers move these pages. A dead link in this
+      section is a rejection just as surely as a missing section.
 - [ ] Screenshots and banner assets prepared.
 
 ## Our own accessibility
@@ -51,18 +56,23 @@ by a human before any public release. Items marked **TODO(human)** are open.
       Section 4 lists what has never been checked; it must not shrink by
       accident, and any claim moved out of it needs the evidence that moved it.
 - [ ] **TODO(human)** Drive the admin dashboard in a browser with axe-core, and
-      through at least one screen reader. Everything in the audit so far is
-      computed from source or from server-rendered output — the running React UI
-      has not been observed, and finding 3 in the 0.8.0 changelog is a fix
-      reasoned from the specification rather than confirmed against a real
-      screen reader.
+      through at least one screen reader. The last live DOM run was 2026-08-23
+      (146 elements, zero findings) against the **step 4** dashboard — the AI
+      settings panel, the fix preview and diff, the statement panel and every
+      0.8.0 change landed afterwards and have never been in a live run.
+      Everything since is computed from source or from server-rendered output,
+      and the live-region fix in 0.8.0 is reasoned from the specification rather
+      than confirmed against a real screen reader. Automating this needs the
+      Playwright harness, which is Phase 2.
+- [ ] Re-run `node bin/check-contrast.js` and `composer test` (which includes
+      `DogfoodTest`) after any change to the admin app or the palette.
 - [ ] **TODO(human)** Test with disabled users. Nothing else settles whether
       any of this works, and shipping an accessibility tool that has never been
       near one is the criticism this product exists to avoid.
 
 ## Known, accepted Plugin Check warnings
 
-Plugin Check reports **0 errors**. Two warnings remain, both in
+Plugin Check reports **0 errors** and 9 warnings. Two are in
 `src/Db/IssueRepository.php`, and both are the same finding:
 `PluginCheck.Security.DirectDB.UnescapedDBParameter` on `add_many()` and
 `find_by_scan()`.
@@ -78,8 +88,9 @@ an injection attempt in a rule ID lands in the bound values and never in the SQL
 If either method is edited, re-read it before assuming the warning is still
 benign.
 
-Five further warnings are `PluginCheck.CodeAnalysis.AIProvider.DirectIntegration`
-on the provider adapters in `src/AI/Providers/`. Plugin Check now nudges plugins
+The other seven are `PluginCheck.CodeAnalysis.AIProvider.DirectIntegration` on
+the provider adapters in `src/AI/Providers/` (OpenAI 1, Gemini 2, Anthropic 2,
+OpenRouter 2). Plugin Check now nudges plugins
 towards the AI client WordPress 7.0 ships rather than calling providers
 directly, and that nudge is right. We already follow it: `AI\AiClientBridge`
 prefers `WordPress\AiClient\AiClient` whenever it is present and configured,
@@ -108,14 +119,3 @@ shortcut around the core API.
       disclaimer rather than an assertion.
 - [ ] No front-end output is added for visitors (rule: not an overlay).
 - [ ] Every conformance surface carries the assist-not-guarantee disclaimer.
-
-## Accessibility
-
-- [ ] The plugin's own admin UI passes WCAG 2.2 AA: keyboard operability,
-      visible focus, `prefers-reduced-motion`, semantic markup.
-- [ ] Re-run the dogfood check after any change to the admin app: load the
-      dashboard and run the plugin's own rules against its rendered DOM. Last
-      run 2026-08-23 against 146 elements with zero findings. This is manual
-      today because it needs a real browser; automating it needs the Playwright
-      harness, which is Phase 2.
-- [ ] Tested with at least one screen reader.

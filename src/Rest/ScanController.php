@@ -67,9 +67,9 @@ final class ScanController implements Registrable {
 						'post_id' => array(
 							'required'          => true,
 							'type'              => 'integer',
+							'minimum'           => 1,
 							'description'       => __( 'The post or page to scan.', 'wowstudio-accessibility-kit' ),
 							'sanitize_callback' => 'absint',
-							'validate_callback' => array( $this, 'validate_post_id' ),
 						),
 					),
 				),
@@ -172,22 +172,29 @@ final class ScanController implements Registrable {
 	}
 
 	/**
-	 * Validates the requested post.
+	 * Checks that the caller may read the post they asked to scan.
 	 *
 	 * Checks readability as well as existence: the capability to scan does not
 	 * imply the capability to read every post on the site, and a scan response
 	 * echoes back the markup of the page it scanned.
 	 *
-	 * @since 0.3.0
+	 * Called from the handler rather than wired up as a validate_callback, and
+	 * that placement is the whole point. WordPress validates arguments *before*
+	 * it runs permission_callback, so this check sitting in a validate_callback
+	 * answered anonymous callers too — and answering "that content could not be
+	 * found" for one id while answering "you do not have permission" for another
+	 * turned the route into an oracle for which post ids exist, drafts and
+	 * private posts included. Running it after can_scan() means only a caller
+	 * already entitled to scan can tell the two apart.
 	 *
-	 * @param mixed $value Submitted value.
-	 * @return true|WP_Error
+	 * @since 0.3.0
+	 * @since 0.9.0 Moved out of the argument validator, which runs too early.
+	 *
+	 * @param int $post_id Post the caller asked for.
+	 * @return WP_Error|null Error to return, or null when access is fine.
 	 */
-	public function validate_post_id( $value ) {
-		$post_id = absint( $value );
-		$post    = get_post( $post_id );
-
-		if ( null === $post ) {
+	private function post_access_error( int $post_id ): ?WP_Error {
+		if ( null === get_post( $post_id ) ) {
 			return new WP_Error(
 				'wsak_unknown_post',
 				__( 'That content could not be found.', 'wowstudio-accessibility-kit' ),
@@ -203,7 +210,7 @@ final class ScanController implements Registrable {
 			);
 		}
 
-		return true;
+		return null;
 	}
 
 	/**
@@ -216,8 +223,15 @@ final class ScanController implements Registrable {
 	 */
 	public function scan( WP_REST_Request $request ) {
 		$post_id = absint( $request->get_param( 'post_id' ) );
-		$scans   = new ScanRepository();
-		$issues  = new IssueRepository();
+
+		$denied = $this->post_access_error( $post_id );
+
+		if ( $denied instanceof WP_Error ) {
+			return $denied;
+		}
+
+		$scans  = new ScanRepository();
+		$issues = new IssueRepository();
 
 		$scan_id = $scans->start( ScanScope::Page, $post_id, get_current_user_id() );
 
