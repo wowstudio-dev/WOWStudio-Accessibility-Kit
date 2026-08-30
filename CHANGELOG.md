@@ -14,6 +14,68 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   Action Scheduler. Shipping a synchronous loop that times out halfway would be
   worse than not shipping it, so bulk lands with the queue.
 
+## [0.8.0] - 2026-08-30
+
+Phase 1, step 8: dogfooding. No new features — this step holds the plugin's own
+surfaces to the standard it reports on, and makes both halves of the honesty
+rule mechanical rather than a matter of review.
+
+### Added
+
+- `docs/accessibility-audit.md` — the audit of our own admin UI against WCAG 2.2
+  AA: what was checked, how, what was found, and, at length, what has **not**
+  been checked. Section 4 is the one to read before quoting any of the rest.
+- `tests/Unit/DogfoodTest.php` — the accessibility statement, in every
+  configuration it supports and both signed off and not, is scanned by the
+  plugin's own engine and must come back clean. It also asserts the checks
+  really ran, so the suite cannot pass silently if the rule registry is ever
+  emptied by accident.
+- `bin/check-disclosures.php` — asserts 17 required disclosures across 10
+  conformance surfaces are still present. The companion to `check-claims.php`:
+  that one stops us saying what we must not, this one stops us quietly dropping
+  what we must say. The caveat under the score, the coverage lede, the warning
+  above a suggested fix and the draft banner are all ordinary strings that a
+  routine refactor could delete without breaking a test.
+- `bin/check-contrast.js` — reads the palette out of `style.scss` and computes
+  the real ratio for all 41 foreground/background pairings the admin UI renders,
+  each at the size and weight it is actually rendered at. All 41 meet WCAG 2.2
+  AA. Also available as `npm run lint:contrast`.
+
+### Fixed
+
+- **Focusable code blocks had no accessible name.** The issue-context and diff
+  blocks are `tabindex="0"` so their overflow can be scrolled without a mouse,
+  but landing on one announced raw markup with no indication of what it belonged
+  to. Both now carry `role="group"` and a naming `aria-label` — a group rather
+  than a region, because a page with thirty findings would otherwise add thirty
+  landmarks to the list a screen reader user navigates by. (SC 4.1.2, 2.4.6)
+- **The statement preview competed with the panel around it.** It injected its
+  own `<h2>Accessibility statement</h2>` into a screen that already had one, so
+  the outline showed two identically-named headings at the same rank and the
+  preview's sections read as siblings of the panel's own. `StatementGenerator::render()`
+  now takes a heading offset, clamped to 0–3 so output can never exceed `h6`;
+  the published statement is unchanged and the preview nests below it. (SC 1.3.1)
+- **Three live regions announced nothing.** Fix applied, fix undone and alt text
+  saved each mounted a `role="status"` element with its text already in it, and
+  a live region has to be in the document *before* its content changes or the
+  announcement goes to a node the screen reader was not yet watching. Both
+  components now keep one always-mounted, initially-empty region and write into
+  it. (SC 4.1.3)
+- `bin/check-claims.php` read `$argv`, which is not defined when
+  `register_argc_argv` is off, so `composer lint` failed static analysis before
+  reaching the tests. It reads `$_SERVER['argv']` now.
+
+### Notes
+
+- Contrast is measured but stacking is not: the guard checks the pairings named
+  in its list, and a newly coloured element has to be added to that list to be
+  covered. Same for `check-disclosures.php` and new conformance surfaces. Both
+  guards are only as complete as their lists.
+- The admin dashboard has still not been driven in a browser with axe-core, nor
+  tested with any screen reader, nor tested with disabled users. Sections 3 and
+  4 of the audit are explicit about which claims rest on source review rather
+  than observed behaviour.
+
 ## [0.7.0] - 2026-08-23
 
 Phase 1, step 7: the accessibility statement generator.

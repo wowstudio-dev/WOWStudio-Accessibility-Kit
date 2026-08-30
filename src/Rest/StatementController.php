@@ -173,7 +173,10 @@ final class StatementController implements Registrable {
 				),
 				'missing'   => $generator->missing(),
 				'attested'  => $generator->is_attested(),
-				'preview'   => $generator->render(),
+				// The preview sits under the panel's own "Preview" heading, so
+				// its headings are pushed two levels down to nest beneath it
+				// rather than competing with the panel's in the page outline.
+				'preview'   => $generator->render( 2 ),
 				'shortcode' => '[' . \WOWStudio\AccessibilityKit\Conformance\StatementBlock::SHORTCODE . ']',
 			)
 		);

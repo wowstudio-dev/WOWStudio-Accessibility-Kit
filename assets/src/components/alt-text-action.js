@@ -30,6 +30,11 @@ export default function AltTextAction( { attachmentId, postId, onUsage } ) {
 	const [ error, setError ] = useState( '' );
 	const [ saved, setSaved ] = useState( false );
 
+	// Mounted from the start and empty until there is news. A live region that
+	// appears with its text already in it is routinely missed, because the
+	// screen reader was not watching the node at the moment it gained content.
+	const [ announcement, setAnnouncement ] = useState( '' );
+
 	if ( ! attachmentId ) {
 		return (
 			<p className="wsak-alt__unavailable">
@@ -51,6 +56,12 @@ export default function AltTextAction( { attachmentId, postId, onUsage } ) {
 				setText( data.suggestion?.text ?? '' );
 				setDecorative( Boolean( data.suggestion?.is_decorative ) );
 				setStatus( 'review' );
+				setAnnouncement(
+					__(
+						'Alt text suggested. Read it before saving.',
+						'wowstudio-accessibility-kit'
+					)
+				);
 
 				if ( onUsage && data.usage ) {
 					onUsage( data.usage );
@@ -69,6 +80,12 @@ export default function AltTextAction( { attachmentId, postId, onUsage } ) {
 			.then( () => {
 				setSaved( true );
 				setStatus( 'review' );
+				setAnnouncement(
+					__(
+						'Alt text saved. Re-scan the page to confirm the issue is resolved.',
+						'wowstudio-accessibility-kit'
+					)
+				);
 			} )
 			.catch( ( caught ) => {
 				setError( readableError( caught ) );
@@ -78,6 +95,10 @@ export default function AltTextAction( { attachmentId, postId, onUsage } ) {
 
 	return (
 		<div className="wsak-alt">
+			<p className="screen-reader-text" role="status" aria-live="polite">
+				{ announcement }
+			</p>
+
 			{ error && (
 				<Notice status="error" isDismissible={ false }>
 					{ error }
@@ -147,7 +168,7 @@ export default function AltTextAction( { attachmentId, postId, onUsage } ) {
 					</div>
 
 					{ saved && (
-						<p className="wsak-alt__saved" role="status">
+						<p className="wsak-alt__saved">
 							{ sprintf(
 								/* translators: %d: media item ID. */
 								__(

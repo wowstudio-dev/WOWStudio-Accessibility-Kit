@@ -175,8 +175,11 @@ function wsak_is_disclaimer( string $line ): bool {
 	return false;
 }
 
-$wsak_root     = __DIR__ . '/..';
-$wsak_verbose  = in_array( '--verbose', $argv, true );
+$wsak_root = __DIR__ . '/..';
+// register_argc_argv can be off even under the CLI SAPI, so $argv is not
+// guaranteed. Reading it from $_SERVER keeps the flag working where it is set
+// and degrades to "not verbose" where it is not.
+$wsak_verbose  = in_array( '--verbose', (array) ( $_SERVER['argv'] ?? array() ), true );
 $wsak_failures = array();
 $wsak_allowed  = array();
 $wsak_approved = wsak_allowlist();

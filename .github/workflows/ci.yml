@@ -56,8 +56,20 @@ jobs:
           php-version: '8.1'
           coverage: none
 
+      # The contrast guard is plain Node with no dependencies, so it needs a
+      # runtime but not an npm install.
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
       - name: No unqualified compliance claims
         run: php bin/check-claims.php --verbose
+
+      - name: Every conformance surface still discloses its limits
+        run: php bin/check-disclosures.php --verbose
+
+      - name: Our own admin UI meets the contrast we report on
+        run: node bin/check-contrast.js --verbose
 
       - name: No premium code in the free build
         run: php bin/check-free-build.php

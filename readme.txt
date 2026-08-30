@@ -4,7 +4,7 @@ Tags: accessibility, wcag, a11y, alt text, accessibility scanner
 Requires at least: 6.6
 Tested up to: 7.1
 Requires PHP: 8.1
-Stable tag: 0.7.0
+Stable tag: 0.8.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -62,10 +62,38 @@ AI features are bring-your-own-key. You connect your own provider account, and y
 
 == Changelog ==
 
+= 0.8.0 =
+* Held the plugin's own admin UI to the standard it reports on. Named the focusable code and diff blocks, fixed the statement preview competing with the panel around it in the heading outline, and fixed three status messages that announced nothing to a screen reader.
+* Added guards that run on every push: all 41 colour pairings in the admin UI are checked against WCAG 2.2 AA contrast, and 17 required honesty disclosures across 10 screens are checked for still being there.
+* Added the audit of our own interface, including a full account of what has not been checked. See docs/accessibility-audit.md in the repository.
+
+= 0.7.0 =
+* Accessibility statement generator, as a block and a shortcode, with the feedback contact route European rules expect.
+* Sign-off: an unsigned statement publishes as a draft, and editing the wording withdraws the sign-off automatically.
+
+= 0.6.0 =
+* Suggested fixes, one at a time, with a preview, a diff, and an undo. Applied fixes are stored in a reversible override layer and never overwrite your content.
+
+= 0.5.0 =
+* Bring-your-own-key AI providers (OpenAI, Anthropic, Gemini, OpenRouter), with keys encrypted at rest and never returned to the browser.
+* AI alt-text suggestions for a single image, always shown in an editable field before anything is saved.
+
+= 0.4.0 =
+* The dashboard: run a scan, read the findings grouped by whether a machine settled them, and open the coverage panel listing every check and what it can decide.
+
+= 0.3.0 =
+* The scanner: server-side WCAG 2.2 checks over the rendered HTML of a page, with every finding tagged auto-detected or needs manual review.
+
+= 0.2.0 =
+* Storage layer for scans and findings.
+
 = 0.1.0 =
 * Initial scaffold: plugin bootstrap, capabilities, activation and uninstall handling.
 
 == Upgrade Notice ==
+
+= 0.8.0 =
+Accessibility fixes to the plugin's own admin screens, and new checks that keep them fixed. No changes to your site's content.
 
 = 0.1.0 =
 First development release.

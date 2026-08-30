@@ -43,7 +43,21 @@ function IssueCard( { issue, postId } ) {
 			<p className="wsak-issue__message">{ issue.message }</p>
 
 			{ issue.context && (
-				<pre className="wsak-issue__context" tabIndex="0">
+				// Focusable so the markup can be scrolled without a mouse, and
+				// named so that landing on it announces what it is rather than
+				// reading out anonymous code. A group rather than a region:
+				// a page with thirty findings would otherwise add thirty
+				// landmarks to the list a screen reader user navigates by.
+				<pre
+					className="wsak-issue__context"
+					tabIndex="0"
+					role="group"
+					aria-label={ sprintf(
+						/* translators: %s: name of the accessibility check. */
+						__( 'Markup for: %s', 'wowstudio-accessibility-kit' ),
+						issue.rule_title
+					) }
+				>
 					<code>{ issue.context }</code>
 				</pre>
 			) }

@@ -37,6 +37,22 @@ final class StatementGenerator {
 	private StatementSettings $settings;
 
 	/**
+	 * How far to push every heading below its natural level.
+	 *
+	 * Zero when the statement is published on its own page, where its title is
+	 * a second-level heading. The admin preview renders the same document
+	 * nested inside a panel that already has its own headings, and a preview
+	 * whose headings sat at the panel's level would put two "Accessibility
+	 * statement" headings in the outline and leave the preview's sections
+	 * looking like siblings of the panel's own. Pushing them down keeps the
+	 * outline honest about what is a preview and what is the screen around it.
+	 *
+	 * @since 0.8.0
+	 * @var int
+	 */
+	private int $offset = 0;
+
+	/**
 	 * Constructor.
 	 *
 	 * @since 0.7.0
@@ -109,9 +125,15 @@ final class StatementGenerator {
 	 *
 	 * @since 0.7.0
 	 *
+	 * @param int $heading_offset Levels to push every heading down by, for
+	 *                            rendering the statement inside a screen that
+	 *                            already has headings of its own. Clamped to
+	 *                            0-3 so the output can never exceed h6.
 	 * @return string
 	 */
-	public function render(): string {
+	public function render( int $heading_offset = 0 ): string {
+		$this->offset = max( 0, min( 3, $heading_offset ) );
+
 		$settings     = $this->settings->all();
 		$organisation = (string) $settings['organisation'];
 		$standard     = self::standard_label( (string) $settings['standard'] );
@@ -123,7 +145,7 @@ final class StatementGenerator {
 			$html .= $this->draft_banner();
 		}
 
-		$html .= '<h2>' . esc_html__( 'Accessibility statement', 'wowstudio-accessibility-kit' ) . '</h2>';
+		$html .= $this->heading( 2, __( 'Accessibility statement', 'wowstudio-accessibility-kit' ) );
 
 		$html .= '<p>' . esc_html(
 			sprintf(
@@ -133,13 +155,13 @@ final class StatementGenerator {
 			)
 		) . '</p>';
 
-		$html .= '<h3>' . esc_html__( 'How accessible this website is', 'wowstudio-accessibility-kit' ) . '</h3>';
+		$html .= $this->heading( 3, __( 'How accessible this website is', 'wowstudio-accessibility-kit' ) );
 		$html .= '<p>' . esc_html( $status->sentence( $organisation, $standard ) ) . '</p>';
 
 		$limitations = trim( (string) $settings['known_limitations'] );
 
 		if ( '' !== $limitations ) {
-			$html .= '<h3>' . esc_html__( 'Known problems', 'wowstudio-accessibility-kit' ) . '</h3>';
+			$html .= $this->heading( 3, __( 'Known problems', 'wowstudio-accessibility-kit' ) );
 			$html .= '<ul>';
 
 			foreach ( $this->as_lines( $limitations ) as $line ) {
@@ -192,7 +214,7 @@ final class StatementGenerator {
 	 * @return string
 	 */
 	private function feedback_section( array $settings ): string {
-		$html = '<h3>' . esc_html__( 'Tell us about a problem', 'wowstudio-accessibility-kit' ) . '</h3>';
+		$html = $this->heading( 3, __( 'Tell us about a problem', 'wowstudio-accessibility-kit' ) );
 
 		$html .= '<p>' . esc_html__( 'If you find something on this site you cannot use, or you need information in a different format, please get in touch and tell us what happened.', 'wowstudio-accessibility-kit' ) . '</p>';
 
@@ -258,7 +280,7 @@ final class StatementGenerator {
 			return '';
 		}
 
-		$html = '<h3>' . esc_html__( 'If you are not happy with our response', 'wowstudio-accessibility-kit' ) . '</h3>';
+		$html = $this->heading( 3, __( 'If you are not happy with our response', 'wowstudio-accessibility-kit' ) );
 
 		$url = trim( (string) $settings['enforcement_url'] );
 
@@ -295,7 +317,7 @@ final class StatementGenerator {
 	 * @return string
 	 */
 	private function preparation_section( array $settings ): string {
-		$html = '<h3>' . esc_html__( 'How we prepared this statement', 'wowstudio-accessibility-kit' ) . '</h3>';
+		$html = $this->heading( 3, __( 'How we prepared this statement', 'wowstudio-accessibility-kit' ) );
 
 		$reviewed = trim( (string) $settings['reviewed_on'] );
 
@@ -341,6 +363,21 @@ final class StatementGenerator {
 		}
 
 		return $html;
+	}
+
+	/**
+	 * Renders one heading at its natural level, pushed down by the offset.
+	 *
+	 * @since 0.8.0
+	 *
+	 * @param int    $level Natural heading level, as published on its own page.
+	 * @param string $text  Already-translated heading text.
+	 * @return string
+	 */
+	private function heading( int $level, string $text ): string {
+		$level = min( 6, $level + $this->offset );
+
+		return sprintf( '<h%1$d>%2$s</h%1$d>', $level, esc_html( $text ) );
 	}
 
 	/**

@@ -23,6 +23,10 @@ by a human before any public release. Items marked **TODO(human)** are open.
 - [ ] `Tested up to:` in readme.txt reflects the current WordPress release.
       Currently `7.1`, verified against the wp-env environment on 2026-08-23.
       Re-check at each release.
+- [ ] The `== Changelog ==` and `Stable tag:` in readme.txt both match the
+      release being shipped. These drifted apart once already (readme listed
+      0.1.0 while the tag read 0.7.0) because CHANGELOG.md is the file anyone
+      actually edits; check both.
 - [ ] Plugin Check passes with no errors (`npm run plugin-check`).
 
       This runs against the **built** plugin in `dist/`, not the working tree,
@@ -40,6 +44,21 @@ by a human before any public release. Items marked **TODO(human)** are open.
       configure, what data is sent, when, and links to each provider's terms and
       privacy policy. Submitting without it is a rejection.
 - [ ] Screenshots and banner assets prepared.
+
+## Our own accessibility
+
+- [ ] `docs/accessibility-audit.md` re-run and re-dated against the release.
+      Section 4 lists what has never been checked; it must not shrink by
+      accident, and any claim moved out of it needs the evidence that moved it.
+- [ ] **TODO(human)** Drive the admin dashboard in a browser with axe-core, and
+      through at least one screen reader. Everything in the audit so far is
+      computed from source or from server-rendered output — the running React UI
+      has not been observed, and finding 3 in the 0.8.0 changelog is a fix
+      reasoned from the specification rather than confirmed against a real
+      screen reader.
+- [ ] **TODO(human)** Test with disabled users. Nothing else settles whether
+      any of this works, and shipping an accessibility tool that has never been
+      near one is the criticism this product exists to avoid.
 
 ## Known, accepted Plugin Check warnings
 

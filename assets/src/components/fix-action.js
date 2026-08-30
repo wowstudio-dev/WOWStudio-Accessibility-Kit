@@ -26,7 +26,15 @@ function DiffView( { segments } ) {
 			<h5 className="wsak-diff__title">
 				{ __( 'What would change', 'wowstudio-accessibility-kit' ) }
 			</h5>
-			<pre className="wsak-diff__body" tabIndex="0">
+			<pre
+				className="wsak-diff__body"
+				tabIndex="0"
+				role="group"
+				aria-label={ __(
+					'Proposed markup change',
+					'wowstudio-accessibility-kit'
+				) }
+			>
 				<code>
 					{ segments.map( ( segment, index ) => {
 						if ( segment.type === 'same' ) {
@@ -86,6 +94,12 @@ export default function FixAction( { issueId } ) {
 	const [ fix, setFix ] = useState( null );
 	const [ error, setError ] = useState( '' );
 
+	// A live region has to be in the document before its text changes, or the
+	// announcement is made to a node the screen reader was not yet watching
+	// and is simply lost. So this one is always mounted and always empty until
+	// there is something to say.
+	const [ announcement, setAnnouncement ] = useState( '' );
+
 	const propose = () => {
 		setStatus( 'working' );
 		setError( '' );
@@ -94,6 +108,12 @@ export default function FixAction( { issueId } ) {
 			.then( ( data ) => {
 				setPreview( data );
 				setStatus( 'review' );
+				setAnnouncement(
+					__(
+						'A fix has been suggested. Review the proposed change before applying it.',
+						'wowstudio-accessibility-kit'
+					)
+				);
 			} )
 			.catch( ( caught ) => {
 				setError( readableError( caught ) );
@@ -108,6 +128,12 @@ export default function FixAction( { issueId } ) {
 			.then( ( data ) => {
 				setFix( data.fix );
 				setStatus( 'applied' );
+				setAnnouncement(
+					__(
+						'Fix applied as an override. Your content is unchanged and this can be undone.',
+						'wowstudio-accessibility-kit'
+					)
+				);
 			} )
 			.catch( ( caught ) => {
 				setError( readableError( caught ) );
@@ -123,6 +149,9 @@ export default function FixAction( { issueId } ) {
 				setFix( null );
 				setPreview( null );
 				setStatus( 'idle' );
+				setAnnouncement(
+					__( 'Fix undone.', 'wowstudio-accessibility-kit' )
+				);
 			} )
 			.catch( ( caught ) => {
 				setError( readableError( caught ) );
@@ -132,6 +161,10 @@ export default function FixAction( { issueId } ) {
 
 	return (
 		<div className="wsak-fix">
+			<p className="screen-reader-text" role="status" aria-live="polite">
+				{ announcement }
+			</p>
+
 			{ error && (
 				<Notice status="error" isDismissible={ false }>
 					{ error }
@@ -213,7 +246,7 @@ export default function FixAction( { issueId } ) {
 
 			{ status === 'applied' && fix && (
 				<div className="wsak-fix__applied">
-					<p role="status">
+					<p>
 						{ __(
 							'Applied as an override. Your content is unchanged, and this can be undone at any time.',
 							'wowstudio-accessibility-kit'
