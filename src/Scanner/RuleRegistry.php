@@ -125,6 +125,28 @@ final class RuleRegistry {
 	}
 
 	/**
+	 * Returns any check by ID, of either pass.
+	 *
+	 * get() deliberately returns only executable rules, so the engine cannot be
+	 * handed a check it has no way to run. Presentation needs the other kind
+	 * too — a browser finding still has a title and remediation advice to show.
+	 *
+	 * @since 0.10.0
+	 *
+	 * @param string $id Rule identifier.
+	 * @return RuleDescriptor|null
+	 */
+	public function descriptor( string $id ): ?RuleDescriptor {
+		foreach ( $this->descriptors() as $rule ) {
+			if ( $rule->id() === $id ) {
+				return $rule;
+			}
+		}
+
+		return null;
+	}
+
+	/**
 	 * Returns every registered rule.
 	 *
 	 * @since 0.3.0

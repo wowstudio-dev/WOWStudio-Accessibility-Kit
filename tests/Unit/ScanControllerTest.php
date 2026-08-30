@@ -61,7 +61,7 @@ final class ScanControllerTest extends TestCase {
 
 		( new ScanController() )->register_routes();
 
-		$this->assertCount( 4, $registered );
+		$this->assertCount( 5, $registered );
 
 		$routes = array();
 
@@ -82,7 +82,13 @@ final class ScanControllerTest extends TestCase {
 		sort( $routes );
 
 		$this->assertSame(
-			array( '/coverage', '/scan', '/scannable', '/scans/(?P<id>\d+)' ),
+			array(
+				'/coverage',
+				'/scan',
+				'/scannable',
+				'/scans/(?P<id>\d+)',
+				'/scans/(?P<id>\d+)/browser',
+			),
 			$routes
 		);
 	}

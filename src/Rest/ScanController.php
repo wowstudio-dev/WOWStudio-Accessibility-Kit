@@ -10,6 +10,10 @@ namespace WOWStudio\AccessibilityKit\Rest;
 use WOWStudio\AccessibilityKit\Core\Registrable;
 use WOWStudio\AccessibilityKit\Db\IssueRepository;
 use WOWStudio\AccessibilityKit\Db\ScanRepository;
+use WOWStudio\AccessibilityKit\Scanner\BrowserPassStatus;
+use WOWStudio\AccessibilityKit\Scanner\BrowserRules;
+use WOWStudio\AccessibilityKit\Scanner\Detection;
+use WOWStudio\AccessibilityKit\Scanner\ScanPass;
 use WOWStudio\AccessibilityKit\Scanner\Engine;
 use WOWStudio\AccessibilityKit\Scanner\PageSource;
 use WOWStudio\AccessibilityKit\Scanner\Preview;
@@ -115,6 +119,37 @@ final class ScanController implements Registrable {
 							'type'              => 'integer',
 							'default'           => 20,
 							'sanitize_callback' => 'absint',
+						),
+					),
+				),
+			)
+		);
+
+		register_rest_route(
+			self::REST_NAMESPACE,
+			'/scans/(?P<id>\d+)/browser',
+			array(
+				array(
+					'methods'             => WP_REST_Server::CREATABLE,
+					'callback'            => array( $this, 'record_browser_pass' ),
+					'permission_callback' => array( $this, 'can_scan' ),
+					'args'                => array(
+						'id'       => array(
+							'required'          => true,
+							'type'              => 'integer',
+							'minimum'           => 1,
+							'sanitize_callback' => 'absint',
+						),
+						'status'   => array(
+							'required'    => true,
+							'type'        => 'string',
+							'enum'        => array( 'ran', 'blocked' ),
+							'description' => __( 'Whether the browser pass completed.', 'wowstudio-accessibility-kit' ),
+						),
+						'findings' => array(
+							'type'        => 'array',
+							'default'     => array(),
+							'description' => __( 'Findings the browser pass produced.', 'wowstudio-accessibility-kit' ),
 						),
 					),
 				),
@@ -461,6 +496,151 @@ final class ScanController implements Registrable {
 	}
 
 	/**
+	 * Records what the browser pass found.
+	 *
+	 * The browser is an untrusted caller. It ran our code, but it ran it on the
+	 * user's machine, on a page we do not control, and what arrives here is just
+	 * a request. So it may report two things and nothing else: which of our
+	 * checks failed, and where. Everything that gives a finding weight — its
+	 * severity, its success criterion, whether it counts as settled — is decided
+	 * here, from the rule declaration.
+	 *
+	 * A finding naming a rule we did not publish is dropped rather than stored,
+	 * so the pass cannot introduce checks that never appeared in the coverage
+	 * panel. And `certain` may only move a finding towards needing a person: the
+	 * browser can say "I could not tell", never "trust me, this is a failure".
+	 *
+	 * @since 0.10.0
+	 *
+	 * @param WP_REST_Request $request Incoming request.
+	 * @return WP_REST_Response|WP_Error
+	 */
+	public function record_browser_pass( WP_REST_Request $request ) {
+		$scan_id = absint( $request->get_param( 'id' ) );
+		$scans   = new ScanRepository();
+		$scan    = $scans->find( $scan_id );
+
+		if ( null === $scan ) {
+			return new WP_Error(
+				'wsak_unknown_scan',
+				__( 'That scan could not be found.', 'wowstudio-accessibility-kit' ),
+				array( 'status' => 404 )
+			);
+		}
+
+		if ( $scan->target_id > 0 && ! current_user_can( 'read_post', $scan->target_id ) ) {
+			return new WP_Error(
+				'wsak_forbidden_post',
+				__( 'You do not have permission to read that content.', 'wowstudio-accessibility-kit' ),
+				array( 'status' => rest_authorization_required_code() )
+			);
+		}
+
+		$status = BrowserPassStatus::tryFrom( (string) $request->get_param( 'status' ) )
+			?? BrowserPassStatus::Blocked;
+
+		$issues = new IssueRepository();
+
+		if ( BrowserPassStatus::Ran !== $status ) {
+			// Nothing was checked, so nothing is stored and the scan records
+			// that its coverage fell short.
+			$scans->record_browser_pass( $scan_id, $status );
+
+			return new WP_REST_Response(
+				array(
+					'browser_pass' => $status->value,
+					'stored'       => 0,
+					'dropped'      => 0,
+					'issues'       => $this->present_issues( $scan_id, $issues ),
+				),
+				200
+			);
+		}
+
+		$declared = array();
+
+		foreach ( BrowserRules::all() as $rule ) {
+			$declared[ $rule->id() ] = $rule;
+		}
+
+		$rows    = array();
+		$dropped = 0;
+
+		foreach ( (array) $request->get_param( 'findings' ) as $reported ) {
+			$rule = is_array( $reported )
+				? ( $declared[ (string) ( $reported['rule_id'] ?? '' ) ] ?? null )
+				: null;
+
+			if ( null === $rule ) {
+				++$dropped;
+
+				continue;
+			}
+
+			$rows[] = array(
+				'post_id'   => $scan->target_id,
+				'rule_id'   => $rule->id(),
+				'wcag_sc'   => $rule->wcag_sc(),
+				'severity'  => $rule->severity(),
+				'detection' => empty( $reported['certain'] ) ? Detection::Manual : $rule->detection(),
+				'found_by'  => ScanPass::Browser,
+				'selector'  => sanitize_text_field( (string) ( $reported['selector'] ?? '' ) ),
+				'context'   => wp_kses_post( (string) ( $reported['context'] ?? '' ) ),
+				'message'   => sanitize_text_field( (string) ( $reported['message'] ?? '' ) ),
+			);
+		}
+
+		$issues->add_many( $scan_id, $rows );
+		$scans->record_browser_pass( $scan_id, $status, $this->rescore( $scan_id, $issues ) );
+
+		return new WP_REST_Response(
+			array(
+				'browser_pass' => $status->value,
+				'stored'       => count( $rows ),
+				'dropped'      => $dropped,
+				'issues'       => $this->present_issues( $scan_id, $issues ),
+			),
+			200
+		);
+	}
+
+	/**
+	 * Recalculates a scan's score across both passes.
+	 *
+	 * The server pass scored the scan before the browser pass had reported, so
+	 * the number is revised once a second engine has been over the same page.
+	 * Only settled findings count, exactly as before: something flagged for a
+	 * person to look at is not yet known to be a fault, and scoring it as one
+	 * would report a page as worse than we actually know it to be.
+	 *
+	 * @since 0.10.0
+	 *
+	 * @param int             $scan_id Scan to rescore.
+	 * @param IssueRepository $issues  Issue store.
+	 * @return int
+	 */
+	private function rescore( int $scan_id, IssueRepository $issues ): int {
+		$penalty = array(
+			'critical' => 10,
+			'serious'  => 6,
+			'moderate' => 3,
+			'minor'    => 1,
+		);
+
+		$total = 0;
+
+		foreach ( $issues->find_by_scan( $scan_id ) as $issue ) {
+			if ( Detection::Auto !== $issue->detection ) {
+				continue;
+			}
+
+			$total += $penalty[ $issue->severity->value ] ?? 1;
+		}
+
+		return max( 0, 100 - $total );
+	}
+
+	/**
 	 * Shapes stored issues for the response.
 	 *
 	 * @since 0.3.0
@@ -474,7 +654,7 @@ final class ScanController implements Registrable {
 		$registry  = ( new Engine() )->registry();
 
 		foreach ( $issues->find_by_scan( $scan_id ) as $issue ) {
-			$rule = $registry->get( $issue->rule_id );
+			$rule = $registry->descriptor( $issue->rule_id );
 
 			$presented[] = array(
 				'rule_title'      => null === $rule ? $issue->rule_id : $rule->title(),
@@ -490,6 +670,7 @@ final class ScanController implements Registrable {
 				'severity_label'  => $issue->severity->label(),
 				'detection'       => $issue->detection->value,
 				'detection_label' => $issue->detection->label(),
+				'found_by'        => $issue->found_by->value,
 				'status'          => $issue->status->value,
 				'message'         => $issue->message,
 				'selector'        => $issue->selector,

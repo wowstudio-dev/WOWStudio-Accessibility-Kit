@@ -14,6 +14,8 @@ import {
 	PAGE_LEVEL,
 } from '../scanner/locate';
 import { frameDocument, highlight, clearHighlight } from '../scanner/highlight';
+import { runBrowserPass } from '../scanner/run';
+import { recordBrowserPass, readableError } from '../api';
 import { DetectionTag, SeverityTag } from './tags';
 
 /**
@@ -68,15 +70,28 @@ function locateMessage( status ) {
  * @param {Array}    props.issues     Findings to list.
  * @param {string}   props.previewUrl URL to frame.
  * @param {string}   props.title      Title of the content being inspected.
+ * @param {number}   props.scanId     Scan the browser pass reports against.
+ * @param {boolean}  props.placeable  Whether server findings can be located here.
  * @param {Function} props.onExit     Called when the user leaves the inspector.
+ * @param {Function} props.onFindings Called with the updated scan after the pass.
  * @return {Element} The inspector.
  */
-export default function Inspector( { issues, previewUrl, title, onExit } ) {
+export default function Inspector( {
+	issues,
+	previewUrl,
+	title,
+	scanId,
+	placeable,
+	onExit,
+	onFindings,
+} ) {
 	const frameRef = useRef( null );
 	const [ frameState, setFrameState ] = useState( 'loading' );
 	const [ activeId, setActiveId ] = useState( null );
 	const [ locateStatus, setLocateStatus ] = useState( '' );
 	const [ announcement, setAnnouncement ] = useState( '' );
+	const [ passState, setPassState ] = useState( 'idle' );
+	const [ passError, setPassError ] = useState( '' );
 
 	// A frame that a security policy refused leaves an empty document behind
 	// rather than raising an error, so silence is the failure signal and has to
@@ -96,10 +111,67 @@ export default function Inspector( { issues, previewUrl, title, onExit } ) {
 	}, [ frameState ] );
 
 	const onFrameLoad = useCallback( () => {
-		setFrameState(
-			frameDocument( frameRef.current ) ? 'ready' : 'blocked'
-		);
+		const doc = frameDocument( frameRef.current );
+
+		setFrameState( doc ? 'ready' : 'blocked' );
 	}, [] );
+
+	// The frame exists, so the checks that need a rendered page can finally
+	// run. A frame that never opened is reported too: the server has to know
+	// the difference between "checked and found nothing" and "never looked".
+	useEffect( () => {
+		if ( passState !== 'idle' || ! scanId ) {
+			return;
+		}
+
+		if ( frameState === 'blocked' ) {
+			setPassState( 'done' );
+			recordBrowserPass( scanId, 'blocked' ).catch( () => {} );
+
+			return;
+		}
+
+		if ( frameState !== 'ready' ) {
+			return;
+		}
+
+		const doc = frameDocument( frameRef.current );
+		const view = doc ? doc.defaultView : null;
+
+		setPassState( 'running' );
+		setAnnouncement(
+			__(
+				'Checking colour, size and layout on the page…',
+				'wowstudio-accessibility-kit'
+			)
+		);
+
+		const outcome = runBrowserPass( doc, view );
+
+		recordBrowserPass( scanId, outcome.status, outcome.findings )
+			.then( ( data ) => {
+				setPassState( 'done' );
+
+				if ( onFindings ) {
+					onFindings( data );
+				}
+
+				setAnnouncement(
+					sprintf(
+						/* translators: %d: number of additional findings. */
+						__(
+							'Page checks finished. %d further findings.',
+							'wowstudio-accessibility-kit'
+						),
+						data.stored ?? 0
+					)
+				);
+			} )
+			.catch( ( error ) => {
+				setPassState( 'done' );
+				setPassError( readableError( error ) );
+			} );
+	}, [ frameState, passState, scanId, onFindings ] );
 
 	const show = useCallback( ( issue ) => {
 		const doc = frameDocument( frameRef.current );
@@ -182,12 +254,36 @@ export default function Inspector( { issues, previewUrl, title, onExit } ) {
 
 			<div className="wsak-inspector__panes">
 				<div className="wsak-inspector__list">
+					{ passState === 'running' && (
+						<p className="wsak-inspector__pass">
+							{ __(
+								'Checking colour, size and layout on the page…',
+								'wowstudio-accessibility-kit'
+							) }
+						</p>
+					) }
+
+					{ passError && (
+						<Notice status="error" isDismissible={ false }>
+							{ passError }
+						</Notice>
+					) }
+
 					<p className="wsak-inspector__hint">
 						{ __(
 							'Choose a finding to see it on the page. Moving through this list with the keyboard works the same way.',
 							'wowstudio-accessibility-kit'
 						) }
 					</p>
+
+					{ ! placeable && (
+						<p className="wsak-inspector__unplaceable-note">
+							{ __(
+								'This scan read only your content, not the whole page, so findings from the markup cannot be pointed at here. Anything found on the page itself — colour, size, layout — still can be.',
+								'wowstudio-accessibility-kit'
+							) }
+						</p>
+					) }
 
 					<ul className="wsak-inspector__issues">
 						{ issues.map( ( issue ) => (

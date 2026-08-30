@@ -47,7 +47,7 @@ msgstr ""
 
 #: src/Admin/Menu.php:93
 #: src/Rest/FixController.php:163
-#: src/Rest/ScanController.php:170
+#: src/Rest/ScanController.php:205
 #: src/Rest/StatementController.php:116
 msgid "You do not have permission to view accessibility reports."
 msgstr ""
@@ -437,41 +437,51 @@ msgid "The reviewed markup. Sanitised again before it is stored."
 msgstr ""
 
 #: src/Rest/FixController.php:246
-#: src/Rest/ScanController.php:209
-#: src/Rest/ScanController.php:346
+#: src/Rest/ScanController.php:244
+#: src/Rest/ScanController.php:381
+#: src/Rest/ScanController.php:534
 msgid "You do not have permission to read that content."
 msgstr ""
 
-#: src/Rest/ScanController.php:72
+#: src/Rest/ScanController.php:76
 msgid "The post or page to scan."
 msgstr ""
 
-#: src/Rest/ScanController.php:92
+#: src/Rest/ScanController.php:96
 msgid "The scan to read."
 msgstr ""
 
-#: src/Rest/ScanController.php:111
+#: src/Rest/ScanController.php:115
 msgid "Filter the list by title."
 msgstr ""
 
-#: src/Rest/ScanController.php:151
+#: src/Rest/ScanController.php:147
+msgid "Whether the browser pass completed."
+msgstr ""
+
+#: src/Rest/ScanController.php:152
+msgid "Findings the browser pass produced."
+msgstr ""
+
+#: src/Rest/ScanController.php:186
 msgid "You do not have permission to run accessibility scans."
 msgstr ""
 
-#: src/Rest/ScanController.php:201
+#: src/Rest/ScanController.php:236
 #: src/Scanner/PageSource.php:150
 msgid "That content could not be found."
 msgstr ""
 
-#: src/Rest/ScanController.php:242
+#: src/Rest/ScanController.php:277
 msgid "The scan could not be recorded. Check that the plugin tables exist."
 msgstr ""
 
-#: src/Rest/ScanController.php:265
+#: src/Rest/ScanController.php:300
 msgid "The page could not be parsed as HTML, so it could not be scanned."
 msgstr ""
 
-#: src/Rest/ScanController.php:338
+#: src/Rest/ScanController.php:373
+#: src/Rest/ScanController.php:526
 msgid "That scan could not be found."
 msgstr ""
 
@@ -905,10 +915,6 @@ msgstr ""
 msgid "This scan covered less than usual."
 msgstr ""
 
-#: assets/src/app.js:263
-msgid "This scan read only the content, not the whole page, so its findings cannot be located on the live page. Showing them side by side needs a full-page scan."
-msgstr ""
-
 #: assets/src/app.js:299
 msgid "This plugin helps you find, fix, document, and monitor accessibility problems. It does not determine whether your site meets the ADA, the European Accessibility Act, Section 508, or any other legal requirement, and nothing here is legal advice."
 msgstr ""
@@ -1201,59 +1207,74 @@ msgstr ""
 msgid "Undo this fix"
 msgstr ""
 
-#: assets/src/components/inspector.js:42
+#: assets/src/components/inspector.js:44
 msgid "This one is about the page as a whole rather than one spot on it, so there is nowhere in particular to point."
 msgstr ""
 
-#: assets/src/components/inspector.js:47
+#: assets/src/components/inspector.js:49
 msgid "This element is not in the page any more. It may have been edited since the scan, or it may only appear for some visitors."
 msgstr ""
 
-#: assets/src/components/inspector.js:52
+#: assets/src/components/inspector.js:54
 msgid "The page has changed shape since the scan, so we cannot be sure which element this refers to. Rather than point at the wrong one, we are pointing at none. Re-scan to place it again."
 msgstr ""
 
-#: assets/src/components/inspector.js:57
+#: assets/src/components/inspector.js:59
 msgid "This element is in the page but is not being displayed, so there is nothing to point at."
 msgstr ""
 
+#: assets/src/components/inspector.js:143
+#: assets/src/components/inspector.js:259
+msgid "Checking colour, size and layout on the page…"
+msgstr ""
+
+#. translators: %d: number of additional findings.
+#: assets/src/components/inspector.js:162
+#, js-format
+msgid "Page checks finished. %d further findings."
+msgstr ""
+
 #. translators: %s: name of the accessibility check.
-#: assets/src/components/inspector.js:134
+#: assets/src/components/inspector.js:206
 #, js-format
 msgid "Showing: %s"
 msgstr ""
 
-#: assets/src/components/inspector.js:143
+#: assets/src/components/inspector.js:215
 msgid "This content has no public address, so it cannot be shown here. The findings below still apply."
 msgstr ""
 
 #. translators: %s: content title.
-#: assets/src/components/inspector.js:161
+#: assets/src/components/inspector.js:233
 #, js-format
 msgid "Inspecting “%s”"
 msgstr ""
 
-#: assets/src/components/inspector.js:167
+#: assets/src/components/inspector.js:239
 msgid "Inspecting"
 msgstr ""
 
-#: assets/src/components/inspector.js:171
+#: assets/src/components/inspector.js:243
 msgid "Back to results"
 msgstr ""
 
-#: assets/src/components/inspector.js:186
+#: assets/src/components/inspector.js:273
 msgid "Choose a finding to see it on the page. Moving through this list with the keyboard works the same way."
 msgstr ""
 
-#: assets/src/components/inspector.js:244
+#: assets/src/components/inspector.js:281
+msgid "This scan read only your content, not the whole page, so findings from the markup cannot be pointed at here. Anything found on the page itself — colour, size, layout — still can be."
+msgstr ""
+
+#: assets/src/components/inspector.js:340
 msgid "Your page would not open here."
 msgstr ""
 
-#: assets/src/components/inspector.js:249
+#: assets/src/components/inspector.js:345
 msgid "Some sites refuse to be shown inside another page, which is a reasonable security setting and not a fault. Findings from the markup are still listed, but nothing that depends on seeing the page — colour, text size, layout — was checked on this scan."
 msgstr ""
 
-#: assets/src/components/inspector.js:260
+#: assets/src/components/inspector.js:356
 msgid "Preview of the page being inspected"
 msgstr ""
 

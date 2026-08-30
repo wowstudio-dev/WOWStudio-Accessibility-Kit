@@ -95,6 +95,47 @@ final class ScanRepository {
 	}
 
 	/**
+	 * Records what happened to the browser pass, and the score that follows.
+	 *
+	 * Separate from complete() because the browser pass finishes after the
+	 * server pass has already been recorded — the scan exists, has findings and
+	 * a score, and is then told that a second engine has been over the same
+	 * page. Folding this into complete() would mean a scan could not be
+	 * considered finished until a browser had reported, which is exactly the
+	 * coupling the two-pass design is trying to avoid: a scheduled scan with no
+	 * browser attached must still be a complete, honest scan.
+	 *
+	 * @since 0.10.0
+	 *
+	 * @param int               $scan_id Scan to update.
+	 * @param BrowserPassStatus $status  What happened to the pass.
+	 * @param int|null          $score   Recalculated score, or null to leave it.
+	 * @return bool
+	 */
+	public function record_browser_pass( int $scan_id, BrowserPassStatus $status, ?int $score = null ): bool {
+		global $wpdb;
+
+		$data   = array( 'browser_pass' => $status->value );
+		$format = array( '%s' );
+
+		if ( null !== $score ) {
+			$data['score'] = $score;
+			$format[]      = '%d';
+		}
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Custom table; no core API covers it.
+		$updated = $wpdb->update(
+			Schema::scans_table(),
+			$data,
+			array( 'id' => $scan_id ),
+			$format,
+			array( '%d' )
+		);
+
+		return false !== $updated;
+	}
+
+	/**
 	 * Marks a scan as failed.
 	 *
 	 * A run interrupted part-way is recorded rather than left looking like a

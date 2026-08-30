@@ -209,7 +209,7 @@ export default function App() {
 										: 'secondary'
 								}
 								aria-pressed={ resultView === 'inspect' }
-								disabled={ ! scan.placeable }
+								disabled={ ! scan.preview_url }
 								onClick={ () =>
 									setResultView(
 										resultView === 'inspect'
@@ -258,21 +258,21 @@ export default function App() {
 						manual={ byDetection.manual ?? 0 }
 					/>
 
-					{ ! scan.placeable && (
-						<p className="wsak-result__unplaceable">
-							{ __(
-								'This scan read only the content, not the whole page, so its findings cannot be located on the live page. Showing them side by side needs a full-page scan.',
-								'wowstudio-accessibility-kit'
-							) }
-						</p>
-					) }
-
-					{ resultView === 'inspect' && scan.placeable ? (
+					{ resultView === 'inspect' && scan.preview_url ? (
 						<Inspector
 							issues={ scan.issues ?? [] }
 							previewUrl={ scan.preview_url }
 							title={ scan.post_title }
+							scanId={ scan.scan_id }
+							placeable={ Boolean( scan.placeable ) }
 							onExit={ () => setResultView( 'list' ) }
+							onFindings={ ( data ) =>
+								setScan( ( current ) => ( {
+									...current,
+									issues: data.issues ?? current.issues,
+									browser_pass: data.browser_pass,
+								} ) )
+							}
 						/>
 					) : (
 						<IssueList

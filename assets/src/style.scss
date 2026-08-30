@@ -905,3 +905,10 @@
 	font-size: 13px;
 	max-width: 74ch;
 }
+
+.wsak-inspector__pass,
+.wsak-inspector__unplaceable-note {
+	margin: 0 0 12px;
+	color: var(--wsak-muted);
+	font-size: 13px;
+}

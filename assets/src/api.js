@@ -227,3 +227,22 @@ export function withdrawStatement() {
 		method: 'POST',
 	} );
 }
+
+/**
+ * Reports what the browser pass found for a scan.
+ *
+ * Everything sent here is checked on the server against the published rule set
+ * before any of it is stored — this is a report, not an instruction.
+ *
+ * @param {number} scanId   Scan the pass belongs to.
+ * @param {string} status   Either "ran" or "blocked".
+ * @param {Array}  findings Findings the pass produced.
+ * @return {Promise<Object>} The updated scan issues.
+ */
+export function recordBrowserPass( scanId, status, findings = [] ) {
+	return apiFetch( {
+		path: `/${ namespace }/scans/${ scanId }/browser`,
+		method: 'POST',
+		data: { status, findings },
+	} );
+}
