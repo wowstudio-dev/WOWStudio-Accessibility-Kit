@@ -53,7 +53,25 @@
 
 	--wsak-radius: 14px;
 	--wsak-radius-sm: 9px;
-	--wsak-gap: 16px;
+
+	/*
+	 * A spacing scale, in fours. There was not one before: twenty-four distinct
+	 * values between 5px and 32px had accumulated, near enough to each other to
+	 * look like mistakes and far enough apart to read as one. Rhythm is what
+	 * makes an interface feel deliberate, and rhythm needs a unit.
+	 *
+	 * Everything below is a step on this ramp. Where a value is off it, there
+	 * is a reason written next to it.
+	 */
+	--wsak-space-1: 4px;
+	--wsak-space-2: 8px;
+	--wsak-space-3: 12px;
+	--wsak-space-4: 16px;
+	--wsak-space-5: 20px;
+	--wsak-space-6: 24px;
+	--wsak-space-8: 32px;
+	--wsak-space-12: 48px;
+	--wsak-space-16: 64px;
 
 	/* Shadows tinted with the brand rather than black, so cards sit on the
 	   ground instead of hovering over a grey hole. */
@@ -72,7 +90,7 @@
 .wsak {
 	max-width: 1240px;
 	margin: 0 auto;
-	padding: 8px 24px 64px;
+	padding: var(--wsak-space-2) var(--wsak-space-6) var(--wsak-space-16);
 	color: var(--wsak-text);
 	font-size: 14.5px;
 	line-height: 1.6;
@@ -90,9 +108,9 @@
 .wsak__header {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 14px;
+	gap: var(--wsak-space-4);
 	align-items: center;
-	padding: 28px 0 20px;
+	padding: var(--wsak-space-8) 0 var(--wsak-space-6);
 }
 
 .wsak__mark {
@@ -127,7 +145,7 @@
 }
 
 .wsak__lede {
-	margin: 2px 0 0;
+	margin: var(--wsak-space-1) 0 0;
 	max-width: 66ch;
 	color: var(--wsak-muted);
 	font-size: 13.5px;
@@ -137,9 +155,15 @@
 
 .wsak__nav {
 	display: inline-flex;
+
+	/* 2px is below the scale on purpose: this is the seam between two
+	   segments of one control, not a gap between two things. */
 	gap: 2px;
-	padding: 4px;
-	margin: 4px 0 24px;
+	padding: var(--wsak-space-1);
+
+	/* No top margin. The header's own bottom padding is the gap, and adding
+	   to it was what made the nav sit closer to the title than to the work. */
+	margin: 0 0 var(--wsak-space-6);
 	background: var(--wsak-raised);
 	border: 1px solid var(--wsak-line);
 	border-radius: 999px;
@@ -148,7 +172,7 @@
 .wsak__nav .components-button {
 	border-radius: 999px !important;
 	height: 34px;
-	padding: 0 18px;
+	padding: 0 var(--wsak-space-5);
 	font-weight: 550;
 	color: var(--wsak-muted);
 	box-shadow: none !important;
@@ -173,8 +197,8 @@
 .wsak-settings,
 .wsak-statement-panel,
 .wsak-inspector {
-	margin-bottom: 20px;
-	padding: 22px;
+	margin-bottom: var(--wsak-space-6);
+	padding: var(--wsak-space-6);
 	background: var(--wsak-surface);
 	border: 1px solid var(--wsak-line);
 	border-radius: var(--wsak-radius);
@@ -191,7 +215,7 @@
 .wsak-coverage__title,
 .wsak-settings__title,
 .wsak-inspector__title {
-	margin: 0 0 10px;
+	margin: 0 0 var(--wsak-space-3);
 	font-size: 16px;
 	font-weight: 650;
 	letter-spacing: -0.01em;
@@ -202,20 +226,20 @@
 .wsak-inspector__head {
 	display: flex;
 	flex-wrap: wrap;
-	gap: var(--wsak-gap);
+	gap: var(--wsak-space-4);
 	align-items: center;
 	justify-content: space-between;
-	margin-bottom: 14px;
+	margin-bottom: var(--wsak-space-5);
 }
 
 .wsak-result__actions {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 8px;
+	gap: var(--wsak-space-2);
 }
 
 .wsak-result__unplaceable {
-	margin: 0 0 12px;
+	margin: 0 0 var(--wsak-space-3);
 	color: var(--wsak-muted);
 	font-size: 13px;
 	max-width: 74ch;
@@ -226,10 +250,13 @@
 .wsak-score {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 26px;
+	gap: var(--wsak-space-6);
 	align-items: center;
-	padding: 22px;
-	margin: 0 0 20px;
+
+	/* One step in from the card that holds it, so the nesting is visible
+	   rather than the two edges reading as one thick border. */
+	padding: var(--wsak-space-5);
+	margin: 0 0 var(--wsak-space-6);
 	background: var(--wsak-raised);
 	border-radius: var(--wsak-radius);
 }
@@ -286,7 +313,7 @@
 }
 
 .wsak-score__band {
-	margin: 0 0 8px;
+	margin: 0 0 var(--wsak-space-2);
 	font-size: 15px;
 	font-weight: 650;
 	color: var(--wsak-ink);
@@ -295,8 +322,8 @@
 .wsak-score__counts {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 8px 18px;
-	margin: 0 0 10px;
+	gap: var(--wsak-space-2) var(--wsak-space-5);
+	margin: 0 0 var(--wsak-space-3);
 	padding: 0;
 	list-style: none;
 	font-size: 13.5px;
@@ -308,7 +335,7 @@
 	max-width: 70ch;
 	color: var(--wsak-muted);
 	font-size: 12.5px;
-	padding-top: 10px;
+	padding-top: var(--wsak-space-3);
 	border-top: 1px solid var(--wsak-line);
 }
 
@@ -317,8 +344,12 @@
 .wsak-tag {
 	display: inline-flex;
 	align-items: center;
-	gap: 5px;
-	padding: 2px 9px;
+	gap: var(--wsak-space-1);
+
+	/* 2px vertically, below the scale, because a pill's height comes from its
+	   line box. A full step here would make every tag as tall as the heading
+	   it sits beside. */
+	padding: 2px var(--wsak-space-2);
 	border-radius: 999px;
 	font-size: 11.5px;
 	font-weight: 600;
@@ -378,13 +409,13 @@
 
 .wsak-table {
 	width: 100%;
-	margin-top: 14px;
+	margin-top: var(--wsak-space-4);
 	border-collapse: collapse;
 }
 
 .wsak-table th,
 .wsak-table td {
-	padding: 11px 12px;
+	padding: var(--wsak-space-3);
 	text-align: start;
 	border-bottom: 1px solid var(--wsak-line);
 	vertical-align: middle;
@@ -427,23 +458,33 @@
 
 /* Findings ----------------------------------------------------------------- */
 
+/*
+ * Groups carry the rhythm inside a result card: a wide step between them, and
+ * none before the first, because the score above already supplies that gap.
+ * Giving the first group a margin of its own was what put fifty-six pixels of
+ * nothing under the score.
+ */
 .wsak-group {
-	margin-top: 22px;
+	margin-top: var(--wsak-space-8);
+}
+
+.wsak-results > .wsak-group:first-child {
+	margin-top: 0;
 }
 
 .wsak-group__title {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
-	gap: 8px;
-	margin: 0 0 4px;
+	gap: var(--wsak-space-2);
+	margin: 0 0 var(--wsak-space-1);
 	font-size: 14.5px;
 	font-weight: 650;
 	color: var(--wsak-ink);
 }
 
 .wsak-group__blurb {
-	margin: 0 0 12px;
+	margin: 0 0 var(--wsak-space-3);
 	color: var(--wsak-muted);
 	max-width: 72ch;
 	font-size: 13px;
@@ -455,15 +496,29 @@
 	list-style: none;
 	display: flex;
 	flex-direction: column;
-	gap: 10px;
+	gap: var(--wsak-space-3);
 }
 
 .wsak-issue {
-	padding: 15px 16px;
+	padding: var(--wsak-space-4);
 	background: var(--wsak-surface);
 	border: 1px solid var(--wsak-line);
 	border-inline-start: 3px solid var(--wsak-line-strong);
 	border-radius: var(--wsak-radius-sm);
+}
+
+/*
+ * A card's padding decides its bottom edge, not whatever its last paragraph
+ * happened to leave behind. Without this every finding sat sixteen pixels below
+ * its title and twenty-six above its own border — a ten-pixel lean that reads
+ * as sloppiness long before anybody works out what it is.
+ */
+.wsak-issue > *:last-child,
+.wsak-alt > *:last-child,
+.wsak-fix > *:last-child,
+.wsak-fix__review > *:last-child,
+.wsak-css-fix__review > *:last-child {
+	margin-bottom: 0;
 }
 
 .wsak-issue:has(.wsak-tag--critical) {
@@ -481,7 +536,7 @@
 .wsak-issue__head {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 8px;
+	gap: var(--wsak-space-2);
 	align-items: baseline;
 	justify-content: space-between;
 }
@@ -496,19 +551,19 @@
 .wsak-issue__tags {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 6px;
+	gap: var(--wsak-space-2);
 }
 
 .wsak-issue__message {
-	margin: 6px 0 10px;
+	margin: var(--wsak-space-2) 0 var(--wsak-space-3);
 	max-width: 78ch;
 	font-size: 13.5px;
 }
 
 .wsak-issue__context,
 .wsak-diff__body {
-	margin: 0 0 10px;
-	padding: 11px 13px;
+	margin: 0 0 var(--wsak-space-3);
+	padding: var(--wsak-space-3) var(--wsak-space-4);
 	overflow-x: auto;
 	background: var(--wsak-ink);
 	color: #e9e6fb;
@@ -547,7 +602,7 @@
 
 .wsak-coverage__lede {
 	max-width: 80ch;
-	margin: 0 0 14px;
+	margin: 0 0 var(--wsak-space-4);
 	color: var(--wsak-muted);
 	font-size: 13.5px;
 }
@@ -555,16 +610,16 @@
 .wsak-coverage__lists {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-	gap: 26px;
-	margin-top: 20px;
+	gap: var(--wsak-space-6);
+	margin-top: var(--wsak-space-6);
 }
 
 .wsak-coverage__group-title {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
-	gap: 8px;
-	margin: 0 0 8px;
+	gap: var(--wsak-space-2);
+	margin: 0 0 var(--wsak-space-2);
 	font-size: 13.5px;
 	font-weight: 650;
 	color: var(--wsak-ink);
@@ -574,7 +629,7 @@
 .wsak-inspector__hint,
 .wsak-inspector__pass,
 .wsak-inspector__unplaceable-note {
-	margin: 0 0 12px;
+	margin: 0 0 var(--wsak-space-3);
 	color: var(--wsak-muted);
 	font-size: 12.5px;
 }
@@ -584,14 +639,14 @@
 }
 
 .wsak-coverage__rule {
-	padding: 10px 0;
+	padding: var(--wsak-space-3) 0;
 	border-top: 1px solid var(--wsak-line);
 }
 
 .wsak-coverage__rule dt {
 	font-weight: 620;
 	color: var(--wsak-ink);
-	margin-bottom: 2px;
+	margin-bottom: var(--wsak-space-1);
 	font-size: 13.5px;
 }
 
@@ -605,15 +660,15 @@
 /* States ------------------------------------------------------------------- */
 
 .wsak-empty {
-	padding: 32px 22px;
-	margin-top: 14px;
+	padding: var(--wsak-space-8) var(--wsak-space-6);
+	margin-top: var(--wsak-space-4);
 	text-align: center;
 	background: var(--wsak-raised);
 	border-radius: var(--wsak-radius);
 }
 
 .wsak-empty__title {
-	margin: 0 0 6px;
+	margin: 0 0 var(--wsak-space-2);
 	font-size: 15px;
 	font-weight: 650;
 	color: var(--wsak-ink);
@@ -627,12 +682,12 @@
 }
 
 .wsak-skeleton {
-	margin-top: 14px;
+	margin-top: var(--wsak-space-4);
 }
 
 .wsak-skeleton__row {
 	height: 44px;
-	margin-bottom: 8px;
+	margin-bottom: var(--wsak-space-2);
 	border-radius: var(--wsak-radius-sm);
 	background: linear-gradient(90deg, var(--wsak-raised) 25%, #edeafb 37%, var(--wsak-raised) 63%);
 	background-size: 400% 100%;
@@ -653,26 +708,26 @@
 .wsak-busy {
 	display: inline-flex;
 	align-items: center;
-	gap: 6px;
+	gap: var(--wsak-space-2);
 	color: var(--wsak-muted);
 	font-size: 13px;
 }
 
 .wsak-error {
-	margin: 14px 0;
+	margin: var(--wsak-space-4) 0;
 }
 
 .wsak-boot {
 	color: var(--wsak-muted);
-	padding: 24px 0;
+	padding: var(--wsak-space-6) 0;
 }
 
 /* Alt text and fixes ------------------------------------------------------- */
 
 .wsak-alt,
 .wsak-fix {
-	margin: 10px 0 0;
-	padding: 13px;
+	margin: var(--wsak-space-3) 0 0;
+	padding: var(--wsak-space-4);
 	background: var(--wsak-raised);
 	border-radius: var(--wsak-radius-sm);
 }
@@ -690,12 +745,12 @@
 .wsak-fix__actions {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 8px;
-	margin-top: 8px;
+	gap: var(--wsak-space-2);
+	margin-top: var(--wsak-space-3);
 }
 
 .wsak-diff__title {
-	margin: 0 0 6px;
+	margin: 0 0 var(--wsak-space-2);
 	font-size: 12.5px;
 	font-weight: 650;
 	color: var(--wsak-ink);
@@ -705,6 +760,9 @@
 	background: #10391f;
 	color: #a7f3c4;
 	text-decoration: underline;
+
+	/* Sub-scale on purpose: these sit inside a line of code, and anything
+	   larger would push the lines apart wherever a change happened. */
 	padding: 1px 2px;
 	border-radius: 3px;
 }
@@ -720,7 +778,7 @@
 /* Settings ----------------------------------------------------------------- */
 
 .wsak-settings__subtitle {
-	margin: 26px 0 8px;
+	margin: var(--wsak-space-8) 0 var(--wsak-space-2);
 	font-size: 13.5px;
 	font-weight: 650;
 	color: var(--wsak-ink);
@@ -735,26 +793,26 @@
 }
 
 .wsak-settings__key {
-	margin-top: 16px;
-	padding: 16px;
+	margin-top: var(--wsak-space-4);
+	padding: var(--wsak-space-4);
 	background: var(--wsak-raised);
 	border-radius: var(--wsak-radius-sm);
 }
 
 .wsak-settings__keylink {
-	margin: 8px 0 0;
+	margin: var(--wsak-space-2) 0 0;
 	font-size: 12.5px;
 }
 
 .wsak-statement-panel__missing {
-	margin: 6px 0 0;
+	margin: var(--wsak-space-2) 0 0;
 	padding-inline-start: 1.2em;
 	list-style: disc;
 }
 
 .wsak-statement-panel__preview {
-	padding: 20px;
-	margin-top: 12px;
+	padding: var(--wsak-space-5);
+	margin-top: var(--wsak-space-4);
 	background: var(--wsak-raised);
 	border-radius: var(--wsak-radius);
 }
@@ -782,14 +840,17 @@
 .wsak-inspector__panes {
 	display: grid;
 	grid-template-columns: minmax(0, 23rem) minmax(0, 1fr);
-	gap: 20px;
+	gap: var(--wsak-space-6);
 	align-items: start;
 }
 
 .wsak-inspector__list {
 	max-height: 72vh;
 	overflow-y: auto;
-	padding-inline-end: 4px;
+
+	/* Room for the focus ring on a card at the edge of the scrolling pane,
+	   which would otherwise be clipped by the overflow. */
+	padding-inline-end: var(--wsak-space-1);
 }
 
 .wsak-inspector__issues {
@@ -798,15 +859,15 @@
 	list-style: none;
 	display: flex;
 	flex-direction: column;
-	gap: 8px;
+	gap: var(--wsak-space-3);
 }
 
 .wsak-inspector__issue {
 	display: flex;
 	flex-direction: column;
-	gap: 6px;
+	gap: var(--wsak-space-2);
 	width: 100%;
-	padding: 12px 13px;
+	padding: var(--wsak-space-3) var(--wsak-space-4);
 	text-align: start;
 	background: var(--wsak-surface);
 	border: 1px solid var(--wsak-line);
@@ -848,7 +909,7 @@
 .wsak-inspector__issue-tags {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 6px;
+	gap: var(--wsak-space-2);
 }
 
 .wsak-inspector__issue-message {
@@ -858,8 +919,8 @@
 
 .wsak-inspector__unplaced,
 .wsak-inspector__no-fix {
-	margin: 6px 0 0;
-	padding: 9px 11px;
+	margin: var(--wsak-space-2) 0 0;
+	padding: var(--wsak-space-3);
 	border-radius: var(--wsak-radius-sm);
 	font-size: 12.5px;
 }
@@ -875,12 +936,15 @@
 }
 
 .wsak-inspector__actions {
-	margin-top: 8px;
+	margin-top: var(--wsak-space-3);
 }
 
 .wsak-inspector__preview {
 	position: sticky;
-	top: 46px;
+
+	/* Clears the admin bar (32px) plus one step, so the frame does not sit
+	   flush under it while the list scrolls past. */
+	top: var(--wsak-space-12);
 }
 
 .wsak-inspector__frame {
@@ -896,18 +960,18 @@
 /* CSS fix review ----------------------------------------------------------- */
 
 .wsak-css-fix {
-	margin-top: 8px;
+	margin-top: var(--wsak-space-3);
 }
 
 .wsak-css-fix__review {
-	padding: 12px 13px;
+	padding: var(--wsak-space-4);
 	border: 1px solid var(--wsak-line);
 	border-radius: var(--wsak-radius-sm);
 	background: var(--wsak-raised);
 }
 
 .wsak-css-fix__summary {
-	margin: 0 0 10px;
+	margin: 0 0 var(--wsak-space-3);
 	max-width: 70ch;
 	font-size: 13px;
 	color: var(--wsak-text);
@@ -916,13 +980,13 @@
 .wsak-css-fix__swatches {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 10px;
-	margin-bottom: 10px;
+	gap: var(--wsak-space-3);
+	margin-bottom: var(--wsak-space-3);
 }
 
 .wsak-css-fix__swatch {
 	flex: 1 1 130px;
-	padding: 9px 10px;
+	padding: var(--wsak-space-3);
 	border: 1px solid var(--wsak-line);
 	border-radius: var(--wsak-radius-sm);
 	background: var(--wsak-surface);
@@ -940,8 +1004,8 @@
 .wsak-css-fix__swatch-value {
 	display: flex;
 	align-items: center;
-	gap: 7px;
-	margin: 4px 0 2px;
+	gap: var(--wsak-space-2);
+	margin: var(--wsak-space-1) 0;
 	font-size: 12.5px;
 }
 
@@ -962,12 +1026,12 @@
 }
 
 .wsak-css-fix__sizes {
-	margin: 0 0 10px;
+	margin: 0 0 var(--wsak-space-3);
 	font-size: 13px;
 }
 
 .wsak-css-fix__radius {
-	margin: 6px 0 0;
+	margin: var(--wsak-space-2) 0 0;
 	max-width: 70ch;
 	font-size: 12.5px;
 	color: var(--wsak-muted);
@@ -977,7 +1041,7 @@
    to get wrong, so the warning carries weight and a rule of its own rather
    than relying on the text colour to do the work. */
 .wsak-css-fix__radius.is-warning {
-	padding: 8px 10px;
+	padding: var(--wsak-space-2) var(--wsak-space-3);
 	border-left: 3px solid var(--wsak-moderate);
 	border-radius: 0 var(--wsak-radius-sm) var(--wsak-radius-sm) 0;
 	background: var(--wsak-moderate-bg);
@@ -986,7 +1050,7 @@
 }
 
 .wsak-css-fix__title {
-	margin: 14px 0 6px;
+	margin: var(--wsak-space-4) 0 var(--wsak-space-2);
 	font-size: 12px;
 	font-weight: 600;
 	text-transform: uppercase;
@@ -995,8 +1059,8 @@
 }
 
 .wsak-css-fix__code {
-	margin: 0 0 10px;
-	padding: 11px 13px;
+	margin: 0 0 var(--wsak-space-3);
+	padding: var(--wsak-space-3) var(--wsak-space-4);
 	overflow-x: auto;
 	background: var(--wsak-ink);
 	color: #e9e6fb;
@@ -1007,7 +1071,7 @@
 }
 
 .wsak-css-fix__note {
-	margin: 0 0 12px;
+	margin: 0 0 var(--wsak-space-4);
 	max-width: 70ch;
 	font-size: 12.5px;
 	color: var(--wsak-muted);
@@ -1016,19 +1080,19 @@
 .wsak-css-fix__actions {
 	display: flex;
 	flex-wrap: wrap;
-	gap: 8px;
+	gap: var(--wsak-space-2);
 }
 
 .wsak-css-fix__applied p {
-	margin: 8px 0;
+	margin: var(--wsak-space-3) 0;
 	font-size: 13px;
 }
 
 /* Footer ------------------------------------------------------------------- */
 
 .wsak__footer {
-	margin-top: 28px;
-	padding-top: 16px;
+	margin-top: var(--wsak-space-8);
+	padding-top: var(--wsak-space-4);
 	border-top: 1px solid var(--wsak-line);
 	color: var(--wsak-muted);
 	font-size: 12.5px;
@@ -1077,7 +1141,7 @@
 @media screen and (max-width: 782px) {
 
 	.wsak {
-		padding: 8px 12px 48px;
+		padding: var(--wsak-space-2) var(--wsak-space-4) var(--wsak-space-12);
 	}
 
 	.wsak-picker,
@@ -1086,7 +1150,7 @@
 	.wsak-settings,
 	.wsak-statement-panel,
 	.wsak-inspector {
-		padding: 16px;
+		padding: var(--wsak-space-4);
 	}
 
 	.wsak__title {
@@ -1101,7 +1165,7 @@
 
 	.wsak__nav .components-button {
 		flex: 1;
-		padding: 0 10px;
+		padding: 0 var(--wsak-space-3);
 	}
 
 	.wsak-table thead {
@@ -1110,14 +1174,14 @@
 
 	.wsak-table tr {
 		display: block;
-		padding: 10px 0;
+		padding: var(--wsak-space-3) 0;
 		border-bottom: 1px solid var(--wsak-line);
 	}
 
 	.wsak-table th,
 	.wsak-table td {
 		display: block;
-		padding: 4px 0;
+		padding: var(--wsak-space-1) 0;
 		border: 0;
 	}
 
