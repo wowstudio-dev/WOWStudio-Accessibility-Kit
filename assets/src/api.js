@@ -246,3 +246,41 @@ export function recordBrowserPass( scanId, status, findings = [] ) {
 		data: { status, findings },
 	} );
 }
+
+/**
+ * Lists the style rules currently written for findings.
+ *
+ * @return {Promise<Object>} Rules keyed by issue, and the theme they belong to.
+ */
+export function fetchCssFixes() {
+	return apiFetch( { path: `/${ namespace }/fixes/css` } );
+}
+
+/**
+ * Writes a reviewed style rule into the site's Additional CSS.
+ *
+ * @param {number} issueId      Finding being answered.
+ * @param {string} selector     Selector the rule applies to.
+ * @param {Array}  declarations Property and value pairs.
+ * @return {Promise<Object>} The stored rule.
+ */
+export function applyCssFix( issueId, selector, declarations ) {
+	return apiFetch( {
+		path: `/${ namespace }/fixes/css`,
+		method: 'POST',
+		data: { issue_id: issueId, selector, declarations },
+	} );
+}
+
+/**
+ * Removes the style rule written for one finding.
+ *
+ * @param {number} issueId Finding whose rule should go.
+ * @return {Promise<Object>} The response.
+ */
+export function revertCssFix( issueId ) {
+	return apiFetch( {
+		path: `/${ namespace }/fixes/css/${ issueId }`,
+		method: 'DELETE',
+	} );
+}

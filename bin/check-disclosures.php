@@ -69,7 +69,14 @@ const WSAK_SURFACES = array(
 		'the refusal to point at the wrong element' => '/Rather than point at the wrong one, we are pointing at none/i',
 		'the blocked-preview caveat'                => '/nothing that depends on seeing the page — colour, text size, layout — was checked/iu',
 		'the unplaceable-findings note'             => '/findings from the markup cannot be pointed at here/i',
-		'the no-markup-to-rewrite note'             => '/there is no markup to rewrite/i',
+		'the cannot-edit-CSS note'                  => '/your account is not allowed to change/i',
+	),
+	'assets/src/scanner/repair.js'                => array(
+		// Moved here in 0.11.0 from the inspector, when these findings gained
+		// a fix of their own. The sentence has to keep saying that a stylesheet
+		// cannot reach them, because that is the part somebody acts on.
+		'the attributes-not-styles note' => '/no stylesheet can add them/i',
+		'the markup-not-styles note'     => '/which a stylesheet cannot change/i',
 	),
 	'assets/src/components/tags.js'               => array(
 		'the auto-detected honesty tag'       => '/Auto-detected/',

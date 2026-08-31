@@ -595,20 +595,34 @@ is the only convincing demonstration this product has.
 
 ### Build order
 
-1. `Remediation\CustomCss` — read, parse the managed block, write it back with
+1. ✅ `Remediation\CustomCss` — read, parse the managed block, write it back with
    everything else preserved. Tests first, including malformed and missing
    markers, and CSS containing our marker text inside a string.
-2. Selector proposal with the stability ranking, and a match count from the live
-   frame.
-3. `POST /wsak/v1/fixes/css` — capability pair, validated rule, rejects any rule
-   whose finding did not come from the browser pass.
-4. Contrast fix generation: propose a compliant colour closest to the original
-   rather than a stock one, so the design survives the fix.
-5. Review UI: the rule, the selector, its blast radius, the before and after
-   swatches, and the measured ratio each way.
-6. Apply, then re-measure in the frame and show the result.
-7. Uninstall leaves the CSS in place unless data removal was opted into — it is
+2. ✅ Selector proposal with the stability ranking, and a match count from the
+   live frame. `assets/src/scanner/selector.js`.
+3. ✅ `POST /wsak/v1/fixes/css` — capability pair, validated rule, rejects any
+   rule whose finding did not come from the browser pass. `Rest\CssFixController`
+   with `Remediation\CssFixManager` and the `Remediation\CssRules` allowlist.
+4. ✅ Contrast fix generation: propose the closest colour to the original that
+   meets the ratio rather than a stock dark one, so the design survives the fix.
+   `colour.js::nearestAccessible` moves lightness only and keeps hue and
+   saturation. At the AA thresholds this always has an answer — lightness 0 and
+   1 are black and white whatever the hue, and the worst background in the
+   colour space still leaves one of them at 4.58:1.
+5. ✅ Review UI: the rule, the selector, its blast radius, the before and after
+   swatches, and the measured ratio each way. `components/css-fix-action.js`.
+6. ✅ Apply, then reload the frame, re-measure, and report honestly when a more
+   specific rule in the theme beat ours.
+7. ✅ Uninstall leaves the CSS in place unless data removal was opted into — it is
    the user's stylesheet now.
+
+Three of the five browser-pass rules have a CSS answer: contrast, links marked
+by colour alone, and undersized targets. The other two — a scrolling region with
+nothing focusable in it, and an `aria-hidden` element still in the tab order —
+need an attribute added to the markup, which no stylesheet can do. Those say so
+in their own words rather than sharing a generic "not supported" message, because
+a reader told a fix is coming waits for it and a reader told to edit their
+template goes and does it.
 
 ### Risks
 

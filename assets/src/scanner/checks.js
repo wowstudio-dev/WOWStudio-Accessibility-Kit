@@ -15,6 +15,26 @@ import { measureContrast } from './colour';
 import { xpathFor, contextFor } from './xpath';
 
 /**
+ * The smallest a pointer target may be, from WCAG 2.5.8.
+ */
+const MIN_TARGET = 24;
+
+/**
+ * Formats a measured dimension without rounding away the reason it failed.
+ *
+ * A box 23.6 pixels tall is a real failure, and `Math.round` turns it into the
+ * sentence "this control is 24 tall, it needs to be 24 tall" — which reads as a
+ * bug in the tool rather than a problem on the page. Fractions are kept where
+ * they exist and dropped where they do not.
+ *
+ * @param {number} value Measurement in pixels.
+ * @return {string} The number, written the way it measured.
+ */
+export function px( value ) {
+	return Number.isInteger( value ) ? String( value ) : value.toFixed( 1 );
+}
+
+/**
  * Selector for things a person can operate.
  */
 const INTERACTIVE =
@@ -223,17 +243,33 @@ export function checkTargetSize( doc, view ) {
 
 		const rect = element.getBoundingClientRect();
 
-		if ( rect.width >= 24 && rect.height >= 24 ) {
+		if ( rect.width >= MIN_TARGET && rect.height >= MIN_TARGET ) {
 			return;
+		}
+
+		// Which dimension actually failed, rather than restating the rule. A
+		// nav link 170 wide and 23.6 tall fails on one measurement, and being
+		// told "it needs to be 24 by 24" sends somebody looking for a width
+		// problem that is not there.
+		const short = [];
+
+		if ( rect.width < MIN_TARGET ) {
+			short.push( 'wide' );
+		}
+
+		if ( rect.height < MIN_TARGET ) {
+			short.push( 'tall' );
 		}
 
 		found.push(
 			finding(
 				'target-too-small',
 				element,
-				`This control is ${ Math.round( rect.width ) } by ${ Math.round(
+				`This control is ${ px( rect.width ) } by ${ px(
 					rect.height
-				) } pixels. It needs to be at least 24 by 24, or have enough clear space around it that a near miss does not hit something else.`
+				) } pixels, so it is not quite ${ MIN_TARGET } ${ short.join(
+					' or '
+				) } enough. Give it a minimum size of ${ MIN_TARGET } by ${ MIN_TARGET }, or enough clear space around it that a near miss does not hit something else.`
 			)
 		);
 	} );

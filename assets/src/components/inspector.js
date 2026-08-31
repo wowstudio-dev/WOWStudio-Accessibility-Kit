@@ -15,8 +15,9 @@ import {
 } from '../scanner/locate';
 import { frameDocument, highlight, clearHighlight } from '../scanner/highlight';
 import { runBrowserPass } from '../scanner/run';
-import { recordBrowserPass, readableError } from '../api';
+import { fetchCssFixes, recordBrowserPass, readableError } from '../api';
 import AltTextAction from './alt-text-action';
+import CssFixAction from './css-fix-action';
 import FixAction from './fix-action';
 import { DetectionTag, SeverityTag } from './tags';
 
@@ -104,8 +105,18 @@ export default function Inspector( {
 	const [ announcement, setAnnouncement ] = useState( '' );
 	const [ passState, setPassState ] = useState( 'idle' );
 	const [ passError, setPassError ] = useState( '' );
+	const [ activeElement, setActiveElement ] = useState( null );
+
+	// Which findings already have a rule in the site's Additional CSS, and
+	// whether this account may write one at all. Both come from the server
+	// rather than being assumed: a rule may have been written in an earlier
+	// session, or deleted by hand in the Customiser since.
+	const [ cssFixes, setCssFixes ] = useState( {} );
+	const [ cssTheme, setCssTheme ] = useState( '' );
+	const [ cssAllowed, setCssAllowed ] = useState( false );
 
 	const hoverTimer = useRef( null );
+	const pendingReload = useRef( null );
 
 	// A frame that a security policy refused leaves an empty document behind
 	// rather than raising an error, so silence is the failure signal and has to
@@ -124,10 +135,35 @@ export default function Inspector( {
 		return () => clearTimeout( timer );
 	}, [ frameState ] );
 
+	const readCssFixes = useCallback(
+		() =>
+			fetchCssFixes()
+				.then( ( data ) => {
+					setCssFixes( data.rules ?? {} );
+					setCssTheme( data.theme ?? '' );
+					setCssAllowed( true );
+				} )
+				// A refusal here is a permission answer, not a fault: an editor
+				// who may scan but not change site-wide CSS gets told what they
+				// can do instead, rather than an error about a route.
+				.catch( () => setCssAllowed( false ) ),
+		[]
+	);
+
+	useEffect( () => {
+		readCssFixes();
+	}, [ readCssFixes ] );
+
 	const onFrameLoad = useCallback( () => {
 		const doc = frameDocument( frameRef.current );
 
 		setFrameState( doc ? 'ready' : 'blocked' );
+
+		if ( pendingReload.current ) {
+			const resolve = pendingReload.current;
+			pendingReload.current = null;
+			resolve( true );
+		}
 	}, [] );
 
 	// The frame exists, so the checks that need a rendered page can finally
@@ -210,11 +246,17 @@ export default function Inspector( {
 
 		if ( found.status !== FOUND ) {
 			clearHighlight( doc );
+			setActiveElement( null );
 			setLocateStatus( found.status );
 			setAnnouncement( locateMessage( found.status ) );
 
 			return;
 		}
+
+		// Kept because the fix proposal is measured from the element itself —
+		// the colour the browser painted and the box it laid out — rather than
+		// from anything the scan recorded earlier.
+		setActiveElement( found.element );
 
 		if ( ! highlight( doc, found.element ) ) {
 			setLocateStatus( 'not-visible' );
@@ -231,6 +273,63 @@ export default function Inspector( {
 				issue.rule_title
 			)
 		);
+	}, [] );
+
+	/**
+	 * Reloads the framed page and finds the element again.
+	 *
+	 * This is what makes an applied rule verifiable rather than merely stored.
+	 * The rule went into the site's own stylesheet, so the only way to know it
+	 * survived the theme's specificity is to let the browser load the page
+	 * again and measure what it painted this time.
+	 *
+	 * @param {Object} issue The finding to re-locate.
+	 * @return {Promise<?{element: Element, view: Window}>} The element, or null.
+	 */
+	const reloadAndLocate = useCallback( ( issue ) => {
+		const frame = frameRef.current;
+
+		if ( ! frame || ! frame.contentWindow ) {
+			return Promise.resolve( null );
+		}
+
+		return new Promise( ( resolve ) => {
+			// A reload that never reports back must not leave the interface
+			// waiting on it forever; the caller treats null as "could not
+			// measure", which is the truth.
+			const timer = setTimeout( () => {
+				pendingReload.current = null;
+				resolve( false );
+			}, LOAD_TIMEOUT_MS );
+
+			pendingReload.current = ( loaded ) => {
+				clearTimeout( timer );
+				resolve( loaded );
+			};
+
+			frame.contentWindow.location.reload();
+		} ).then( ( loaded ) => {
+			if ( ! loaded ) {
+				return null;
+			}
+
+			const doc = frameDocument( frameRef.current );
+
+			if ( ! doc ) {
+				return null;
+			}
+
+			const found = locate( doc, issue );
+
+			if ( found.status !== FOUND ) {
+				return null;
+			}
+
+			setActiveElement( found.element );
+			highlight( doc, found.element );
+
+			return { element: found.element, view: doc.defaultView };
+		} );
 	}, [] );
 
 	if ( ! previewUrl ) {
@@ -392,14 +491,36 @@ export default function Inspector( {
 											)
 										) }
 
-										{ issue.found_by === 'browser' && (
-											<p className="wsak-inspector__no-fix">
-												{ __(
-													'This one is about how the page is styled rather than how it is written, so there is no markup to rewrite. It has to be changed in your theme or customiser.',
-													'wowstudio-accessibility-kit'
-												) }
-											</p>
-										) }
+										{ issue.found_by === 'browser' &&
+											( cssAllowed ? (
+												<CssFixAction
+													issue={ issue }
+													element={ activeElement }
+													doc={ frameDocument(
+														frameRef.current
+													) }
+													view={
+														frameDocument(
+															frameRef.current
+														)?.defaultView
+													}
+													applied={ Boolean(
+														cssFixes[ issue.id ]
+													) }
+													theme={ cssTheme }
+													onChange={ readCssFixes }
+													onReVerify={ () =>
+														reloadAndLocate( issue )
+													}
+												/>
+											) : (
+												<p className="wsak-inspector__no-fix">
+													{ __(
+														'This one is about how the page is styled. Fixing it writes a rule into your site’s Additional CSS, which your account is not allowed to change — an administrator can apply it, or make the change in Appearance → Customise.',
+														'wowstudio-accessibility-kit'
+													) }
+												</p>
+											) ) }
 									</div>
 								) }
 							</li>

@@ -271,3 +271,222 @@ export function measureContrast( element, view ) {
 		reason: '',
 	};
 }
+
+/**
+ * Converts an RGB colour to HSL.
+ *
+ * Used so a proposed colour can be moved in lightness while its hue and
+ * saturation are left exactly as the designer chose them. Fixing contrast by
+ * reaching for black would meet the ratio and wreck the design, and a fix
+ * somebody reverts because it looks wrong has not fixed anything.
+ *
+ * @param {Object} colour An opaque RGB colour.
+ * @return {{h: number, s: number, l: number}} Hue in degrees, saturation and lightness as fractions.
+ */
+export function rgbToHsl( colour ) {
+	const r = colour.r / 255;
+	const g = colour.g / 255;
+	const b = colour.b / 255;
+
+	const max = Math.max( r, g, b );
+	const min = Math.min( r, g, b );
+	const l = ( max + min ) / 2;
+
+	if ( max === min ) {
+		return { h: 0, s: 0, l };
+	}
+
+	const d = max - min;
+	const s = l > 0.5 ? d / ( 2 - max - min ) : d / ( max + min );
+
+	let h;
+
+	if ( max === r ) {
+		h = ( g - b ) / d + ( g < b ? 6 : 0 );
+	} else if ( max === g ) {
+		h = ( b - r ) / d + 2;
+	} else {
+		h = ( r - g ) / d + 4;
+	}
+
+	return { h: h * 60, s, l };
+}
+
+/**
+ * Converts an HSL colour back to RGB.
+ *
+ * @param {Object} hsl   The colour in HSL.
+ * @param {number} hsl.h Hue in degrees.
+ * @param {number} hsl.s Saturation as a fraction.
+ * @param {number} hsl.l Lightness as a fraction.
+ * @return {{r: number, g: number, b: number, a: number}} The colour.
+ */
+export function hslToRgb( { h, s, l } ) {
+	if ( s === 0 ) {
+		const grey = Math.round( l * 255 );
+
+		return { r: grey, g: grey, b: grey, a: 1 };
+	}
+
+	const q = l < 0.5 ? l * ( 1 + s ) : l + s - l * s;
+	const p = 2 * l - q;
+
+	const channel = ( t ) => {
+		let value = t;
+
+		if ( value < 0 ) {
+			value += 1;
+		}
+
+		if ( value > 1 ) {
+			value -= 1;
+		}
+
+		if ( value < 1 / 6 ) {
+			return p + ( q - p ) * 6 * value;
+		}
+
+		if ( value < 1 / 2 ) {
+			return q;
+		}
+
+		if ( value < 2 / 3 ) {
+			return p + ( q - p ) * ( 2 / 3 - value ) * 6;
+		}
+
+		return p;
+	};
+
+	const hue = ( ( ( h % 360 ) + 360 ) % 360 ) / 360;
+
+	return {
+		r: Math.round( channel( hue + 1 / 3 ) * 255 ),
+		g: Math.round( channel( hue ) * 255 ),
+		b: Math.round( channel( hue - 1 / 3 ) * 255 ),
+		a: 1,
+	};
+}
+
+/**
+ * Formats a colour as a six-digit hex string.
+ *
+ * @param {Object} colour An opaque RGB colour.
+ * @return {string} A `#rrggbb` value.
+ */
+export function toHex( colour ) {
+	const pair = ( value ) =>
+		Math.max( 0, Math.min( 255, Math.round( value ) ) )
+			.toString( 16 )
+			.padStart( 2, '0' );
+
+	return `#${ pair( colour.r ) }${ pair( colour.g ) }${ pair( colour.b ) }`;
+}
+
+/**
+ * How precisely the search below pins down a lightness value.
+ *
+ * Twenty halvings of the 0–1 range land well inside one step of an eight-bit
+ * channel, so the answer is as exact as the colour space allows.
+ */
+const SEARCH_STEPS = 20;
+
+/**
+ * Finds the smallest change to a colour that reaches a contrast ratio.
+ *
+ * The search moves lightness only, in whichever direction the background allows,
+ * and stops at the first value that meets the target — so the result is the
+ * closest colour to the original that meets the ratio, rather than a stock
+ * dark one. Hue and
+ * saturation are untouched, which is what makes the result something a designer
+ * will accept rather than immediately undo.
+ *
+ * At the AA thresholds this is always solvable, which is a more useful fact
+ * than it sounds: lightness 0 and 1 are black and white whatever the hue, and
+ * the worst background in the whole colour space still leaves one of those at
+ * 4.58:1. So a contrast finding on measurable text always has a fix, and the
+ * only question is how far the colour has to move.
+ *
+ * The unreachable branch is kept for a caller asking for more than AA — 7:1
+ * genuinely cannot be met on some backgrounds by changing the text alone. It
+ * returns the best it found and says the target was missed, because "the
+ * closest I can get is 6.2:1, and the background has to change too" is a useful
+ * answer and a silent near-miss is not.
+ *
+ * @param {Object} foreground The colour to move.
+ * @param {Object} background The colour it sits on.
+ * @param {number} required   Ratio to reach.
+ * @return {{colour: Object, hex: string, ratio: number, reached: boolean}} The proposal.
+ */
+export function nearestAccessible( foreground, background, required ) {
+	const hsl = rgbToHsl( foreground );
+
+	// Both directions are tried because neither is reliably available: dark
+	// text on a dark background has to get lighter, and against a mid-tone
+	// background one direction may not reach the ratio at all.
+	const candidates = [ 0, 1 ]
+		.map( ( bound ) => {
+			let near = hsl.l;
+			let far = bound;
+
+			if (
+				contrastRatio( hslToRgb( { ...hsl, l: far } ), background ) <
+				required
+			) {
+				return null;
+			}
+
+			for ( let step = 0; step < SEARCH_STEPS; step += 1 ) {
+				const middle = ( near + far ) / 2;
+				const ratio = contrastRatio(
+					hslToRgb( { ...hsl, l: middle } ),
+					background
+				);
+
+				if ( ratio >= required ) {
+					far = middle;
+				} else {
+					near = middle;
+				}
+			}
+
+			const colour = hslToRgb( { ...hsl, l: far } );
+
+			return {
+				colour,
+				distance: Math.abs( far - hsl.l ),
+				ratio: contrastRatio( colour, background ),
+			};
+		} )
+		.filter( ( candidate ) => candidate && candidate.ratio >= required );
+
+	if ( candidates.length > 0 ) {
+		// The smaller move wins: it is the one that changes the design least.
+		const best = candidates.sort(
+			( a, b ) => a.distance - b.distance
+		)[ 0 ];
+
+		return {
+			colour: best.colour,
+			hex: toHex( best.colour ),
+			ratio: best.ratio,
+			reached: true,
+		};
+	}
+
+	// Nothing on this hue reaches the ratio. Offer the strongest end anyway so
+	// the reader can see how far short it falls and decide about the background.
+	const best = [ 0, 1 ]
+		.map( ( l ) => hslToRgb( { ...hsl, l } ) )
+		.map( ( colour ) => ( {
+			colour,
+			ratio: contrastRatio( colour, background ),
+		} ) )
+		.sort( ( a, b ) => b.ratio - a.ratio )[ 0 ];
+
+	return {
+		colour: best.colour,
+		hex: toHex( best.colour ),
+		ratio: best.ratio,
+		reached: false,
+	};
+}

@@ -155,6 +155,21 @@ describe( 'target size', () => {
 		expect( found[ 0 ].message ).toMatch( /16 by 16/ );
 	} );
 
+	it( 'never reports a measurement that contradicts the verdict', () => {
+		// A nav link 170 wide and 23.6 tall really does fail. Rounding it to
+		// "170 by 24 pixels, needs to be 24 by 24" reads as a bug in the tool,
+		// and somebody goes looking for a width problem that is not there.
+		const doc = page( '<div><button>x</button></div>' );
+		size( doc.querySelector( 'button' ), 170, 23.6 );
+
+		const found = checkTargetSize( doc, window );
+
+		expect( found ).toHaveLength( 1 );
+		expect( found[ 0 ].message ).toMatch( /170 by 23\.6 pixels/ );
+		expect( found[ 0 ].message ).toMatch( /24 tall enough/ );
+		expect( found[ 0 ].message ).not.toMatch( /24 wide/ );
+	} );
+
 	it( 'accepts a control that is big enough', () => {
 		const doc = page( '<div><button>ok</button></div>' );
 		size( doc.querySelector( 'button' ), 44, 44 );

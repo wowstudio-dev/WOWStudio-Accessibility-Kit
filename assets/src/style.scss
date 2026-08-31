@@ -893,6 +893,137 @@
 	box-shadow: var(--wsak-shadow-lift);
 }
 
+/* CSS fix review ----------------------------------------------------------- */
+
+.wsak-css-fix {
+	margin-top: 8px;
+}
+
+.wsak-css-fix__review {
+	padding: 12px 13px;
+	border: 1px solid var(--wsak-line);
+	border-radius: var(--wsak-radius-sm);
+	background: var(--wsak-raised);
+}
+
+.wsak-css-fix__summary {
+	margin: 0 0 10px;
+	max-width: 70ch;
+	font-size: 13px;
+	color: var(--wsak-text);
+}
+
+.wsak-css-fix__swatches {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px;
+	margin-bottom: 10px;
+}
+
+.wsak-css-fix__swatch {
+	flex: 1 1 130px;
+	padding: 9px 10px;
+	border: 1px solid var(--wsak-line);
+	border-radius: var(--wsak-radius-sm);
+	background: var(--wsak-surface);
+}
+
+.wsak-css-fix__swatch-label {
+	display: block;
+	font-size: 11px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	color: var(--wsak-muted);
+}
+
+.wsak-css-fix__swatch-value {
+	display: flex;
+	align-items: center;
+	gap: 7px;
+	margin: 4px 0 2px;
+	font-size: 12.5px;
+}
+
+/* The swatch is decoration over a written value, never the value itself: a
+   colour shown only as a colour says nothing to a reader who cannot see it,
+   which would be an odd thing to get wrong on this screen in particular. */
+.wsak-css-fix__chip {
+	width: 18px;
+	height: 18px;
+	flex: 0 0 auto;
+	border: 1px solid var(--wsak-line-strong);
+	border-radius: 5px;
+}
+
+.wsak-css-fix__swatch-ratio {
+	font-size: 12px;
+	color: var(--wsak-muted);
+}
+
+.wsak-css-fix__sizes {
+	margin: 0 0 10px;
+	font-size: 13px;
+}
+
+.wsak-css-fix__radius {
+	margin: 6px 0 0;
+	max-width: 70ch;
+	font-size: 12.5px;
+	color: var(--wsak-muted);
+}
+
+/* The blast radius is the thing most likely to be skimmed and most expensive
+   to get wrong, so the warning carries weight and a rule of its own rather
+   than relying on the text colour to do the work. */
+.wsak-css-fix__radius.is-warning {
+	padding: 8px 10px;
+	border-left: 3px solid var(--wsak-moderate);
+	border-radius: 0 var(--wsak-radius-sm) var(--wsak-radius-sm) 0;
+	background: var(--wsak-moderate-bg);
+	color: var(--wsak-moderate);
+	font-weight: 500;
+}
+
+.wsak-css-fix__title {
+	margin: 14px 0 6px;
+	font-size: 12px;
+	font-weight: 600;
+	text-transform: uppercase;
+	letter-spacing: 0.04em;
+	color: var(--wsak-muted);
+}
+
+.wsak-css-fix__code {
+	margin: 0 0 10px;
+	padding: 11px 13px;
+	overflow-x: auto;
+	background: var(--wsak-ink);
+	color: #e9e6fb;
+	border-radius: var(--wsak-radius-sm);
+	font-size: 12px;
+	line-height: 1.55;
+	white-space: pre;
+}
+
+.wsak-css-fix__note {
+	margin: 0 0 12px;
+	max-width: 70ch;
+	font-size: 12.5px;
+	color: var(--wsak-muted);
+}
+
+.wsak-css-fix__actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+
+.wsak-css-fix__applied p {
+	margin: 8px 0;
+	font-size: 13px;
+}
+
 /* Footer ------------------------------------------------------------------- */
 
 .wsak__footer {

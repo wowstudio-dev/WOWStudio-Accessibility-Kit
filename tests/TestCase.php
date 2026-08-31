@@ -35,6 +35,19 @@ abstract class TestCase extends PHPUnitTestCase {
 	}
 
 	/**
+	 * Asserts that a call refused, and hands back the refusal to inspect.
+	 *
+	 * @param mixed  $result  Whatever the call returned.
+	 * @param string $message Optional failure message.
+	 * @return \WP_Error The refusal.
+	 */
+	protected function assertWPError( $result, string $message = '' ): \WP_Error {
+		$this->assertInstanceOf( \WP_Error::class, $result, $message );
+
+		return $result;
+	}
+
+	/**
 	 * Tears Brain Monkey down.
 	 *
 	 * @return void
