@@ -517,7 +517,9 @@
 .wsak-alt > *:last-child,
 .wsak-fix > *:last-child,
 .wsak-fix__review > *:last-child,
-.wsak-css-fix__review > *:last-child {
+.wsak-css-fix__review > *:last-child,
+.wsak-settings > *:last-child,
+.wsak-statement-panel > *:last-child {
 	margin-bottom: 0;
 }
 
@@ -775,6 +777,38 @@
 	border-radius: 3px;
 }
 
+/* Form controls ------------------------------------------------------------ */
+
+/*
+ * Every control in this interface passes `__nextHasNoMarginBottom`, which is
+ * the right call: it tells WordPress that the author owns the spacing rather
+ * than inheriting a legacy default. Nothing then claimed it. The result was
+ * nine fields in the statement panel sitting flush against the label of the
+ * field below — eight pixels from a label down to its own control, and zero
+ * from that control down to the next label.
+ *
+ * Which is worse than untidy. Proximity is how a reader decides which label
+ * goes with which field, and at a zero gap it says the wrong thing: the label
+ * looks like it belongs to the field above it. On a form whose answers are
+ * published as a statement about your own accessibility, filling in the wrong
+ * box is not a cosmetic problem.
+ *
+ * So the ratio is the fix rather than the number: eight pixels from a label to
+ * its field, twenty from one control to the next. Two and a half times the gap
+ * leaves no question about which belongs to which.
+ *
+ * Scoped to the whole app rather than the settings panels, because every place
+ * we render a control passes the same flag and inherits the same problem.
+ */
+.wsak .components-base-control {
+	margin-bottom: var(--wsak-space-5);
+}
+
+.wsak-settings .components-notice,
+.wsak-statement-panel .components-notice {
+	margin: 0 0 var(--wsak-space-5);
+}
+
 /* Settings ----------------------------------------------------------------- */
 
 .wsak-settings__subtitle {
@@ -787,6 +821,7 @@
 .wsak-settings__lede,
 .wsak-settings__privacy,
 .wsak-settings__usage {
+	margin: 0 0 var(--wsak-space-5);
 	max-width: 72ch;
 	color: var(--wsak-muted);
 	font-size: 13.5px;
@@ -800,7 +835,7 @@
 }
 
 .wsak-settings__keylink {
-	margin: var(--wsak-space-2) 0 0;
+	margin: var(--wsak-space-3) 0 0;
 	font-size: 12.5px;
 }
 
