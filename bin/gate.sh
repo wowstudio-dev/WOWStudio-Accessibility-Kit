@@ -36,6 +36,26 @@ php_in_container() {
 	docker run --rm -v "${ROOT}":/app -w /app php:8.1-cli php "$@"
 }
 
+# Regenerates the translation template and reports whether it changed.
+#
+# Every user-facing string has to be translatable, and the template is how that
+# is proved — so a template missing the strings added in a commit means the
+# feature shipped untranslatable and nobody was told. This is checked here
+# rather than only in CI because it is slow enough to be tempting to skip and
+# exactly the kind of thing that gets skipped: a run of new strings was pushed
+# without it, and CI caught what this should have.
+pot_is_current() {
+	npm run makepot || return 1
+
+	# Compared against HEAD rather than the index, so a regenerated template
+	# that was staged but never committed still counts as stale — which is what
+	# CI sees when it checks out the commit.
+	git diff HEAD --quiet -- languages/wowstudio-accessibility-kit.pot || {
+		echo "languages/*.pot is stale. It has been regenerated — commit it."
+		return 1
+	}
+}
+
 echo "Quality gate"
 step "PHPCS"              php_in_container vendor/bin/phpcs -q --no-cache
 step "PHPStan"            php_in_container vendor/bin/phpstan analyse --memory-limit=1G --no-progress
@@ -47,6 +67,7 @@ step "Contrast guard"     node bin/check-contrast.js
 step "JavaScript lint"    npm run lint:js
 step "Stylesheet lint"    npm run lint:css
 step "JavaScript tests"   npm run test:js
+step "Translations"       pot_is_current
 
 rm -f /tmp/wsak-gate.log
 
@@ -55,4 +76,4 @@ if [ ${#FAILED[@]} -gt 0 ]; then
 	exit 1
 fi
 
-printf '\nGATE PASSED — all 10 steps.\n'
+printf '\nGATE PASSED — all 11 steps.\n'

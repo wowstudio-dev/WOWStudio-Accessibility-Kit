@@ -2,7 +2,7 @@
 # This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: WOWStudio Accessibility Kit 0.9.0\n"
+"Project-Id-Version: WOWStudio Accessibility Kit 0.11.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wowstudio-accessibility-kit\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -338,9 +338,50 @@ msgstr ""
 msgid "The Accessibility Kit interface has not been built. Run \"npm install && npm run build\" in the plugin directory."
 msgstr ""
 
+#: src/Remediation/CssFixManager.php:86
 #: src/Remediation/FixManager.php:146
 #: src/Remediation/FixManager.php:238
 msgid "That issue could not be found."
+msgstr ""
+
+#: src/Remediation/CssFixManager.php:98
+msgid "This finding came from reading your markup, not from the page, so it is fixed by correcting the markup rather than by adding a style rule."
+msgstr ""
+
+#: src/Remediation/CssFixManager.php:106
+msgid "There is no style rule that would answer this finding."
+msgstr ""
+
+#: src/Remediation/CssFixManager.php:116
+msgid "That selector cannot be written into a stylesheet safely. Use element, class, id and attribute selectors only."
+msgstr ""
+
+#: src/Remediation/CssFixManager.php:132
+msgid "The rule could not be saved to your Additional CSS."
+msgstr ""
+
+#: src/Remediation/CssFixManager.php:170
+msgid "There is no rule stored for that finding. It may already have been removed, or edited by hand in the Customiser."
+msgstr ""
+
+#: src/Remediation/CssFixManager.php:178
+msgid "The rule could not be removed from your Additional CSS."
+msgstr ""
+
+#. translators: 1: CSS property name, 2: accessibility rule name.
+#: src/Remediation/CssFixManager.php:225
+#, php-format
+msgid "A fix for %2$s is not allowed to set %1$s."
+msgstr ""
+
+#. translators: %s: CSS property name.
+#: src/Remediation/CssFixManager.php:240
+#, php-format
+msgid "The value given for %s is not one WordPress will store in a stylesheet."
+msgstr ""
+
+#: src/Remediation/CssFixManager.php:253
+msgid "The fix contained no declarations, so there was nothing to write."
 msgstr ""
 
 #: src/Remediation/FixManager.php:162
@@ -404,6 +445,7 @@ msgid "You do not have permission to change accessibility settings."
 msgstr ""
 
 #: src/Rest/AiController.php:164
+#: src/Rest/CssFixController.php:123
 #: src/Rest/FixController.php:144
 msgid "You do not have permission to apply accessibility fixes."
 msgstr ""
@@ -430,6 +472,18 @@ msgstr ""
 
 #: src/Rest/AiController.php:324
 msgid "You do not have permission to edit that image."
+msgstr ""
+
+#: src/Rest/CssFixController.php:68
+msgid "The selector the rule applies to. Checked again before it is written."
+msgstr ""
+
+#: src/Rest/CssFixController.php:73
+msgid "Property and value pairs, restricted to what the finding is about."
+msgstr ""
+
+#: src/Rest/CssFixController.php:131
+msgid "Applying this kind of fix edits your site's Additional CSS, which your account is not allowed to change. An administrator can apply it, or make the change in Appearance → Customise."
 msgstr ""
 
 #: src/Rest/FixController.php:84
@@ -1139,6 +1193,123 @@ msgstr ""
 msgid "WCAG %s"
 msgstr ""
 
+#: assets/src/components/css-fix-action.js:74
+msgid "That selector will not parse, so nothing can be counted and nothing can be applied."
+msgstr ""
+
+#: assets/src/components/css-fix-action.js:86
+msgid "This selector matches nothing on this page. Applying it would write a rule that does nothing."
+msgstr ""
+
+#. translators: %d: number of matching elements.
+#: assets/src/components/css-fix-action.js:92
+#, js-format
+msgid "Matches %d element on this page — and every element it matches on pages that have not been scanned."
+msgid_plural "Matches %d elements on this page — and every element they match on pages that have not been scanned."
+msgstr[0] ""
+msgstr[1] ""
+
+#: assets/src/components/css-fix-action.js:103
+msgid "This element has no id or usable class, so the selector describes where it sits in the page. It will stop matching the next time the content around it changes. A class added in your theme would make a better anchor."
+msgstr ""
+
+#: assets/src/components/css-fix-action.js:174
+msgid "This element sits too deep in the page to name reliably, so no rule is offered for it. It needs a class in your theme before a stylesheet can reach it."
+msgstr ""
+
+#: assets/src/components/css-fix-action.js:189
+msgid "A style rule has been proposed. Review the selector and what it will affect before applying it."
+msgstr ""
+
+#: assets/src/components/css-fix-action.js:206
+msgid "Rule written. Reloading the page to measure whether it took effect."
+msgstr ""
+
+#: assets/src/components/css-fix-action.js:230
+msgid "Rule written. It could not be measured again automatically."
+msgstr ""
+
+#: assets/src/components/css-fix-action.js:251
+msgid "Rule removed from your Additional CSS."
+msgstr ""
+
+#: assets/src/components/css-fix-action.js:283
+msgid "Suggest a style fix"
+msgstr ""
+
+#: assets/src/components/css-fix-action.js:299
+msgid "Now"
+msgstr ""
+
+#: assets/src/components/css-fix-action.js:309
+msgid "Proposed"
+msgstr ""
+
+#. translators: 1: current size, 2: size after the fix.
+#: assets/src/components/css-fix-action.js:325
+#, js-format
+msgid "Now %1$s, at least %2$s after the fix."
+msgstr ""
+
+#: assets/src/components/css-fix-action.js:337
+msgid "Selector this rule applies to"
+msgstr ""
+
+#: assets/src/components/css-fix-action.js:341
+msgid "Edit this to widen or narrow what the rule reaches. Broader is often right: a colour that is wrong here is usually wrong everywhere that class is used."
+msgstr ""
+
+#: assets/src/components/css-fix-action.js:352
+msgid "What would be added to your Additional CSS"
+msgstr ""
+
+#: assets/src/components/css-fix-action.js:361
+msgid "Proposed style rule"
+msgstr ""
+
+#. translators: %s: the active theme's name.
+#: assets/src/components/css-fix-action.js:374
+#, js-format
+msgid "This goes into Appearance → Customise → Additional CSS, where you can read, edit or delete it without this plugin. WordPress stores that per theme, so it belongs to %s and will stop applying if you switch themes."
+msgstr ""
+
+#: assets/src/components/css-fix-action.js:392
+msgid "Apply this rule"
+msgstr ""
+
+#: assets/src/components/css-fix-action.js:404
+#: assets/src/components/fix-action.js:235
+msgid "Discard"
+msgstr ""
+
+#: assets/src/components/css-fix-action.js:412
+msgid "Reloading the page and measuring again…"
+msgstr ""
+
+#: assets/src/components/css-fix-action.js:421
+msgid "Removing…"
+msgstr ""
+
+#: assets/src/components/css-fix-action.js:434
+msgid "Applied, and it took effect."
+msgstr ""
+
+#: assets/src/components/css-fix-action.js:438
+msgid "Applied, but it did not take effect."
+msgstr ""
+
+#: assets/src/components/css-fix-action.js:446
+msgid "Something in your theme is more specific than this rule. Narrowing the selector to the element itself usually wins."
+msgstr ""
+
+#: assets/src/components/css-fix-action.js:455
+msgid "A rule for this finding is in your Additional CSS."
+msgstr ""
+
+#: assets/src/components/css-fix-action.js:463
+msgid "Remove this rule"
+msgstr ""
+
 #: assets/src/components/fix-action.js:27
 msgid "What would change"
 msgstr ""
@@ -1191,10 +1362,6 @@ msgstr ""
 msgid "Suggest another"
 msgstr ""
 
-#: assets/src/components/fix-action.js:235
-msgid "Discard"
-msgstr ""
-
 #: assets/src/components/fix-action.js:243
 msgid "Undoing…"
 msgstr ""
@@ -1207,78 +1374,78 @@ msgstr ""
 msgid "Undo this fix"
 msgstr ""
 
-#: assets/src/components/inspector.js:56
+#: assets/src/components/inspector.js:57
 msgid "This one is about the page as a whole rather than one spot on it, so there is nowhere in particular to point."
 msgstr ""
 
-#: assets/src/components/inspector.js:61
+#: assets/src/components/inspector.js:62
 msgid "This element is not in the page any more. It may have been edited since the scan, or it may only appear for some visitors."
 msgstr ""
 
-#: assets/src/components/inspector.js:66
+#: assets/src/components/inspector.js:67
 msgid "The page has changed shape since the scan, so we cannot be sure which element this refers to. Rather than point at the wrong one, we are pointing at none. Re-scan to place it again."
 msgstr ""
 
-#: assets/src/components/inspector.js:71
+#: assets/src/components/inspector.js:72
 msgid "This element is in the page but is not being displayed, so there is nothing to point at."
 msgstr ""
 
-#: assets/src/components/inspector.js:157
-#: assets/src/components/inspector.js:283
+#: assets/src/components/inspector.js:193
+#: assets/src/components/inspector.js:382
 msgid "Checking colour, size and layout on the page…"
 msgstr ""
 
 #. translators: %d: number of additional findings.
-#: assets/src/components/inspector.js:176
+#: assets/src/components/inspector.js:212
 #, js-format
 msgid "Page checks finished. %d further findings."
 msgstr ""
 
 #. translators: %s: name of the accessibility check.
-#: assets/src/components/inspector.js:230
+#: assets/src/components/inspector.js:272
 #, js-format
 msgid "Showing: %s"
 msgstr ""
 
-#: assets/src/components/inspector.js:239
+#: assets/src/components/inspector.js:338
 msgid "This content has no public address, so it cannot be shown here. The findings below still apply."
 msgstr ""
 
 #. translators: %s: content title.
-#: assets/src/components/inspector.js:257
+#: assets/src/components/inspector.js:356
 #, js-format
 msgid "Inspecting “%s”"
 msgstr ""
 
-#: assets/src/components/inspector.js:263
+#: assets/src/components/inspector.js:362
 msgid "Inspecting"
 msgstr ""
 
-#: assets/src/components/inspector.js:267
+#: assets/src/components/inspector.js:366
 msgid "Back to results"
 msgstr ""
 
-#: assets/src/components/inspector.js:297
+#: assets/src/components/inspector.js:396
 msgid "Choose a finding to see it on the page. Moving through this list with the keyboard works the same way."
 msgstr ""
 
-#: assets/src/components/inspector.js:305
+#: assets/src/components/inspector.js:404
 msgid "This scan read only your content, not the whole page, so findings from the markup cannot be pointed at here. Anything found on the page itself — colour, size, layout — still can be."
 msgstr ""
 
-#: assets/src/components/inspector.js:397
-msgid "This one is about how the page is styled rather than how it is written, so there is no markup to rewrite. It has to be changed in your theme or customiser."
+#: assets/src/components/inspector.js:518
+msgid "This one is about how the page is styled. Fixing it writes a rule into your site’s Additional CSS, which your account is not allowed to change — an administrator can apply it, or make the change in Appearance → Customise."
 msgstr ""
 
-#: assets/src/components/inspector.js:414
+#: assets/src/components/inspector.js:535
 msgid "Your page would not open here."
 msgstr ""
 
-#: assets/src/components/inspector.js:419
+#: assets/src/components/inspector.js:540
 msgid "Some sites refuse to be shown inside another page, which is a reasonable security setting and not a fault. Findings from the markup are still listed, but nothing that depends on seeing the page — colour, text size, layout — was checked on this scan."
 msgstr ""
 
-#: assets/src/components/inspector.js:430
+#: assets/src/components/inspector.js:551
 msgid "Preview of the page being inspected"
 msgstr ""
 
@@ -1544,6 +1711,56 @@ msgstr ""
 
 #: assets/src/components/states.js:23
 msgid "Loading…"
+msgstr ""
+
+#: assets/src/scanner/repair.js:60
+msgid "This one needs tabindex=\"0\" and a label on the scrolling container. Those are attributes in the markup, and no stylesheet can add them — it has to be changed in your theme or the block that produced it."
+msgstr ""
+
+#: assets/src/scanner/repair.js:65
+msgid "This one needs either aria-hidden removed or the control taken out of the tab order. Both are attributes in the markup, which a stylesheet cannot change — it has to be done in your theme or the block that produced it."
+msgstr ""
+
+#: assets/src/scanner/repair.js:70
+msgid "There is no style rule that would answer this one. It has to be changed where the markup is produced."
+msgstr ""
+
+#. translators: 1: current contrast ratio, 2: proposed contrast ratio.
+#: assets/src/scanner/repair.js:123
+#, js-format
+msgid "Darkens or lightens the text just enough to clear the threshold: %1$s becomes %2$s. The hue and saturation you chose are kept exactly."
+msgstr ""
+
+#: assets/src/scanner/repair.js:144
+msgid "Underlines the link, so it is recognisable as one without depending on telling two colours apart."
+msgstr ""
+
+#: assets/src/scanner/repair.js:194
+msgid "Gives the control a floor of 24 by 24 pixels. It also switches it to inline-block, because a browser ignores a minimum size on a plain inline element — without that the rule would apply and change nothing."
+msgstr ""
+
+#: assets/src/scanner/repair.js:198
+msgid "Gives the control a floor of 24 by 24 pixels, so it stays hittable for anyone whose aim is not exact. It can still grow past that."
+msgstr ""
+
+#. translators: 1: measured contrast ratio, 2: required ratio.
+#: assets/src/scanner/repair.js:281
+#, js-format
+msgid "Measured again on the page: %1$s, against the %2$s required."
+msgstr ""
+
+#. translators: %s: measured size, such as "24 × 24px".
+#: assets/src/scanner/repair.js:300
+#, js-format
+msgid "Measured again on the page: %s."
+msgstr ""
+
+#: assets/src/scanner/repair.js:319
+msgid "The link is underlined on the page now."
+msgstr ""
+
+#: assets/src/scanner/repair.js:323
+msgid "The link is still not underlined on the page, so something in your theme is overriding the rule."
 msgstr ""
 
 #: assets/src/blocks/statement/block.json
