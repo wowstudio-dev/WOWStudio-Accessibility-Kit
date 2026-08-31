@@ -155,9 +155,20 @@
 
 ## Tier boundary (mapped to Freemius plans)
 
-**Free plan (WordPress.org, the funnel):** AI alt-text (BYOK, capped), single-page WCAG 2.2 scan, in-editor checks, basic dashboard & score, accessibility-statement generator, manual checklists + contrast checker, one-at-a-time AI fixes (capped).
+*Revised 2026-08-31 — see Phase 3, decision F1. The line is scale, not
+capability: **the free tier fixes a page, the paid tier fixes a site and keeps
+it fixed.***
 
-**Pro plan (Freemius):** full-site + scheduled + bulk scanning, full AI remediation engine, Media SEO, monitoring/alerts/trends, conformance report + evidence log, WooCommerce at scale, WP-CLI + Abilities API, priority support.
+**Free plan (WordPress.org, the funnel):** unlimited single-page scanning from
+the dashboard and from the editor; the full inspector — live preview, hover
+placement, both scanning passes, every check; deterministic auto-fixes on one
+page; AI fixes and alt text one at a time under the daily cap; CSS fixes one page
+at a time; the accessibility-statement generator; the coverage panel.
+
+**Pro plan (Freemius):** bulk scanning by post type, the bulk review queue,
+deterministic fixes applied across a site, uncapped and bulk alt text, scheduled
+re-scans, monitoring/alerts/trends, history and export, conformance report +
+evidence log, WooCommerce at scale, WP-CLI + Abilities API, priority support.
 
 **Agency plan (Freemius, Phase 3):** multisite, white-label client reports, roles/permissions, cross-site management, unlimited sites.
 
@@ -167,9 +178,19 @@
 
 **Phase 1 — MVP / launch (the wedge):** AI alt-text (Free) + single-page WCAG 2.2 scanner + issue list with auto/manual honesty tags + one-at-a-time AI fix + basic dashboard + accessibility-statement generator + Freemius Free/Pro scaffold. Ships the funnel and proves the AI-remediation angle.
 
-**Phase 2 — monetize:** full-site & scheduled scanning, bulk AI remediation, Media SEO, monitoring + alerts, conformance-report draft + evidence log, client-side axe-core contrast pass.
+**Phase 2 — see the page, not just the markup** *(built):* a browser pass of our
+own for the render-dependent checks, the inspector that shows a finding on the
+page it came from, and CSS remediation written into the site's own Additional
+CSS and verified by re-measuring. Steps 1 and 2 above.
 
-**Phase 3 — expand & defend:** WooCommerce depth, agency/multisite + white-label, WP-CLI + Abilities API, simulators & focus visualizer, extra page-builder integrations.
+**Phase 3 — from one page to a whole site:** the queue, bulk scanning by post
+type, bulk alt text with a review screen, checks inside the editor, fixes that
+write to the content, theme triage, and the plain-language layer that makes any
+of it readable by the people who run the site. Full record below.
+
+**Phase 4 — expand & defend:** WooCommerce depth, agency/multisite + white-label,
+WP-CLI + Abilities API, simulators & focus visualizer, extra page-builder
+integrations.
 
 ---
 
@@ -180,6 +201,7 @@
 - ❌ No auto-published conformance report asserting a level without human attestation.
 - ❌ No storing/transmitting user content to AI beyond what a fix requires, without disclosure.
 - ❌ No premium code shipped in the free WordPress.org zip (enforced by Freemius stripping).
+- ❌ No buffering and rewriting the whole front-end page at runtime. See Phase 3, decision F6: it would "fix" far more than a filter can reach, and it is the accessiBe pattern wearing our clothes.
 
 ---
 
@@ -198,7 +220,7 @@
 
 ## Scanning engine approach *(resolves open decision #1)*
 - **MVP = PHP server-side static analysis** with `DOMDocument` / `DOMXPath` over rendered post/page HTML. Covers the machine-detectable subset that does **not** need CSS rendering: missing/empty `alt`, unlabeled form controls, empty/undescriptive links & buttons, heading order + multiple `H1`, missing landmarks, `lang` attribute, document `title`, table headers/scope, basic ARIA misuse. Zero per-scan cost, no headless browser.
-- **Contrast & CSS-dependent checks** can't be done reliably server-side → **Phase 2** optional **client-side axe-core** pass run in the admin against the live page. Do **not** bundle a headless browser. Fully specified below.
+- **Contrast & CSS-dependent checks** can't be done reliably server-side → a **browser pass of our own**, run in the admin against the live page in the inspector's frame. Do **not** bundle a headless browser, and do **not** bundle axe-core — see Phase 2 step 1, decision D1, which reversed the original plan. Fully specified below.
 - Keep rules in a registry (id → WCAG SC → severity → detector → `auto|manual` flag) so new rules and per-rule overrides are trivial.
 
 ### How the competition does it *(measured, 2026-08-30)*
@@ -633,9 +655,236 @@ template goes and does it.
 | Specificity losing to the theme | Verify by re-measuring after applying, and report honestly when the rule did not take effect rather than claiming success. |
 | Fixes silently stopping on a theme switch | Stated in the interface; a theme switch prompts a re-scan. |
 
+## Phase 3 — from one page to a whole site *(and from "found" to "fixed")*
+
+**Goal:** the plugin stops being a thing you point at one page at a time. Bulk
+scanning, bulk alt text, checks inside the editor, and fixes that write to the
+content rather than filtering it on the way out.
+
+**Why now:** everything in Phases 1 and 2 improved what happens on *one* page.
+A real site has hundreds. The plugin currently has no queue, no bulk anything,
+no editor integration, and one entry point — pick a page, scan it, read a list
+of WCAG success criteria. That serves a developer auditing a page. It does not
+serve the person who runs the site, which is who most of them are.
+
+### Decisions
+
+**F1 — The free tier fixes a page. The paid tier fixes a site.**
+
+The line is scale and repetition, not capability. Everything about *one* page is
+free, including the inspector; bulk, scheduling and history are paid.
+
+The tempting alternative was to put the in-editor inspector behind Pro, since it
+is the most impressive thing here. That is the wrong wall, for the reason
+already recorded in E8: detection is table stakes, and the free competitor has
+it. A free tier that scans a page and then will not show you where the problem
+is would be weaker than the free plugin we are competing against, at the thing
+that category is known for.
+
+It is also our best acquisition surface. The inspector lives where the user
+already works, it creates the habit, and it is where "oh, *that* is what is
+wrong" happens. Charging for it means nobody meets the product's best idea
+before paying.
+
+So: **one page, everything. Many pages, and keeping them that way, is Pro.**
+It states in one sentence, it needs nothing crippled, and it maps cleanly onto
+what actually costs us something to run.
+
+**F2 — Bulk work goes through Action Scheduler, or it does not ship.**
+
+Action Scheduler is currently a dependency in name only: it is named in
+CLAUDE.md and absent from `composer.json`. Every scan today runs synchronously
+inside one admin request.
+
+Ten pages is ten loopback HTTP fetches in a single request, and bulk alt text is
+worse — every image is a multi-second call to a vision model. On shared hosting
+that times out part-way through, leaving a half-finished scan, no record of
+where it stopped, and no way to resume. This is the largest piece of work in the
+phase, it is invisible in the interface, and everything else depends on it, so
+it goes first.
+
+The queue owes the interface four things, all of which have to be real rather
+than animated: progress, resume after a timeout, cancel, and a visible account
+of anything that failed.
+
+**F3 — "Auto fix" means deterministic. Anything a model wrote gets reviewed.**
+
+The instinct behind "user clicks auto fix and the plugin fixes it" is right, and
+it collides with product rule #3 only because one phrase is covering two
+different kinds of change:
+
+| | Deterministic | Generative |
+| --- | --- | --- |
+| Examples | `lang` on `<html>`, a missing `<title>`, `tabindex="0"` on a scroll region, an underline on a link, a 24px minimum target | alt text, button names, link text |
+| Produced by | a rule; there is one right answer | a model; it is a guess |
+| Review before applying | not needed | always |
+
+Roughly half of the current checks have a deterministic answer. Those get a real
+one-click fix — no modal, no diff, batch-applicable — because there is nothing
+to judge. `lang="en"` is either present or it is not.
+
+The generative half can still be *bulk* without being *unreviewed*: generate for
+forty items in the background, then show one **review queue** — a grid of
+suggestions, editable, approve all or amend individually. One screen and one
+click for the user, and a person still read every string. It is also a far
+better interface than forty modals.
+
+Each rule therefore declares which kind it is. A rule with no deterministic fix
+never grows an auto-fix button, and no amount of interface work can give it one.
+
+**F4 — A bulk scan is a partial scan, and the badge has to say which.**
+
+The browser pass needs a rendered page in a frame. It cannot run in a background
+job, so anything scanned in bulk is server-pass only: no contrast, no target
+size, no colour-only links.
+
+A badge reading "Scanned ✓ 12 Feb" after such a run would be a lie by omission.
+Somebody bulk-scans, sees no contrast findings, and concludes they have none —
+which is the exact failure this product exists not to commit.
+
+So the badge has two states, and the difference is stated plainly:
+
+- **Content checked** — the markup pass ran. Colour, size and layout were not
+  looked at.
+- **Fully checked** — somebody opened this page in the inspector and the browser
+  pass ran too.
+
+The honest version is also the useful one: it gives people a reason to open
+pages individually, which is where the product is at its best.
+
+**F5 — In the editor, check the block tree. Do not render a preview.**
+
+A button in the editor is the right idea. An iframe of a preview URL is the
+wrong way to serve it: unsaved drafts need a preview nonce, the request has to
+go out and come back, and loopback is exactly what fails on the hosts that need
+us most.
+
+Inside the block editor the content is already in the browser, structured, in
+`core/block-editor`. We can check it as the user types — no HTTP request, no
+loopback, no preview URL — and point at the offending block.
+
+That changes what "fix" means, and for the better. Setting `alt` on an image
+block writes to the **actual post content**, not to an override layer. It is a
+genuine source fix, it is instant, and it is undoable with the editor's own
+undo, because it is just another editor change. This is the first place the
+plugin does real remediation rather than reversible interception.
+
+Classic editor and page builders still need the framed-preview route. Gutenberg
+does not, and pretending otherwise would make the common case worse to serve the
+rare one.
+
+**F6 — Theme problems get three different answers, and one refusal.**
+
+Most accessibility failures on a real WordPress site are not in the post
+content. They are in the theme: navigation, header, footer, search form, social
+icons. On our own proving ground, fourteen of nineteen findings were theme
+navigation. A policy of "fix pages and posts only" is correct and, left there,
+means finding three hundred problems and fixing twenty.
+
+The refusal first, because it is the tempting shortcut. **We will not buffer the
+front-end page and rewrite it.** `ob_start()` on `template_redirect`, parse,
+patch, flush would reach everything — and it would put a DOM parse in front of
+every visitor on every request, and turn the plugin into something that silently
+rewrites what visitors receive at runtime. That is the accessiBe pattern with
+better intentions, and rule #2 exists to prevent exactly it.
+
+What we do instead, decided by what the problem actually is:
+
+1. **It is a setting, not code.** A logo with no alt, a menu item with a useless
+   label, a widget title. Deep-link to the exact screen with the exact
+   instruction. Best outcome available: permanent, no code, and a non-technical
+   user can do it unaided.
+2. **A core filter genuinely reaches it.** `wp_nav_menu_items`,
+   `get_search_form`, `post_thumbnail_html`, and their neighbours. Narrow,
+   named, reversible — the same shape as today's content overrides. No general
+   page rewriting hides in this tier.
+3. **It is hardcoded in a template.** No filter exists and none should be
+   invented. Hand it off: the corrected snippet, the template it lives in where
+   we can tell, and an export for whoever maintains the theme.
+
+Tier 1 is the one most likely to be underrated. For the audience this phase is
+for, "go to Appearance → Menus and rename this item" beats any override we could
+write.
+
+**F7 — Alt text in the media library is a real fix, and the one bulk write that
+is unambiguously safe.**
+
+Writing `_wp_attachment_image_alt` is not an override and not an interception.
+It sets the alt text on the attachment, so it applies everywhere that image is
+used, on every page, under any theme, and it survives uninstalling this plugin.
+
+That makes bulk alt text the highest-leverage thing in the product: it is
+theme-independent, it is a genuine repair, and it is the one bulk operation
+where applying at scale carries no risk of being wrong about *where* the change
+lands. It still goes through the F3 review queue, because what the model wrote
+is still a guess about the image.
+
+**F8 — Plain language is a feature in this phase, not a copy pass at the end.**
+
+Every item above is about *where* scanning happens. None of them is about
+whether the result can be understood, which is the actual goal. Scanning in bulk
+without this just delivers "Heading level is skipped · WCAG 1.3.1 · Moderate"
+next to an XPath, faster and in larger quantities.
+
+Three parts, and they are build work rather than wording:
+
+- **A plain title and a plain consequence for every rule.** "Screen readers
+  announce this image as `IMG_4021.jpg`" earns its place; "img-alt-missing" does
+  not. The success criterion stays, one level down, for the people who want it.
+- **An order that means something.** Findings sorted by what to do first —
+  cheapest real improvement at the top — rather than by severity enum. Severity
+  answers "how bad"; it never answers "what now".
+- **Visible progress.** How many pages are checked, how many findings closed,
+  what changed since last time. Without it there is no way to feel that any of
+  this is working.
+
+This lands before the three new surfaces are built, not after. Bulk results, the
+review queue and the editor panel all render findings, and changing how a
+finding presents itself after the fact means rewriting three interfaces.
+
+### Build order
+
+1. **Action Scheduler.** Add the dependency, model a job, and give the interface
+   progress, resume, cancel and a failure account. Nothing bulk exists until
+   this does. *(F2)*
+2. **Fix classification on the rule.** Every rule declares deterministic,
+   generative, or hand-off, and deterministic rules carry their fix. This is a
+   change to the rule model and it gates every auto-fix button in the phase.
+   *(F3)*
+3. **The plain-language layer.** Titles, consequences, do-this-first ordering,
+   progress. Before three new surfaces start rendering findings. *(F8)*
+4. **Bulk scan.** Post-type tabs, a selection list with a "first 10" shortcut,
+   queued execution, the two-state badge, and results grouped per page. Badges
+   are invalidated when a post is saved. *(F4)*
+5. **Fix actions in bulk results.** One-click for deterministic; review queue for
+   generative; mark as false positive with a note — `IssueStatus::Ignored`
+   already exists and needs the interface and the audit trail. *(F3)*
+6. **Bulk alt text.** Selection, queue, cost estimate before the run, review
+   queue, write to the media library. *(F7)*
+7. **Editor integration.** Block-tree checks as the user types; fixes written to
+   block attributes; framed preview only for the editors that need it. Can run in
+   parallel with 4–6 once 3 is done. *(F5)*
+8. **Theme triage.** The three tiers: setting deep-links, the named filters, the
+   developer hand-off and export. *(F6)*
+9. **Tier gating.** Apply F1 across the new surfaces, extend the free-build check
+   to cover them.
+
+### Risks
+
+| Risk | Handling |
+| --- | --- |
+| A bulk run times out and leaves the site in an unknown state | The queue owns resumption; a scan records where it stopped, and the interface says so rather than showing a stalled bar. |
+| Bulk alt text runs up somebody's provider bill | Estimate the cost of the selected run before it starts, and keep the daily cap enforced in the generation path rather than the interface. |
+| Users read "Scanned" as "fully checked" | Two badge states, worded as coverage rather than completion. *(F4)* |
+| Auto-fix applied at scale turns out to be wrong | Only deterministic fixes are ever applied unreviewed, and every applied fix stays revertible. |
+| Theme findings dominate the results and nothing can be fixed | The three-tier triage, and honest counts: how many are ours to fix, how many are settings, how many need a developer. |
+| Block-attribute writes corrupt a post | They go through the editor's own store, so they are ordinary undoable edits and are never written from a background job. |
+
+
 ## Open decisions (updated)
-1. **Scanning engine** — ✅ *Resolved and specified.* PHP DOM static analysis is the spine; a scoped client-side axe-core pass adds the render-dependent checks in Phase 2, step 1. Full decision record above. The one open sub-question is the axe-core licence sign-off, tracked in the release checklist.
-2. **Fix storage model** — 🟡 *Recommended:* override/filter layer first (safe, reversible); add optional write-to-source in Phase 2 with backups. *(confirm)*
+1. **Scanning engine** — ✅ *Resolved, specified and built.* PHP DOM static analysis is the spine; a browser pass we wrote ourselves adds the render-dependent checks. axe-core was considered and **rejected** — see Phase 2 step 1, decision D1 — so the licence sign-off that used to hang off this decision no longer exists.
+2. **Fix storage model** — ✅ *Resolved.* Three layers, each chosen by what the problem is rather than by preference: the reversible **override layer** for markup in post content; the site's own **Additional CSS** for anything caused by styling (E1); and **write-to-source** in the two places it is safe and honest — block attributes edited in the editor, where the user is present and the editor's own undo applies (F5), and `_wp_attachment_image_alt` in the media library, which is a real repair rather than an interception (F7). Whole-page output rewriting is refused outright (F6).
 3. **Monetization / licensing** — ✅ *Resolved:* **Freemius** now (Free on WordPress.org, Pro via Freemius). AI stays **BYOK** (cost ≈ 0, and it keeps you out of AI-data-processor liability). Managed AI credits deferred — could be sold later as a Freemius credit pack/add-on if BYOK friction hurts conversion.
-4. **Free alt-text cap** — 🟡 *Recommended:* Free = BYOK alt-text, single image + a small daily/volume cap; Pro = uncapped + full-library bulk queue. *(confirm the exact Free cap number)*
-5. **Agency tier** — ✅ *Deferred* to Phase 3 as a third Freemius plan.
+4. **Free alt-text cap** — ✅ *Resolved and built:* **20 images per day** on Free, enforced in the generation path through one filterable constant rather than in the interface. Pro is uncapped, with the bulk queue and review screen in Phase 3.
+5. **Agency tier** — ✅ *Deferred* to Phase 4 as a third Freemius plan.
+6. **Tier boundary** — ✅ *Resolved 2026-08-31:* the free tier fixes a page, the paid tier fixes a site and keeps it fixed. Full reasoning in Phase 3, decision F1, including why the in-editor inspector stays free.
