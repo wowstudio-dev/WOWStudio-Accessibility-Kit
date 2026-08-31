@@ -6,23 +6,6 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
-### Fixed
-
-- **Static analysis failed on a fresh checkout, including CI's first ever run.**
-  `Core\Assets` require()s `build/index.asset.php`. The runtime behaviour is
-  correct — the require is guarded by `file_exists()` and an admin notice
-  explains a missing build — but PHPStan resolves the path statically and errors
-  when the file is absent. `build/` is generated and gitignored, so it is absent
-  on any fresh clone; the check only ever passed locally because a build was
-  already sitting there. The `php` job now builds the admin bundle before
-  analysing, so PHPStan sees the plugin as it actually ships. Reproduced by
-  moving `build/` aside and confirming the same error, then confirming it clears
-  when the build is restored.
-
-  Worth knowing when reproducing this: PHPStan caches results, so a stale cache
-  reports the error after the build is back. `vendor/bin/phpstan
-  clear-result-cache` first.
-
 ### Still outstanding
 
 - Capped **bulk** alt-text generation. Single-image generation is complete and
@@ -30,6 +13,141 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   one request, which is exactly the kind of work CLAUDE.md says must go through
   Action Scheduler. Shipping a synchronous loop that times out halfway would be
   worse than not shipping it, so bulk lands with the queue.
+- Driving the redesigned admin in a real browser with a screen reader, and
+  testing with disabled users. The contrast guard checks 60 colour pairings on
+  every push, which is not the same thing as somebody using the interface.
+
+## [0.11.0] - 2026-08-31
+
+Phase 2, step 2: the browser pass stops being a pass that only reports. Plus the
+admin redesign.
+
+### Added
+
+- **CSS remediation for the findings an override cannot reach.** Three of the
+  five browser-pass rules can be answered by a style rule — contrast, links
+  marked by colour alone, and undersized targets — and now are. The inspector had
+  been finding these and then offering nothing but an explanation, which on a
+  representative page meant fourteen of nineteen findings were a dead end.
+
+  Rules go into WordPress's own Additional CSS rather than a stylesheet of ours.
+  That keeps the "nothing for visitors" line intact, and it puts the change
+  somewhere the site owner can read, edit or delete with or without this plugin
+  installed. A fix only we can undo is a fix that holds the site hostage.
+  Everything outside our marker block is preserved byte for byte.
+
+- **The selector is part of the review, because the blast radius is.** A markup
+  override touches one element in one post; a CSS rule touches everything it
+  matches, on every page, forever. So the proposal shows the selector, makes it
+  editable, counts what it matches in the live frame, and says plainly when it
+  had to fall back to a positional selector that will break as the content moves.
+  Preference order is id, then a single class, then position — biased towards the
+  class, because a colour that is wrong here is usually wrong everywhere that
+  class is used.
+
+- **Verification by re-measurement.** After a rule is applied the frame is
+  reloaded and the same measurement taken again, so "applied" and "it worked" are
+  reported as the different things they are. A rule can be written perfectly and
+  still lose to a more specific selector in the theme; that case now reads
+  "Applied, but it did not take effect" rather than being quietly counted as a
+  fix.
+
+- **Contrast proposals that a designer will keep.** `nearestAccessible()` moves
+  lightness only, keeping the hue and saturation somebody chose, and stops at the
+  first value that clears the threshold rather than reaching for black. Worth
+  recording: at the AA thresholds this always has an answer. Lightness 0 and 1
+  are black and white whatever the hue, and the worst background in the entire
+  colour space still leaves one of them at 4.58:1 — confirmed by brute force over
+  the space, not assumed.
+
+### Changed
+
+- Redesigned the admin screens around the WOWStudio mark. Every colour was
+  measured before it was given a job: the lavender at 2.08:1 is used for
+  gradients and never behind a word, the indigo at 6.65:1 carries actions and
+  links, the navy at 14.02:1 carries headings. The contrast guard grew from 52
+  pairings to 60, all passing.
+- Renamed the admin menu entry from "Accessibility" to "Accessibility Kit",
+  which said nothing about whose plugin it was and collided with every other
+  accessibility plugin in the menu.
+- The two browser-pass rules a stylesheet genuinely cannot answer — a scrolling
+  region with nothing focusable in it, and an `aria-hidden` element still in the
+  tab order — now explain themselves individually instead of sharing a generic
+  refusal. Both need an attribute added to the markup. A reader told a fix is
+  coming waits for it; a reader told to edit their template goes and does it.
+
+### Fixed
+
+- **A finding whose measurement contradicted its own verdict.** A navigation link
+  23.6 pixels tall was reported as "This control is 170 by 24 pixels. It needs to
+  be at least 24 by 24" — the message rounded and the comparison did not, so the
+  tool read as broken and sent people looking for a width problem that was not
+  there. The message now names the dimension that actually failed and keeps the
+  fraction that explains it.
+
+### Security
+
+- The declarations for a CSS fix arrive over REST from a page we do not control,
+  so nothing in the request is trusted to describe itself. Which rule is being
+  answered, which properties that rule may set, and what a selector may contain
+  are all decided server-side, and every value passes core's
+  `safecss_filter_attr` as well. Applying requires core's `edit_css` in addition
+  to `wsak_apply_fix`: this must never become a way to change site-wide CSS for
+  somebody who could not already do it by hand. Verified against the live
+  install by attacking it — a markup finding routed to the CSS endpoint, a
+  `position: fixed` smuggled into a contrast fix, and a selector carrying
+  `.a { } body { display: none }` were all refused with nothing written.
+
+## [0.10.0] - 2026-08-30
+
+Phase 2, step 1: the scanner learns to see the page, not just read it.
+
+### Added
+
+- **A second scanning pass that runs in the browser**, checking the things no
+  parser can know because they only exist once a page has been rendered: real
+  text contrast, real target sizes, links distinguished by colour alone,
+  scrollable regions no keyboard can reach, and elements hidden from screen
+  readers but still focusable.
+- **The inspector** — findings on the left, a live preview of the page on the
+  right, and choosing a finding highlights the element it is about. Selectors are
+  verified against the recorded markup before anything is highlighted: pointing
+  at the wrong element is worse than pointing at none, because it looks
+  authoritative and is silent when wrong.
+- Contrast that cannot be determined — text over a photograph, a gradient,
+  stacked translucency — is reported as needing a person, with the reason. A tool
+  that guesses there produces a confident pass on text that may be invisible.
+
+### Changed
+
+- The browser pass is our own implementation rather than axe-core. Two engines
+  reporting the same problem twice would be worse than useless to the person
+  reading the list, and every check we run has to be one we can explain in our
+  own words and stand behind in the coverage panel.
+- The quality gate now states a verdict per step instead of implying one. It was
+  possible to read a passing line above a failing one and conclude the run was
+  clean — which happened.
+
+### Fixed
+
+- **Moving across the findings list yanked the page around.** `scrollIntoView`
+  scrolls every scrollable ancestor, and the element lives in an iframe, so it
+  dragged the admin page underneath to bring the frame into view — made worse by
+  the preview pane being sticky. The frame now scrolls itself, only when the
+  element is actually out of sight, and only after the pointer has settled. A
+  regression test fails the build if `scrollIntoView` is ever called again.
+- **Static analysis failed on a fresh checkout, including CI's first ever run.**
+  `Core\Assets` require()s `build/index.asset.php`. The runtime behaviour is
+  correct — the require is guarded by `file_exists()` and an admin notice
+  explains a missing build — but PHPStan resolves the path statically and errors
+  when the file is absent. `build/` is generated and gitignored, so it is absent
+  on any fresh clone; the check only ever passed locally because a build was
+  already sitting there. The `php` job now builds the admin bundle before
+  analysing.
+
+  Worth knowing when reproducing this: PHPStan caches results, so a stale cache
+  reports the error after the build is back. `vendor/bin/phpstan
+  clear-result-cache` first.
 
 ## [0.9.0] - 2026-08-30
 

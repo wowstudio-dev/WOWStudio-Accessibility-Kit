@@ -4,7 +4,7 @@ Tags: accessibility, wcag, a11y, alt text, accessibility scanner
 Requires at least: 6.6
 Tested up to: 7.1
 Requires PHP: 8.1
-Stable tag: 0.9.0
+Stable tag: 0.11.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -18,9 +18,11 @@ It is not an accessibility overlay. Nothing is injected into your front end, and
 
 = How it works =
 
-* **Scan.** A server-side scan reads the rendered HTML of a page and checks it against a registry of WCAG rules. No external service is contacted to run a scan.
+* **Scan, twice.** A server-side scan reads the rendered HTML and checks it against a registry of WCAG rules. A second pass then runs in your browser, on the page as it was actually painted, to check the things no parser can know: real contrast, real target sizes, real layout. No external service is contacted for either.
+* **See it.** The inspector puts the findings beside a live preview of the page. Choosing a finding highlights the element it is about, so you are never left guessing which paragraph or which button.
 * **Understand.** Every issue is tagged with its WCAG success criterion and severity, and labelled either *auto-detected* or *needs manual review*.
-* **Fix.** Suggested fixes are shown as a preview and a diff. You approve each one. Applied fixes are stored in a reversible override layer and can be undone.
+* **Fix.** Suggested markup fixes are shown as a preview and a diff, and applied fixes are stored in a reversible override layer that never overwrites your content. Findings caused by styling instead get a style rule, written into your own Additional CSS — where you can read, edit or delete it without this plugin.
+* **Check the fix worked.** After a style rule is applied, the page is loaded again and measured again. If something in your theme overrode the rule, you are told that, rather than being told it is fixed.
 * **Document.** Generate an accessibility statement you edit and publish, including the feedback contact mechanism European rules expect.
 
 = Honesty about what automated testing can do =
@@ -121,6 +123,21 @@ AI features are bring-your-own-key. You connect your own provider account, and y
 
 == Changelog ==
 
+= 0.11.0 =
+* Findings caused by styling can now be fixed, not just reported: text contrast, links marked by colour alone, and controls too small to hit reliably. The proposed colour keeps the hue and saturation you chose and moves only as far as it has to.
+* Fixes of this kind are written into your own Additional CSS, under Appearance → Customise, where you can read, edit or delete them with or without this plugin. Everything already in that stylesheet is preserved exactly.
+* Before applying, you see the selector, how many elements it matches, and a warning when the selector is one that will break as your content changes. The selector is editable.
+* After applying, the page is loaded again and measured again — so you are told when a rule in your theme overrode the fix, instead of being told it worked.
+* The two rules a stylesheet cannot answer now say why, and what to change instead.
+* Redesigned admin screens.
+* Fixed a finding that reported a control as "170 by 24 pixels" and then asked for 24 by 24. The measurement was rounded and the comparison was not.
+
+= 0.10.0 =
+* Added a second scanning pass that runs in your browser, checking what only a rendered page can show: text contrast, target size, links distinguished by colour alone, scrollable regions no keyboard can reach, and hidden elements still in the tab order.
+* Added the inspector: findings on the left, a live preview of the page on the right. Choosing a finding highlights the element on the page.
+* Contrast that cannot be measured — text over a photograph, stacked translucency — is reported as needing a person rather than guessed at and reported as a pass.
+* Fixed a build failure on a fresh checkout, where static analysis ran before the admin bundle existed.
+
 = 0.9.0 =
 * Security: closed a hole that let anyone, without logging in, work out which post IDs existed on your site — including drafts and private posts. No titles or content were ever exposed, only whether an ID was in use. Please update.
 * Added the External services section describing exactly what each AI provider receives, and when.
@@ -155,6 +172,12 @@ AI features are bring-your-own-key. You connect your own provider account, and y
 * Initial scaffold: plugin bootstrap, capabilities, activation and uninstall handling.
 
 == Upgrade Notice ==
+
+= 0.11.0 =
+Style-caused findings can now be fixed as well as found, written into your own Additional CSS and verified by re-measuring the page.
+
+= 0.10.0 =
+Adds a browser-level scanning pass and the inspector, which shows each finding on the page it came from.
 
 = 0.9.0 =
 Security fix: an unauthenticated visitor could determine which post IDs existed on your site, drafts included. No content was exposed. Update recommended.
