@@ -752,6 +752,11 @@ So the badge has two states, and the difference is stated plainly:
 The honest version is also the useful one: it gives people a reason to open
 pages individually, which is where the product is at its best.
 
+*Amended by F9:* "fully checked" is reachable in bulk after all, through the
+rendered strategy — the admin's own browser working through a queue of framed
+pages. What stays true is that it cannot be reached **unattended**: a scheduled
+scan has no browser, so scheduled runs earn "content checked" and nothing more.
+
 **F5 — In the editor, check the block tree. Do not render a preview.**
 
 A button in the editor is the right idea. An iframe of a preview URL is the
@@ -842,32 +847,130 @@ This lands before the three new surfaces are built, not after. Bulk results, the
 review queue and the editor panel all render findings, and changing how a
 finding presents itself after the fact means rewriting three interfaces.
 
+**F9 — Bulk scanning fetches differently, because fetching per page does not
+survive contact with a real site.**
+
+Today a scan is one loopback `wp_remote_get()` of the permalink, with a 20-second
+timeout and a per-post fallback to post content. That is the right design for
+one page and the wrong one for two hundred:
+
+- **It fails per page instead of once.** Loopback is blocked on plenty of hosts,
+  and the current code rediscovers that on every post. A hundred unreachable
+  pages is roughly half an hour of the queue waiting for timeouts, to learn one
+  fact that could have been established in five seconds.
+- **It has no user.** A queued job runs as nobody, so a loopback request for a
+  draft or a private post gets a 404. The single-page scan gets away with this
+  because it runs inside an authenticated admin request; bulk does not.
+- **It doubles the site's own load.** Every scanned page is a second full
+  WordPress bootstrap and theme render, requested by the site, of itself.
+- **It reports the same theme fault hundreds of times.** A missing `main`
+  landmark is one problem in one template. Filed against four hundred posts it
+  is four hundred findings, and the list becomes unreadable at exactly the
+  moment it was supposed to become useful.
+
+So bulk does not fetch pages. It uses three strategies, chosen by what is being
+asked and what the host allows.
+
+| | How it gets the markup | Needs | Sees | Used by |
+| --- | --- | --- | --- | --- |
+| **Content** | `the_content` filters, in process | nothing | the post's own content | every bulk scan, always |
+| **Template** | loopback of a handful of representative URLs, once per theme version | loopback | the whole page, chrome included | site-level findings, and the profile below |
+| **Rendered** | the admin's own browser, one framed page at a time | an open tab, and a framable site | the whole page **as painted** | deep scans, drafts, anything needing the browser pass |
+
+**The content strategy is the spine.** It needs no HTTP, so it works on every
+host, in cron, and for drafts and private posts — none of which loopback manages.
+It is also fast enough that scanning is no longer the expensive part of a bulk
+run.
+
+**The template strategy runs a handful of times, not once per post.** One
+representative URL per public post type, plus the front page and one archive.
+Roughly six requests for a whole site rather than one per post. What it finds —
+a missing `lang`, no `title`, no `main` landmark, an unlabelled search form in
+the header — is filed **once, against the theme**, not against every post that
+happens to use it. That is both far less noise and a truer description of the
+problem: it is one fault, in one template, and fixing it fixes every page.
+
+**The template profile is why this is accurate rather than merely cheap.**
+Scanning content alone would produce real false positives, and two of the current
+rules demonstrate it. A post whose first heading is `<h2>` looks like a skipped
+level when you cannot see the `<h1>` the theme printed above it; a post
+containing an `<h1>` is only a *second* top-level heading if the template already
+emitted one. So the template pass records a few facts the content pass needs —
+the heading level the theme establishes before the content, whether the page
+already has a `main`, a `title`, a `lang` — and the content pass is seeded with
+them. Without this, bulk scanning would be confidently wrong about heading
+structure on every well-built theme.
+
+**Attribution is by subtraction, and the code for it exists.**
+`Substitution::locatable()` already answers "does this recorded markup appear in
+this post's content", which is how applied fixes decide whether an override can
+reach them. The same test separates a finding that belongs to the content from
+one that belongs to the template.
+
+**Probe once, and say so.** Before a bulk run, one request to the front page with
+a short timeout establishes whether loopback works at all. The answer is cached,
+re-testable on demand, and shown to the user *before* they start — with what it
+means for coverage, not as an error. A host that blocks loopback loses the
+template pass; it does not lose bulk scanning.
+
+**The rendered strategy is how bulk gets the browser pass.** The admin page
+queues framed pages one at a time, reusing `Preview::url_for()` and the existing
+`runBrowserPass()`. Because it is the administrator's own browser it carries
+their cookies, so drafts and private posts work with no token scheme and no
+authentication bypass to design. Findings are recorded server-side as they
+arrive, so closing the tab loses the remaining queue and nothing already found.
+It cannot be scheduled — a cron job has no browser — which is a real limit and
+is stated rather than worked around.
+
+**Rejected: rendering the template in-process.** Simulating the main query and
+running WordPress's template loader inside the same request would get a full page
+with no HTTP at all. It also means firing `wp_head` and `wp_footer` inside an
+admin or cron request, with every plugin's side effects attached, while
+clobbering `$wp_query` for whatever else that request was doing — and some themes
+call `exit`. It would work on the machines we test and break on somebody's site
+in a way we could not reproduce. Not worth it when the content strategy already
+covers the common case honestly.
+
+**Rejected: collecting markup from real visitors.** Cheap, complete, and always
+current, because the site renders those pages anyway. It also means shipping code
+to the front end, which is the one thing this plugin does not do.
+
 ### Build order
 
 1. **Action Scheduler.** Add the dependency, model a job, and give the interface
    progress, resume, cancel and a failure account. Nothing bulk exists until
    this does. *(F2)*
-2. **Fix classification on the rule.** Every rule declares deterministic,
+2. **The fetch strategies.** Split `PageSource` into content, template and
+   rendered; add the loopback probe with its cached verdict; scan representative
+   URLs once per theme version and record the template profile the content pass
+   is seeded with; attribute findings to content or template with
+   `Substitution::locatable()`. Bulk scanning is built on this, so it comes
+   before it. *(F9)*
+3. **Fix classification on the rule.** Every rule declares deterministic,
    generative, or hand-off, and deterministic rules carry their fix. This is a
    change to the rule model and it gates every auto-fix button in the phase.
    *(F3)*
-3. **The plain-language layer.** Titles, consequences, do-this-first ordering,
+4. **The plain-language layer.** Titles, consequences, do-this-first ordering,
    progress. Before three new surfaces start rendering findings. *(F8)*
-4. **Bulk scan.** Post-type tabs, a selection list with a "first 10" shortcut,
-   queued execution, the two-state badge, and results grouped per page. Badges
-   are invalidated when a post is saved. *(F4)*
-5. **Fix actions in bulk results.** One-click for deterministic; review queue for
+5. **Bulk scan.** Post-type tabs, a selection list with a "first 10" shortcut,
+   queued execution, the two-state badge, results grouped per page, and theme
+   findings in their own list rather than repeated against every post. Badges are
+   invalidated when a post is saved. *(F4, F9)*
+6. **Fix actions in bulk results.** One-click for deterministic; review queue for
    generative; mark as false positive with a note — `IssueStatus::Ignored`
    already exists and needs the interface and the audit trail. *(F3)*
-6. **Bulk alt text.** Selection, queue, cost estimate before the run, review
+7. **Bulk alt text.** Selection, queue, cost estimate before the run, review
    queue, write to the media library. *(F7)*
-7. **Editor integration.** Block-tree checks as the user types; fixes written to
+8. **Editor integration.** Block-tree checks as the user types; fixes written to
    block attributes; framed preview only for the editors that need it. Can run in
-   parallel with 4–6 once 3 is done. *(F5)*
-8. **Theme triage.** The three tiers: setting deep-links, the named filters, the
+   parallel with 5–7 once 4 is done. *(F5)*
+9. **The rendered queue.** The admin browser working through framed pages one at
+   a time, so "fully checked" is reachable in bulk. Reuses `Preview::url_for()`
+   and `runBrowserPass()`. *(F9)*
+10. **Theme triage.** The three tiers: setting deep-links, the named filters, the
    developer hand-off and export. *(F6)*
-9. **Tier gating.** Apply F1 across the new surfaces, extend the free-build check
-   to cover them.
+11. **Tier gating.** Apply F1 across the new surfaces, extend the free-build
+    check to cover them.
 
 ### Risks
 
@@ -876,6 +979,8 @@ finding presents itself after the fact means rewriting three interfaces.
 | A bulk run times out and leaves the site in an unknown state | The queue owns resumption; a scan records where it stopped, and the interface says so rather than showing a stalled bar. |
 | Bulk alt text runs up somebody's provider bill | Estimate the cost of the selected run before it starts, and keep the daily cap enforced in the generation path rather than the interface. |
 | Users read "Scanned" as "fully checked" | Two badge states, worded as coverage rather than completion. *(F4)* |
+| A host blocks loopback and bulk scanning looks broken | Probe once before the run, cache the verdict, and say what coverage the site will get before it starts. The content strategy needs no HTTP, so bulk still works — it sees less, and says so. *(F9)* |
+| The template profile goes stale after a theme update | Keyed to theme and version, invalidated on `switch_theme` and on plugin/theme updates, re-runnable by hand, and expiring on its own. A missing profile means the heading rules abstain rather than guess. *(F9)* |
 | Auto-fix applied at scale turns out to be wrong | Only deterministic fixes are ever applied unreviewed, and every applied fix stays revertible. |
 | Theme findings dominate the results and nothing can be fixed | The three-tier triage, and honest counts: how many are ours to fix, how many are settings, how many need a developer. |
 | Block-attribute writes corrupt a post | They go through the editor's own store, so they are ordinary undoable edits and are never written from a background job. |
