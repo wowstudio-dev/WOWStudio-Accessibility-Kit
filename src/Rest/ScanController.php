@@ -652,6 +652,7 @@ final class ScanController implements Registrable {
 				'detection_label' => $issue->detection->label(),
 				'found_by'        => $issue->found_by->value,
 				'status'          => $issue->status->value,
+				'note'            => $issue->note,
 				'message'         => $issue->message,
 				'selector'        => $issue->selector,
 				'context'         => $issue->context,

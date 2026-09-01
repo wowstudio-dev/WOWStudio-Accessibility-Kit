@@ -445,6 +445,7 @@ final class RunController implements Registrable {
 				'detection'       => $issue->detection->value,
 				'detection_label' => $issue->detection->label(),
 				'status'          => $issue->status->value,
+				'note'            => $issue->note,
 				'message'         => $issue->message,
 				'selector'        => $issue->selector,
 				'context'         => $issue->context,

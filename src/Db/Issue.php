@@ -38,7 +38,8 @@ final class Issue {
 	 * @param string      $selector   XPath or CSS selector for the element.
 	 * @param string      $context    The offending markup, for preview and diff.
 	 * @param string      $message    Plain-language description.
-	 * @param string      $note       Reviewer note, used when ignoring.
+	 * @param string      $note        Reviewer note, required when ignoring.
+	 * @param int         $resolved_by Who ignored or reopened it, 0 when nobody has.
 	 * @param string      $created_at MySQL datetime.
 	 * @param string      $updated_at MySQL datetime.
 	 */
@@ -56,6 +57,7 @@ final class Issue {
 		public readonly string $context,
 		public readonly string $message,
 		public readonly string $note,
+		public readonly int $resolved_by,
 		public readonly string $created_at,
 		public readonly string $updated_at
 	) {}
@@ -83,6 +85,7 @@ final class Issue {
 			(string) ( $row->context ?? '' ),
 			(string) $row->message,
 			(string) ( $row->note ?? '' ),
+			(int) ( $row->resolved_by ?? 0 ),
 			(string) $row->created_at,
 			(string) $row->updated_at
 		);

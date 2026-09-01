@@ -23,8 +23,14 @@ defined( 'ABSPATH' ) || exit;
  * the identifier is one a caller should be allowed to ask for.
  *
  * @since 0.2.0
+ *
+ * Not final, unlike most classes here. It is handed to another object through
+ * that object's constructor so the object can be tested without it, and sealing
+ * it would make the injection decorative — a parameter nobody could ever pass
+ * anything but the default to. The rule here is final by default, open where
+ * something is meant to be substituted.
  */
-final class IssueRepository {
+class IssueRepository {
 
 	/**
 	 * Columns that may be grouped on.
@@ -210,23 +216,25 @@ final class IssueRepository {
 	 * @since 0.2.0
 	 *
 	 * @param int         $id     Issue ID.
-	 * @param IssueStatus $status New status.
-	 * @param string      $note   Reviewer note, expected when ignoring.
+	 * @param IssueStatus $status  New status.
+	 * @param string      $note    Reviewer note, required when ignoring.
+	 * @param int         $user_id Who decided, so the record has an author.
 	 * @return bool
 	 */
-	public function set_status( int $id, IssueStatus $status, string $note = '' ): bool {
+	public function set_status( int $id, IssueStatus $status, string $note = '', int $user_id = 0 ): bool {
 		global $wpdb;
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Custom table; no core API covers it.
 		$updated = $wpdb->update(
 			Schema::issues_table(),
 			array(
-				'status'     => $status->value,
-				'note'       => $note,
-				'updated_at' => gmdate( 'Y-m-d H:i:s' ),
+				'status'      => $status->value,
+				'note'        => $note,
+				'resolved_by' => $user_id,
+				'updated_at'  => gmdate( 'Y-m-d H:i:s' ),
 			),
 			array( 'id' => $id ),
-			array( '%s', '%s', '%s' ),
+			array( '%s', '%s', '%d', '%s' ),
 			array( '%d' )
 		);
 

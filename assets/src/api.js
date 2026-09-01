@@ -363,3 +363,31 @@ export function fetchTheme() {
 export function checkTheme() {
 	return apiFetch( { path: `/${ namespace }/theme`, method: 'POST' } );
 }
+
+/**
+ * Sets a finding aside, with the reason that will be kept beside it.
+ *
+ * @param {number} issueId Finding to dismiss.
+ * @param {string} note    Why it is not a problem.
+ * @return {Promise<Object>} The finding's review state.
+ */
+export function ignoreIssue( issueId, note ) {
+	return apiFetch( {
+		path: `/${ namespace }/issues/${ issueId }/ignore`,
+		method: 'POST',
+		data: { note },
+	} );
+}
+
+/**
+ * Puts a dismissed finding back on the list.
+ *
+ * @param {number} issueId Finding to restore.
+ * @return {Promise<Object>} The finding's review state.
+ */
+export function reopenIssue( issueId ) {
+	return apiFetch( {
+		path: `/${ namespace }/issues/${ issueId }/reopen`,
+		method: 'POST',
+	} );
+}

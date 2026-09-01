@@ -375,27 +375,27 @@ msgid "That run could not be found."
 msgstr ""
 
 #: src/Remediation/ActionBand.php:110
-#: assets/src/components/issue-list.js:132
+#: assets/src/components/issue-list.js:156
 msgid "Fix these now"
 msgstr ""
 
 #: src/Remediation/ActionBand.php:111
-#: assets/src/components/issue-list.js:140
+#: assets/src/components/issue-list.js:164
 msgid "Read, then apply"
 msgstr ""
 
 #: src/Remediation/ActionBand.php:112
-#: assets/src/components/issue-list.js:148
+#: assets/src/components/issue-list.js:172
 msgid "Needs a decision from you"
 msgstr ""
 
 #: src/Remediation/ActionBand.php:113
-#: assets/src/components/issue-list.js:156
+#: assets/src/components/issue-list.js:180
 msgid "For whoever looks after your theme"
 msgstr ""
 
 #: src/Remediation/ActionBand.php:126
-#: assets/src/components/issue-list.js:133
+#: assets/src/components/issue-list.js:157
 msgid "There is one correct answer and we already know it. Nothing here is a guess, so nothing here needs checking first."
 msgstr ""
 
@@ -404,12 +404,12 @@ msgid "We can draft these, but a draft is not an answer. Read what it says befor
 msgstr ""
 
 #: src/Remediation/ActionBand.php:128
-#: assets/src/components/issue-list.js:149
+#: assets/src/components/issue-list.js:173
 msgid "These depend on what your content means, which is not something any tool can work out for you. Each one explains what to weigh up."
 msgstr ""
 
 #: src/Remediation/ActionBand.php:129
-#: assets/src/components/issue-list.js:160
+#: assets/src/components/issue-list.js:184
 msgid "These are in your theme rather than your content, so nothing here can reach them. Each one comes with what to change and where."
 msgstr ""
 
@@ -546,6 +546,32 @@ msgstr ""
 msgid "Nowhere"
 msgstr ""
 
+#: src/Remediation/IssueReview.php:82
+#: src/Remediation/IssueReview.php:146
+msgid "That finding could not be found."
+msgstr ""
+
+#: src/Remediation/IssueReview.php:92
+msgid "Say why this is not a problem. The reason is kept with the finding, and it is what makes this a record somebody can rely on later rather than an unexplained dismissal."
+msgstr ""
+
+#: src/Remediation/IssueReview.php:100
+#: src/Remediation/IssueReview.php:154
+msgid "You do not have permission to make decisions about that content."
+msgstr ""
+
+#: src/Remediation/IssueReview.php:108
+msgid "That decision could not be saved."
+msgstr ""
+
+#: src/Remediation/TitleTagFix.php:159
+msgid "WordPress composes the title itself; your theme just never asked for it. This asks on its behalf, and changes nothing in your content."
+msgstr ""
+
+#: src/Remediation/TitleTagFix.php:164
+msgid "This takes effect the next time a page is loaded."
+msgstr ""
+
 #: src/Rest/AiController.php:74
 msgid "A key to store for the named provider. Never returned by any route."
 msgstr ""
@@ -606,6 +632,18 @@ msgstr ""
 #: src/Rest/ScanController.php:354
 #: src/Rest/ScanController.php:507
 msgid "You do not have permission to read that content."
+msgstr ""
+
+#: src/Rest/ReviewController.php:65
+msgid "Why this is not a problem. Kept with the finding."
+msgstr ""
+
+#: src/Rest/ReviewController.php:128
+msgid "You do not have permission to make decisions about findings."
+msgstr ""
+
+#: src/Rest/ReviewController.php:154
+msgid "This fix changes how your theme renders every page, and your account is not allowed to change theme settings. An administrator can apply it."
 msgstr ""
 
 #: src/Rest/RunController.php:184
@@ -1630,14 +1668,14 @@ msgstr ""
 
 #. translators: %d: number of items in this group.
 #: assets/src/components/coverage-panel.js:174
-#: assets/src/components/issue-list.js:190
+#: assets/src/components/issue-list.js:214
 #, js-format
 msgid "(%d)"
 msgstr ""
 
 #. translators: %s: WCAG success criterion number.
 #: assets/src/components/coverage-panel.js:188
-#: assets/src/components/issue-list.js:48
+#: assets/src/components/issue-list.js:49
 #, js-format
 msgid "WCAG %s"
 msgstr ""
@@ -1757,6 +1795,40 @@ msgstr ""
 
 #: assets/src/components/css-fix-action.js:463
 msgid "Remove this rule"
+msgstr ""
+
+#: assets/src/components/dismiss-action.js:86
+msgid "Set aside as not a problem."
+msgstr ""
+
+#. translators: %s: name of the person who dismissed the finding.
+#: assets/src/components/dismiss-action.js:96
+#, js-format
+msgid "— %s"
+msgstr ""
+
+#: assets/src/components/dismiss-action.js:101
+msgid "Put it back on the list"
+msgstr ""
+
+#: assets/src/components/dismiss-action.js:117
+msgid "This is not a problem"
+msgstr ""
+
+#: assets/src/components/dismiss-action.js:132
+msgid "Why is this not a problem?"
+msgstr ""
+
+#: assets/src/components/dismiss-action.js:136
+msgid "Kept with the finding, with your name and the date. This is the part that makes it a record somebody can rely on later rather than an unexplained dismissal — so write it for whoever reads it in a year, which may well be you."
+msgstr ""
+
+#: assets/src/components/dismiss-action.js:147
+msgid "Set it aside"
+msgstr ""
+
+#: assets/src/components/dismiss-action.js:156
+msgid "Cancel"
 msgstr ""
 
 #: assets/src/components/fix-action.js:27
@@ -1899,28 +1971,28 @@ msgid "Preview of the page being inspected"
 msgstr ""
 
 #. translators: %s: name of the accessibility check.
-#: assets/src/components/issue-list.js:73
+#: assets/src/components/issue-list.js:89
 #, js-format
 msgid "Markup for: %s"
 msgstr ""
 
-#: assets/src/components/issue-list.js:93
+#: assets/src/components/issue-list.js:109
 msgid "How to fix this"
 msgstr ""
 
-#: assets/src/components/issue-list.js:102
+#: assets/src/components/issue-list.js:118
 msgid "Element:"
 msgstr ""
 
-#: assets/src/components/issue-list.js:141
+#: assets/src/components/issue-list.js:165
 msgid "We can draft these, but a draft is not an answer. Read what it says before you apply it — it was written by a model that cannot see why your page exists."
 msgstr ""
 
-#: assets/src/components/issue-list.js:233
+#: assets/src/components/issue-list.js:257
 msgid "Nothing found by the automated checks"
 msgstr ""
 
-#: assets/src/components/issue-list.js:237
+#: assets/src/components/issue-list.js:261
 msgid "None of the checks we can run automatically flagged anything on this page. That is a good sign, and it is not the same as the page being accessible — most of WCAG needs a person. The manual checklists are the next step."
 msgstr ""
 

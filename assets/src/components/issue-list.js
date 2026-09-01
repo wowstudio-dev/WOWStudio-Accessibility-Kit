@@ -5,6 +5,7 @@
 import { __, sprintf } from '@wordpress/i18n';
 
 import AltTextAction from './alt-text-action';
+import DismissAction from './dismiss-action';
 import FixAction from './fix-action';
 import { DetectionTag, SeverityTag } from './tags';
 import { EmptyState } from './states';
@@ -58,6 +59,21 @@ function IssueCard( { issue, postId } ) {
 
 			<p className="wsak-issue__message">{ issue.message }</p>
 
+			{ /*
+			 * What a rule says can be done about it, in its own words. Shown for
+			 * the findings that offer no button, because "no fix here" without a
+			 * reason reads as the tool giving up rather than as an accurate
+			 * statement about where the problem lives.
+			 */ }
+			{ issue.fix?.summary && ! issue.fix?.reviewable && (
+				<p className="wsak-issue__plan">
+					<span className="wsak-issue__plan-where">
+						{ issue.fix.kind_label }
+					</span>{ ' ' }
+					{ issue.fix.summary }
+				</p>
+			) }
+
 			{ issue.context && (
 				// Focusable so the markup can be scrolled without a mouse, and
 				// named so that landing on it announces what it is rather than
@@ -109,6 +125,14 @@ function IssueCard( { issue, postId } ) {
 					) }
 				</details>
 			) }
+
+			{ /*
+			 * Offered on everything, including findings with a fix. A suggestion
+			 * that turns out to be wrong for this page is exactly the case that
+			 * needs setting aside, and hiding the option behind "we could not
+			 * help" would put it furthest from where it is most needed.
+			 */ }
+			<DismissAction issue={ issue } />
 		</li>
 	);
 }

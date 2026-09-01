@@ -27,7 +27,7 @@ final class Schema {
 	 * @since 0.2.0
 	 * @var string
 	 */
-	public const VERSION = '1.3.0';
+	public const VERSION = '1.4.0';
 
 	/**
 	 * Option holding the installed schema version.
@@ -237,6 +237,7 @@ final class Schema {
 			context longtext NULL,
 			message text NOT NULL,
 			note text NULL,
+			resolved_by bigint(20) unsigned NOT NULL DEFAULT 0,
 			created_at datetime NOT NULL,
 			updated_at datetime NOT NULL,
 			PRIMARY KEY  (id),

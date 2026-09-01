@@ -1004,6 +1004,54 @@
 	box-shadow: var(--wsak-shadow-lift);
 }
 
+/* Review decisions --------------------------------------------------------- */
+
+/*
+ * What a rule says can be done, when it offers no button. Quieter than the
+ * finding itself but not muted into invisibility: it is the sentence that
+ * distinguishes "nothing can reach this" from "nobody has built it yet".
+ */
+.wsak-issue__plan {
+	margin: var(--wsak-space-3) 0 0;
+	max-width: 74ch;
+	color: var(--wsak-muted);
+	font-size: 12.5px;
+}
+
+.wsak-issue__plan-where {
+	color: var(--wsak-ink);
+	font-weight: 620;
+}
+
+.wsak-dismiss {
+	margin-top: var(--wsak-space-3);
+}
+
+.wsak-dismiss--done {
+	padding: var(--wsak-space-3);
+	border-inline-start: 3px solid var(--wsak-line-strong);
+	border-radius: 0 var(--wsak-radius-sm) var(--wsak-radius-sm) 0;
+	background: var(--wsak-raised);
+}
+
+.wsak-dismiss__record {
+	margin: 0 0 var(--wsak-space-2);
+	max-width: 74ch;
+	color: var(--wsak-muted);
+	font-size: 12.5px;
+}
+
+.wsak-dismiss__record strong {
+	color: var(--wsak-ink);
+}
+
+.wsak-dismiss__actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--wsak-space-2);
+	margin-top: var(--wsak-space-3);
+}
+
 /* Bulk scanning ------------------------------------------------------------ */
 
 .wsak-bulk {
