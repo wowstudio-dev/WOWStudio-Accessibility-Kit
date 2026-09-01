@@ -12,7 +12,7 @@
  * Plugin URI:        https://wowstudio.dev/accessibility-kit/
  * Description:       Helps you find, fix, document, and monitor WCAG accessibility issues at the code level. Real markup fixes with preview and undo — not an overlay.
  * Version:           0.11.0
- * Requires at least: 6.6
+ * Requires at least: 6.8
  * Requires PHP:      8.1
  * Author:            WOWStudio
  * Author URI:        https://wowstudio.dev/
@@ -37,7 +37,7 @@ define( 'WSAK_PATH', plugin_dir_path( __FILE__ ) );
 define( 'WSAK_URL', plugin_dir_url( __FILE__ ) );
 define( 'WSAK_BASENAME', plugin_basename( __FILE__ ) );
 define( 'WSAK_MIN_PHP', '8.1' );
-define( 'WSAK_MIN_WP', '6.6' );
+define( 'WSAK_MIN_WP', '6.8' );
 
 /**
  * Collects unmet runtime requirements.
@@ -238,6 +238,19 @@ function wsak_can_use_premium_code() {
 }
 
 require_once WSAK_PATH . 'vendor/autoload.php';
+
+/*
+ * Action Scheduler is a plugin pretending to be a library, so it is required by
+ * path rather than autoloaded: it registers its own hooks and its own version
+ * negotiation at include time, and Composer's autoloader would never reach it
+ * because nothing in our code names one of its classes directly.
+ *
+ * It has to be included here, at file scope, rather than on plugins_loaded.
+ * Several plugins on a site may each bundle a copy; they all register, and
+ * Action Scheduler itself decides which version runs. That negotiation happens
+ * on plugins_loaded, so anything registering later is simply not considered.
+ */
+require_once WSAK_PATH . 'vendor/woocommerce/action-scheduler/action-scheduler.php';
 
 register_activation_hook( __FILE__, array( 'WOWStudio\AccessibilityKit\Core\Activator', 'activate' ) );
 register_deactivation_hook( __FILE__, array( 'WOWStudio\AccessibilityKit\Core\Deactivator', 'deactivate' ) );

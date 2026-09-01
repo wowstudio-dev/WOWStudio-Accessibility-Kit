@@ -1,7 +1,7 @@
 === WOWStudio Accessibility Kit ===
 Contributors: wowstudio
 Tags: accessibility, wcag, a11y, alt text, accessibility scanner
-Requires at least: 6.6
+Requires at least: 6.8
 Tested up to: 7.1
 Requires PHP: 8.1
 Stable tag: 0.11.0
@@ -37,6 +37,16 @@ This plugin **does not** determine or certify whether your site complies with th
 * No silent changes to your content. Every fix is reviewed by a person first.
 * No claim, anywhere, that your site is compliant, certified, or protected from legal action.
 * No conformance document published without your explicit review and attestation.
+
+== Bundled libraries ==
+
+This plugin bundles **Action Scheduler** by Automattic, which runs the
+background work — bulk scans and bulk alt-text generation — so that long jobs
+never block an admin page or time out half-finished. It is licensed GPLv3 or
+later; this plugin's own code is GPLv2 or later.
+
+Action Scheduler makes no outbound requests of its own. Source and documentation:
+https://actionscheduler.org
 
 == External services ==
 

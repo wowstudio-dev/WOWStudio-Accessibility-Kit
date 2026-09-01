@@ -72,15 +72,26 @@ by a human before any public release. Items marked **TODO(human)** are open.
 
 ## Third-party code (from Phase 2 onward)
 
-- [x] **No third-party runtime code ships.** The browser pass was going to bundle
-      axe-core (MPL-2.0), which would have been the only third-party licence
-      question in the plugin and the only item here needing a legal opinion
+- [x] **axe-core is not bundled.** The browser pass was going to use it
+      (MPL-2.0), which would have been the only item here needing a legal opinion
       rather than an engineering one. Reversed on 2026-08-30: we write the five
-      browser checks ourselves. The licence question is not answered, it is
+      browser checks ourselves. That licence question is not answered, it is
       *gone*. Decision and reasoning in SPEC.md under D1.
-- [ ] Re-check this if any third-party runtime library is ever added. The
-      standing rule: PHP dev dependencies and build tooling do not ship, so they
-      are not a licensing question; anything that reaches the zip is.
+- [ ] **Action Scheduler ships, and it is GPLv3-or-later.** Added 2026-09-01 as
+      the background queue (decision F10). This plugin is GPLv2-or-later, and
+      those combine in this direction: "or later" permits distributing the
+      combined work under v3, which is what WooCommerce and every other plugin
+      bundling Action Scheduler relies on. **Our source stays GPLv2+; the shipped
+      zip taken as a whole is GPLv3.** Nothing to resolve — recorded so nobody
+      has to derive it again under time pressure.
+      - [ ] `vendor/woocommerce/action-scheduler/license.txt` survives the build.
+      - [ ] Attributed in readme.txt.
+      - [ ] Its WordPress floor is still ≤ our declared `Requires at least`.
+            4.x wants 6.8; ours says 6.8. A future bump on their side is a
+            decision on ours, not a silent follow.
+- [ ] Re-check this section if any third-party runtime library is ever added.
+      The standing rule: PHP dev dependencies and build tooling do not ship, so
+      they are not a licensing question; anything that reaches the zip is.
 - [ ] Attribution for every bundled library appears in readme.txt and the source
       headers survive the build (wp-scripts writes `*.LICENSE.txt` alongside each
       bundle — confirm those files are not stripped by `.distignore`).
@@ -111,7 +122,7 @@ directly, and that nudge is right. We already follow it: `AI\AiClientBridge`
 prefers `WordPress\AiClient\AiClient` whenever it is present and configured,
 and only falls back to the direct adapters otherwise.
 
-The adapters exist because the plugin supports WordPress 6.6, and the AI client
+The adapters exist because the plugin supports WordPress 6.8, and the AI client
 does not exist before 7.0. They are the documented graceful degradation, not a
 shortcut around the core API.
 

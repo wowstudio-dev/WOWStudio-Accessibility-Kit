@@ -13,7 +13,7 @@
 | WordPress.org slug | `wowstudio-accessibility-kit` |
 | Text domain | `wowstudio-accessibility-kit` |
 | Namespace / prefix | `WOWStudio\AccessibilityKit` · `wsak_` · DB tables `wp_wsak_*` |
-| Requires WP | 6.6+ (first-class support for WP 7.0 AI Client / Abilities API) |
+| Requires WP | 6.8+ (first-class support for WP 7.0 AI Client / Abilities API) — raised from 6.6 by decision F10 |
 | Requires PHP | 8.1+ (min declared 8.0) |
 | License | GPLv2 or later (WordPress.org requirement) |
 | Monetization | **Freemius** — Free on WordPress.org, Pro via Freemius checkout |
@@ -208,7 +208,7 @@ integrations.
 # ── For Claude Code: development ──
 
 ## Tech stack & requirements
-- **WordPress** ≥ 6.6, with first-class support for **WP 7.0** (AI Client, Abilities API, Command Palette); graceful degradation below 7.0 via the BYOK adapter.
+- **WordPress** ≥ 6.8 *(raised from 6.6 — see decision F10)*, with first-class support for **WP 7.0** (AI Client, Abilities API, Command Palette); graceful degradation below 7.0 via the BYOK adapter.
 - **PHP** ≥ 8.1 (declare 8.0 minimum). PSR-4 autoloading via Composer.
 - **Admin UI:** React through `@wordpress/scripts` (wp-scripts / webpack), `@wordpress/components`, `@wordpress/data`, `@wordpress/api-fetch`. Gutenberg block for the accessibility statement.
 - **Background jobs:** Action Scheduler (bundled) for queued bulk scans, remediation, and alt-text.
@@ -934,6 +934,42 @@ covers the common case honestly.
 **Rejected: collecting markup from real visitors.** Cheap, complete, and always
 current, because the site renders those pages anyway. It also means shipping code
 to the front end, which is the one thing this plugin does not do.
+
+**F10 — Action Scheduler 4.x, and the WordPress floor moves to 6.8 to get it.**
+
+The queue is Action Scheduler, as CLAUDE.md has said since the start. What was
+not anticipated is that taking it costs a supported WordPress version.
+
+Action Scheduler 4.0.0 raised its own requirement to **WordPress 6.8**. The 3.9
+line still supports 6.4 and would have let the floor stay at 6.6 — but 4.1.0
+carries a fix described as *"protections to guard against the risk of
+object-injection/deserialization attacks when retrieving stored schedule data"*,
+and that hardening was never backported. There is no 3.9.4.
+
+So the choice is between an older WordPress floor and shipping a queue without
+a security fix its authors thought worth making. For a plugin whose whole
+position is being the trustworthy option in a category with a bad reputation,
+that is not a close call. **Take 4.1.0, move the floor to 6.8.**
+
+WordPress 6.8 shipped in April 2025, seventeen months before this decision. This
+plugin already declares itself first-class on 7.0. Holding a two-year-old floor
+in order to avoid a security fix would be the wrong trade in both directions at
+once.
+
+*Licence, for the record:* Action Scheduler is GPLv3-or-later and this plugin is
+GPLv2-or-later. Those are compatible in this direction — "or later" permits
+distribution of the combined work under v3 — which is exactly what WooCommerce
+and every other plugin bundling it relies on. Our own source stays GPLv2+; the
+shipped zip, taken as a whole, is GPLv3. Noted in the release checklist so
+nobody has to re-derive it.
+
+*Loading, for the record:* Action Scheduler is a plugin wearing a library's
+clothes. It is `require_once`d at file scope rather than autoloaded, because
+Composer's autoloader would never reach it — nothing in our code names one of
+its classes — and because several plugins on one site may each bundle a copy.
+They all register, and Action Scheduler decides which version runs, during
+`plugins_loaded`. Registering any later than file scope means not being
+considered at all.
 
 ### Build order
 

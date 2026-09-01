@@ -18,7 +18,7 @@ Positioning: *"helps you find, fix, document, and monitor"* — never *"makes yo
 See `SPEC.md` → "Explicitly NOT included (anti-features)" for the full stop-list.
 
 ## Tech stack
-- WordPress ≥ 6.6, first-class on WP 7.0 (AI Client, Abilities API); graceful degradation below 7.0 via BYOK adapter.
+- WordPress ≥ 6.8, first-class on WP 7.0 (AI Client, Abilities API); graceful degradation below 7.0 via BYOK adapter. *(Raised from 6.6 on 2026-09-01 — Action Scheduler 4.x requires 6.8, and the 3.9 line never received its deserialization hardening. See SPEC.md, decision F10.)*
 - PHP ≥ 8.1 (declare 8.0 min), PSR-4 autoload via Composer.
 - Admin UI: React via `@wordpress/scripts` (`@wordpress/components`, `data`, `api-fetch`). Gutenberg block for the accessibility statement.
 - Background jobs: **Action Scheduler** (never block admin/AI on request threads).
