@@ -7,6 +7,9 @@
 
 namespace WOWStudio\AccessibilityKit\Scanner\Rules;
 
+use WOWStudio\AccessibilityKit\Remediation\FixKind;
+use WOWStudio\AccessibilityKit\Remediation\FixPlan;
+use WOWStudio\AccessibilityKit\Remediation\FixTarget;
 use WOWStudio\AccessibilityKit\Scanner\Detection;
 use WOWStudio\AccessibilityKit\Scanner\Document;
 use WOWStudio\AccessibilityKit\Scanner\Finding;
@@ -93,6 +96,22 @@ final class HtmlLangMissing implements Rule {
 	 */
 	public function description(): string {
 		return __( 'The page does not say what language it is written in, so a screen reader may read it with the wrong pronunciation. Set a lang attribute on the html element, such as lang="en".', 'wowstudio-accessibility-kit' );
+	}
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * @since 0.13.0
+	 *
+	 * @return FixPlan
+	 */
+	public function fix_plan(): FixPlan {
+		// The right value is known — it is the site's own language setting — but the html element is printed by the theme and no filter reaches it.
+		return new FixPlan(
+			FixKind::Deterministic,
+			FixTarget::Theme,
+			__( 'The right value is known — it is the site\'s own language setting — but the html element is printed by the theme and no filter reaches it. Knowing the answer is not the same as being able to write it, which is why this is a hand-off rather than a button.', 'wowstudio-accessibility-kit' )
+		);
 	}
 
 	/**

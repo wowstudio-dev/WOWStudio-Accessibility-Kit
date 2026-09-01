@@ -8,6 +8,9 @@
 namespace WOWStudio\AccessibilityKit\Scanner\Rules;
 
 use DOMElement;
+use WOWStudio\AccessibilityKit\Remediation\FixKind;
+use WOWStudio\AccessibilityKit\Remediation\FixPlan;
+use WOWStudio\AccessibilityKit\Remediation\FixTarget;
 use WOWStudio\AccessibilityKit\Scanner\Detection;
 use WOWStudio\AccessibilityKit\Scanner\Document;
 use WOWStudio\AccessibilityKit\Scanner\Finding;
@@ -95,6 +98,22 @@ final class TableHeadersMissing implements Rule {
 	 */
 	public function description(): string {
 		return __( 'If this is a data table, someone using a screen reader cannot tell which column or row a cell belongs to, so the numbers lose their meaning. Mark the header cells up as th with a scope attribute. If the table is only being used for layout, it needs no headers and you can mark this as reviewed.', 'wowstudio-accessibility-kit' );
+	}
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * @since 0.13.0
+	 *
+	 * @return FixPlan
+	 */
+	public function fix_plan(): FixPlan {
+		// Which cells are headers is a statement about what the data means.
+		return new FixPlan(
+			FixKind::Manual,
+			FixTarget::Content,
+			__( 'Which cells are headers is a statement about what the data means. Guessing would produce a table that reads confidently and wrongly to a screen reader.', 'wowstudio-accessibility-kit' )
+		);
 	}
 
 	/**

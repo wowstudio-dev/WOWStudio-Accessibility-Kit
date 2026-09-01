@@ -7,6 +7,10 @@
 
 namespace WOWStudio\AccessibilityKit\Scanner;
 
+use WOWStudio\AccessibilityKit\Remediation\FixKind;
+use WOWStudio\AccessibilityKit\Remediation\FixPlan;
+use WOWStudio\AccessibilityKit\Remediation\FixTarget;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -34,12 +38,13 @@ final class BrowserRule implements RuleDescriptor {
 	 *
 	 * @since 0.10.0
 	 *
-	 * @param string    $id          Our stable rule identifier.
-	 * @param string    $wcag_sc     WCAG success criterion.
-	 * @param Severity  $severity    How much this fault hurts.
-	 * @param Detection $detection   Whether this settles the issue or flags it.
-	 * @param string    $title       Short human-readable name.
-	 * @param string    $description What fails, who it affects, how to fix it.
+	 * @param string       $id          Our stable rule identifier.
+	 * @param string       $wcag_sc     WCAG success criterion.
+	 * @param Severity     $severity    How much this fault hurts.
+	 * @param Detection    $detection   Whether this settles the issue or flags it.
+	 * @param string       $title       Short human-readable name.
+	 * @param string       $description What fails, who it affects, how to fix it.
+	 * @param FixPlan|null $fix_plan    What can be done about it.
 	 */
 	public function __construct(
 		private readonly string $id,
@@ -47,7 +52,8 @@ final class BrowserRule implements RuleDescriptor {
 		private readonly Severity $severity,
 		private readonly Detection $detection,
 		private readonly string $title,
-		private readonly string $description
+		private readonly string $description,
+		private readonly ?FixPlan $fix_plan = null
 	) {}
 
 	/**
@@ -125,5 +131,18 @@ final class BrowserRule implements RuleDescriptor {
 	 */
 	public function description(): string {
 		return $this->description;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * @since 0.13.0
+	 *
+	 * @return FixPlan
+	 */
+	public function fix_plan(): FixPlan {
+		// A browser rule that was never given a plan is treated as needing a
+		// person. Silence must never read as "we can fix this".
+		return $this->fix_plan ?? FixPlan::manual( FixTarget::Theme );
 	}
 }

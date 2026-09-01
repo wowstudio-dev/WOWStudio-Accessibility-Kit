@@ -7,6 +7,8 @@
 
 namespace WOWStudio\AccessibilityKit\Scanner;
 
+use WOWStudio\AccessibilityKit\Remediation\FixPlan;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -91,4 +93,18 @@ interface RuleDescriptor {
 	 * @return string
 	 */
 	public function description(): string;
+
+	/**
+	 * Returns what can be done about findings from this rule.
+	 *
+	 * Declared here rather than worked out by the interface, because a coverage
+	 * claim that is inferred is a coverage claim that goes quietly wrong. A rule
+	 * that gains an automated fix says so in its own file; a rule that has none
+	 * says that too, in its own words.
+	 *
+	 * @since 0.13.0
+	 *
+	 * @return FixPlan
+	 */
+	public function fix_plan(): FixPlan;
 }

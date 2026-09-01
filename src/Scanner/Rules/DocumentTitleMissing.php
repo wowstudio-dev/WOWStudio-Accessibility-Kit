@@ -7,6 +7,9 @@
 
 namespace WOWStudio\AccessibilityKit\Scanner\Rules;
 
+use WOWStudio\AccessibilityKit\Remediation\FixKind;
+use WOWStudio\AccessibilityKit\Remediation\FixPlan;
+use WOWStudio\AccessibilityKit\Remediation\FixTarget;
 use WOWStudio\AccessibilityKit\Scanner\Detection;
 use WOWStudio\AccessibilityKit\Scanner\Document;
 use WOWStudio\AccessibilityKit\Scanner\Finding;
@@ -92,6 +95,22 @@ final class DocumentTitleMissing implements Rule {
 	 */
 	public function description(): string {
 		return __( 'The page title is the first thing a screen reader announces, and the label people see in browser tabs, bookmarks, and search results. Give the page a title that describes what is on it.', 'wowstudio-accessibility-kit' );
+	}
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * @since 0.13.0
+	 *
+	 * @return FixPlan
+	 */
+	public function fix_plan(): FixPlan {
+		// WordPress writes the title itself once the theme declares support for it, and a plugin can declare that support on the theme's behalf before wp_loaded.
+		return new FixPlan(
+			FixKind::Deterministic,
+			FixTarget::Setting,
+			__( 'WordPress writes the title itself once the theme declares support for it, and a plugin can declare that support on the theme\'s behalf before wp_loaded. One right answer, and somewhere to put it.', 'wowstudio-accessibility-kit' )
+		);
 	}
 
 	/**

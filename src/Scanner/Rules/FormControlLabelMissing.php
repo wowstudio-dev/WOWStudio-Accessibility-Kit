@@ -8,6 +8,9 @@
 namespace WOWStudio\AccessibilityKit\Scanner\Rules;
 
 use DOMElement;
+use WOWStudio\AccessibilityKit\Remediation\FixKind;
+use WOWStudio\AccessibilityKit\Remediation\FixPlan;
+use WOWStudio\AccessibilityKit\Remediation\FixTarget;
 use WOWStudio\AccessibilityKit\Scanner\Detection;
 use WOWStudio\AccessibilityKit\Scanner\Document;
 use WOWStudio\AccessibilityKit\Scanner\Finding;
@@ -94,6 +97,22 @@ final class FormControlLabelMissing implements Rule {
 	 */
 	public function description(): string {
 		return __( 'This field is not labelled, so someone using a screen reader cannot tell what to type into it. Add a <label for> pointing at the field, or an aria-label. Placeholder text does not count.', 'wowstudio-accessibility-kit' );
+	}
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * @since 0.13.0
+	 *
+	 * @return FixPlan
+	 */
+	public function fix_plan(): FixPlan {
+		// What a field should be called is a judgement about what it is asking for.
+		return new FixPlan(
+			FixKind::Generative,
+			FixTarget::Content,
+			__( 'What a field should be called is a judgement about what it is asking for. A model can propose wording from the surrounding markup; a person confirms it.', 'wowstudio-accessibility-kit' )
+		);
 	}
 
 	/**

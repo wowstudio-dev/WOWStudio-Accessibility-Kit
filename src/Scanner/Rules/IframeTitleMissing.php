@@ -8,6 +8,9 @@
 namespace WOWStudio\AccessibilityKit\Scanner\Rules;
 
 use DOMElement;
+use WOWStudio\AccessibilityKit\Remediation\FixKind;
+use WOWStudio\AccessibilityKit\Remediation\FixPlan;
+use WOWStudio\AccessibilityKit\Remediation\FixTarget;
 use WOWStudio\AccessibilityKit\Scanner\Detection;
 use WOWStudio\AccessibilityKit\Scanner\Document;
 use WOWStudio\AccessibilityKit\Scanner\Finding;
@@ -93,6 +96,22 @@ final class IframeTitleMissing implements Rule {
 	 */
 	public function description(): string {
 		return __( 'Screen readers let people jump between frames on a page, but an untitled frame shows up in that list with no name. Add a title attribute describing what the frame contains, such as the name of an embedded video.', 'wowstudio-accessibility-kit' );
+	}
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * @since 0.13.0
+	 *
+	 * @return FixPlan
+	 */
+	public function fix_plan(): FixPlan {
+		// The title has to describe what is embedded, which means looking at it.
+		return new FixPlan(
+			FixKind::Generative,
+			FixTarget::Content,
+			__( 'The title has to describe what is embedded, which means looking at it. Proposed, then reviewed.', 'wowstudio-accessibility-kit' )
+		);
 	}
 
 	/**

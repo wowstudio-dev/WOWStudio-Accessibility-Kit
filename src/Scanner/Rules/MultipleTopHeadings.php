@@ -8,6 +8,9 @@
 namespace WOWStudio\AccessibilityKit\Scanner\Rules;
 
 use DOMElement;
+use WOWStudio\AccessibilityKit\Remediation\FixKind;
+use WOWStudio\AccessibilityKit\Remediation\FixPlan;
+use WOWStudio\AccessibilityKit\Remediation\FixTarget;
 use WOWStudio\AccessibilityKit\Scanner\Detection;
 use WOWStudio\AccessibilityKit\Scanner\Document;
 use WOWStudio\AccessibilityKit\Scanner\Finding;
@@ -94,6 +97,22 @@ final class MultipleTopHeadings implements Rule {
 	 */
 	public function description(): string {
 		return __( 'A page normally has one h1 naming what the page is about. More than one gives it competing titles and muddles the outline people navigate by. Check whether the extra headings should be h2 instead.', 'wowstudio-accessibility-kit' );
+	}
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * @since 0.13.0
+	 *
+	 * @return FixPlan
+	 */
+	public function fix_plan(): FixPlan {
+		// Which of the two should stop being a top-level heading depends on which one the page is actually about.
+		return new FixPlan(
+			FixKind::Manual,
+			FixTarget::Content,
+			__( 'Which of the two should stop being a top-level heading depends on which one the page is actually about.', 'wowstudio-accessibility-kit' )
+		);
 	}
 
 	/**

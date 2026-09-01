@@ -181,7 +181,7 @@ final class RuleRegistry {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @return array<int, array<string, string>>
+	 * @return array<int, array<string, mixed>>
 	 */
 	public function coverage(): array {
 		$coverage = array();
@@ -195,6 +195,10 @@ final class RuleRegistry {
 				'severity'    => $rule->severity()->value,
 				'detection'   => $rule->detection()->value,
 				'pass'        => $rule->pass()->value,
+				// Sent so the interface asks rather than infers. Working out
+				// which findings can be fixed by matching rule IDs in
+				// JavaScript is how the two lists quietly stop agreeing.
+				'fix'         => $rule->fix_plan()->to_array(),
 			);
 		}
 

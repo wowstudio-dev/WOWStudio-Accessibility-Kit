@@ -7,6 +7,9 @@
 
 namespace WOWStudio\AccessibilityKit\Scanner\Rules;
 
+use WOWStudio\AccessibilityKit\Remediation\FixKind;
+use WOWStudio\AccessibilityKit\Remediation\FixPlan;
+use WOWStudio\AccessibilityKit\Remediation\FixTarget;
 use WOWStudio\AccessibilityKit\Scanner\Detection;
 use WOWStudio\AccessibilityKit\Scanner\Document;
 use WOWStudio\AccessibilityKit\Scanner\Finding;
@@ -93,6 +96,22 @@ final class MainLandmarkMissing implements Rule {
 	 */
 	public function description(): string {
 		return __( 'Landmarks let someone using a screen reader jump straight to the content instead of listening through the header and navigation on every page. Wrap the primary content of the page in a main element.', 'wowstudio-accessibility-kit' );
+	}
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * @since 0.13.0
+	 *
+	 * @return FixPlan
+	 */
+	public function fix_plan(): FixPlan {
+		// The landmark has to wrap the page's main content, which is a decision about the template and belongs in the theme.
+		return new FixPlan(
+			FixKind::Manual,
+			FixTarget::Theme,
+			__( 'The landmark has to wrap the page\'s main content, which is a decision about the template and belongs in the theme.', 'wowstudio-accessibility-kit' )
+		);
 	}
 
 	/**

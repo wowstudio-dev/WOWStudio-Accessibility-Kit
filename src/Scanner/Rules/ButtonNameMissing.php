@@ -8,6 +8,9 @@
 namespace WOWStudio\AccessibilityKit\Scanner\Rules;
 
 use DOMElement;
+use WOWStudio\AccessibilityKit\Remediation\FixKind;
+use WOWStudio\AccessibilityKit\Remediation\FixPlan;
+use WOWStudio\AccessibilityKit\Remediation\FixTarget;
 use WOWStudio\AccessibilityKit\Scanner\Detection;
 use WOWStudio\AccessibilityKit\Scanner\Document;
 use WOWStudio\AccessibilityKit\Scanner\Finding;
@@ -93,6 +96,22 @@ final class ButtonNameMissing implements Rule {
 	 */
 	public function description(): string {
 		return __( 'Someone using a screen reader hears only "button" and cannot tell what it does. Icon-only buttons need an aria-label, or visually hidden text describing the action.', 'wowstudio-accessibility-kit' );
+	}
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * @since 0.13.0
+	 *
+	 * @return FixPlan
+	 */
+	public function fix_plan(): FixPlan {
+		// A button's name has to describe what it does.
+		return new FixPlan(
+			FixKind::Generative,
+			FixTarget::Content,
+			__( 'A button\'s name has to describe what it does. Proposed, then reviewed.', 'wowstudio-accessibility-kit' )
+		);
 	}
 
 	/**

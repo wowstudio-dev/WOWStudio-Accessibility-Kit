@@ -719,9 +719,33 @@ different kinds of change:
 | Produced by | a rule; there is one right answer | a model; it is a guess |
 | Review before applying | not needed | always |
 
-Roughly half of the current checks have a deterministic answer. Those get a real
-one-click fix — no modal, no diff, batch-applicable — because there is nothing
-to judge. `lang="en"` is either present or it is not.
+*Corrected while implementing, 2026-09-01.* This decision originally said
+"roughly half of the current checks have a deterministic answer". Classifying
+all seventeen says otherwise, and the gap matters enough to record rather than
+quietly fix.
+
+Two questions were being conflated. **Do we know the right answer?** and **can we
+write it where the fault is?** A one-click fix needs both, and several rules have
+the first without the second: `lang="en"` has exactly one correct value and lives
+on an `<html>` element printed by the theme, which no filter reaches. Knowing the
+answer is not the same as being able to apply it.
+
+The honest tally, pinned in `FixPlanTest` so it cannot drift upward one
+reasonable-looking rule at a time:
+
+| | count | |
+| --- | --- | --- |
+| **One click** | 4 | colour, link underline, target size — all CSS and already shipped — plus a missing `<title>`, which WordPress writes itself once a plugin declares `title-tag` support on the theme's behalf |
+| **Draft, then review** | 6 | alt text, and the five other checks whose fix is a piece of writing |
+| **Hand off to the theme** | 4 | a known answer, or an obvious one, in a file nothing here reaches |
+| **Only the owner can settle it** | 3 | which cells are headers, which heading should be demoted |
+
+So the one-click story is thin on the markup pass and rich on the browser pass,
+which is the opposite of what the original wording implied. It does not change
+the design — the split between computed and generated is exactly as necessary as
+it was — but it does change what the interface can promise, and it means the
+value of "fix automatically" rests on the CSS work already done rather than on
+markup fixes still to come.
 
 The generative half can still be *bulk* without being *unreviewed*: generate for
 forty items in the background, then show one **review queue** — a grid of

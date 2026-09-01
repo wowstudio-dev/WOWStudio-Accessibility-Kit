@@ -8,6 +8,9 @@
 namespace WOWStudio\AccessibilityKit\Scanner\Rules;
 
 use DOMElement;
+use WOWStudio\AccessibilityKit\Remediation\FixKind;
+use WOWStudio\AccessibilityKit\Remediation\FixPlan;
+use WOWStudio\AccessibilityKit\Remediation\FixTarget;
 use WOWStudio\AccessibilityKit\Scanner\Detection;
 use WOWStudio\AccessibilityKit\Scanner\Document;
 use WOWStudio\AccessibilityKit\Scanner\Finding;
@@ -94,6 +97,22 @@ final class LinkNameMissing implements Rule {
 	 */
 	public function description(): string {
 		return __( 'This link announces nothing, so someone using a screen reader hears only "link" and cannot tell where it goes. Add visible text, an aria-label, or alt text on the image inside it.', 'wowstudio-accessibility-kit' );
+	}
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * @since 0.13.0
+	 *
+	 * @return FixPlan
+	 */
+	public function fix_plan(): FixPlan {
+		// A link's name has to describe where it goes, which nothing here knows for certain.
+		return new FixPlan(
+			FixKind::Generative,
+			FixTarget::Content,
+			__( 'A link\'s name has to describe where it goes, which nothing here knows for certain. Proposed, then reviewed.', 'wowstudio-accessibility-kit' )
+		);
 	}
 
 	/**

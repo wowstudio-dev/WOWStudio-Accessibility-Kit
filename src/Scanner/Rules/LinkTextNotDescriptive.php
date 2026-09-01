@@ -8,6 +8,9 @@
 namespace WOWStudio\AccessibilityKit\Scanner\Rules;
 
 use DOMElement;
+use WOWStudio\AccessibilityKit\Remediation\FixKind;
+use WOWStudio\AccessibilityKit\Remediation\FixPlan;
+use WOWStudio\AccessibilityKit\Remediation\FixTarget;
 use WOWStudio\AccessibilityKit\Scanner\Detection;
 use WOWStudio\AccessibilityKit\Scanner\Document;
 use WOWStudio\AccessibilityKit\Scanner\Finding;
@@ -96,6 +99,22 @@ final class LinkTextNotDescriptive implements Rule {
 	 */
 	public function description(): string {
 		return __( 'Screen reader users often browse a list of every link on the page, with no surrounding text. Phrases like \'read more\' or \'click here\' give them nothing to go on. Consider rewriting the link to name its destination. If the wording is genuinely clear in context, mark this as reviewed.', 'wowstudio-accessibility-kit' );
+	}
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * @since 0.13.0
+	 *
+	 * @return FixPlan
+	 */
+	public function fix_plan(): FixPlan {
+		// Better wording depends on where the link goes and what the sentence around it already says.
+		return new FixPlan(
+			FixKind::Generative,
+			FixTarget::Content,
+			__( 'Better wording depends on where the link goes and what the sentence around it already says. Proposed, then reviewed.', 'wowstudio-accessibility-kit' )
+		);
 	}
 
 	/**
