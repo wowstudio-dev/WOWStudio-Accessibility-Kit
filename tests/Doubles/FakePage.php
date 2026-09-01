@@ -10,6 +10,7 @@ declare( strict_types = 1 );
 namespace WOWStudio\AccessibilityKit\Tests\Doubles;
 
 use RuntimeException;
+use WOWStudio\AccessibilityKit\Scanner\FetchStrategy;
 use WOWStudio\AccessibilityKit\Scanner\PageScanner;
 
 /**
@@ -23,6 +24,13 @@ final class FakePage extends PageScanner {
 	 * @var int[]
 	 */
 	public array $scanned = array();
+
+	/**
+	 * The strategy each call asked for, so a test can assert bulk uses content.
+	 *
+	 * @var array<int, FetchStrategy|null>
+	 */
+	public array $strategies = array();
 
 	/**
 	 * Post to throw on, or 0 for none.
@@ -50,12 +58,15 @@ final class FakePage extends PageScanner {
 	/**
 	 * {@inheritDoc}
 	 *
-	 * @param int $scan_id Scan.
-	 * @param int $post_id Post.
+	 * @param int                $scan_id  Scan.
+	 * @param int                $post_id  Post.
+	 * @param FetchStrategy|null $strategy How the markup was to be fetched.
 	 * @return array<string, mixed>
 	 * @throws RuntimeException When told to fail on this post.
 	 */
-	public function run( int $scan_id, int $post_id ) {
+	public function run( int $scan_id, int $post_id, ?FetchStrategy $strategy = null ) {
+		$this->strategies[] = $strategy;
+
 		if ( $this->throw_on === $post_id ) {
 			throw new RuntimeException( 'this page is no good' );
 		}

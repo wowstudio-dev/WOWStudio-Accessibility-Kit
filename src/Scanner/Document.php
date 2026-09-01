@@ -64,14 +64,28 @@ final class Document {
 	private bool $is_full_page;
 
 	/**
+	 * What the theme puts around this markup, when that is known.
+	 *
+	 * Only ever consulted by rules that judge content relative to what precedes
+	 * it. Everything else in here is a fact about the markup in hand; this is
+	 * the one piece of knowledge from outside it.
+	 *
+	 * @since 0.12.0
+	 * @var TemplateProfile
+	 */
+	private TemplateProfile $profile;
+
+	/**
 	 * Constructor.
 	 *
 	 * @since 0.3.0
 	 *
-	 * @param DOMDocument $dom          Parsed document.
-	 * @param bool        $is_full_page Whether the source was a whole page.
+	 * @param DOMDocument          $dom          Parsed document.
+	 * @param bool                 $is_full_page Whether the source was a whole page.
+	 * @param TemplateProfile|null $profile      What the theme puts around it, when known.
 	 */
-	private function __construct( DOMDocument $dom, bool $is_full_page ) {
+	private function __construct( DOMDocument $dom, bool $is_full_page, ?TemplateProfile $profile = null ) {
+		$this->profile      = $profile ?? TemplateProfile::unknown();
 		$this->dom          = $dom;
 		$this->xpath        = new DOMXPath( $dom );
 		$this->is_full_page = $is_full_page;
@@ -86,10 +100,11 @@ final class Document {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @param string $html Raw HTML.
+	 * @param string               $html Raw HTML.
+	 * @param TemplateProfile|null $profile What the theme puts around it, when known.
 	 * @return self|null
 	 */
-	public static function from_html( string $html ): ?self {
+	public static function from_html( string $html, ?TemplateProfile $profile = null ): ?self {
 		if ( '' === trim( $html ) ) {
 			return null;
 		}
@@ -123,7 +138,7 @@ final class Document {
 		 */
 		$is_full_page = 1 === preg_match( '/<(?:html|head)[\s>]/i', $html );
 
-		return $loaded ? new self( $dom, $is_full_page ) : null;
+		return $loaded ? new self( $dom, $is_full_page, $profile ) : null;
 	}
 
 	/**
@@ -137,6 +152,20 @@ final class Document {
 	 */
 	public function is_full_page(): bool {
 		return $this->is_full_page;
+	}
+
+	/**
+	 * What the theme contributes around this markup.
+	 *
+	 * Returns a profile that admits it knows nothing when nothing is known,
+	 * rather than null, so no caller has to guard before asking.
+	 *
+	 * @since 0.12.0
+	 *
+	 * @return TemplateProfile
+	 */
+	public function profile(): TemplateProfile {
+		return $this->profile;
 	}
 
 	/**

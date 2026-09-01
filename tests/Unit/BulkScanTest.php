@@ -13,6 +13,7 @@ use Brain\Monkey\Functions;
 use WOWStudio\AccessibilityKit\Jobs\BulkScan;
 use WOWStudio\AccessibilityKit\Jobs\Progress;
 use WOWStudio\AccessibilityKit\Jobs\Queue;
+use WOWStudio\AccessibilityKit\Scanner\FetchStrategy;
 use WOWStudio\AccessibilityKit\Scanner\ScanStatus;
 use WOWStudio\AccessibilityKit\Tests\Doubles\FakePage;
 use WOWStudio\AccessibilityKit\Tests\Doubles\FakeQueue;
@@ -157,6 +158,26 @@ final class BulkScanTest extends TestCase {
 		$this->assertSame( array( 11 ), $scanner->scanned );
 		$this->assertSame( ScanStatus::Complete->value, $scans->rows[ $scan_id ]['status'] );
 		$this->assertSame( ScanStatus::Complete->value, $scans->rows[ $run ]['status'] );
+	}
+
+	/**
+	 * A bulk run asks for content, never for the whole page.
+	 *
+	 * The decision that makes bulk scanning work on hosts that block loopback,
+	 * on drafts, and inside cron — and it is one line in one place, so a test is
+	 * the only thing that keeps it there. See decision F9.
+	 *
+	 * @return void
+	 */
+	public function test_a_bulk_run_uses_the_content_strategy(): void {
+		$scans   = new FakeScanStore();
+		$queue   = new FakeQueue();
+		$scanner = new FakePage( $scans );
+
+		$this->manager( $scans, $queue, $scanner )->start( array( 11 ), 1 );
+		$this->manager( $scans, $queue, $scanner )->step( $queue->enqueued[0]['scan_id'] );
+
+		$this->assertSame( array( FetchStrategy::Content ), $scanner->strategies );
 	}
 
 	/**

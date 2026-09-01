@@ -8,6 +8,7 @@
 namespace WOWStudio\AccessibilityKit\Jobs;
 
 use WOWStudio\AccessibilityKit\Db\ScanRepository;
+use WOWStudio\AccessibilityKit\Scanner\FetchStrategy;
 use WOWStudio\AccessibilityKit\Scanner\PageScanner;
 use WOWStudio\AccessibilityKit\Scanner\ScanScope;
 use WOWStudio\AccessibilityKit\Scanner\ScanStatus;
@@ -215,7 +216,15 @@ final class BulkScan {
 		}
 
 		try {
-			$this->scanner->run( $scan_id, $scan->target_id );
+			/*
+			 * Content, not the whole page. A hundred loopback fetches is a
+			 * different proposition from one: it fails on hosts that block
+			 * loopback, gets a 404 for every draft because a queued job has no
+			 * user, and makes the site render itself a second time for every
+			 * page. What the theme contributes is checked once, separately.
+			 * Decision F9.
+			 */
+			$this->scanner->run( $scan_id, $scan->target_id, FetchStrategy::Content );
 		} catch ( Throwable $error ) {
 			$this->scans->fail( $scan_id, $error->getMessage() );
 		}

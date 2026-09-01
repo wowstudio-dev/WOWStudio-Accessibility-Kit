@@ -106,7 +106,14 @@ final class MultipleTopHeadings implements Rule {
 	 */
 	public function evaluate( Document $document ): array {
 		$findings = array();
-		$seen     = 0;
+
+		/*
+		 * A content-only scan sees the post's headings and not the theme's. If
+		 * the theme already printed the title as an h1, the first h1 in the
+		 * content is the second on the page — and reporting from the second
+		 * onwards means it would otherwise be missed entirely.
+		 */
+		$seen = $document->is_full_page() ? 0 : $document->profile()->top_headings_before_content();
 
 		foreach ( $document->find( '//h1' ) as $heading ) {
 			if ( ! $heading instanceof DOMElement || $document->is_hidden( $heading ) ) {

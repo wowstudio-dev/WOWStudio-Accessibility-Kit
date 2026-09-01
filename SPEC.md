@@ -891,15 +891,28 @@ happens to use it. That is both far less noise and a truer description of the
 problem: it is one fault, in one template, and fixing it fixes every page.
 
 **The template profile is why this is accurate rather than merely cheap.**
-Scanning content alone would produce real false positives, and two of the current
-rules demonstrate it. A post whose first heading is `<h2>` looks like a skipped
-level when you cannot see the `<h1>` the theme printed above it; a post
-containing an `<h1>` is only a *second* top-level heading if the template already
-emitted one. So the template pass records a few facts the content pass needs —
-the heading level the theme establishes before the content, whether the page
-already has a `main`, a `title`, a `lang` — and the content pass is seeded with
-them. Without this, bulk scanning would be confidently wrong about heading
-structure on every well-built theme.
+
+*Corrected while implementing, 2026-09-01.* This decision originally claimed that
+scanning content alone would produce false **positives** on heading structure.
+Reading the two rules says otherwise: `HeadingLevelSkipped` guards its first
+heading with `0 !== $previous`, and `MultipleTopHeadings` only reports from the
+second `h1` onwards. Neither invents a finding when the theme's heading is out of
+sight.
+
+What they do instead is miss real ones, which for these two is the more likely
+failure and the harder one to notice. A post whose content runs `h1` under a
+theme that already printed one is a genuine second top-level heading, and
+content alone counts one and says nothing. A post starting at `<h3>` under a
+theme's `<h1>` is a genuine skipped level, and content alone treats `h3` as the
+beginning and says nothing. Bulk scanning without the profile would therefore be
+quietly *less* thorough on exactly the well-built themes where the remaining
+faults are subtle.
+
+So the template pass records the few facts the content pass is missing — the
+heading level the theme establishes before the content, whether the page already
+has a `main`, a `title`, a `lang` — and the content pass is seeded with them. A
+missing profile means those rules behave as they do today rather than guessing:
+under-reporting is recoverable, and inventing findings is not.
 
 **Attribution is by subtraction, and the code for it exists.**
 `Substitution::locatable()` already answers "does this recorded markup appear in

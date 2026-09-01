@@ -38,6 +38,13 @@ final class PageSourceTest extends TestCase {
 		Functions\when( 'wp_remote_retrieve_response_code' )->alias( static fn( array $r ): int => $r['response']['code'] ?? 0 );
 		Functions\when( 'wp_remote_retrieve_body' )->alias( static fn( array $r ): string => $r['body'] ?? '' );
 		Functions\when( 'get_post' )->justReturn( (object) array( 'post_content' => '<p>Just the content.</p>' ) );
+
+		// These tests are about what happens once a request has been attempted,
+		// so the probe is told loopback works and stays out of the way. Its own
+		// behaviour is covered in LoopbackProbeTest.
+		Functions\when( 'get_transient' )->justReturn( '1' );
+		Functions\when( 'set_transient' )->justReturn( true );
+		Functions\when( 'delete_transient' )->justReturn( true );
 	}
 
 	/**

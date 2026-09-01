@@ -55,11 +55,12 @@ final class Engine {
 	 *
 	 * @since 0.3.0
 	 *
-	 * @param string $html Page or fragment markup.
+	 * @param string               $html    Page or fragment markup.
+	 * @param TemplateProfile|null $profile What the theme puts around it, when known.
 	 * @return Result|null
 	 */
-	public function scan( string $html ): ?Result {
-		$document = Document::from_html( $html );
+	public function scan( string $html, ?TemplateProfile $profile = null ): ?Result {
+		$document = Document::from_html( $html, $profile );
 
 		if ( null === $document ) {
 			return null;

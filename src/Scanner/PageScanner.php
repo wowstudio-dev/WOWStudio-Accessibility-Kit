@@ -69,25 +69,36 @@ class PageScanner {
 	private Engine $engine;
 
 	/**
+	 * What the theme contributes, for content-only scans.
+	 *
+	 * @since 0.12.0
+	 * @var TemplateScan
+	 */
+	private TemplateScan $templates;
+
+	/**
 	 * Constructor.
 	 *
 	 * @since 0.12.0
 	 *
 	 * @param ScanRepository|null  $scans  Scan storage.
 	 * @param IssueRepository|null $issues Issue storage.
-	 * @param PageSource|null      $source Markup source.
-	 * @param Engine|null          $engine Rule engine.
+	 * @param PageSource|null      $source    Markup source.
+	 * @param Engine|null          $engine    Rule engine.
+	 * @param TemplateScan|null    $templates Theme profile source.
 	 */
 	public function __construct(
 		?ScanRepository $scans = null,
 		?IssueRepository $issues = null,
 		?PageSource $source = null,
-		?Engine $engine = null
+		?Engine $engine = null,
+		?TemplateScan $templates = null
 	) {
-		$this->scans  = $scans ?? new ScanRepository();
-		$this->issues = $issues ?? new IssueRepository();
-		$this->source = $source ?? new PageSource();
-		$this->engine = $engine ?? new Engine();
+		$this->scans     = $scans ?? new ScanRepository();
+		$this->issues    = $issues ?? new IssueRepository();
+		$this->source    = $source ?? new PageSource();
+		$this->engine    = $engine ?? new Engine();
+		$this->templates = $templates ?? new TemplateScan();
 	}
 
 	/**
@@ -95,12 +106,13 @@ class PageScanner {
 	 *
 	 * @since 0.12.0
 	 *
-	 * @param int $scan_id Scan row to fill in.
-	 * @param int $post_id Post to scan.
+	 * @param int                $scan_id  Scan row to fill in.
+	 * @param int                $post_id  Post to scan.
+	 * @param FetchStrategy|null $strategy How to get the markup, or null for the whole page.
 	 * @return array<string, mixed>|WP_Error What was found, or why nothing was.
 	 */
-	public function run( int $scan_id, int $post_id ) {
-		$markup = $this->source->for_post( $post_id );
+	public function run( int $scan_id, int $post_id, ?FetchStrategy $strategy = null ) {
+		$markup = $this->source->for_post( $post_id, $strategy );
 
 		if ( is_wp_error( $markup ) ) {
 			$this->scans->fail( $scan_id, $markup->get_error_message() );
@@ -108,7 +120,15 @@ class PageScanner {
 			return $markup;
 		}
 
-		$result = $this->engine->scan( $markup->html );
+		/*
+		 * A whole page carries its own theme, so it needs no profile. A
+		 * content-only scan does: without it the heading rules treat the first
+		 * heading in the content as the first on the page, and miss the two
+		 * commonest real faults. See decision F9.
+		 */
+		$profile = $markup->from_loopback ? null : $this->templates->profile();
+
+		$result = $this->engine->scan( $markup->html, $profile );
 
 		if ( null === $result ) {
 			$error = new WP_Error(
@@ -131,11 +151,13 @@ class PageScanner {
 		$summary                    = $result->summary();
 		$summary['from_loopback']   = $markup->from_loopback;
 		$summary['coverage_notice'] = $markup->notice;
+		$summary['strategy']        = $markup->from_loopback ? FetchStrategy::Loopback->value : FetchStrategy::Content->value;
 
 		$this->issues->add_many( $scan_id, $rows );
 		$this->scans->complete( $scan_id, $result->score(), $summary );
 
 		return array(
+			'strategy'      => $markup->from_loopback ? FetchStrategy::Loopback->value : FetchStrategy::Content->value,
 			'score'         => $result->score(),
 			'summary'       => $summary,
 			'full_page'     => $result->full_page,

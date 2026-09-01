@@ -106,7 +106,16 @@ final class HeadingLevelSkipped implements Rule {
 	 */
 	public function evaluate( Document $document ): array {
 		$findings = array();
-		$previous = 0;
+
+		/*
+		 * On a whole page the first heading has nothing before it, so nothing to
+		 * skip from. On a content-only scan there *is* something before it — the
+		 * theme's own heading — and starting from zero means the commonest real
+		 * skip of all, a post opening at h3 under the theme's h1, goes
+		 * unreported. Zero when the theme has not been looked at, which restores
+		 * exactly the old behaviour rather than guessing.
+		 */
+		$previous = $document->is_full_page() ? 0 : $document->profile()->heading_context();
 
 		foreach ( $document->find( '//h1 | //h2 | //h3 | //h4 | //h5 | //h6' ) as $heading ) {
 			if ( ! $heading instanceof DOMElement || $document->is_hidden( $heading ) ) {

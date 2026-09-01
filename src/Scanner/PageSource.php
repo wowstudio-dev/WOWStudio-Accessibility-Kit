@@ -26,6 +26,11 @@ defined( 'ABSPATH' ) || exit;
  * reduced and why. A partial scan presented as a full one would misreport a
  * site in both directions.
  *
+ * Which of those happens is now a choice rather than an accident. A single-page
+ * scan asks for the whole page, because somebody is waiting and the extra
+ * coverage is worth a round trip. A bulk run asks for content, because a
+ * hundred round trips is a different proposition from one — see decision F9.
+ *
  * @since 0.3.0
  */
 final class PageSource {
@@ -39,14 +44,41 @@ final class PageSource {
 	private const TIMEOUT = 20;
 
 	/**
-	 * Fetches the rendered HTML for a post.
+	 * Whether this site can fetch itself.
+	 *
+	 * @since 0.12.0
+	 * @var LoopbackProbe
+	 */
+	private LoopbackProbe $probe;
+
+	/**
+	 * Constructor.
+	 *
+	 * @since 0.12.0
+	 *
+	 * @param LoopbackProbe|null $probe Loopback verdict.
+	 */
+	public function __construct( ?LoopbackProbe $probe = null ) {
+		$this->probe = $probe ?? new LoopbackProbe();
+	}
+
+	/**
+	 * Fetches the markup for a post.
 	 *
 	 * @since 0.3.0
 	 *
-	 * @param int $post_id Post to fetch.
+	 * @param int                $post_id  Post to fetch.
+	 * @param FetchStrategy|null $strategy How to get it, or null for the whole page.
 	 * @return PageMarkup|WP_Error Markup and its origin, or an error explaining what to do.
 	 */
-	public function for_post( int $post_id ) {
+	public function for_post( int $post_id, ?FetchStrategy $strategy = null ) {
+		$strategy = $strategy ?? FetchStrategy::Loopback;
+
+		if ( FetchStrategy::Content === $strategy ) {
+			// Asked for deliberately, so this is not a fallback and does not
+			// carry a fallback's apologetic reason.
+			return $this->content_only( $post_id );
+		}
 		/**
 		 * Filters the HTML the scanner analyses, before it is fetched.
 		 *
@@ -68,6 +100,14 @@ final class PageSource {
 
 		if ( false === $permalink ) {
 			return $this->fallback( $post_id, __( 'that content has no public address', 'wowstudio-accessibility-kit' ) );
+		}
+
+		// Established once for the site rather than rediscovered per page. On a
+		// host that blocks loopback this turns a twenty-second timeout into no
+		// request at all, which is the difference between a bulk run being slow
+		// and a bulk run being unusable.
+		if ( ! $this->probe->works() ) {
+			return $this->fallback( $post_id, __( 'this site cannot make requests to itself', 'wowstudio-accessibility-kit' ) );
 		}
 
 		$response = wp_remote_get(
@@ -105,6 +145,40 @@ final class PageSource {
 		}
 
 		return new PageMarkup( $body, true );
+	}
+
+	/**
+	 * Renders a post's own content, with no HTTP at all.
+	 *
+	 * The strategy a bulk run uses, and the reason bulk scanning works on hosts
+	 * where nothing else does. Deliberately not routed through fallback(): this
+	 * is a choice, and dressing a choice up as a failure would put an apology in
+	 * front of somebody who got exactly what they asked for.
+	 *
+	 * @since 0.12.0
+	 *
+	 * @param int $post_id Post to render.
+	 * @return PageMarkup|WP_Error
+	 */
+	private function content_only( int $post_id ) {
+		$post = get_post( $post_id );
+
+		if ( null === $post ) {
+			return new WP_Error(
+				'wsak_unknown_post',
+				__( 'That content could not be found.', 'wowstudio-accessibility-kit' ),
+				array( 'status' => 404 )
+			);
+		}
+
+		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Applying core's content filter is the intent here, not declaring a new hook.
+		$content = apply_filters( 'the_content', $post->post_content );
+
+		return new PageMarkup(
+			is_string( $content ) ? $content : '',
+			false,
+			__( 'This checked the content of the page, not the theme around it. Faults in your header, navigation and footer are reported separately, against the theme, rather than repeated against every page that uses it.', 'wowstudio-accessibility-kit' )
+		);
 	}
 
 	/**

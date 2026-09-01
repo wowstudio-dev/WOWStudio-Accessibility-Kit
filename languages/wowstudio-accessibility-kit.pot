@@ -338,37 +338,37 @@ msgstr ""
 msgid "The Accessibility Kit interface has not been built. Run \"npm install && npm run build\" in the plugin directory."
 msgstr ""
 
-#: src/Jobs/BulkScan.php:105
+#: src/Jobs/BulkScan.php:106
 msgid "The background scheduler is not running, so a bulk scan cannot be started. Scanning one page at a time still works."
 msgstr ""
 
-#: src/Jobs/BulkScan.php:115
+#: src/Jobs/BulkScan.php:116
 msgid "No content was selected, so there is nothing to scan."
 msgstr ""
 
 #. translators: %d: maximum number of pages in one run.
-#: src/Jobs/BulkScan.php:125
+#: src/Jobs/BulkScan.php:126
 #, php-format
 msgid "A single run covers at most %d items. Select fewer, and run again when it finishes."
 msgstr ""
 
-#: src/Jobs/BulkScan.php:137
+#: src/Jobs/BulkScan.php:138
 msgid "The run could not be recorded. Check that the plugin tables exist."
 msgstr ""
 
-#: src/Jobs/BulkScan.php:156
+#: src/Jobs/BulkScan.php:157
 msgid "This page could not be added to the queue."
 msgstr ""
 
-#: src/Jobs/BulkScan.php:161
+#: src/Jobs/BulkScan.php:162
 msgid "Nothing could be added to the queue."
 msgstr ""
 
-#: src/Jobs/BulkScan.php:165
+#: src/Jobs/BulkScan.php:166
 msgid "None of the selected content could be added to the queue."
 msgstr ""
 
-#: src/Jobs/BulkScan.php:276
+#: src/Jobs/BulkScan.php:285
 msgid "That run could not be found."
 msgstr ""
 
@@ -556,7 +556,8 @@ msgid "You do not have permission to run accessibility scans."
 msgstr ""
 
 #: src/Rest/ScanController.php:236
-#: src/Scanner/PageSource.php:150
+#: src/Scanner/PageSource.php:169
+#: src/Scanner/PageSource.php:224
 msgid "That content could not be found."
 msgstr ""
 
@@ -651,6 +652,14 @@ msgstr ""
 msgid "Needs manual review"
 msgstr ""
 
+#: src/Scanner/FetchStrategy.php:57
+msgid "Whole page"
+msgstr ""
+
+#: src/Scanner/FetchStrategy.php:58
+msgid "Content only"
+msgstr ""
+
 #: src/Scanner/IssueStatus.php:43
 msgid "Open"
 msgstr ""
@@ -663,32 +672,40 @@ msgstr ""
 msgid "Ignored"
 msgstr ""
 
-#: src/Scanner/PageScanner.php:116
+#: src/Scanner/PageScanner.php:136
 msgid "The page could not be parsed as HTML, so it could not be scanned."
 msgstr ""
 
-#: src/Scanner/PageSource.php:70
+#: src/Scanner/PageSource.php:102
 msgid "that content has no public address"
 msgstr ""
 
+#: src/Scanner/PageSource.php:110
+msgid "this site cannot make requests to itself"
+msgstr ""
+
 #. translators: %d: HTTP status code.
-#: src/Scanner/PageSource.php:95
+#: src/Scanner/PageSource.php:135
 #, php-format
 msgid "the page returned HTTP %d"
 msgstr ""
 
-#: src/Scanner/PageSource.php:104
+#: src/Scanner/PageSource.php:144
 msgid "the page returned no content"
 msgstr ""
 
+#: src/Scanner/PageSource.php:180
+msgid "This checked the content of the page, not the theme around it. Faults in your header, navigation and footer are reported separately, against the theme, rather than repeated against every page that uses it."
+msgstr ""
+
 #. translators: %s: the underlying reason.
-#: src/Scanner/PageSource.php:138
+#: src/Scanner/PageSource.php:212
 #, php-format
 msgid "The page could not be fetched for scanning because %s. This usually means the site cannot make requests to itself; ask your host about loopback requests."
 msgstr ""
 
 #. translators: %s: the underlying reason the whole page could not be fetched.
-#: src/Scanner/PageSource.php:165
+#: src/Scanner/PageSource.php:239
 #, php-format
 msgid "Only this content was scanned, not the whole page, because %s. Checks that depend on the surrounding page — its language, its title, its landmarks — were skipped, so this scan covers less than usual. Ask your host about loopback requests to enable full-page scanning."
 msgstr ""
@@ -744,7 +761,7 @@ msgid "People using a screen reader navigate by moving through headings, so the 
 msgstr ""
 
 #. translators: 1: previous heading level, 2: this heading level.
-#: src/Scanner/Rules/HeadingLevelSkipped.php:126
+#: src/Scanner/Rules/HeadingLevelSkipped.php:135
 #, php-format
 msgid "This heading jumps from level %1$d to level %2$d."
 msgstr ""
@@ -840,7 +857,7 @@ msgid "A page normally has one h1 naming what the page is about. More than one g
 msgstr ""
 
 #. translators: %d: position of this top-level heading on the page.
-#: src/Scanner/Rules/MultipleTopHeadings.php:129
+#: src/Scanner/Rules/MultipleTopHeadings.php:136
 #, php-format
 msgid "This is top-level heading number %d on the page."
 msgstr ""
@@ -873,12 +890,16 @@ msgstr ""
 msgid "Measured in a real browser, where colours, sizes and layout are known. Only runs while you have the dashboard open."
 msgstr ""
 
-#: src/Scanner/ScanScope.php:38
+#: src/Scanner/ScanScope.php:51
 msgid "Single page"
 msgstr ""
 
-#: src/Scanner/ScanScope.php:39
+#: src/Scanner/ScanScope.php:52
 msgid "Whole site"
+msgstr ""
+
+#: src/Scanner/ScanScope.php:53
+msgid "Theme"
 msgstr ""
 
 #: src/Scanner/ScanStatus.php:69
@@ -915,6 +936,22 @@ msgstr ""
 
 #: src/Scanner/Severity.php:51
 msgid "Minor"
+msgstr ""
+
+#: src/Scanner/TemplateScan.php:188
+msgid "There is no published content to check the theme against. Publish a page or a post, then try again."
+msgstr ""
+
+#: src/Scanner/TemplateScan.php:198
+msgid "The theme check could not be recorded. Check that the plugin tables exist."
+msgstr ""
+
+#: src/Scanner/TemplateScan.php:254
+msgid "The theme could not be checked, because this site cannot fetch its own pages."
+msgstr ""
+
+#: src/Scanner/TemplateScan.php:258
+msgid "Your theme could not be checked, because this site cannot make requests to itself. Everything else still works: pages are checked on their own content, and opening one in the inspector checks it in full."
 msgstr ""
 
 #. translators: 1: required PHP version, 2: PHP version running on the server.
