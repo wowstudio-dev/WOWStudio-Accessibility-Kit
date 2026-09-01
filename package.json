@@ -15,6 +15,7 @@
 		"lint:css": "wp-scripts lint-style \"assets/src/**/*.scss\"",
 		"lint:contrast": "node bin/check-contrast.js",
 		"test:js": "wp-scripts test-unit-js",
+		"check:tiers": "php bin/check-tiers.php",
 		"gate": "bin/gate.sh",
 		"format": "wp-scripts format",
 		"packages-update": "wp-scripts packages-update",

@@ -20,6 +20,7 @@ import {
 	startRun,
 } from '../api';
 import CoverageBadge from './coverage-badge';
+import PaidNotice from './paid-notice';
 import RenderedQueue from './rendered-queue';
 import { Busy, ErrorState, Skeleton } from './states';
 
@@ -61,6 +62,11 @@ export default function BulkScan( { onInspect } ) {
 	const [ announcement, setAnnouncement ] = useState( '' );
 
 	const timer = useRef( null );
+
+	// Read from the page rather than fetched. The routes enforce this
+	// themselves; this only decides what the interface offers, so a stale or
+	// missing value costs a confusing button and never a wrong outcome.
+	const isPro = Boolean( window.wsakSettings?.plan?.pro );
 
 	useEffect( () => {
 		fetchContentTypes()
@@ -335,10 +341,20 @@ export default function BulkScan( { onInspect } ) {
 						) ) }
 					</ul>
 
+					{ ! isPro && (
+						<PaidNotice
+							feature={ __(
+								'Checking many pages at once',
+								'wowstudio-accessibility-kit'
+							) }
+						/>
+					) }
+
 					<div className="wsak-bulk__actions">
 						<Button
 							variant="primary"
 							disabled={
+								! isPro ||
 								! selected.length ||
 								( run && ! run.progress?.finished )
 							}

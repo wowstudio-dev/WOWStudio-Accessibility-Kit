@@ -14,6 +14,7 @@ use WOWStudio\AccessibilityKit\AltText\MediaIndex;
 use WOWStudio\AccessibilityKit\AltText\UsageMeter;
 use WOWStudio\AccessibilityKit\Core\Registrable;
 use WOWStudio\AccessibilityKit\Support\Capabilities;
+use WOWStudio\AccessibilityKit\Support\Plan;
 use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -235,6 +236,10 @@ final class AltTextRunController implements Registrable {
 	 * @return WP_REST_Response|WP_Error
 	 */
 	public function start( WP_REST_Request $request ) {
+		if ( ! ( new Plan() )->is_pro() ) {
+			return ( new Plan() )->refuse( __( 'Describing many images at once', 'wowstudio-accessibility-kit' ) );
+		}
+
 		$run = ( new AltTextRun() )->start( (array) $request->get_param( 'attachment_ids' ) );
 
 		if ( is_wp_error( $run ) ) {

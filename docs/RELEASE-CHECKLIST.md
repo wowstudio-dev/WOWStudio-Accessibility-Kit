@@ -70,6 +70,26 @@ by a human before any public release. Items marked **TODO(human)** are open.
       any of this works, and shipping an accessibility tool that has never been
       near one is the criticism this product exists to avoid.
 
+## Tier boundary (from Phase 3 onward)
+
+- [x] **Every paid route refuses a free site.** Checked mechanically by
+      `bin/check-tiers.php`, which runs in the gate. It asserts the gate is near
+      the top of each paid handler, before any work — a check buried after the
+      side effects is not a gate. Adding a paid feature means adding a line to
+      that file, and the guard fails until the gate exists.
+- [x] **The boundary is F1:** the free tier fixes a page, the paid tier fixes a
+      site and keeps it fixed. Free keeps single-page scanning, the inspector,
+      the editor panel, the theme report, every check and every one-at-a-time
+      fix, unlimited. Paid is bulk scanning, bulk alt text, and the uncapped
+      allowance.
+- [ ] **Before the first paid release:** decide whether the Pro-only classes
+      should move into `@fs_premium_only` files so Freemius strips them from the
+      free zip entirely. Today the gate is enforced at the route, which stops
+      the feature being *used* but still ships the code. That is the ordinary
+      arrangement for most Freemius plugins and it is not what CLAUDE.md's
+      "no premium code in the free zip" rule asks for. Worth resolving
+      deliberately rather than discovering at submission.
+
 ## Third-party code (from Phase 2 onward)
 
 - [x] **axe-core is not bundled.** The browser pass was going to use it

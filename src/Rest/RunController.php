@@ -22,6 +22,7 @@ use WOWStudio\AccessibilityKit\Scanner\ScanScope;
 use WOWStudio\AccessibilityKit\Scanner\ScanStatus;
 use WOWStudio\AccessibilityKit\Scanner\TemplateScan;
 use WOWStudio\AccessibilityKit\Support\Capabilities;
+use WOWStudio\AccessibilityKit\Support\Plan;
 use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -257,6 +258,13 @@ final class RunController implements Registrable {
 	 * @return WP_REST_Response|WP_Error
 	 */
 	public function start( WP_REST_Request $request ) {
+		// The line from F1: one page is free, many pages is paid. Enforced here
+		// rather than in the interface, because a limit that only exists in the
+		// interface is not a limit.
+		if ( ! ( new Plan() )->is_pro() ) {
+			return ( new Plan() )->refuse( __( 'Checking many pages at once', 'wowstudio-accessibility-kit' ) );
+		}
+
 		$requested = (array) $request->get_param( 'post_ids' );
 		$allowed   = array();
 

@@ -47,7 +47,7 @@ msgstr ""
 
 #: src/Admin/Menu.php:93
 #: src/Rest/FixController.php:163
-#: src/Rest/RunController.php:205
+#: src/Rest/RunController.php:206
 #: src/Rest/ScanController.php:206
 #: src/Rest/StatementController.php:116
 msgid "You do not have permission to view accessibility reports."
@@ -359,7 +359,7 @@ msgstr ""
 msgid "Reviewed and approved by %1$s on %2$s."
 msgstr ""
 
-#: src/Core/Assets.php:172
+#: src/Core/Assets.php:173
 msgid "The Accessibility Kit interface has not been built. Run \"npm install && npm run build\" in the plugin directory."
 msgstr ""
 
@@ -394,7 +394,7 @@ msgid "None of the selected content could be added to the queue."
 msgstr ""
 
 #: src/Jobs/BulkScan.php:285
-#: src/Rest/RunController.php:306
+#: src/Rest/RunController.php:314
 msgid "That run could not be found."
 msgstr ""
 
@@ -657,12 +657,18 @@ msgstr ""
 msgid "The key could not be stored."
 msgstr ""
 
-#: src/Rest/AltTextRunController.php:177
+#: src/Rest/AltTextRunController.php:178
 msgid "You do not have permission to change the media library."
 msgstr ""
 
-#: src/Rest/AltTextRunController.php:225
+#: src/Rest/AltTextRunController.php:226
 msgid "Each image is one request to your own provider account, and they bill you for it directly. We never see what it costs, so we will not guess at a figure — check their pricing if you want one before you start."
+msgstr ""
+
+#: src/Rest/AltTextRunController.php:240
+#: src/Support/Plan.php:99
+#: assets/src/components/alt-text-bulk.js:285
+msgid "Describing many images at once"
 msgstr ""
 
 #: src/Rest/BlockCheckController.php:118
@@ -708,46 +714,52 @@ msgstr ""
 msgid "This fix changes how your theme renders every page, and your account is not allowed to change theme settings. An administrator can apply it."
 msgstr ""
 
-#: src/Rest/RunController.php:186
+#: src/Rest/RunController.php:187
 #: src/Rest/ScanController.php:187
 msgid "You do not have permission to run accessibility scans."
 msgstr ""
 
-#: src/Rest/RunController.php:277
+#: src/Rest/RunController.php:265
+#: src/Support/Plan.php:98
+#: assets/src/components/bulk-scan.js:346
+msgid "Checking many pages at once"
+msgstr ""
+
+#: src/Rest/RunController.php:285
 msgid "None of the selected content could be read with your account, so there is nothing to scan."
 msgstr ""
 
 #. translators: %s: theme name.
-#: src/Rest/RunController.php:485
+#: src/Rest/RunController.php:493
 #, php-format
 msgid "Accessibility changes needed in the %s theme"
 msgstr ""
 
-#: src/Rest/RunController.php:489
+#: src/Rest/RunController.php:497
 msgid "These are in theme files rather than in page content, so they cannot be changed from the WordPress admin. Each one lists what a person loses because of it, and the smallest change that would fix it."
 msgstr ""
 
-#: src/Rest/RunController.php:491
+#: src/Rest/RunController.php:499
 msgid "Found by WOWStudio Accessibility Kit. Automated checks cover part of WCAG, not all of it — this list is a starting point rather than a complete audit."
 msgstr ""
 
-#: src/Rest/RunController.php:507
+#: src/Rest/RunController.php:515
 msgid "Why it matters:"
 msgstr ""
 
-#: src/Rest/RunController.php:508
+#: src/Rest/RunController.php:516
 msgid "Where:"
 msgstr ""
 
-#: src/Rest/RunController.php:511
+#: src/Rest/RunController.php:519
 msgid "Current markup:"
 msgstr ""
 
-#: src/Rest/RunController.php:515
+#: src/Rest/RunController.php:523
 msgid "Change to:"
 msgstr ""
 
-#: src/Rest/RunController.php:518
+#: src/Rest/RunController.php:526
 msgid "WCAG:"
 msgstr ""
 
@@ -1331,6 +1343,16 @@ msgstr ""
 msgid "Your theme could not be checked, because this site cannot make requests to itself. Everything else still works: pages are checked on their own content, and opening one in the inspector checks it in full."
 msgstr ""
 
+#. translators: %s: the feature that was asked for.
+#: src/Support/Plan.php:77
+#, php-format
+msgid "%s is part of the paid version. Checking and fixing one page at a time — including the inspector, the editor panel and your theme — stays free and is not limited."
+msgstr ""
+
+#: src/Support/Plan.php:100
+msgid "Unlimited AI suggestions"
+msgstr ""
+
 #. translators: 1: required PHP version, 2: PHP version running on the server.
 #: wowstudio-accessibility-kit.php:105
 #, php-format
@@ -1606,212 +1628,212 @@ msgstr ""
 msgid "Saved to media item %d. Re-scan the page to confirm the issue is resolved."
 msgstr ""
 
-#: assets/src/components/alt-text-bulk.js:86
+#: assets/src/components/alt-text-bulk.js:90
 msgid "Descriptions are ready to read."
 msgstr ""
 
 #. translators: %d: number of images queued.
-#: assets/src/components/alt-text-bulk.js:109
+#: assets/src/components/alt-text-bulk.js:113
 #, js-format
 msgid "%d images queued. Nothing is saved until you have read each one."
 msgstr ""
 
-#: assets/src/components/alt-text-bulk.js:132
+#: assets/src/components/alt-text-bulk.js:136
 msgid "Looking through your media library…"
 msgstr ""
 
-#: assets/src/components/alt-text-bulk.js:146
+#: assets/src/components/alt-text-bulk.js:150
 msgid "Describe your images"
 msgstr ""
 
 #. translators: 1: generations left today, 2: daily cap.
-#: assets/src/components/alt-text-bulk.js:174
+#: assets/src/components/alt-text-bulk.js:178
 #, js-format
 msgid "You have %1$d of today’s %2$d free descriptions left."
 msgstr ""
 
-#: assets/src/components/alt-text-bulk.js:188
+#: assets/src/components/alt-text-bulk.js:192
 msgid "Every image has been described"
 msgstr ""
 
-#: assets/src/components/alt-text-bulk.js:192
+#: assets/src/components/alt-text-bulk.js:196
 msgid "Nothing in your media library is missing a description. Images deliberately marked as decorative are left alone — an empty description is a decision, not a gap."
 msgstr ""
 
 #. translators: %d: number of images with no description.
-#: assets/src/components/alt-text-bulk.js:204
+#: assets/src/components/alt-text-bulk.js:208
 #, js-format
 msgid "%d image in your library has never been described."
 msgid_plural "%d images in your library have never been described."
 msgstr[0] ""
 msgstr[1] ""
 
-#: assets/src/components/alt-text-bulk.js:216
-#: assets/src/components/bulk-scan.js:282
+#: assets/src/components/alt-text-bulk.js:220
+#: assets/src/components/bulk-scan.js:288
 msgid "Select the first"
 msgstr ""
 
-#: assets/src/components/alt-text-bulk.js:242
-#: assets/src/components/bulk-scan.js:302
+#: assets/src/components/alt-text-bulk.js:246
+#: assets/src/components/bulk-scan.js:308
 msgid "Clear"
 msgstr ""
 
 #. translators: %d: number of selected images.
-#: assets/src/components/alt-text-bulk.js:288
+#: assets/src/components/alt-text-bulk.js:301
 #, js-format
 msgid "Describe %d image"
 msgid_plural "Describe %d images"
 msgstr[0] ""
 msgstr[1] ""
 
-#: assets/src/components/alt-text-bulk.js:296
+#: assets/src/components/alt-text-bulk.js:309
 msgid "Select some images"
 msgstr ""
 
-#: assets/src/components/alt-text-bulk.js:336
+#: assets/src/components/alt-text-bulk.js:349
 msgid "Read each one before it is saved"
 msgstr ""
 
-#: assets/src/components/alt-text-bulk.js:340
+#: assets/src/components/alt-text-bulk.js:353
 msgid "Describing…"
 msgstr ""
 
-#: assets/src/components/alt-text-bulk.js:344
+#: assets/src/components/alt-text-bulk.js:357
 #: assets/src/components/rendered-queue.js:156
 msgid "Done"
 msgstr ""
 
-#: assets/src/components/alt-text-bulk.js:348
-#: assets/src/components/bulk-scan.js:410
+#: assets/src/components/alt-text-bulk.js:361
+#: assets/src/components/bulk-scan.js:426
 #: assets/src/components/rendered-queue.js:163
 msgid "Stop"
 msgstr ""
 
 #. translators: 1: images settled, 2: images in the run.
-#: assets/src/components/alt-text-bulk.js:362
+#: assets/src/components/alt-text-bulk.js:375
 #, js-format
 msgctxt "images described"
 msgid "%1$d of %2$d"
 msgstr ""
 
 #. translators: %d: number of images that could not be described.
-#: assets/src/components/alt-text-bulk.js:374
+#: assets/src/components/alt-text-bulk.js:387
 #, js-format
 msgid "%d could not be described"
 msgstr ""
 
-#: assets/src/components/alt-text-bulk.js:384
-#: assets/src/components/bulk-scan.js:457
+#: assets/src/components/alt-text-bulk.js:397
+#: assets/src/components/bulk-scan.js:473
 msgid "This runs in the background. You can leave this page and come back."
 msgstr ""
 
-#: assets/src/components/alt-text-bulk.js:457
+#: assets/src/components/alt-text-bulk.js:470
 msgid "Waiting…"
 msgstr ""
 
-#: assets/src/components/alt-text-bulk.js:466
+#: assets/src/components/alt-text-bulk.js:479
 msgid "Saved to your media library. It now describes this image everywhere it appears."
 msgstr ""
 
-#: assets/src/components/alt-text-bulk.js:477
+#: assets/src/components/alt-text-bulk.js:490
 msgid "This looks decorative — an image that adds nothing a reader would miss. If that is right, save it with the box empty, which tells a screen reader to skip it."
 msgstr ""
 
-#: assets/src/components/alt-text-bulk.js:486
+#: assets/src/components/alt-text-bulk.js:499
 msgid "Description"
 msgstr ""
 
-#: assets/src/components/alt-text-bulk.js:490
+#: assets/src/components/alt-text-bulk.js:503
 msgid "Written by a model that cannot see why this image is on your page. Change anything that is wrong before saving."
 msgstr ""
 
-#: assets/src/components/alt-text-bulk.js:505
+#: assets/src/components/alt-text-bulk.js:518
 msgid "Save this"
 msgstr ""
 
-#: assets/src/components/alt-text-bulk.js:515
+#: assets/src/components/alt-text-bulk.js:528
 #: assets/src/components/css-fix-action.js:404
 #: assets/src/components/fix-action.js:235
 msgid "Discard"
 msgstr ""
 
 #. translators: %d: number of pages checked.
-#: assets/src/components/bulk-scan.js:123
+#: assets/src/components/bulk-scan.js:129
 #, js-format
 msgid "Finished. %d pages checked."
 msgstr ""
 
 #. translators: %d: number of pages queued.
-#: assets/src/components/bulk-scan.js:159
+#: assets/src/components/bulk-scan.js:165
 #, js-format
 msgid "%d pages queued. This runs in the background — you can leave this page."
 msgstr ""
 
-#: assets/src/components/bulk-scan.js:178
+#: assets/src/components/bulk-scan.js:184
 msgid "Stopped. Everything already checked has been kept."
 msgstr ""
 
-#: assets/src/components/bulk-scan.js:190
+#: assets/src/components/bulk-scan.js:196
 #: assets/src/components/scan-picker.js:88
 msgid "Loading your content…"
 msgstr ""
 
-#: assets/src/components/bulk-scan.js:201
+#: assets/src/components/bulk-scan.js:207
 msgid "Check your content"
 msgstr ""
 
-#: assets/src/components/bulk-scan.js:223
+#: assets/src/components/bulk-scan.js:229
 msgid "This site cannot fetch its own pages, which is a common host setting and not a fault. Bulk checking still works and reads the content of every page you select. What it cannot do is check colour, text size and layout — those need the page open in a browser, so open a page in the inspector to check those."
 msgstr ""
 
-#: assets/src/components/bulk-scan.js:233
+#: assets/src/components/bulk-scan.js:239
 msgid "Content types"
 msgstr ""
 
-#: assets/src/components/bulk-scan.js:257
+#: assets/src/components/bulk-scan.js:263
 #: assets/src/components/scan-picker.js:74
 msgid "Search your content"
 msgstr ""
 
-#: assets/src/components/bulk-scan.js:274
+#: assets/src/components/bulk-scan.js:280
 #: assets/src/components/states.js:23
 msgid "Loading…"
 msgstr ""
 
 #. translators: %d: score out of 100.
-#: assets/src/components/bulk-scan.js:325
+#: assets/src/components/bulk-scan.js:331
 #, js-format
 msgid "%d / 100"
 msgstr ""
 
 #. translators: %d: number of selected items.
-#: assets/src/components/bulk-scan.js:350
+#: assets/src/components/bulk-scan.js:366
 #, js-format
 msgid "Check %d item"
 msgid_plural "Check %d items"
 msgstr[0] ""
 msgstr[1] ""
 
-#: assets/src/components/bulk-scan.js:358
+#: assets/src/components/bulk-scan.js:374
 msgid "Select something to check"
 msgstr ""
 
-#: assets/src/components/bulk-scan.js:405
+#: assets/src/components/bulk-scan.js:421
 msgid "Finished"
 msgstr ""
 
-#: assets/src/components/bulk-scan.js:406
+#: assets/src/components/bulk-scan.js:422
 msgid "Checking…"
 msgstr ""
 
 #. translators: 1: pages settled, 2: pages in the run.
-#: assets/src/components/bulk-scan.js:430
+#: assets/src/components/bulk-scan.js:446
 #, js-format
 msgid "%1$d of %2$d"
 msgstr ""
 
 #. translators: %d: number of pages that could not be checked.
-#: assets/src/components/bulk-scan.js:438
+#: assets/src/components/bulk-scan.js:454
 #, js-format
 msgid "%d could not be checked"
 msgid_plural "%d could not be checked"
@@ -1819,32 +1841,32 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %d: number of pages not checked because the run was stopped.
-#: assets/src/components/bulk-scan.js:450
+#: assets/src/components/bulk-scan.js:466
 #, js-format
 msgid "%d stopped"
 msgstr ""
 
 #. translators: %d: number of pages checked for content only.
-#: assets/src/components/bulk-scan.js:475
+#: assets/src/components/bulk-scan.js:491
 #, js-format
 msgid "%d page was checked for content only. Colour, text size and layout need the page open in a browser."
 msgid_plural "%d pages were checked for content only. Colour, text size and layout need the page open in a browser."
 msgstr[0] ""
 msgstr[1] ""
 
-#: assets/src/components/bulk-scan.js:488
+#: assets/src/components/bulk-scan.js:504
 msgid "Check colour and layout too"
 msgstr ""
 
 #. translators: %d: number of findings.
-#: assets/src/components/bulk-scan.js:523
+#: assets/src/components/bulk-scan.js:539
 #, js-format
 msgid "%d finding"
 msgid_plural "%d findings"
 msgstr[0] ""
 msgstr[1] ""
 
-#: assets/src/components/bulk-scan.js:539
+#: assets/src/components/bulk-scan.js:555
 msgid "Check the rest"
 msgstr ""
 
@@ -2216,6 +2238,14 @@ msgstr ""
 
 #: assets/src/components/issue-list.js:261
 msgid "None of the checks we can run automatically flagged anything on this page. That is a good sign, and it is not the same as the page being accessible — most of WCAG needs a person. The manual checklists are the next step."
+msgstr ""
+
+#: assets/src/components/paid-notice.js:29
+msgid "is part of the paid version."
+msgstr ""
+
+#: assets/src/components/paid-notice.js:33
+msgid "Checking and fixing one page at a time is not limited in any way — every check, the inspector, the editor panel, your theme report, and as many pages as you like, one after another. What you are paying for is doing them all at once."
 msgstr ""
 
 #. translators: 1: page title, 2: position, 3: total pages.

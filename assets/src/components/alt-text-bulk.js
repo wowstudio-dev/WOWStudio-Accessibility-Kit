@@ -20,6 +20,7 @@ import {
 	rejectAltText,
 	startAltTextRun,
 } from '../api';
+import PaidNotice from './paid-notice';
 import { Busy, EmptyState, Skeleton } from './states';
 
 /**
@@ -55,6 +56,9 @@ export default function AltTextBulk() {
 	const [ announcement, setAnnouncement ] = useState( '' );
 
 	const timer = useRef( null );
+
+	// The route enforces this itself; this only decides what is offered.
+	const isPro = Boolean( window.wsakSettings?.plan?.pro );
 
 	const load = useCallback( () => {
 		fetchUndescribedMedia()
@@ -276,10 +280,19 @@ export default function AltTextBulk() {
 						) ) }
 					</ul>
 
+					{ ! isPro && (
+						<PaidNotice
+							feature={ __(
+								'Describing many images at once',
+								'wowstudio-accessibility-kit'
+							) }
+						/>
+					) }
+
 					<div className="wsak-bulk__actions">
 						<Button
 							variant="primary"
-							disabled={ ! selected.length }
+							disabled={ ! isPro || ! selected.length }
 							onClick={ begin }
 						>
 							{ selected.length
