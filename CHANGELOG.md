@@ -17,6 +17,171 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   testing with disabled users. The contrast guard checks 60 colour pairings on
   every push, which is not the same thing as somebody using the interface.
 
+## [0.14.0] - 2026-09-01
+
+Phase 3, final third: the editor, the theme, and the paid line.
+
+### Added
+
+- **An accessibility panel in the block editor**, checking what you write as
+  you write it. The content is already in the browser, structured, so there is
+  nothing to fetch — no permalink, no preview nonce, and no loopback request,
+  which matters most on the hosts where loopback fails. Blocks are checked
+  individually and findings come back keyed to the block that produced them:
+  attributing a finding by matching markup afterwards is a heuristic, and asking
+  about one block at a time makes it a fact.
+- **Fixes written into the block itself.** Setting alt text on an image block
+  writes the block's own attribute, so the correction is in the post content,
+  visible immediately, and undone with the editor's own undo. Not an override
+  and not a filter — the first place this plugin does real remediation rather
+  than reversible interception, and it does not depend on the plugin staying
+  installed.
+- **The rendered queue.** A finished bulk run can now go on to check colour,
+  size and layout by working through the pages one frame at a time in the
+  administrator's own browser. Because it is their session, drafts and private
+  pages work with no token scheme and no authentication bypass to design. It
+  cannot be scheduled — a cron job has no browser — and that is stated before it
+  starts rather than discovered when the tab closes.
+- **Theme triage.** Most accessibility faults on a real site are in the theme,
+  and this plugin cannot edit a theme. Each finding is now sorted by what would
+  actually fix it: a setting the owner already has, or a change for whoever
+  maintains the theme, with a plain-text hand-over document written out for the
+  second. The setting tier is used only where identification is certain — the
+  site logo is matched against the attachment WordPress records as the logo, and
+  menu items by the class core's own walker writes.
+- **The paid boundary, and a guard for it.** `bin/check-tiers.php` asserts that
+  every paid route refuses a free site, with the check near the top of the
+  handler before any work. A route that forgets its gate works perfectly, passes
+  every test, and gives the product away silently; nothing else in the
+  repository would notice.
+
+### Changed
+
+- Menus in the theme report link to the screen the active theme actually uses.
+  Appearance → Menus is not merely the wrong page on a block theme — it is
+  frequently not registered at all, and a link that 404s is worse than none.
+
+### Fixed
+
+- **Two accessibility faults in this plugin's own interface**, found by auditing
+  the six screens Phase 3 added. The progress bar's track was 1.49:1 against the
+  panel behind it, where SC 1.4.11 wants 3:1; it now carries a hairline outline,
+  because every track colour dark enough to clear 3:1 lands within 1.5:1 of the
+  fill. And the post-type filters claimed `role="tablist"` while implementing
+  none of the tab pattern — no `aria-controls`, no tabpanel, no roving tabindex,
+  no arrow keys — which is worse than plain buttons, since a screen reader
+  announces "tab, 1 of 2" and the arrow keys do nothing.
+- The rendered queue unmounted the moment its last page reported, so the one
+  thing worth reading — how many pages refused to open, and were therefore never
+  checked for colour — appeared for a few milliseconds and vanished.
+- Switching a paid feature on could not take effect in the request that did it.
+  `add_theme_support( 'title-tag' )` is refused after `wp_loaded`, which every
+  REST request is past, so the "helpful" immediate call achieved nothing except
+  a `_doing_it_wrong` notice on any site with debugging on.
+
+### Notes
+
+- The contrast guard grew from 60 pairings to 91, covering every colour Phase 3
+  introduced against the panel it actually sits on rather than against white.
+- `docs/accessibility-audit.md` was re-run and re-dated. Its "what has not been
+  checked" section grew as well: the editor panel has still never been opened in
+  a block editor, and the audit says so rather than implying coverage.
+
+## [0.13.0] - 2026-09-01
+
+Phase 3, middle third: what to do about a finding, and doing it to many things
+at once.
+
+### Added
+
+- **Every rule now declares what can be done about it** — whether the fix is
+  computed or generated, and where it would be written. Both halves matter: a
+  one-click fix needs a known answer *and* somewhere we can write it, and
+  several rules have the first without the second. `lang="en"` has exactly one
+  correct value and lives on an element printed by the theme.
+- **Plain language.** Every check carries one sentence on what it costs an
+  actual person — "a screen reader announces this as button and nothing else" —
+  shown above the technical message rather than instead of it. A test bans
+  specification vocabulary from those sentences.
+- **Findings are grouped by what they ask of you** rather than by severity: fix
+  now, read then apply, decide for yourself, or hand to whoever maintains the
+  theme. Cheapest first. Sorting by severity opens a real page with the most
+  serious problem on it, which is very often in the theme and not the reader's
+  to fix — and a list that opens with "ask your developer" is a list people
+  close.
+- **Bulk scanning**, by post type, with selection and a two-state badge.
+  "Content checked" and "Fully checked" are worded to be told apart, because a
+  bulk run reads content and cannot check colour, size or layout.
+- **Findings can be set aside as not problems, with the reason required.** Every
+  scanner produces some of these, and a tool with no way to say so leaves a
+  permanently dirty list that people stop reading. But these records are what a
+  conformance document is built from, so a dismissal needs a sentence, an author
+  and a date — and reopening keeps all three.
+- **Bulk alt text**, generated in the background and approved on one screen.
+  Alt text describes the image itself, so it applies wherever that image
+  appears, under any theme, and it outlives this plugin. Bulk here means one
+  screen instead of forty modals; it does not mean nobody reads them.
+- A deterministic fix for a missing `<title>`: WordPress composes the right
+  answer already, and the only reason it is absent is that the theme never asked
+  for it.
+
+### Changed
+
+- Staleness is worked out by comparing timestamps rather than recorded on save.
+  A stored flag needs a hook on every write path — the editor, REST, WP-CLI, an
+  import, a scheduled publish — and the one that gets missed leaves a page
+  claiming coverage it no longer has.
+
+### Fixed
+
+- A finding reported a control as "170 by 24 pixels" and then asked for 24 by
+  24. The measurement was rounded and the comparison was not, so the tool read
+  as broken.
+
+## [0.12.0] - 2026-09-01
+
+Phase 3, first third: work that survives being interrupted.
+
+### Added
+
+- **A background queue.** Bulk work runs through Action Scheduler rather than
+  inside an admin request. A run is a parent scan row with one child per page,
+  written before any work happens: progress is a count rather than a number
+  somebody remembered to increment, and resuming after a timeout needs no cursor
+  because the rows still marked queued *are* the cursor.
+- **Runs can be stopped**, and everything already found is kept. Cancellation is
+  checked in the worker as well as unscheduled in Action Scheduler, because
+  unscheduling races with a runner that has already claimed a batch.
+- **A separate fetch strategy for bulk.** One loopback request per permalink is
+  right for one page and wrong for two hundred: it fails per page rather than
+  once, it has no user so a queued job fetching a draft gets a 404, and it makes
+  the site render itself a second time for every page scanned. Bulk now reads
+  post content in process, which needs no HTTP and therefore works on hosts that
+  block loopback, inside cron, and on drafts.
+- **The theme is checked once**, against a handful of representative pages,
+  with what it finds filed against the theme rather than repeated against every
+  page that uses it.
+- **A template profile**, so a content-only scan is not blind to what the theme
+  puts above it. Without it, two heading rules quietly under-report on exactly
+  the well-built themes where the remaining faults are subtle.
+
+### Changed
+
+- **The minimum WordPress version is now 6.8**, raised from 6.6. Action
+  Scheduler 4.x requires it, and 4.1.0 carries hardening against object
+  injection when deserializing stored schedule data that was never backported to
+  the 3.9 line. The choice was an older floor or a queue missing a security fix
+  its own authors thought worth making.
+- Whether the site can fetch its own pages is established once and cached rather
+  than rediscovered per page. A hundred-page run previously spent half an hour
+  learning one fact and then reported it a hundred times.
+
+### Notes
+
+- Action Scheduler by Automattic is now bundled. It is GPLv3-or-later; this
+  plugin's own code remains GPLv2-or-later, and the two combine in that
+  direction. It makes no outbound requests of its own.
+
 ## [0.11.0] - 2026-08-31
 
 Phase 2, step 2: the browser pass stops being a pass that only reports. Plus the

@@ -4,7 +4,7 @@ Tags: accessibility, wcag, a11y, alt text, accessibility scanner
 Requires at least: 6.8
 Tested up to: 7.1
 Requires PHP: 8.1
-Stable tag: 0.11.0
+Stable tag: 0.14.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -133,6 +133,26 @@ AI features are bring-your-own-key. You connect your own provider account, and y
 
 == Changelog ==
 
+= 0.14.0 =
+* Added an accessibility panel inside the block editor, checking what you write as you write it. Fixes you apply there go straight into the block, so they are part of your content and undo works on them like any other edit.
+* A finished bulk check can now go on to check colour, text size and layout, working through your pages in your own browser. That part only runs while the tab is open, and it says so before it starts.
+* Your theme is now reported separately, with each fault sorted by who can fix it: the ones you can change in a setting, and the ones that need whoever maintains your theme — with a copyable summary written out for them.
+* Fixed two accessibility faults in this plugin's own screens, found by auditing them against the standard we report on. Details in docs/accessibility-audit.md, including what has still not been checked.
+
+= 0.13.0 =
+* Findings are now grouped by what they ask of you — fix now, read then apply, decide for yourself, or hand to your developer — rather than by how serious they are. Severity tells you how bad something is; it never tells you where to start.
+* Every finding now says, in one plain sentence, what it costs an actual person. The WCAG number is still there, one level down.
+* Added bulk checking by content type, so you can check pages, posts or products together instead of one at a time.
+* Added bulk image descriptions, generated in the background and shown to you on one screen. Nothing is saved to your media library until you have read it.
+* You can now set a finding aside as not a problem. The reason is required, and it is kept with your name and the date — that is what makes it a record you can rely on later.
+* Images you have deliberately marked as decorative are left alone. An empty description is a decision, not a gap.
+
+= 0.12.0 =
+* Bulk work now runs in the background, so a long job cannot time out halfway through an admin page. Runs can be stopped, and anything already found is kept.
+* Checking many pages no longer asks your site to fetch each one. On hosts that block those requests — a common and reasonable setting — checking now works where it previously fell back to less.
+* Your theme is checked once rather than reported against every page that uses it.
+* Requires WordPress 6.8 or newer. This is needed by the background scheduler we now bundle, whose current version carries a security fix that was never added to the older line.
+
 = 0.11.0 =
 * Findings caused by styling can now be fixed, not just reported: text contrast, links marked by colour alone, and controls too small to hit reliably. The proposed colour keeps the hue and saturation you chose and moves only as far as it has to.
 * Fixes of this kind are written into your own Additional CSS, under Appearance → Customise, where you can read, edit or delete them with or without this plugin. Everything already in that stylesheet is preserved exactly.
@@ -182,6 +202,15 @@ AI features are bring-your-own-key. You connect your own provider account, and y
 * Initial scaffold: plugin bootstrap, capabilities, activation and uninstall handling.
 
 == Upgrade Notice ==
+
+= 0.14.0 =
+Adds an accessibility panel to the block editor, a separate report for your theme, and colour and layout checking across a whole run.
+
+= 0.13.0 =
+Findings are now ordered by what you can actually do about them, and images and pages can be handled in bulk.
+
+= 0.12.0 =
+Requires WordPress 6.8. Bulk work moves to the background and now works on hosts that block loopback requests.
 
 = 0.11.0 =
 Style-caused findings can now be fixed as well as found, written into your own Additional CSS and verified by re-measuring the page.
