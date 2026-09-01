@@ -13,6 +13,9 @@ parameters:
 	# Loads Freemius SDK symbols without analysing the vendored SDK itself.
 	scanDirectories:
 		- freemius/includes
+		# Action Scheduler's API is global functions, declared in a bundled
+		# library we do not analyse. Scanned so calls to it resolve.
+		- vendor/woocommerce/action-scheduler
 	scanFiles:
 		- freemius/start.php
 		# WordPress 7.0's AI Client; the bundled WP stubs still describe 6.9.

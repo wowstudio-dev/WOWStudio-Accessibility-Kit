@@ -28,6 +28,7 @@ final class Scan {
 	 * @param int                  $id          Row ID.
 	 * @param ScanScope            $scope       What the scan covered.
 	 * @param int                  $target_id   Post ID for a page scan, 0 for a site scan.
+	 * @param int                  $parent_id   Run this scan belongs to, or 0 when it stands alone.
 	 * @param ScanStatus           $status      Where the run got to.
 	 * @param int|null             $score       Score out of 100, or null while running.
 	 * @param BrowserPassStatus    $browser_pass Whether the render-dependent checks ran.
@@ -40,6 +41,7 @@ final class Scan {
 		public readonly int $id,
 		public readonly ScanScope $scope,
 		public readonly int $target_id,
+		public readonly int $parent_id,
 		public readonly ScanStatus $status,
 		public readonly ?int $score,
 		public readonly BrowserPassStatus $browser_pass,
@@ -67,6 +69,7 @@ final class Scan {
 			(int) $row->id,
 			ScanScope::tryFrom( (string) $row->scope ) ?? ScanScope::Page,
 			(int) $row->target_id,
+			(int) ( $row->parent_id ?? 0 ),
 			ScanStatus::tryFrom( (string) $row->status ) ?? ScanStatus::Running,
 			null === $row->score ? null : (int) $row->score,
 			BrowserPassStatus::tryFrom( (string) ( $row->browser_pass ?? '' ) ) ?? BrowserPassStatus::Skipped,

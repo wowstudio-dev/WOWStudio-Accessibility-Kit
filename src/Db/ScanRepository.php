@@ -25,8 +25,14 @@ defined( 'ABSPATH' ) || exit;
  * timezone change silently rewrite history.
  *
  * @since 0.2.0
+ *
+ * Not final, unlike most classes here. It is handed to another object through
+ * that object's constructor so the object can be tested without it, and sealing
+ * it would make the injection decorative — a parameter nobody could ever pass
+ * anything but the default to. The rule here is final by default, open where
+ * something is meant to be substituted.
  */
-final class ScanRepository {
+class ScanRepository {
 
 	/**
 	 * Records the start of a scan.
@@ -55,6 +61,199 @@ final class ScanRepository {
 		);
 
 		return false === $inserted ? 0 : (int) $wpdb->insert_id;
+	}
+
+	/**
+	 * Sets a scan's status and stamps it finished.
+	 *
+	 * @since 0.12.0
+	 *
+	 * @param int        $scan_id Scan to update.
+	 * @param ScanStatus $status  New status.
+	 * @return bool
+	 */
+	public function set_status( int $scan_id, ScanStatus $status ): bool {
+		global $wpdb;
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Custom table; no core API covers it.
+		$updated = $wpdb->update(
+			Schema::scans_table(),
+			array(
+				'status'      => $status->value,
+				'finished_at' => gmdate( 'Y-m-d H:i:s' ),
+			),
+			array( 'id' => $scan_id ),
+			array( '%s', '%s' ),
+			array( '%d' )
+		);
+
+		return false !== $updated;
+	}
+
+	/**
+	 * Records a scan that is waiting for the queue.
+	 *
+	 * Separate from start() because the two mean different things. start() says
+	 * "this is happening now"; this says "this is owed". A run that is
+	 * interrupted has to be able to tell work it never began from work it began
+	 * and lost, and one status cannot carry both.
+	 *
+	 * @since 0.12.0
+	 *
+	 * @param ScanScope $scope     What the scan will cover.
+	 * @param int       $target_id Post to scan.
+	 * @param int       $user_id   Who asked for it.
+	 * @param int       $parent_id Run it belongs to.
+	 * @return int Row ID, or 0 when the insert failed.
+	 */
+	public function queue( ScanScope $scope, int $target_id, int $user_id, int $parent_id ): int {
+		global $wpdb;
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Custom table; no core API covers it, and a write must not be cached.
+		$inserted = $wpdb->insert(
+			Schema::scans_table(),
+			array(
+				'scope'      => $scope->value,
+				'target_id'  => $target_id,
+				'parent_id'  => $parent_id,
+				'status'     => ScanStatus::Queued->value,
+				'started_at' => gmdate( 'Y-m-d H:i:s' ),
+				'created_by' => $user_id,
+			),
+			array( '%s', '%d', '%d', '%s', '%s', '%d' )
+		);
+
+		return false === $inserted ? 0 : (int) $wpdb->insert_id;
+	}
+
+	/**
+	 * Opens a run and returns its ID.
+	 *
+	 * @since 0.12.0
+	 *
+	 * @param int $user_id Who started it.
+	 * @return int
+	 */
+	public function start_run( int $user_id ): int {
+		return $this->start( ScanScope::Site, 0, $user_id );
+	}
+
+	/**
+	 * Moves a queued scan to running.
+	 *
+	 * Returns false when the row was not in the queue any more — cancelled,
+	 * or already claimed by another worker. Callers treat that as "somebody
+	 * else owns this now" and stop, which is what makes a duplicated job
+	 * harmless rather than a double scan.
+	 *
+	 * @since 0.12.0
+	 *
+	 * @param int $scan_id Scan to claim.
+	 * @return bool
+	 */
+	public function claim( int $scan_id ): bool {
+		global $wpdb;
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Custom table; no core API covers it.
+		$updated = $wpdb->query(
+			$wpdb->prepare(
+				'UPDATE %i SET status = %s, started_at = %s WHERE id = %d AND status = %s',
+				Schema::scans_table(),
+				ScanStatus::Running->value,
+				gmdate( 'Y-m-d H:i:s' ),
+				$scan_id,
+				ScanStatus::Queued->value
+			)
+		);
+
+		return is_int( $updated ) && $updated > 0;
+	}
+
+	/**
+	 * Counts a run's scans by status.
+	 *
+	 * @since 0.12.0
+	 *
+	 * @param int $parent_id Run to count.
+	 * @return array<string, int> Counts keyed by status value.
+	 */
+	public function count_by_status( int $parent_id ): array {
+		global $wpdb;
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Custom table; no core API covers it.
+		$rows = $wpdb->get_results(
+			$wpdb->prepare(
+				'SELECT status, COUNT(*) AS total FROM %i WHERE parent_id = %d GROUP BY status',
+				Schema::scans_table(),
+				$parent_id
+			)
+		);
+
+		$counts = array();
+
+		foreach ( (array) $rows as $row ) {
+			$counts[ (string) $row->status ] = (int) $row->total;
+		}
+
+		return $counts;
+	}
+
+	/**
+	 * Returns a run's scans, oldest first.
+	 *
+	 * @since 0.12.0
+	 *
+	 * @param int $parent_id Run to read.
+	 * @param int $limit     Maximum rows.
+	 * @return Scan[]
+	 */
+	public function children( int $parent_id, int $limit = 500 ): array {
+		global $wpdb;
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Custom table; no core API covers it.
+		$rows = $wpdb->get_results(
+			$wpdb->prepare(
+				'SELECT * FROM %i WHERE parent_id = %d ORDER BY id ASC LIMIT %d',
+				Schema::scans_table(),
+				$parent_id,
+				max( 1, $limit )
+			)
+		);
+
+		return array_map(
+			static fn( object $row ): Scan => Scan::from_row( $row ),
+			(array) $rows
+		);
+	}
+
+	/**
+	 * Cancels everything in a run that has not started.
+	 *
+	 * Work already running is left alone. Interrupting a scan mid-flight would
+	 * leave findings half-written, and the step it is in will finish in seconds
+	 * anyway.
+	 *
+	 * @since 0.12.0
+	 *
+	 * @param int $parent_id Run to stop.
+	 * @return int How many scans were cancelled.
+	 */
+	public function cancel_queued( int $parent_id ): int {
+		global $wpdb;
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Custom table; no core API covers it.
+		$updated = $wpdb->query(
+			$wpdb->prepare(
+				'UPDATE %i SET status = %s, finished_at = %s WHERE parent_id = %d AND status = %s',
+				Schema::scans_table(),
+				ScanStatus::Cancelled->value,
+				gmdate( 'Y-m-d H:i:s' ),
+				$parent_id,
+				ScanStatus::Queued->value
+			)
+		);
+
+		return is_int( $updated ) ? $updated : 0;
 	}
 
 	/**
@@ -143,21 +342,34 @@ final class ScanRepository {
 	 *
 	 * @since 0.2.0
 	 *
-	 * @param int $scan_id Scan to update.
+	 * @param int    $scan_id Scan to update.
+	 * @param string $reason  What went wrong, kept with the row.
 	 * @return bool
 	 */
-	public function fail( int $scan_id ): bool {
+	public function fail( int $scan_id, string $reason = '' ): bool {
 		global $wpdb;
+
+		$data    = array(
+			'status'      => ScanStatus::Failed->value,
+			'finished_at' => gmdate( 'Y-m-d H:i:s' ),
+		);
+		$formats = array( '%s', '%s' );
+
+		// The reason is stored rather than logged. A bulk run that skipped nine
+		// pages has to be able to say which nine and why, months later, without
+		// anybody having had debug logging switched on at the time.
+		if ( '' !== $reason ) {
+			$encoded         = wp_json_encode( array( 'error' => $reason ) );
+			$data['summary'] = false === $encoded ? '' : $encoded;
+			$formats[]       = '%s';
+		}
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Custom table; no core API covers it.
 		$updated = $wpdb->update(
 			Schema::scans_table(),
-			array(
-				'status'      => ScanStatus::Failed->value,
-				'finished_at' => gmdate( 'Y-m-d H:i:s' ),
-			),
+			$data,
 			array( 'id' => $scan_id ),
-			array( '%s', '%s' ),
+			$formats,
 			array( '%d' )
 		);
 

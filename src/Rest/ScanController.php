@@ -15,7 +15,7 @@ use WOWStudio\AccessibilityKit\Scanner\BrowserRules;
 use WOWStudio\AccessibilityKit\Scanner\Detection;
 use WOWStudio\AccessibilityKit\Scanner\ScanPass;
 use WOWStudio\AccessibilityKit\Scanner\Engine;
-use WOWStudio\AccessibilityKit\Scanner\PageSource;
+use WOWStudio\AccessibilityKit\Scanner\PageScanner;
 use WOWStudio\AccessibilityKit\Scanner\Preview;
 use WOWStudio\AccessibilityKit\Scanner\ScanScope;
 use WOWStudio\AccessibilityKit\Support\Capabilities;
@@ -279,41 +279,13 @@ final class ScanController implements Registrable {
 			);
 		}
 
-		$markup = ( new PageSource() )->for_post( $post_id );
+		// The scan itself lives in PageScanner, because a queued bulk run has to
+		// do exactly this and two copies would drift.
+		$outcome = ( new PageScanner( $scans, $issues ) )->run( $scan_id, $post_id );
 
-		if ( is_wp_error( $markup ) ) {
-			// The run is recorded as failed rather than deleted, so a page that
-			// cannot be fetched is visible as a problem instead of silently
-			// never appearing in the history.
-			$scans->fail( $scan_id );
-
-			return $markup;
+		if ( is_wp_error( $outcome ) ) {
+			return $outcome;
 		}
-
-		$result = ( new Engine() )->scan( $markup->html );
-
-		if ( null === $result ) {
-			$scans->fail( $scan_id );
-
-			return new WP_Error(
-				'wsak_unparseable',
-				__( 'The page could not be parsed as HTML, so it could not be scanned.', 'wowstudio-accessibility-kit' ),
-				array( 'status' => 422 )
-			);
-		}
-
-		$rows = array();
-
-		foreach ( $result->findings as $finding ) {
-			$rows[] = $finding->to_row( $post_id );
-		}
-
-		$summary                    = $result->summary();
-		$summary['from_loopback']   = $markup->from_loopback;
-		$summary['coverage_notice'] = $markup->notice;
-
-		$issues->add_many( $scan_id, $rows );
-		$scans->complete( $scan_id, $result->score(), $summary );
 
 		return new WP_REST_Response(
 			array(
@@ -324,13 +296,13 @@ final class ScanController implements Registrable {
 				// Findings can only be placed on the live page when the scan
 				// read that same page. A content-only fallback produces
 				// selectors relative to a fragment, which resolve to nothing.
-				'placeable'       => $markup->from_loopback && '' !== Preview::url_for( $post_id ),
-				'score'           => $result->score(),
-				'summary'         => $summary,
-				'full_page'       => $result->full_page,
+				'placeable'       => $outcome['from_loopback'] && '' !== Preview::url_for( $post_id ),
+				'score'           => $outcome['score'],
+				'summary'         => $outcome['summary'],
+				'full_page'       => $outcome['full_page'],
 				// Surfaced separately so the UI cannot present a reduced scan as
 				// a complete one without deliberately ignoring this field.
-				'coverage_notice' => $markup->notice,
+				'coverage_notice' => $outcome['notice'],
 				'issues'          => $this->present_issues( $scan_id, $issues ),
 			),
 			201

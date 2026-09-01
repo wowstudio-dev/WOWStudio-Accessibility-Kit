@@ -338,6 +338,40 @@ msgstr ""
 msgid "The Accessibility Kit interface has not been built. Run \"npm install && npm run build\" in the plugin directory."
 msgstr ""
 
+#: src/Jobs/BulkScan.php:105
+msgid "The background scheduler is not running, so a bulk scan cannot be started. Scanning one page at a time still works."
+msgstr ""
+
+#: src/Jobs/BulkScan.php:115
+msgid "No content was selected, so there is nothing to scan."
+msgstr ""
+
+#. translators: %d: maximum number of pages in one run.
+#: src/Jobs/BulkScan.php:125
+#, php-format
+msgid "A single run covers at most %d items. Select fewer, and run again when it finishes."
+msgstr ""
+
+#: src/Jobs/BulkScan.php:137
+msgid "The run could not be recorded. Check that the plugin tables exist."
+msgstr ""
+
+#: src/Jobs/BulkScan.php:156
+msgid "This page could not be added to the queue."
+msgstr ""
+
+#: src/Jobs/BulkScan.php:161
+msgid "Nothing could be added to the queue."
+msgstr ""
+
+#: src/Jobs/BulkScan.php:165
+msgid "None of the selected content could be added to the queue."
+msgstr ""
+
+#: src/Jobs/BulkScan.php:276
+msgid "That run could not be found."
+msgstr ""
+
 #: src/Remediation/CssFixManager.php:86
 #: src/Remediation/FixManager.php:146
 #: src/Remediation/FixManager.php:238
@@ -492,8 +526,8 @@ msgstr ""
 
 #: src/Rest/FixController.php:246
 #: src/Rest/ScanController.php:244
-#: src/Rest/ScanController.php:381
-#: src/Rest/ScanController.php:534
+#: src/Rest/ScanController.php:353
+#: src/Rest/ScanController.php:506
 msgid "You do not have permission to read that content."
 msgstr ""
 
@@ -530,12 +564,8 @@ msgstr ""
 msgid "The scan could not be recorded. Check that the plugin tables exist."
 msgstr ""
 
-#: src/Rest/ScanController.php:300
-msgid "The page could not be parsed as HTML, so it could not be scanned."
-msgstr ""
-
-#: src/Rest/ScanController.php:373
-#: src/Rest/ScanController.php:526
+#: src/Rest/ScanController.php:345
+#: src/Rest/ScanController.php:498
 msgid "That scan could not be found."
 msgstr ""
 
@@ -631,6 +661,10 @@ msgstr ""
 
 #: src/Scanner/IssueStatus.php:45
 msgid "Ignored"
+msgstr ""
+
+#: src/Scanner/PageScanner.php:116
+msgid "The page could not be parsed as HTML, so it could not be scanned."
 msgstr ""
 
 #: src/Scanner/PageSource.php:70
@@ -847,16 +881,24 @@ msgstr ""
 msgid "Whole site"
 msgstr ""
 
-#: src/Scanner/ScanStatus.php:47
+#: src/Scanner/ScanStatus.php:69
+msgid "Waiting"
+msgstr ""
+
+#: src/Scanner/ScanStatus.php:70
 msgid "Running"
 msgstr ""
 
-#: src/Scanner/ScanStatus.php:48
+#: src/Scanner/ScanStatus.php:71
 msgid "Complete"
 msgstr ""
 
-#: src/Scanner/ScanStatus.php:49
+#: src/Scanner/ScanStatus.php:72
 msgid "Failed"
+msgstr ""
+
+#: src/Scanner/ScanStatus.php:73
+msgid "Stopped"
 msgstr ""
 
 #: src/Scanner/Severity.php:48

@@ -12,6 +12,7 @@ use WOWStudio\AccessibilityKit\Conformance\StatementBlock;
 use WOWStudio\AccessibilityKit\Remediation\OverrideStore;
 use WOWStudio\AccessibilityKit\Scanner\Preview;
 use WOWStudio\AccessibilityKit\Rest\AiController;
+use WOWStudio\AccessibilityKit\Jobs\Worker;
 use WOWStudio\AccessibilityKit\Rest\CssFixController;
 use WOWStudio\AccessibilityKit\Rest\FixController;
 use WOWStudio\AccessibilityKit\Rest\StatementController;
@@ -143,6 +144,7 @@ final class Plugin {
 			'rest.ai'        => new AiController(),
 			'rest.fix'       => new FixController(),
 			'rest.fix.css'   => new CssFixController(),
+			'jobs.worker'    => new Worker(),
 			'overrides'      => new OverrideStore(),
 			'preview'        => new Preview(),
 			'statement'      => new StatementBlock(),

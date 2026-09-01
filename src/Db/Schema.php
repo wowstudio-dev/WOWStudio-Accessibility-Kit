@@ -27,7 +27,7 @@ final class Schema {
 	 * @since 0.2.0
 	 * @var string
 	 */
-	public const VERSION = '1.2.0';
+	public const VERSION = '1.3.0';
 
 	/**
 	 * Option holding the installed schema version.
@@ -157,6 +157,7 @@ final class Schema {
 			id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
 			scope varchar(20) NOT NULL DEFAULT 'page',
 			target_id bigint(20) unsigned NOT NULL DEFAULT 0,
+			parent_id bigint(20) unsigned NOT NULL DEFAULT 0,
 			status varchar(20) NOT NULL DEFAULT 'running',
 			score tinyint(3) unsigned DEFAULT NULL,
 			browser_pass varchar(20) NOT NULL DEFAULT 'skipped',
@@ -166,6 +167,7 @@ final class Schema {
 			created_by bigint(20) unsigned NOT NULL DEFAULT 0,
 			PRIMARY KEY  (id),
 			KEY scope_target (scope,target_id),
+			KEY parent_status (parent_id,status),
 			KEY status (status),
 			KEY started_at (started_at)
 		) {$wpdb->get_charset_collate()};";
