@@ -104,6 +104,16 @@ const WSAK_SURFACES = array(
 	'src/Rest/BlockCheckController.php'           => array(
 		'the editor-scope caveat' => '/Colour, text size and layout need the page open in a browser/i',
 	),
+	'assets/src/components/theme-panel.js'        => array(
+		// The theme panel can come back empty, and empty is easily read as a
+		// clean bill of health. It is not.
+		'the clean-theme-is-not-a-verdict caveat' => '/not a clean bill of health/i',
+	),
+	'src/Rest/RunController.php'                  => array(
+		// The document somebody emails to a developer travels furthest of
+		// anything this plugin writes, so it carries the coverage caveat with it.
+		'the handover-is-not-an-audit caveat' => '/a starting point rather than a complete audit/i',
+	),
 	'assets/src/components/rendered-queue.js'     => array(
 		// The one thing here that cannot be left to run. Said before it starts,
 		// not discovered when somebody closes the tab.

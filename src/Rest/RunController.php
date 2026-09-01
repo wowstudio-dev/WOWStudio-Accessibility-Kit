@@ -12,6 +12,7 @@ use WOWStudio\AccessibilityKit\Db\ContentIndex;
 use WOWStudio\AccessibilityKit\Db\IssueRepository;
 use WOWStudio\AccessibilityKit\Db\ScanRepository;
 use WOWStudio\AccessibilityKit\Jobs\BulkScan;
+use WOWStudio\AccessibilityKit\Remediation\ThemeTriage;
 use WOWStudio\AccessibilityKit\Remediation\WorkList;
 use WOWStudio\AccessibilityKit\Scanner\Engine;
 use WOWStudio\AccessibilityKit\Scanner\LoopbackProbe;
@@ -343,12 +344,19 @@ final class RunController implements Registrable {
 		$issues    = new IssueRepository();
 		$latest    = $scans->latest_of_scope( ScanScope::Template );
 
+		$findings = null === $latest ? array() : $this->triaged( $latest->id, $issues );
+
 		return new WP_REST_Response(
 			array(
 				'profile'  => $profile->to_array(),
 				'checked'  => $profile->known,
 				'scan_id'  => null === $latest ? 0 : $latest->id,
-				'findings' => null === $latest ? array() : $this->present( $latest->id, $issues ),
+				'theme'    => (string) wp_get_theme()->get( 'Name' ),
+				'findings' => $findings,
+				// Written here rather than assembled in the interface, so what
+				// gets handed to a developer is the same text every time and
+				// carries the same caveats.
+				'handover' => $this->handover( $findings ),
 			)
 		);
 	}
@@ -419,6 +427,103 @@ final class RunController implements Registrable {
 			'progress' => $bulk->progress( $run_id )->to_array(),
 			'pages'    => $pages,
 		);
+	}
+
+	/**
+	 * Shapes theme findings, each sorted by what would actually fix it.
+	 *
+	 * @since 0.14.0
+	 *
+	 * @param int             $scan_id Scan to read.
+	 * @param IssueRepository $issues  Issue storage.
+	 * @return array<int, array<string, mixed>>
+	 */
+	private function triaged( int $scan_id, IssueRepository $issues ): array {
+		$registry = ( new Engine() )->registry();
+		$triage   = new ThemeTriage();
+		$rows     = array();
+
+		// Indexed once. Looking each row's issue up by walking the whole set
+		// would be quadratic, on a list whose whole point is that a theme fault
+		// appears once rather than four hundred times — but a page builder site
+		// can still produce plenty.
+		$by_id = array();
+
+		foreach ( $issues->find_by_scan( $scan_id ) as $issue ) {
+			$by_id[ $issue->id ] = $issue;
+		}
+
+		foreach ( $this->present( $scan_id, $issues ) as $row ) {
+			$issue = $by_id[ $row['id'] ] ?? null;
+
+			$row['triage'] = null === $issue
+				? array()
+				: $triage->triage( $issue, $registry->descriptor( $issue->rule_id ) );
+
+			$rows[] = $row;
+		}
+
+		return $rows;
+	}
+
+	/**
+	 * Writes the document somebody hands to whoever maintains the theme.
+	 *
+	 * Plain text on purpose. It gets pasted into an email, a ticket, or a chat
+	 * window, and every one of those would mangle anything cleverer.
+	 *
+	 * @since 0.14.0
+	 *
+	 * @param array<int, array<string, mixed>> $findings Triaged findings.
+	 * @return string
+	 */
+	private function handover( array $findings ): string {
+		$theme = (string) wp_get_theme()->get( 'Name' );
+		$lines = array(
+			sprintf(
+				/* translators: %s: theme name. */
+				__( 'Accessibility changes needed in the %s theme', 'wowstudio-accessibility-kit' ),
+				$theme
+			),
+			'',
+			__( 'These are in theme files rather than in page content, so they cannot be changed from the WordPress admin. Each one lists what a person loses because of it, and the smallest change that would fix it.', 'wowstudio-accessibility-kit' ),
+			'',
+			__( 'Found by WOWStudio Accessibility Kit. Automated checks cover part of WCAG, not all of it — this list is a starting point rather than a complete audit.', 'wowstudio-accessibility-kit' ),
+			'',
+			str_repeat( '-', 60 ),
+			'',
+		);
+
+		$handoffs = 0;
+
+		foreach ( $findings as $finding ) {
+			if ( ( $finding['triage']['tier'] ?? '' ) !== ThemeTriage::TIER_HANDOFF ) {
+				continue;
+			}
+
+			++$handoffs;
+
+			$lines[] = sprintf( '%d. %s', $handoffs, $finding['rule_title'] );
+			$lines[] = '   ' . __( 'Why it matters:', 'wowstudio-accessibility-kit' ) . ' ' . $finding['consequence'];
+			$lines[] = '   ' . __( 'Where:', 'wowstudio-accessibility-kit' ) . ' ' . $finding['selector'];
+
+			if ( '' !== trim( (string) $finding['context'] ) ) {
+				$lines[] = '   ' . __( 'Current markup:', 'wowstudio-accessibility-kit' ) . ' ' . trim( $finding['context'] );
+			}
+
+			if ( '' !== trim( (string) ( $finding['triage']['snippet'] ?? '' ) ) ) {
+				$lines[] = '   ' . __( 'Change to:', 'wowstudio-accessibility-kit' ) . ' ' . $finding['triage']['snippet'];
+			}
+
+			$lines[] = '   ' . __( 'WCAG:', 'wowstudio-accessibility-kit' ) . ' ' . $finding['wcag_sc'];
+			$lines[] = '';
+		}
+
+		if ( 0 === $handoffs ) {
+			return '';
+		}
+
+		return implode( "\n", $lines );
 	}
 
 	/**

@@ -14,6 +14,7 @@ import Inspector from './components/inspector';
 import IssueList from './components/issue-list';
 import AltTextBulk from './components/alt-text-bulk';
 import BulkScan from './components/bulk-scan';
+import ThemePanel from './components/theme-panel';
 import ScanPicker from './components/scan-picker';
 import ScoreCard from './components/score-card';
 import { ErrorState, Skeleton } from './components/states';
@@ -156,6 +157,15 @@ export default function App() {
 						{ __( 'Images', 'wowstudio-accessibility-kit' ) }
 					</Button>
 				) }
+				{ capabilities.viewReports && (
+					<Button
+						variant={ view === 'theme' ? 'primary' : 'tertiary' }
+						aria-current={ view === 'theme' ? 'page' : undefined }
+						onClick={ () => setView( 'theme' ) }
+					>
+						{ __( 'Theme', 'wowstudio-accessibility-kit' ) }
+					</Button>
+				) }
 				{ capabilities.manage && (
 					<Button
 						variant={ view === 'settings' ? 'primary' : 'tertiary' }
@@ -218,6 +228,8 @@ export default function App() {
 			) }
 
 			{ view === 'images' && <AltTextBulk /> }
+
+			{ view === 'theme' && <ThemePanel /> }
 
 			{ view === 'settings' && <AiSettings /> }
 

@@ -41,13 +41,13 @@ msgid "https://wowstudio.dev/"
 msgstr ""
 
 #: src/Admin/Menu.php:71
-#: assets/src/app.js:116
+#: assets/src/app.js:117
 msgid "Accessibility Kit"
 msgstr ""
 
 #: src/Admin/Menu.php:93
 #: src/Rest/FixController.php:163
-#: src/Rest/RunController.php:204
+#: src/Rest/RunController.php:205
 #: src/Rest/ScanController.php:206
 #: src/Rest/StatementController.php:116
 msgid "You do not have permission to view accessibility reports."
@@ -394,7 +394,7 @@ msgid "None of the selected content could be added to the queue."
 msgstr ""
 
 #: src/Jobs/BulkScan.php:285
-#: src/Rest/RunController.php:305
+#: src/Rest/RunController.php:306
 msgid "That run could not be found."
 msgstr ""
 
@@ -563,6 +563,7 @@ msgid "A WordPress setting"
 msgstr ""
 
 #: src/Remediation/FixTarget.php:87
+#: assets/src/components/theme-panel.js:77
 msgid "Your theme"
 msgstr ""
 
@@ -586,6 +587,31 @@ msgstr ""
 
 #: src/Remediation/IssueReview.php:108
 msgid "That decision could not be saved."
+msgstr ""
+
+#: src/Remediation/ThemeTriage.php:82
+msgid "Someone has to edit the theme"
+msgstr ""
+
+#: src/Remediation/ThemeTriage.php:83
+msgid "No setting reaches this, and nothing here can change a theme file. Send the change below to whoever maintains your theme — or paste it into a child theme if you keep one."
+msgstr ""
+
+#: src/Remediation/ThemeTriage.php:108
+#: src/Remediation/ThemeTriage.php:124
+msgid "This is a setting, not code"
+msgstr ""
+
+#: src/Remediation/ThemeTriage.php:109
+msgid "This is your site logo. Describe it in the media library and every page that shows it is fixed at once — including pages nothing here has scanned."
+msgstr ""
+
+#: src/Remediation/ThemeTriage.php:126
+msgid "This is an item in one of your menus. Open the navigation block in the editor and give it a label — no code, and nothing here needs to stay installed for it to hold."
+msgstr ""
+
+#: src/Remediation/ThemeTriage.php:127
+msgid "This is an item in one of your menus. Give it a label in Appearance → Menus and the problem is gone — no code, and nothing here needs to stay installed for it to hold."
 msgstr ""
 
 #: src/Remediation/TitleTagFix.php:159
@@ -682,13 +708,47 @@ msgstr ""
 msgid "This fix changes how your theme renders every page, and your account is not allowed to change theme settings. An administrator can apply it."
 msgstr ""
 
-#: src/Rest/RunController.php:185
+#: src/Rest/RunController.php:186
 #: src/Rest/ScanController.php:187
 msgid "You do not have permission to run accessibility scans."
 msgstr ""
 
-#: src/Rest/RunController.php:276
+#: src/Rest/RunController.php:277
 msgid "None of the selected content could be read with your account, so there is nothing to scan."
+msgstr ""
+
+#. translators: %s: theme name.
+#: src/Rest/RunController.php:485
+#, php-format
+msgid "Accessibility changes needed in the %s theme"
+msgstr ""
+
+#: src/Rest/RunController.php:489
+msgid "These are in theme files rather than in page content, so they cannot be changed from the WordPress admin. Each one lists what a person loses because of it, and the smallest change that would fix it."
+msgstr ""
+
+#: src/Rest/RunController.php:491
+msgid "Found by WOWStudio Accessibility Kit. Automated checks cover part of WCAG, not all of it — this list is a starting point rather than a complete audit."
+msgstr ""
+
+#: src/Rest/RunController.php:507
+msgid "Why it matters:"
+msgstr ""
+
+#: src/Rest/RunController.php:508
+msgid "Where:"
+msgstr ""
+
+#: src/Rest/RunController.php:511
+msgid "Current markup:"
+msgstr ""
+
+#: src/Rest/RunController.php:515
+msgid "Change to:"
+msgstr ""
+
+#: src/Rest/RunController.php:518
+msgid "WCAG:"
 msgstr ""
 
 #: src/Rest/ScanController.php:77
@@ -1215,6 +1275,7 @@ msgid "Whole site"
 msgstr ""
 
 #: src/Scanner/ScanScope.php:53
+#: assets/src/app.js:166
 msgid "Theme"
 msgstr ""
 
@@ -1294,84 +1355,84 @@ msgstr ""
 msgid "Something went wrong and we could not say what. Please try again."
 msgstr ""
 
-#: assets/src/app.js:58
+#: assets/src/app.js:59
 msgid "Scanning the page…"
 msgstr ""
 
 #. translators: %d: number of findings.
-#: assets/src/app.js:67
+#: assets/src/app.js:68
 #, js-format
 msgid "Scan finished. %d findings."
 msgstr ""
 
-#: assets/src/app.js:78
+#: assets/src/app.js:79
 msgid "The scan failed."
 msgstr ""
 
-#: assets/src/app.js:122
+#: assets/src/app.js:123
 msgid "Find, fix, document, and monitor accessibility problems at the code level."
 msgstr ""
 
-#: assets/src/app.js:132
+#: assets/src/app.js:133
 msgid "Sections"
 msgstr ""
 
-#: assets/src/app.js:139
+#: assets/src/app.js:140
 msgid "One page"
 msgstr ""
 
-#: assets/src/app.js:147
+#: assets/src/app.js:148
 msgid "Your content"
 msgstr ""
 
-#: assets/src/app.js:156
+#: assets/src/app.js:157
 msgid "Images"
 msgstr ""
 
-#: assets/src/app.js:167
+#: assets/src/app.js:177
 #: assets/src/components/ai-settings.js:98
 msgid "AI settings"
 msgstr ""
 
-#: assets/src/app.js:180
+#: assets/src/app.js:190
 msgid "Statement"
 msgstr ""
 
-#: assets/src/app.js:198
+#: assets/src/app.js:208
 msgid "You can read results here but not start a scan. An administrator can grant that."
 msgstr ""
 
-#: assets/src/app.js:228
+#: assets/src/app.js:240
 msgid "Loading the scan…"
 msgstr ""
 
 #. translators: %s: content title.
-#: assets/src/app.js:250
+#: assets/src/app.js:262
 #, js-format
 msgid "Results for “%s”"
 msgstr ""
 
-#: assets/src/app.js:256
+#: assets/src/app.js:268
 msgid "Scan results"
 msgstr ""
 
-#: assets/src/app.js:279
+#: assets/src/app.js:291
 msgid "Show as a list"
 msgstr ""
 
-#: assets/src/app.js:283
+#: assets/src/app.js:295
 msgid "Show on the page"
 msgstr ""
 
-#: assets/src/app.js:292
+#: assets/src/app.js:304
 msgid "Back to your content"
 msgstr ""
 
-#: assets/src/app.js:303
+#: assets/src/app.js:315
 msgid "This scan covered less than usual."
 msgstr ""
 
-#: assets/src/app.js:356
+#: assets/src/app.js:368
 msgid "This plugin helps you find, fix, document, and monitor accessibility problems. It does not determine whether your site meets the ADA, the European Accessibility Act, Section 508, or any other legal requirement, and nothing here is legal advice."
 msgstr ""
 
@@ -1841,6 +1902,7 @@ msgstr ""
 #. translators: %s: WCAG success criterion number.
 #: assets/src/components/coverage-panel.js:188
 #: assets/src/components/issue-list.js:49
+#: assets/src/components/theme-panel.js:253
 #, js-format
 msgid "WCAG %s"
 msgstr ""
@@ -2427,6 +2489,86 @@ msgstr ""
 
 #: assets/src/components/statement-settings.js:373
 msgid "Preview"
+msgstr ""
+
+#: assets/src/components/theme-panel.js:48
+msgid "Looking at your theme…"
+msgstr ""
+
+#. translators: %s: theme name.
+#: assets/src/components/theme-panel.js:71
+#, js-format
+msgid "Your theme: %s"
+msgstr ""
+
+#: assets/src/components/theme-panel.js:85
+msgid "Check again"
+msgstr ""
+
+#: assets/src/components/theme-panel.js:86
+msgid "Check my theme"
+msgstr ""
+
+#: assets/src/components/theme-panel.js:101
+msgid "Looking at a few representative pages…"
+msgstr ""
+
+#: assets/src/components/theme-panel.js:109
+msgid "Your header, navigation and footer are the same on every page, so they are checked once here rather than reported against every page that uses them."
+msgstr ""
+
+#: assets/src/components/theme-panel.js:117
+msgid "Nothing has looked at your theme yet."
+msgstr ""
+
+#: assets/src/components/theme-panel.js:127
+msgid "You can fix these yourself, without code"
+msgstr ""
+
+#: assets/src/components/theme-panel.js:133
+msgid "Each of these is a field on a screen you already have. Fixing it there is permanent, and it holds whether or not this plugin stays installed."
+msgstr ""
+
+#: assets/src/components/theme-panel.js:149
+msgid "These need whoever maintains your theme"
+msgstr ""
+
+#: assets/src/components/theme-panel.js:155
+msgid "These live in theme files, which nothing here can change. There is a copyable summary below with the exact change for each one."
+msgstr ""
+
+#. translators: %d: number of changes needed.
+#: assets/src/components/theme-panel.js:173
+#, js-format
+msgid "Send this to your developer (%d change)"
+msgid_plural "Send this to your developer (%d changes)"
+msgstr[0] ""
+msgstr[1] ""
+
+#: assets/src/components/theme-panel.js:184
+msgid "The changes, written out"
+msgstr ""
+
+#: assets/src/components/theme-panel.js:205
+msgid "Copied"
+msgstr ""
+
+#: assets/src/components/theme-panel.js:206
+msgid "Copy it"
+msgstr ""
+
+#: assets/src/components/theme-panel.js:217
+msgid "None of the automated checks found anything in your theme. That is a good sign and not a clean bill of health — most of WCAG needs a person."
+msgstr ""
+
+#: assets/src/components/theme-panel.js:273
+msgid "Take me to the setting"
+msgstr ""
+
+#. translators: %s: name of the accessibility check.
+#: assets/src/components/theme-panel.js:288
+#, js-format
+msgid "Suggested change for: %s"
 msgstr ""
 
 #: assets/src/editor/api.js:25

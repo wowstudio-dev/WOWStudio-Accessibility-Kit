@@ -1363,6 +1363,62 @@
 	margin-top: var(--wsak-space-3);
 }
 
+/* Theme triage ------------------------------------------------------------- */
+
+.wsak-theme {
+	background: var(--wsak-surface);
+	border: 1px solid var(--wsak-line);
+	border-radius: var(--wsak-radius);
+	box-shadow: var(--wsak-shadow);
+	margin-bottom: var(--wsak-space-6);
+	padding: var(--wsak-space-6);
+}
+
+.wsak-theme__head {
+	align-items: center;
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--wsak-space-4);
+	justify-content: space-between;
+	margin-bottom: var(--wsak-space-3);
+}
+
+.wsak-theme__title {
+	margin: 0;
+	color: var(--wsak-ink);
+	font-size: 16px;
+	font-weight: 650;
+	letter-spacing: -0.01em;
+}
+
+.wsak-theme__lede {
+	margin: 0 0 var(--wsak-space-5);
+	max-width: 78ch;
+	color: var(--wsak-muted);
+	font-size: 13.5px;
+}
+
+.wsak-theme__link {
+	margin: var(--wsak-space-3) 0 0;
+	font-size: 13px;
+	font-weight: 600;
+}
+
+.wsak-theme__handover {
+	margin-top: var(--wsak-space-8);
+	padding-top: var(--wsak-space-5);
+	border-top: 1px solid var(--wsak-line);
+}
+
+.wsak-theme__handover textarea {
+	font-family: Menlo, Consolas, monospace;
+	font-size: 12px;
+}
+
+.wsak-theme__handover-actions {
+	margin-top: var(--wsak-space-3);
+}
+
 /* The rendered queue ------------------------------------------------------- */
 
 .wsak-run__followon {
