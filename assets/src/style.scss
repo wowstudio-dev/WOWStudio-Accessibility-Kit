@@ -1363,6 +1363,88 @@
 	margin-top: var(--wsak-space-3);
 }
 
+/* The rendered queue ------------------------------------------------------- */
+
+.wsak-run__followon {
+	margin: var(--wsak-space-4) 0;
+	padding: var(--wsak-space-4);
+	border: 1px solid var(--wsak-line-strong);
+	border-radius: var(--wsak-radius-sm);
+	background: var(--wsak-surface);
+}
+
+.wsak-run__followon-note {
+	margin: 0 0 var(--wsak-space-3);
+	max-width: 74ch;
+	color: var(--wsak-text);
+	font-size: 13px;
+}
+
+.wsak-rendered {
+	margin-top: var(--wsak-space-4);
+	padding: var(--wsak-space-4);
+	border: 1px solid var(--wsak-line-strong);
+	border-radius: var(--wsak-radius-sm);
+	background: var(--wsak-surface);
+}
+
+.wsak-rendered__head {
+	align-items: center;
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--wsak-space-4);
+	justify-content: space-between;
+	margin-bottom: var(--wsak-space-3);
+}
+
+.wsak-rendered__title {
+	margin: 0;
+	color: var(--wsak-ink);
+	font-size: 13.5px;
+	font-weight: 650;
+}
+
+.wsak-rendered__note {
+	margin: var(--wsak-space-2) 0 var(--wsak-space-3);
+	max-width: 74ch;
+	color: var(--wsak-muted);
+	font-size: 12.5px;
+}
+
+/*
+ * On screen rather than hidden. A display:none frame is throttled or never
+ * painted by some browsers, and these checks measure real layout — a hidden
+ * frame reports every element as zero-sized and quietly finds nothing.
+ */
+.wsak-rendered__frame {
+	width: 100%;
+	height: 220px;
+	border: 1px solid var(--wsak-line);
+	border-radius: var(--wsak-radius-sm);
+	background: #fff;
+}
+
+.wsak-rendered__done {
+	list-style: none;
+	margin: var(--wsak-space-3) 0 0;
+	padding: 0;
+}
+
+.wsak-rendered__done-item {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--wsak-space-3);
+	justify-content: space-between;
+	padding: var(--wsak-space-2) 0;
+	border-top: 1px solid var(--wsak-line);
+	font-size: 12.5px;
+}
+
+.wsak-rendered__done-meta {
+	color: var(--wsak-muted);
+	font-variant-numeric: tabular-nums;
+}
+
 /* CSS fix review ----------------------------------------------------------- */
 
 .wsak-css-fix {

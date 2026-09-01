@@ -15,6 +15,7 @@ use WOWStudio\AccessibilityKit\Jobs\BulkScan;
 use WOWStudio\AccessibilityKit\Remediation\WorkList;
 use WOWStudio\AccessibilityKit\Scanner\Engine;
 use WOWStudio\AccessibilityKit\Scanner\LoopbackProbe;
+use WOWStudio\AccessibilityKit\Scanner\Preview;
 use WOWStudio\AccessibilityKit\Scanner\ScanCoverage;
 use WOWStudio\AccessibilityKit\Scanner\ScanScope;
 use WOWStudio\AccessibilityKit\Scanner\ScanStatus;
@@ -393,6 +394,11 @@ final class RunController implements Registrable {
 				'post_id'        => $child->target_id,
 				'title'          => get_the_title( $child->target_id ),
 				'edit_url'       => (string) get_edit_post_link( $child->target_id, 'raw' ),
+				// Needed by the rendered queue, which frames each page in the
+				// administrator's own browser to run the checks a background
+				// job cannot. Empty when the content has no public address, and
+				// the queue skips those rather than framing nothing.
+				'preview_url'    => Preview::url_for( $child->target_id ),
 				'status'         => $child->status->value,
 				'status_label'   => $child->status->label(),
 				'score'          => $child->score,

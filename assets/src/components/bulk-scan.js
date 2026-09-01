@@ -20,6 +20,7 @@ import {
 	startRun,
 } from '../api';
 import CoverageBadge from './coverage-badge';
+import RenderedQueue from './rendered-queue';
 import { Busy, ErrorState, Skeleton } from './states';
 
 /**
@@ -384,8 +385,17 @@ export default function BulkScan( { onInspect } ) {
  * @return {Element} The panel.
  */
 function RunProgress( { run, onStop, onInspect } ) {
+	const [ rendering, setRendering ] = useState( false );
+
 	const progress = run.progress ?? {};
 	const finished = progress.finished;
+
+	// Pages a bulk run reached but the browser checks did not. Those with no
+	// public address are left out: there is nothing to frame.
+	const unrendered = ( run.pages ?? [] ).filter(
+		( page ) =>
+			page.coverage === 'content' && page.preview_url && ! page.error
+	);
 
 	return (
 		<div className="wsak-run">
@@ -448,6 +458,45 @@ function RunProgress( { run, onStop, onInspect } ) {
 						'This runs in the background. You can leave this page and come back.',
 						'wowstudio-accessibility-kit'
 					) }
+				/>
+			) }
+
+			{ /*
+			 * The offer to finish the job. A bulk run reads content and cannot
+			 * check colour, size or layout — those need a rendered page, and the
+			 * only browser available is the one reading this. Offered rather
+			 * than done automatically, because it holds the tab open.
+			 */ }
+			{ finished && ! rendering && unrendered.length > 0 && (
+				<div className="wsak-run__followon">
+					<p className="wsak-run__followon-note">
+						{ sprintf(
+							/* translators: %d: number of pages checked for content only. */
+							_n(
+								'%d page was checked for content only. Colour, text size and layout need the page open in a browser.',
+								'%d pages were checked for content only. Colour, text size and layout need the page open in a browser.',
+								unrendered.length,
+								'wowstudio-accessibility-kit'
+							),
+							unrendered.length
+						) }
+					</p>
+					<Button
+						variant="primary"
+						onClick={ () => setRendering( true ) }
+					>
+						{ __(
+							'Check colour and layout too',
+							'wowstudio-accessibility-kit'
+						) }
+					</Button>
+				</div>
+			) }
+
+			{ rendering && (
+				<RenderedQueue
+					pages={ unrendered }
+					onDismiss={ () => setRendering( false ) }
 				/>
 			) }
 

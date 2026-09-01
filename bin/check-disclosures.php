@@ -104,6 +104,13 @@ const WSAK_SURFACES = array(
 	'src/Rest/BlockCheckController.php'           => array(
 		'the editor-scope caveat' => '/Colour, text size and layout need the page open in a browser/i',
 	),
+	'assets/src/components/rendered-queue.js'     => array(
+		// The one thing here that cannot be left to run. Said before it starts,
+		// not discovered when somebody closes the tab.
+		'the needs-your-browser caveat' => '/only runs while this tab is open/i',
+		// And the reason a page can come back with nothing.
+		'the frame-refused caveat'      => '/would not open here/i',
+	),
 	'assets/src/editor/block-finding.js'          => array(
 		'the writes-into-your-content note' => '/writes into the block itself/i',
 	),

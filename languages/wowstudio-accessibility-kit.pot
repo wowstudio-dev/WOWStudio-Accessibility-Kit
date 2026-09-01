@@ -47,7 +47,7 @@ msgstr ""
 
 #: src/Admin/Menu.php:93
 #: src/Rest/FixController.php:163
-#: src/Rest/RunController.php:203
+#: src/Rest/RunController.php:204
 #: src/Rest/ScanController.php:206
 #: src/Rest/StatementController.php:116
 msgid "You do not have permission to view accessibility reports."
@@ -394,7 +394,7 @@ msgid "None of the selected content could be added to the queue."
 msgstr ""
 
 #: src/Jobs/BulkScan.php:285
-#: src/Rest/RunController.php:304
+#: src/Rest/RunController.php:305
 msgid "That run could not be found."
 msgstr ""
 
@@ -682,12 +682,12 @@ msgstr ""
 msgid "This fix changes how your theme renders every page, and your account is not allowed to change theme settings. An administrator can apply it."
 msgstr ""
 
-#: src/Rest/RunController.php:184
+#: src/Rest/RunController.php:185
 #: src/Rest/ScanController.php:187
 msgid "You do not have permission to run accessibility scans."
 msgstr ""
 
-#: src/Rest/RunController.php:275
+#: src/Rest/RunController.php:276
 msgid "None of the selected content could be read with your account, so there is nothing to scan."
 msgstr ""
 
@@ -1586,12 +1586,12 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: assets/src/components/alt-text-bulk.js:216
-#: assets/src/components/bulk-scan.js:281
+#: assets/src/components/bulk-scan.js:282
 msgid "Select the first"
 msgstr ""
 
 #: assets/src/components/alt-text-bulk.js:242
-#: assets/src/components/bulk-scan.js:301
+#: assets/src/components/bulk-scan.js:302
 msgid "Clear"
 msgstr ""
 
@@ -1616,11 +1616,13 @@ msgid "Describing…"
 msgstr ""
 
 #: assets/src/components/alt-text-bulk.js:344
+#: assets/src/components/rendered-queue.js:156
 msgid "Done"
 msgstr ""
 
 #: assets/src/components/alt-text-bulk.js:348
-#: assets/src/components/bulk-scan.js:400
+#: assets/src/components/bulk-scan.js:410
+#: assets/src/components/rendered-queue.js:163
 msgid "Stop"
 msgstr ""
 
@@ -1638,7 +1640,7 @@ msgid "%d could not be described"
 msgstr ""
 
 #: assets/src/components/alt-text-bulk.js:384
-#: assets/src/components/bulk-scan.js:447
+#: assets/src/components/bulk-scan.js:457
 msgid "This runs in the background. You can leave this page and come back."
 msgstr ""
 
@@ -1673,82 +1675,82 @@ msgid "Discard"
 msgstr ""
 
 #. translators: %d: number of pages checked.
-#: assets/src/components/bulk-scan.js:122
+#: assets/src/components/bulk-scan.js:123
 #, js-format
 msgid "Finished. %d pages checked."
 msgstr ""
 
 #. translators: %d: number of pages queued.
-#: assets/src/components/bulk-scan.js:158
+#: assets/src/components/bulk-scan.js:159
 #, js-format
 msgid "%d pages queued. This runs in the background — you can leave this page."
 msgstr ""
 
-#: assets/src/components/bulk-scan.js:177
+#: assets/src/components/bulk-scan.js:178
 msgid "Stopped. Everything already checked has been kept."
 msgstr ""
 
-#: assets/src/components/bulk-scan.js:189
+#: assets/src/components/bulk-scan.js:190
 #: assets/src/components/scan-picker.js:88
 msgid "Loading your content…"
 msgstr ""
 
-#: assets/src/components/bulk-scan.js:200
+#: assets/src/components/bulk-scan.js:201
 msgid "Check your content"
 msgstr ""
 
-#: assets/src/components/bulk-scan.js:222
+#: assets/src/components/bulk-scan.js:223
 msgid "This site cannot fetch its own pages, which is a common host setting and not a fault. Bulk checking still works and reads the content of every page you select. What it cannot do is check colour, text size and layout — those need the page open in a browser, so open a page in the inspector to check those."
 msgstr ""
 
-#: assets/src/components/bulk-scan.js:232
+#: assets/src/components/bulk-scan.js:233
 msgid "Content types"
 msgstr ""
 
-#: assets/src/components/bulk-scan.js:256
+#: assets/src/components/bulk-scan.js:257
 #: assets/src/components/scan-picker.js:74
 msgid "Search your content"
 msgstr ""
 
-#: assets/src/components/bulk-scan.js:273
+#: assets/src/components/bulk-scan.js:274
 #: assets/src/components/states.js:23
 msgid "Loading…"
 msgstr ""
 
 #. translators: %d: score out of 100.
-#: assets/src/components/bulk-scan.js:324
+#: assets/src/components/bulk-scan.js:325
 #, js-format
 msgid "%d / 100"
 msgstr ""
 
 #. translators: %d: number of selected items.
-#: assets/src/components/bulk-scan.js:349
+#: assets/src/components/bulk-scan.js:350
 #, js-format
 msgid "Check %d item"
 msgid_plural "Check %d items"
 msgstr[0] ""
 msgstr[1] ""
 
-#: assets/src/components/bulk-scan.js:357
+#: assets/src/components/bulk-scan.js:358
 msgid "Select something to check"
 msgstr ""
 
-#: assets/src/components/bulk-scan.js:395
+#: assets/src/components/bulk-scan.js:405
 msgid "Finished"
 msgstr ""
 
-#: assets/src/components/bulk-scan.js:396
+#: assets/src/components/bulk-scan.js:406
 msgid "Checking…"
 msgstr ""
 
 #. translators: 1: pages settled, 2: pages in the run.
-#: assets/src/components/bulk-scan.js:420
+#: assets/src/components/bulk-scan.js:430
 #, js-format
 msgid "%1$d of %2$d"
 msgstr ""
 
 #. translators: %d: number of pages that could not be checked.
-#: assets/src/components/bulk-scan.js:428
+#: assets/src/components/bulk-scan.js:438
 #, js-format
 msgid "%d could not be checked"
 msgid_plural "%d could not be checked"
@@ -1756,20 +1758,32 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %d: number of pages not checked because the run was stopped.
-#: assets/src/components/bulk-scan.js:440
+#: assets/src/components/bulk-scan.js:450
 #, js-format
 msgid "%d stopped"
 msgstr ""
 
+#. translators: %d: number of pages checked for content only.
+#: assets/src/components/bulk-scan.js:475
+#, js-format
+msgid "%d page was checked for content only. Colour, text size and layout need the page open in a browser."
+msgid_plural "%d pages were checked for content only. Colour, text size and layout need the page open in a browser."
+msgstr[0] ""
+msgstr[1] ""
+
+#: assets/src/components/bulk-scan.js:488
+msgid "Check colour and layout too"
+msgstr ""
+
 #. translators: %d: number of findings.
-#: assets/src/components/bulk-scan.js:474
+#: assets/src/components/bulk-scan.js:523
 #, js-format
 msgid "%d finding"
 msgid_plural "%d findings"
 msgstr[0] ""
 msgstr[1] ""
 
-#: assets/src/components/bulk-scan.js:490
+#: assets/src/components/bulk-scan.js:539
 msgid "Check the rest"
 msgstr ""
 
@@ -2141,6 +2155,61 @@ msgstr ""
 #: assets/src/components/issue-list.js:261
 msgid "None of the checks we can run automatically flagged anything on this page. That is a good sign, and it is not the same as the page being accessible — most of WCAG needs a person. The manual checklists are the next step."
 msgstr ""
+
+#. translators: 1: page title, 2: position, 3: total pages.
+#: assets/src/components/rendered-queue.js:101
+#, js-format
+msgid "Checking %1$s — %2$d of %3$d."
+msgstr ""
+
+#: assets/src/components/rendered-queue.js:138
+msgid "Colour and layout checked"
+msgstr ""
+
+#: assets/src/components/rendered-queue.js:142
+msgid "Checking colour and layout…"
+msgstr ""
+
+#. translators: 1: pages checked, 2: pages in the queue.
+#: assets/src/components/rendered-queue.js:187
+#, js-format
+msgctxt "pages checked in the browser"
+msgid "%1$d of %2$d"
+msgstr ""
+
+#: assets/src/components/rendered-queue.js:203
+msgid "This one needs your browser, so it only runs while this tab is open. Everything already checked is saved as it goes."
+msgstr ""
+
+#. translators: %d: number of pages that would not open in a frame.
+#: assets/src/components/rendered-queue.js:214
+#, js-format
+msgid "%d page would not open here, so its colour and layout were not checked."
+msgid_plural "%d pages would not open here, so their colour and layout were not checked."
+msgstr[0] ""
+msgstr[1] ""
+
+#: assets/src/components/rendered-queue.js:222
+msgid "Some sites refuse to be shown inside another page, which is a reasonable security setting and not a fault."
+msgstr ""
+
+#. translators: %s: page title.
+#: assets/src/components/rendered-queue.js:240
+#, js-format
+msgid "Checking: %s"
+msgstr ""
+
+#: assets/src/components/rendered-queue.js:254
+msgid "would not open"
+msgstr ""
+
+#. translators: %d: number of further findings.
+#: assets/src/components/rendered-queue.js:260
+#, js-format
+msgid "%d more finding"
+msgid_plural "%d more findings"
+msgstr[0] ""
+msgstr[1] ""
 
 #: assets/src/components/scan-picker.js:69
 msgid "Scan a page"
