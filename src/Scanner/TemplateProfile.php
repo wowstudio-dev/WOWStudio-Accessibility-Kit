@@ -33,6 +33,25 @@ defined( 'ABSPATH' ) || exit;
 final class TemplateProfile {
 
 	/**
+	 * How long a measurement of the theme is trusted for.
+	 *
+	 * The docblock on describes() promised this expiry from the start and the
+	 * code never implemented it, which meant a profile measured once was
+	 * believed for ever. That matters because the profile is taken from a
+	 * sample of one page: a caching plugin, a maintenance screen or a
+	 * personalised header at the wrong moment bakes in a number that then
+	 * biases every content-only scan on the site, with no way to notice.
+	 *
+	 * Fourteen days is long enough that the theme check is not constantly
+	 * re-running, and short enough that a bad reading corrects itself without
+	 * anybody having to know profiles exist.
+	 *
+	 * @since 0.14.1
+	 * @var int
+	 */
+	public const MAX_AGE_DAYS = 14;
+
+	/**
 	 * Constructor.
 	 *
 	 * @since 0.12.0
@@ -149,7 +168,8 @@ final class TemplateProfile {
 	 * WordPress stores nothing about when a theme's markup changed, so the
 	 * version is the only signal available — and a theme that ships an unchanged
 	 * version number after changing its header is a case this cannot catch. The
-	 * profile expires on its own for that reason.
+	 * profile therefore also expires on age, which is what limits the damage a
+	 * bad reading can do.
 	 *
 	 * @since 0.12.0
 	 *
@@ -158,6 +178,36 @@ final class TemplateProfile {
 	 * @return bool
 	 */
 	public function describes( string $theme, string $version ): bool {
-		return $this->known && $this->theme === $theme && $this->version === $version;
+		if ( ! $this->known || $this->theme !== $theme || $this->version !== $version ) {
+			return false;
+		}
+
+		return ! $this->is_stale();
+	}
+
+	/**
+	 * Reports whether this measurement is too old to be trusted.
+	 *
+	 * A profile with no recorded date is treated as stale rather than fresh.
+	 * Anything written before this field existed, or by hand, has no provenance
+	 * — and the safe reading of "I do not know when this was measured" is to
+	 * measure again.
+	 *
+	 * @since 0.14.1
+	 *
+	 * @return bool
+	 */
+	public function is_stale(): bool {
+		if ( '' === trim( $this->captured_at ) ) {
+			return true;
+		}
+
+		$taken = strtotime( $this->captured_at . ' UTC' );
+
+		if ( false === $taken ) {
+			return true;
+		}
+
+		return ( time() - $taken ) > self::MAX_AGE_DAYS * DAY_IN_SECONDS;
 	}
 }

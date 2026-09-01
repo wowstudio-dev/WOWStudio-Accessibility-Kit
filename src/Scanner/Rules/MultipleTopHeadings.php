@@ -143,7 +143,8 @@ final class MultipleTopHeadings implements Rule {
 		 * content is the second on the page — and reporting from the second
 		 * onwards means it would otherwise be missed entirely.
 		 */
-		$seen = $document->is_full_page() ? 0 : $document->profile()->top_headings_before_content();
+		$from_theme = $document->is_full_page() ? 0 : $document->profile()->top_headings_before_content();
+		$seen       = $from_theme;
 
 		foreach ( $document->find( '//h1' ) as $heading ) {
 			if ( ! $heading instanceof DOMElement || $document->is_hidden( $heading ) ) {
@@ -156,16 +157,35 @@ final class MultipleTopHeadings implements Rule {
 				continue;
 			}
 
+			/*
+			 * Whether this finding exists on its own evidence, or only because
+			 * the profile said the theme contributes a heading we cannot see.
+			 *
+			 * The distinction matters more than it looks. A profile is measured
+			 * from a sample of one page, and anything that made that page
+			 * unrepresentative — a caching plugin, a maintenance screen, a
+			 * personalised header — bakes a wrong number in. When that happens
+			 * this rule invents a finding about a page whose headings are
+			 * perfectly correct, which is the one failure decision F9 said must
+			 * never happen: under-reporting is recoverable, inventing is not.
+			 *
+			 * So a finding the content alone would not have produced is offered
+			 * for a person to confirm rather than asserted.
+			 */
+			$inferred = ( $seen - $from_theme ) < 2;
+
 			$findings[] = new Finding(
 				$this->id(),
 				$this->wcag_sc(),
 				$this->severity(),
-				$this->detection(),
-				sprintf(
-					/* translators: %d: position of this top-level heading on the page. */
-					__( 'This is top-level heading number %d on the page.', 'wowstudio-accessibility-kit' ),
-					$seen
-				),
+				$inferred ? Detection::Manual : $this->detection(),
+				$inferred
+					? __( 'Your theme appears to put a top-level heading above your content, which would make this one the second on the page. Worth checking on the page itself — if your theme does not, this is fine as it is.', 'wowstudio-accessibility-kit' )
+					: sprintf(
+						/* translators: %d: position of this top-level heading on the page. */
+						__( 'This is top-level heading number %d on the page.', 'wowstudio-accessibility-kit' ),
+						$seen
+					),
 				$document->selector_for( $heading ),
 				$document->context_for( $heading )
 			);

@@ -145,7 +145,9 @@ final class HeadingLevelSkipped implements Rule {
 		 * unreported. Zero when the theme has not been looked at, which restores
 		 * exactly the old behaviour rather than guessing.
 		 */
-		$previous = $document->is_full_page() ? 0 : $document->profile()->heading_context();
+		$seed     = $document->is_full_page() ? 0 : $document->profile()->heading_context();
+		$previous = $seed;
+		$first    = true;
 
 		foreach ( $document->find( '//h1 | //h2 | //h3 | //h4 | //h5 | //h6' ) as $heading ) {
 			if ( ! $heading instanceof DOMElement || $document->is_hidden( $heading ) ) {
@@ -155,23 +157,41 @@ final class HeadingLevelSkipped implements Rule {
 			$level = (int) substr( $heading->nodeName, 1 );
 
 			if ( 0 !== $previous && $level > $previous + 1 ) {
+				/*
+				 * On the first heading there is no preceding one in this
+				 * content: the level being compared against came from the
+				 * profile, which is a measurement of a sample of the theme
+				 * rather than of this page. A wrong profile would otherwise
+				 * assert a gap that is not there — see the note in
+				 * MultipleTopHeadings, and decision F9.
+				 */
+				$inferred = $first && $seed > 0;
+
 				$findings[] = new Finding(
 					$this->id(),
 					$this->wcag_sc(),
 					$this->severity(),
-					$this->detection(),
-					sprintf(
-						/* translators: 1: previous heading level, 2: this heading level. */
-						__( 'This heading jumps from level %1$d to level %2$d.', 'wowstudio-accessibility-kit' ),
-						$previous,
-						$level
-					),
+					$inferred ? Detection::Manual : $this->detection(),
+					$inferred
+						? sprintf(
+							/* translators: 1: heading level the theme appears to establish, 2: this heading level. */
+							__( 'Your theme appears to put a level %1$d heading above your content, which would make this level %2$d a jump. Worth checking on the page itself.', 'wowstudio-accessibility-kit' ),
+							$previous,
+							$level
+						)
+						: sprintf(
+							/* translators: 1: previous heading level, 2: this heading level. */
+							__( 'This heading jumps from level %1$d to level %2$d.', 'wowstudio-accessibility-kit' ),
+							$previous,
+							$level
+						),
 					$document->selector_for( $heading ),
 					$document->context_for( $heading )
 				);
 			}
 
 			$previous = $level;
+			$first    = false;
 		}
 
 		return $findings;

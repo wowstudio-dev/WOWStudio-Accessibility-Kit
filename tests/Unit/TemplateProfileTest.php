@@ -37,7 +37,7 @@ final class TemplateProfileTest extends TestCase {
 	 * @return TemplateProfile
 	 */
 	private function typical_theme(): TemplateProfile {
-		return new TemplateProfile( true, 1, 1, true, true, true, 'twentytwentyfive', '1.0', '2026-09-01 00:00:00' );
+		return new TemplateProfile( true, 1, 1, true, true, true, 'twentytwentyfive', '1.0', gmdate( 'Y-m-d H:i:s' ) );
 	}
 
 	/**
@@ -132,7 +132,7 @@ final class TemplateProfileTest extends TestCase {
 	 * @return void
 	 */
 	public function test_a_theme_without_a_top_heading_seeds_nothing(): void {
-		$profile = new TemplateProfile( true, 0, 0, true, true, true, 'bare', '1.0', '2026-09-01 00:00:00' );
+		$profile = new TemplateProfile( true, 0, 0, true, true, true, 'bare', '1.0', gmdate( 'Y-m-d H:i:s' ) );
 
 		$this->assertNotContains( 'heading-level-skipped', $this->scan( '<h3>A section</h3>', $profile ) );
 		$this->assertNotContains( 'heading-multiple-h1', $this->scan( '<h1>A title</h1>', $profile ) );
@@ -152,6 +152,147 @@ final class TemplateProfileTest extends TestCase {
 		$this->assertNotContains( 'html-lang-missing', $found );
 		$this->assertNotContains( 'document-title-missing', $found );
 		$this->assertNotContains( 'landmark-main-missing', $found );
+	}
+
+	/**
+	 * Returns the findings with their detection, so inference can be told apart.
+	 *
+	 * @param string               $html    Markup to scan.
+	 * @param TemplateProfile|null $profile Theme knowledge.
+	 * @return array<int, array{rule: string, detection: string}>
+	 */
+	private function detailed( string $html, ?TemplateProfile $profile = null ): array {
+		$result = ( new Engine() )->scan( $html, $profile );
+
+		$this->assertNotNull( $result );
+
+		return array_map(
+			static fn( $finding ): array => array(
+				'rule'      => $finding->rule_id,
+				'detection' => $finding->detection->value,
+				'message'   => $finding->message,
+			),
+			$result->findings
+		);
+	}
+
+	/**
+	 * A finding owed only to the profile is offered, never asserted.
+	 *
+	 * The bug this exists for, found by testing the plugin against three real
+	 * page-builder pages. A page with exactly one top-level heading — correct
+	 * structure — was reported as having a duplicate, because a profile measured
+	 * under unrepresentative conditions claimed the theme contributed one.
+	 *
+	 * A profile is a measurement of a sample of one page. When it is wrong this
+	 * rule used to invent a finding about a page that was perfectly fine, which
+	 * is the one failure decision F9 said must never happen: under-reporting is
+	 * recoverable and inventing is not.
+	 *
+	 * @return void
+	 */
+	public function test_a_finding_owed_only_to_the_profile_says_so(): void {
+		$found = $this->detailed( '<h1>The only heading in this content</h1>', $this->typical_theme() );
+
+		$h1 = array_values(
+			array_filter( $found, static fn( array $f ): bool => 'heading-multiple-h1' === $f['rule'] )
+		);
+
+		$this->assertCount( 1, $h1, 'It is still reported — the profile may well be right.' );
+		$this->assertSame( 'manual', $h1[0]['detection'] );
+
+		// This rule was already manual, so the detection tag was never the
+		// problem. The message was: "This is top-level heading number 2 on the
+		// page" states as fact a count that includes a heading measured from a
+		// sample of the theme, which the reader cannot see in their own content
+		// and which may simply be wrong.
+		$this->assertStringContainsString( 'Your theme appears to', $h1[0]['message'] );
+		$this->assertStringNotContainsString( 'number 2 on the page', $h1[0]['message'] );
+	}
+
+	/**
+	 * A second heading in the content stands on its own evidence.
+	 *
+	 * The profile is irrelevant here: two top-level headings in one post are a
+	 * duplicate whatever the theme does.
+	 *
+	 * @return void
+	 */
+	public function test_a_finding_the_content_settles_states_it_plainly(): void {
+		$found = $this->detailed(
+			'<h1>First</h1><h1>Second</h1>',
+			$this->typical_theme()
+		);
+
+		$h1 = array_values(
+			array_filter( $found, static fn( array $f ): bool => 'heading-multiple-h1' === $f['rule'] )
+		);
+
+		$this->assertCount( 2, $h1 );
+		$this->assertStringContainsString( 'Your theme appears to', $h1[0]['message'], 'The first rests on the profile.' );
+		$this->assertStringContainsString( 'number 3 on the page', $h1[1]['message'], 'The second is settled by the content itself.' );
+	}
+
+	/**
+	 * The same distinction for skipped heading levels.
+	 *
+	 * @return void
+	 */
+	public function test_a_skip_measured_from_the_profile_is_not_asserted(): void {
+		$inferred = $this->detailed( '<h3>Opens at level three</h3>', $this->typical_theme() );
+		$settled  = $this->detailed( '<h2>Two</h2><p>Words.</p><h4>Four</h4>', $this->typical_theme() );
+
+		$first = array_values(
+			array_filter( $inferred, static fn( array $f ): bool => 'heading-level-skipped' === $f['rule'] )
+		);
+		$later = array_values(
+			array_filter( $settled, static fn( array $f ): bool => 'heading-level-skipped' === $f['rule'] )
+		);
+
+		$this->assertCount( 1, $first );
+		$this->assertSame( 'manual', $first[0]['detection'] );
+
+		$this->assertCount( 1, $later );
+		$this->assertSame( 'auto', $later[0]['detection'], 'h2 to h4 is a gap the content itself shows.' );
+	}
+
+	/**
+	 * An inferred finding costs nothing against the score.
+	 *
+	 * Following from the above: the score counts only what a scan settled, so a
+	 * wrong profile can no longer drag a page's number down.
+	 *
+	 * @return void
+	 */
+	public function test_an_inferred_finding_does_not_move_the_score(): void {
+		// The heading-skip rule is Detection::Auto, so before this change a
+		// profile-seeded finding counted against the score as though the scan
+		// had settled it. That is the one that mattered: a wrong profile could
+		// silently take points off a page whose headings are fine.
+		$result = ( new Engine() )->scan( '<h3>Opens at level three</h3>', $this->typical_theme() );
+
+		$this->assertNotNull( $result );
+		$this->assertSame( 100, $result->score() );
+	}
+
+	/**
+	 * A measurement too old to trust is not used.
+	 *
+	 * The method promised this expiry in its own docblock from the day it was
+	 * written, and never did it. A profile measured once was believed for ever,
+	 * so a reading taken while a caching plugin or a maintenance screen was in
+	 * the way could bias every scan on the site indefinitely.
+	 *
+	 * @return void
+	 */
+	public function test_an_old_profile_is_not_trusted(): void {
+		$fresh   = new TemplateProfile( true, 1, 1, true, true, true, 'x', '1.0', gmdate( 'Y-m-d H:i:s' ) );
+		$old     = new TemplateProfile( true, 1, 1, true, true, true, 'x', '1.0', gmdate( 'Y-m-d H:i:s', time() - ( TemplateProfile::MAX_AGE_DAYS + 1 ) * DAY_IN_SECONDS ) );
+		$undated = new TemplateProfile( true, 1, 1, true, true, true, 'x', '1.0', '' );
+
+		$this->assertTrue( $fresh->describes( 'x', '1.0' ) );
+		$this->assertFalse( $old->describes( 'x', '1.0' ), 'An old measurement is re-taken rather than trusted.' );
+		$this->assertFalse( $undated->describes( 'x', '1.0' ), 'No date means no provenance.' );
 	}
 
 	/**

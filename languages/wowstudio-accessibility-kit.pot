@@ -1060,8 +1060,14 @@ msgstr ""
 msgid "Renumbering the heading is one possible fix; the other is that a section is genuinely missing and should be written. Choosing between those is a judgement about the document, not a correction to it."
 msgstr ""
 
+#. translators: 1: heading level the theme appears to establish, 2: this heading level.
+#: src/Scanner/Rules/HeadingLevelSkipped.php:178
+#, php-format
+msgid "Your theme appears to put a level %1$d heading above your content, which would make this level %2$d a jump. Worth checking on the page itself."
+msgstr ""
+
 #. translators: 1: previous heading level, 2: this heading level.
-#: src/Scanner/Rules/HeadingLevelSkipped.php:165
+#: src/Scanner/Rules/HeadingLevelSkipped.php:184
 #, php-format
 msgid "This heading jumps from level %1$d to level %2$d."
 msgstr ""
@@ -1212,8 +1218,12 @@ msgstr ""
 msgid "Which of the two should stop being a top-level heading depends on which one the page is actually about."
 msgstr ""
 
+#: src/Scanner/Rules/MultipleTopHeadings.php:183
+msgid "Your theme appears to put a top-level heading above your content, which would make this one the second on the page. Worth checking on the page itself — if your theme does not, this is fine as it is."
+msgstr ""
+
 #. translators: %d: position of this top-level heading on the page.
-#: src/Scanner/Rules/MultipleTopHeadings.php:166
+#: src/Scanner/Rules/MultipleTopHeadings.php:186
 #, php-format
 msgid "This is top-level heading number %d on the page."
 msgstr ""
