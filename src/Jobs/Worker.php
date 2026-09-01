@@ -33,8 +33,17 @@ final class Worker implements Registrable {
 	 * @return void
 	 */
 	public function register(): void {
-		add_action( Queue::HOOK, array( $this, 'scan_page' ), 10, 1 );
-		add_action( Queue::ALT_HOOK, array( $this, 'describe_image' ), 10, 1 );
+		// Both handlers belong to paid features whose implementations Freemius
+		// strips from the free build. Registering a hook whose handler would
+		// fatal is worse than not registering it: the action would be claimed,
+		// run, and take the queue down with it.
+		if ( class_exists( BulkScan::class ) ) {
+			add_action( Queue::HOOK, array( $this, 'scan_page' ), 10, 1 );
+		}
+
+		if ( class_exists( AltTextRun::class ) ) {
+			add_action( Queue::ALT_HOOK, array( $this, 'describe_image' ), 10, 1 );
+		}
 	}
 
 	/**

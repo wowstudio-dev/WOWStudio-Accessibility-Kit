@@ -43,7 +43,13 @@ by a human before any public release. Items marked **TODO(human)** are open.
       cap on page context, the `_wsak_skip_ai` opt-out, and Freemius. It landed
       four steps later than planned: the item said "step 5" and the adapters
       shipped in 0.5.0 without it.
-- [ ] **TODO(human)** Open every link in that section and confirm it resolves.
+- [x] Every link in that section was checked on 2026-09-01. Thirteen of sixteen
+      answered 200 directly. `www.gnu.org/licenses/gpl-2.0.html` answers 302 to
+      `old-licenses/gpl-2.0.html` and then 200 — it works, and the redirect is
+      worth knowing. The three OpenAI URLs answer 403 with
+      `cf-mitigated: challenge`, which is Cloudflare refusing an automated
+      client rather than a missing page; a browser passes. Their *content* was
+      therefore not confirmed from here.
       The endpoint URLs were read out of the provider adapters and are correct;
       the terms and privacy-policy URLs were written from knowledge and have
       **not** been fetched. Providers move these pages. A dead link in this
@@ -87,13 +93,23 @@ by a human before any public release. Items marked **TODO(human)** are open.
       the editor panel, the theme report, every check and every one-at-a-time
       fix, unlimited. Paid is bulk scanning, bulk alt text, and the uncapped
       allowance.
-- [ ] **Before the first paid release:** decide whether the Pro-only classes
-      should move into `@fs_premium_only` files so Freemius strips them from the
-      free zip entirely. Today the gate is enforced at the route, which stops
-      the feature being *used* but still ships the code. That is the ordinary
-      arrangement for most Freemius plugins and it is not what CLAUDE.md's
-      "no premium code in the free zip" rule asks for. Worth resolving
-      deliberately rather than discovering at submission.
+- [x] **Pro-only implementations are stripped, not merely switched off.**
+      Resolved 2026-09-01. `Jobs\BulkScan`, `AltText\AltTextRun`,
+      `AltText\MediaIndex` and `Rest\AltTextRunController` carry
+      `@fs_premium_only`, and every place that reaches for them checks
+      `class_exists()` first — the worker before registering its hooks, the
+      plugin before constructing the controller, and `RunController` before
+      declaring the run routes at all. Registering a hook or a route whose
+      handler cannot exist would answer with a fatal rather than a refusal.
+
+      Verified by deleting all four files and booting: the plugin came up, no
+      paid route was registered, and `/coverage`, `/theme`, `/content/types` and
+      `/check-blocks` all still answered 200. That is a simulation of stripping,
+      not stripping itself — see the item below.
+- [ ] Re-run `php bin/check-free-build.php dist/free.zip` against a
+      **Freemius-generated** zip and confirm the four files are absent. Our own
+      `--free` build deliberately refuses to guess at stripping, so this is the
+      one step that cannot be done locally.
 
 ## Third-party code (from Phase 2 onward)
 

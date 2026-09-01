@@ -25,6 +25,15 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Listing undescribed images, describing them in bulk, and approving the result.
  *
+ * @fs_premium_only
+ *
+ * Stripped from the free build by Freemius rather than merely switched off. The
+ * tier check on the route refuses a free site, but a refusal still ships the
+ * code, and CLAUDE.md asks for the stronger thing: the paid implementation is
+ * absent from the zip that goes to WordPress.org. Every place that reaches for
+ * this class therefore checks it exists first — on a free build it does not,
+ * and the feature is not merely closed but genuinely not there.
+ *
  * @since 0.13.0
  */
 final class AltTextRunController implements Registrable {

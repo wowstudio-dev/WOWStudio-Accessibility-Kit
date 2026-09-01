@@ -151,7 +151,6 @@ final class Plugin {
 			'rest.fix.css'   => new CssFixController(),
 			'rest.runs'      => new RunController(),
 			'rest.review'    => new ReviewController(),
-			'rest.alt.bulk'  => new AltTextRunController(),
 			'rest.blocks'    => new BlockCheckController(),
 			'fix.title'      => new TitleTagFix(),
 			'jobs.worker'    => new Worker(),
@@ -160,6 +159,13 @@ final class Plugin {
 			'statement'      => new StatementBlock(),
 			'rest.statement' => new StatementController(),
 		);
+
+		// Paid controllers whose files Freemius strips. Added only when present,
+		// so the free build boots with the routes simply absent rather than
+		// fatalling on a class that is not there.
+		if ( class_exists( AltTextRunController::class ) ) {
+			$services['rest.alt.bulk'] = new AltTextRunController();
+		}
 
 		/**
 		 * Filters the services the plugin boots.

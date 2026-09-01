@@ -30,6 +30,15 @@ defined( 'ABSPATH' ) || exit;
  * with a conditional update and stops if the claim fails, so a duplicated job is
  * a no-op rather than a second scan writing a second set of findings.
  *
+ * @fs_premium_only
+ *
+ * Stripped from the free build by Freemius rather than merely switched off. The
+ * tier check on the route refuses a free site, but a refusal still ships the
+ * code, and CLAUDE.md asks for the stronger thing: the paid implementation is
+ * absent from the zip that goes to WordPress.org. Every place that reaches for
+ * this class therefore checks it exists first — on a free build it does not,
+ * and the feature is not merely closed but genuinely not there.
+ *
  * @since 0.12.0
  */
 final class BulkScan {

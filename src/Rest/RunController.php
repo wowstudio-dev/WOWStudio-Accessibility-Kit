@@ -102,6 +102,40 @@ final class RunController implements Registrable {
 			)
 		);
 
+		// The three run routes are the paid feature, and the class that carries
+		// it out is stripped from the free build. Declaring routes whose handler
+		// cannot work would answer requests with a fatal rather than a refusal,
+		// so on a free build they are simply not there.
+		if ( class_exists( BulkScan::class ) ) {
+			$this->register_run_routes();
+		}
+
+		register_rest_route(
+			ScanController::REST_NAMESPACE,
+			'/theme',
+			array(
+				array(
+					'methods'             => WP_REST_Server::READABLE,
+					'callback'            => array( $this, 'theme' ),
+					'permission_callback' => array( $this, 'can_view' ),
+				),
+				array(
+					'methods'             => WP_REST_Server::CREATABLE,
+					'callback'            => array( $this, 'check_theme' ),
+					'permission_callback' => array( $this, 'can_scan' ),
+				),
+			)
+		);
+	}
+
+	/**
+	 * Declares the routes that only exist in the paid build.
+	 *
+	 * @since 0.14.0
+	 *
+	 * @return void
+	 */
+	private function register_run_routes(): void {
 		register_rest_route(
 			ScanController::REST_NAMESPACE,
 			'/runs',
@@ -148,23 +182,6 @@ final class RunController implements Registrable {
 							'sanitize_callback' => 'absint',
 						),
 					),
-				),
-			)
-		);
-
-		register_rest_route(
-			ScanController::REST_NAMESPACE,
-			'/theme',
-			array(
-				array(
-					'methods'             => WP_REST_Server::READABLE,
-					'callback'            => array( $this, 'theme' ),
-					'permission_callback' => array( $this, 'can_view' ),
-				),
-				array(
-					'methods'             => WP_REST_Server::CREATABLE,
-					'callback'            => array( $this, 'check_theme' ),
-					'permission_callback' => array( $this, 'can_scan' ),
 				),
 			)
 		);
