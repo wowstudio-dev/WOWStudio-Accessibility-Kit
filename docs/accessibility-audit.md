@@ -1,6 +1,6 @@
 # Accessibility audit — the plugin's own admin UI
 
-*Phase 1, step 8. Standard audited against: WCAG 2.2 level AA. Last run: 2026-08-30, against 0.7.0 + the step 8 changes.*
+*Standard audited against: WCAG 2.2 level AA. Last run: 2026-09-01, against 0.11.0 plus every Phase 3 surface. The previous run covered 0.7.0 and predated six screens.*
 
 A tool that reports accessibility failures has no business shipping them, so
 this is the audit of our own surfaces. It records what was checked, how, what
@@ -106,31 +106,96 @@ distinction from section 1 stays visible:
 
 ---
 
+## 3a. The Phase 3 surfaces
+
+Six screens arrived after the previous run and had never been audited: bulk
+scanning, the images screen and its review queue, the theme report, the rendered
+queue, the dismissal form, and the block-editor panel. Product rule #6 says this
+plugin's own interface meets the standard it reports on, and six unaudited
+screens is the point at which that stops being true.
+
+### 3a.1 Colour — measured, not eyeballed
+
+`bin/check-contrast.js` grew from 60 pairings to 91: every colour Phase 3
+introduced, taken from what the stylesheet actually declares, against the panel
+it actually sits on. A card is `surface`; a run panel and a dismissal record are
+`raised`, and pairing them against white would have flattered several of them.
+
+**One real failure, found and fixed.** The progress bar's track was 1.49:1
+against the panel behind it, where SC 1.4.11 wants 3:1 for a control's visual
+boundary. The fix took a moment's thought because the obvious one does not work:
+every track colour dark enough to clear 3:1 against the panel lands within 1.5:1
+of the indigo fill, so you gain the outer edge and lose the thing the bar is
+for. It now carries a hairline outline in the brand violet — 4.19:1 on a raised
+panel, 4.53:1 on white — and the fill keeps 5.19:1 against the track.
+
+Worth recording that the bar was never the only conveyance: the counts are
+written out beside it. That is a reason the failure was not serious, and not a
+reason to have left it.
+
+### 3a.2 Structure — checked in a live DOM
+
+Each new screen was rendered against the real `@wordpress/components` build and
+inspected: heading order, accessible names on every control, alt on every image,
+live regions, and whether everything is reachable by keyboard.
+
+| | |
+| --- | --- |
+| Heading order | No skipped levels on any screen. |
+| Unnamed controls | None. |
+| Images without `alt` | None. |
+| Keyboard reachable | Every focusable element, on every screen. |
+| Checkbox labels | Every one in the selection list. |
+
+### 3a.3 What was found: an ARIA tablist that was not one
+
+The post-type filters on the bulk screen were marked `role="tablist"` with
+`role="tab"` on each button. None of the tab pattern was implemented — no
+`aria-controls`, no element with `role="tabpanel"`, no roving tabindex, and no
+arrow-key handling.
+
+That is worse than plain buttons rather than better than them. A screen reader
+announces "tab, 1 of 2", the user presses an arrow key as the role invites, and
+nothing happens. The roles were describing an interaction that did not exist.
+
+They are now a `role="group"` with an accessible name, and `aria-pressed` on
+each button to carry which filter is on — which is what they always were.
+Verified after the change: no `tab` roles remain, both buttons expose a pressed
+state, and everything on the screen is still reachable.
+
+---
+
 ## 4. What has NOT been checked
 
 This is the honest part, and it is the section to read before quoting any of the
 above.
 
-1. **No current live DOM audit of the running React admin UI.** One was run on
-   2026-08-23 (recorded in the release checklist: 146 elements, zero findings),
-   but that was against the step 4 dashboard. The AI settings panel, the fix
-   preview and diff, the statement panel, and every change in this audit landed
-   afterwards and have never been in a live run. Everything in section 1 was
-   computed from source or from server-rendered output; section 3 is source
-   review rather than observed behaviour.
-2. **No assistive-technology testing.** Nothing here has been through NVDA,
+1. **The live DOM audit covers the Phase 3 screens and not the earlier ones.**
+   Section 3a was run against a real render on 2026-09-01. The AI settings
+   panel, the fix preview and diff, and the statement panel have still never
+   been in a live run — the last one that touched them was 2026-08-23, against
+   the step 4 dashboard. Everything in section 1 is computed from source; section
+   3 is source review rather than observed behaviour.
+2. **The block-editor panel has never been opened in the block editor.** Its
+   REST route, its per-block attribution and its refusal to write anything are
+   verified against a live WordPress, and the bundle builds with the right script
+   dependencies — but no one has watched the sidebar mount, tabbed through it, or
+   confirmed that selecting a block from it moves focus sensibly. It is the
+   largest surface here with no end-to-end confirmation, and the audit should not
+   be read as covering it.
+3. **No assistive-technology testing.** Nothing here has been through NVDA,
    JAWS, VoiceOver, TalkBack, Dragon, or a switch device. Live-region behaviour
    in particular varies between screen readers, and finding 3 above is a fix
    reasoned from the specification, not one confirmed against a real screen
    reader.
-3. **No testing with disabled users.** The thing that actually settles whether
+4. **No testing with disabled users.** The thing that actually settles whether
    this UI works.
-4. **Third-party surfaces are out of scope.** `@wordpress/components` renders
+5. **Third-party surfaces are out of scope.** `@wordpress/components` renders
    much of this UI and Freemius renders its own opt-in, account and upgrade
    screens. Neither was audited here.
-5. **Zoom and reflow (1.4.10), text spacing (1.4.12), and target size (2.5.8)**
+6. **Zoom and reflow (1.4.10), text spacing (1.4.12), and target size (2.5.8)**
    need a rendered viewport and have not been measured.
-6. **The Gutenberg block editor experience** for the statement block was not
+7. **The Gutenberg block editor experience** for the statement block was not
    audited beyond the server-rendered output it shows.
 
 None of these gaps is a reason to delay; all of them are reasons not to overstate

@@ -200,6 +200,51 @@ const PAIRINGS = [
 	[ '.wsak-inspector__no-fix', 'muted', 'raised', 12.5, false ],
 	[ 'statement draft, admin preview', 'moderate', 'moderate-bg', 14, false ],
 
+	// Phase 3 surfaces. Each pairing below is the colour the stylesheet
+	// declares, against the panel it actually sits on — a card is surface, a
+	// run panel and a dismissal record are raised.
+	[ '.wsak-issue__consequence', 'text', 'surface', 13.5, false ],
+	[ '.wsak-issue__plan', 'muted', 'surface', 12.5, false ],
+	[ '.wsak-issue__plan-where', 'ink', 'surface', 12.5, true ],
+	[ '.wsak-dismiss__record', 'muted', 'raised', 12.5, false ],
+	[ '.wsak-dismiss__record strong', 'ink', 'raised', 12.5, true ],
+
+	// Bulk scanning.
+	[ '.wsak-bulk__title', 'ink', 'surface', 16, true ],
+	[ '.wsak-bulk__lede', 'muted', 'surface', 13.5, false ],
+	[ '.wsak-bulk__picks-label', 'muted', 'surface', 13, false ],
+	[ '.wsak-bulk__score', 'muted', 'surface', 12.5, false ],
+
+	// Coverage badges. Two positive states that have to be told apart, so both
+	// are checked rather than assumed to inherit from the tags they resemble.
+	[ '.wsak-badge--full', 'good', 'good-bg', 11.5, true ],
+	[ '.wsak-badge--content', 'muted', 'raised', 11.5, true ],
+	[ '.wsak-badge--never', 'minor', 'minor-bg', 11.5, true ],
+	[ '.wsak-badge--stale', 'moderate', 'moderate-bg', 11.5, true ],
+
+	// The run panel sits on a raised background, so everything in it does too.
+	[ '.wsak-run__title', 'ink', 'raised', 14.5, true ],
+	[ '.wsak-run__counts', 'muted', 'raised', 13, false ],
+	[ '.wsak-run__page-title', 'ink', 'raised', 13.5, true ],
+	[ '.wsak-run__page-count', 'muted', 'raised', 12.5, false ],
+	[ '.wsak-run__page-error', 'serious', 'raised', 12.5, false ],
+	[ '.wsak-run__followon-note', 'text', 'surface', 13, false ],
+
+	// The rendered queue, which sits on white inside the run panel.
+	[ '.wsak-rendered__title', 'ink', 'surface', 13.5, true ],
+	[ '.wsak-rendered__note', 'muted', 'surface', 12.5, false ],
+	[ '.wsak-rendered__done-meta', 'muted', 'surface', 12.5, false ],
+
+	// Alt text and its review queue.
+	[ '.wsak-alt-bulk__billing', 'muted', 'raised', 12.5, false ],
+	[ '.wsak-review__file', 'muted', 'surface', 12, false ],
+	[ '.wsak-review__error', 'serious', 'surface', 12.5, false ],
+	[ '.wsak-review__saved', 'good', 'surface', 12.5, false ],
+
+	// Theme triage.
+	[ '.wsak-theme__title', 'ink', 'surface', 16, true ],
+	[ '.wsak-theme__lede', 'muted', 'surface', 13.5, false ],
+
 	// SC 1.4.11 — the focus ring, and borders that carry state.
 	[ 'focus ring on white', 'indigo', 'surface', 0, false, true ],
 	[ 'focus ring on a raised panel', 'indigo', 'raised', 0, false, true ],
@@ -209,6 +254,13 @@ const PAIRINGS = [
 	[ 'issue border, serious', 'serious', 'surface', 0, false, true ],
 	[ 'issue border, moderate', 'moderate', 'surface', 0, false, true ],
 	[ 'score dial arc', 'indigo', 'raised', 0, false, true ],
+
+	// The progress bar is information, not decoration: it is the only thing on
+	// screen saying how far a run has got, so its filled track has to be
+	// distinguishable from its empty one.
+	[ 'progress bar fill on its track', 'indigo', 'line', 0, false, true ],
+	[ 'progress bar outline on a raised panel', 'violet', 'raised', 0, false, true ],
+	[ 'progress bar outline on white', 'violet', 'surface', 0, false, true ],
 ];
 
 const verbose = process.argv.includes( '--verbose' ) || process.argv.includes( '-v' );

@@ -233,19 +233,31 @@ export default function BulkScan( { onInspect } ) {
 				</Notice>
 			) }
 
+			{ /*
+			 * A group of filter buttons, deliberately not an ARIA tablist.
+			 *
+			 * It was one, briefly. Declaring role="tablist" and role="tab"
+			 * promises a whole interaction: arrow keys move between tabs, only
+			 * the selected one sits in the tab order, and each controls a panel.
+			 * None of that was implemented, so a screen reader announced "tab,
+			 * 1 of 2" and the arrow keys did nothing — worse than plain buttons,
+			 * because plain buttons behave exactly as they are announced.
+			 *
+			 * These filter a list. aria-pressed says which one is on, which is
+			 * true and needs no keyboard handling of its own.
+			 */ }
 			<div
 				className="wsak-bulk__types"
-				role="tablist"
+				role="group"
 				aria-label={ __(
-					'Content types',
+					'Filter by content type',
 					'wowstudio-accessibility-kit'
 				) }
 			>
 				{ types.map( ( one ) => (
 					<Button
 						key={ one.name }
-						role="tab"
-						aria-selected={ type === one.name }
+						aria-pressed={ type === one.name }
 						variant={ type === one.name ? 'primary' : 'tertiary' }
 						onClick={ () => {
 							setType( one.name );

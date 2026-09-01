@@ -52,7 +52,12 @@ by a human before any public release. Items marked **TODO(human)** are open.
 
 ## Our own accessibility
 
-- [ ] `docs/accessibility-audit.md` re-run and re-dated against the release.
+- [x] `docs/accessibility-audit.md` re-run and re-dated against the release.
+      Done 2026-09-01 against 0.11.0 plus all six Phase 3 screens. Found and
+      fixed one contrast failure (the progress bar's boundary, SC 1.4.11) and one
+      false ARIA tablist on the bulk screen. Contrast guard grew 60 → 91
+      pairings. Re-run it whenever a screen is added — the guard's pairing list
+      is maintained by hand and will not notice a new colour on its own.
       Section 4 lists what has never been checked; it must not shrink by
       accident, and any claim moved out of it needs the evidence that moved it.
 - [ ] **TODO(human)** Drive the admin dashboard in a browser with axe-core, and
