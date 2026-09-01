@@ -394,6 +394,30 @@ class ScanRepository {
 	}
 
 	/**
+	 * Finds the most recent completed scan of a given scope.
+	 *
+	 * @since 0.13.0
+	 *
+	 * @param ScanScope $scope Scope to look for.
+	 * @return Scan|null
+	 */
+	public function latest_of_scope( ScanScope $scope ): ?Scan {
+		global $wpdb;
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Custom table; no core API covers it.
+		$row = $wpdb->get_row(
+			$wpdb->prepare(
+				'SELECT * FROM %i WHERE scope = %s AND status = %s ORDER BY id DESC LIMIT 1',
+				Schema::scans_table(),
+				$scope->value,
+				ScanStatus::Complete->value
+			)
+		);
+
+		return $row instanceof \stdClass ? Scan::from_row( $row ) : null;
+	}
+
+	/**
 	 * Finds the most recent completed scan for a post.
 	 *
 	 * @since 0.2.0

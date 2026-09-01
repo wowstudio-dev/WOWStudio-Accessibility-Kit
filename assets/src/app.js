@@ -12,6 +12,7 @@ import StatementSettings from './components/statement-settings';
 import CoveragePanel from './components/coverage-panel';
 import Inspector from './components/inspector';
 import IssueList from './components/issue-list';
+import BulkScan from './components/bulk-scan';
 import ScanPicker from './components/scan-picker';
 import ScoreCard from './components/score-card';
 import { ErrorState, Skeleton } from './components/states';
@@ -134,8 +135,17 @@ export default function App() {
 					aria-current={ view === 'scan' ? 'page' : undefined }
 					onClick={ () => setView( 'scan' ) }
 				>
-					{ __( 'Scan', 'wowstudio-accessibility-kit' ) }
+					{ __( 'One page', 'wowstudio-accessibility-kit' ) }
 				</Button>
+				{ capabilities.runScan && (
+					<Button
+						variant={ view === 'bulk' ? 'primary' : 'tertiary' }
+						aria-current={ view === 'bulk' ? 'page' : undefined }
+						onClick={ () => setView( 'bulk' ) }
+					>
+						{ __( 'Your content', 'wowstudio-accessibility-kit' ) }
+					</Button>
+				) }
 				{ capabilities.manage && (
 					<Button
 						variant={ view === 'settings' ? 'primary' : 'tertiary' }
@@ -180,6 +190,21 @@ export default function App() {
 						'wowstudio-accessibility-kit'
 					) }
 				</Notice>
+			) }
+
+			{ /*
+			 * Checking one page and checking a hundred are different jobs with
+			 * different coverage, so they are different screens rather than one
+			 * screen with a mode. Opening a page from a bulk result drops into
+			 * the single-page view, which is where the browser pass runs.
+			 */ }
+			{ view === 'bulk' && (
+				<BulkScan
+					onInspect={ ( postId ) => {
+						setView( 'scan' );
+						startScan( postId );
+					} }
+				/>
 			) }
 
 			{ view === 'settings' && <AiSettings /> }

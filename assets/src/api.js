@@ -284,3 +284,82 @@ export function revertCssFix( issueId ) {
 		method: 'DELETE',
 	} );
 }
+
+/**
+ * Lists the post types worth scanning, and what is known about loopback.
+ *
+ * @return {Promise<Object>} Types with counts, and the loopback verdict.
+ */
+export function fetchContentTypes() {
+	return apiFetch( { path: `/${ namespace }/content/types` } );
+}
+
+/**
+ * Lists one page of content, with each item's badge.
+ *
+ * @param {Object} options        Query options.
+ * @param {string} options.type   Post type.
+ * @param {number} options.page   One-based page number.
+ * @param {string} options.search Title filter.
+ * @return {Promise<Object>} Items and paging.
+ */
+export function fetchContent( { type, page = 1, search = '' } = {} ) {
+	const query = new URLSearchParams( { type, page: String( page ), search } );
+
+	return apiFetch( { path: `/${ namespace }/content?${ query }` } );
+}
+
+/**
+ * Starts a bulk run over the selected content.
+ *
+ * @param {Array} postIds Content to scan.
+ * @return {Promise<Object>} The run.
+ */
+export function startRun( postIds ) {
+	return apiFetch( {
+		path: `/${ namespace }/runs`,
+		method: 'POST',
+		data: { post_ids: postIds },
+	} );
+}
+
+/**
+ * Reads a run's progress and results.
+ *
+ * @param {number} runId Run to read.
+ * @return {Promise<Object>} The run.
+ */
+export function fetchRun( runId ) {
+	return apiFetch( { path: `/${ namespace }/runs/${ runId }` } );
+}
+
+/**
+ * Stops a run, keeping whatever it already found.
+ *
+ * @param {number} runId Run to stop.
+ * @return {Promise<Object>} The run.
+ */
+export function cancelRun( runId ) {
+	return apiFetch( {
+		path: `/${ namespace }/runs/${ runId }`,
+		method: 'DELETE',
+	} );
+}
+
+/**
+ * Reads what is known about the theme.
+ *
+ * @return {Promise<Object>} The theme profile and its findings.
+ */
+export function fetchTheme() {
+	return apiFetch( { path: `/${ namespace }/theme` } );
+}
+
+/**
+ * Checks the theme against a few representative pages.
+ *
+ * @return {Promise<Object>} The theme profile and its findings.
+ */
+export function checkTheme() {
+	return apiFetch( { path: `/${ namespace }/theme`, method: 'POST' } );
+}

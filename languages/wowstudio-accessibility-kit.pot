@@ -41,12 +41,13 @@ msgid "https://wowstudio.dev/"
 msgstr ""
 
 #: src/Admin/Menu.php:71
-#: assets/src/app.js:114
+#: assets/src/app.js:115
 msgid "Accessibility Kit"
 msgstr ""
 
 #: src/Admin/Menu.php:93
 #: src/Rest/FixController.php:163
+#: src/Rest/RunController.php:203
 #: src/Rest/ScanController.php:206
 #: src/Rest/StatementController.php:116
 msgid "You do not have permission to view accessibility reports."
@@ -369,6 +370,7 @@ msgid "None of the selected content could be added to the queue."
 msgstr ""
 
 #: src/Jobs/BulkScan.php:285
+#: src/Rest/RunController.php:304
 msgid "That run could not be found."
 msgstr ""
 
@@ -606,6 +608,15 @@ msgstr ""
 msgid "You do not have permission to read that content."
 msgstr ""
 
+#: src/Rest/RunController.php:184
+#: src/Rest/ScanController.php:187
+msgid "You do not have permission to run accessibility scans."
+msgstr ""
+
+#: src/Rest/RunController.php:275
+msgid "None of the selected content could be read with your account, so there is nothing to scan."
+msgstr ""
+
 #: src/Rest/ScanController.php:77
 msgid "The post or page to scan."
 msgstr ""
@@ -624,10 +635,6 @@ msgstr ""
 
 #: src/Rest/ScanController.php:153
 msgid "Findings the browser pass produced."
-msgstr ""
-
-#: src/Rest/ScanController.php:187
-msgid "You do not have permission to run accessibility scans."
 msgstr ""
 
 #: src/Rest/ScanController.php:237
@@ -1085,6 +1092,30 @@ msgstr ""
 msgid "This table has no header cells. If it presents data rather than layout, its headers need marking up."
 msgstr ""
 
+#: src/Scanner/ScanCoverage.php:75
+msgid "Not checked"
+msgstr ""
+
+#: src/Scanner/ScanCoverage.php:76
+msgid "Content checked"
+msgstr ""
+
+#: src/Scanner/ScanCoverage.php:77
+msgid "Fully checked"
+msgstr ""
+
+#: src/Scanner/ScanCoverage.php:90
+msgid "Nothing has looked at this page yet."
+msgstr ""
+
+#: src/Scanner/ScanCoverage.php:91
+msgid "The words and markup of this page were checked. Colour, text size and layout were not — those need the page open in a browser, which a background run cannot do. Open it in the inspector to check the rest."
+msgstr ""
+
+#: src/Scanner/ScanCoverage.php:92
+msgid "Both passes ran: the markup, and the page as a browser actually draws it."
+msgstr ""
+
 #: src/Scanner/ScanPass.php:51
 msgid "Found in the markup"
 msgstr ""
@@ -1189,77 +1220,80 @@ msgstr ""
 msgid "Something went wrong and we could not say what. Please try again."
 msgstr ""
 
-#: assets/src/app.js:56
+#: assets/src/app.js:57
 msgid "Scanning the page…"
 msgstr ""
 
 #. translators: %d: number of findings.
-#: assets/src/app.js:65
+#: assets/src/app.js:66
 #, js-format
 msgid "Scan finished. %d findings."
 msgstr ""
 
-#: assets/src/app.js:76
+#: assets/src/app.js:77
 msgid "The scan failed."
 msgstr ""
 
-#: assets/src/app.js:120
+#: assets/src/app.js:121
 msgid "Find, fix, document, and monitor accessibility problems at the code level."
 msgstr ""
 
-#: assets/src/app.js:130
+#: assets/src/app.js:131
 msgid "Sections"
 msgstr ""
 
-#: assets/src/app.js:137
-#: assets/src/components/scan-picker.js:222
-msgid "Scan"
+#: assets/src/app.js:138
+msgid "One page"
 msgstr ""
 
-#: assets/src/app.js:147
+#: assets/src/app.js:146
+msgid "Your content"
+msgstr ""
+
+#: assets/src/app.js:157
 #: assets/src/components/ai-settings.js:98
 msgid "AI settings"
 msgstr ""
 
-#: assets/src/app.js:160
+#: assets/src/app.js:170
 msgid "Statement"
 msgstr ""
 
-#: assets/src/app.js:178
+#: assets/src/app.js:188
 msgid "You can read results here but not start a scan. An administrator can grant that."
 msgstr ""
 
-#: assets/src/app.js:191
+#: assets/src/app.js:216
 msgid "Loading the scan…"
 msgstr ""
 
 #. translators: %s: content title.
-#: assets/src/app.js:213
+#: assets/src/app.js:238
 #, js-format
 msgid "Results for “%s”"
 msgstr ""
 
-#: assets/src/app.js:219
+#: assets/src/app.js:244
 msgid "Scan results"
 msgstr ""
 
-#: assets/src/app.js:242
+#: assets/src/app.js:267
 msgid "Show as a list"
 msgstr ""
 
-#: assets/src/app.js:246
+#: assets/src/app.js:271
 msgid "Show on the page"
 msgstr ""
 
-#: assets/src/app.js:255
+#: assets/src/app.js:280
 msgid "Back to your content"
 msgstr ""
 
-#: assets/src/app.js:266
+#: assets/src/app.js:291
 msgid "This scan covered less than usual."
 msgstr ""
 
-#: assets/src/app.js:319
+#: assets/src/app.js:344
 msgid "This plugin helps you find, fix, document, and monitor accessibility problems. It does not determine whether your site meets the ADA, the European Accessibility Act, Section 508, or any other legal requirement, and nothing here is legal advice."
 msgstr ""
 
@@ -1431,6 +1465,131 @@ msgstr ""
 #: assets/src/components/alt-text-action.js:174
 #, js-format
 msgid "Saved to media item %d. Re-scan the page to confirm the issue is resolved."
+msgstr ""
+
+#. translators: %d: number of pages checked.
+#: assets/src/components/bulk-scan.js:122
+#, js-format
+msgid "Finished. %d pages checked."
+msgstr ""
+
+#. translators: %d: number of pages queued.
+#: assets/src/components/bulk-scan.js:158
+#, js-format
+msgid "%d pages queued. This runs in the background — you can leave this page."
+msgstr ""
+
+#: assets/src/components/bulk-scan.js:177
+msgid "Stopped. Everything already checked has been kept."
+msgstr ""
+
+#: assets/src/components/bulk-scan.js:189
+#: assets/src/components/scan-picker.js:88
+msgid "Loading your content…"
+msgstr ""
+
+#: assets/src/components/bulk-scan.js:200
+msgid "Check your content"
+msgstr ""
+
+#: assets/src/components/bulk-scan.js:222
+msgid "This site cannot fetch its own pages, which is a common host setting and not a fault. Bulk checking still works and reads the content of every page you select. What it cannot do is check colour, text size and layout — those need the page open in a browser, so open a page in the inspector to check those."
+msgstr ""
+
+#: assets/src/components/bulk-scan.js:232
+msgid "Content types"
+msgstr ""
+
+#: assets/src/components/bulk-scan.js:256
+#: assets/src/components/scan-picker.js:74
+msgid "Search your content"
+msgstr ""
+
+#: assets/src/components/bulk-scan.js:273
+#: assets/src/components/states.js:23
+msgid "Loading…"
+msgstr ""
+
+#: assets/src/components/bulk-scan.js:281
+msgid "Select the first"
+msgstr ""
+
+#: assets/src/components/bulk-scan.js:301
+msgid "Clear"
+msgstr ""
+
+#. translators: %d: score out of 100.
+#: assets/src/components/bulk-scan.js:324
+#, js-format
+msgid "%d / 100"
+msgstr ""
+
+#. translators: %d: number of selected items.
+#: assets/src/components/bulk-scan.js:349
+#, js-format
+msgid "Check %d item"
+msgid_plural "Check %d items"
+msgstr[0] ""
+msgstr[1] ""
+
+#: assets/src/components/bulk-scan.js:357
+msgid "Select something to check"
+msgstr ""
+
+#: assets/src/components/bulk-scan.js:395
+msgid "Finished"
+msgstr ""
+
+#: assets/src/components/bulk-scan.js:396
+msgid "Checking…"
+msgstr ""
+
+#: assets/src/components/bulk-scan.js:400
+msgid "Stop"
+msgstr ""
+
+#. translators: 1: pages settled, 2: pages in the run.
+#: assets/src/components/bulk-scan.js:420
+#, js-format
+msgid "%1$d of %2$d"
+msgstr ""
+
+#. translators: %d: number of pages that could not be checked.
+#: assets/src/components/bulk-scan.js:428
+#, js-format
+msgid "%d could not be checked"
+msgid_plural "%d could not be checked"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %d: number of pages not checked because the run was stopped.
+#: assets/src/components/bulk-scan.js:440
+#, js-format
+msgid "%d stopped"
+msgstr ""
+
+#: assets/src/components/bulk-scan.js:447
+msgid "This runs in the background. You can leave this page and come back."
+msgstr ""
+
+#. translators: %d: number of findings.
+#: assets/src/components/bulk-scan.js:474
+#, js-format
+msgid "%d finding"
+msgid_plural "%d findings"
+msgstr[0] ""
+msgstr[1] ""
+
+#: assets/src/components/bulk-scan.js:490
+msgid "Check the rest"
+msgstr ""
+
+#: assets/src/components/coverage-badge.js:29
+msgid "This page has been edited since it was checked, so what we found may no longer be what is there."
+msgstr ""
+
+#: assets/src/components/coverage-badge.js:34
+msgid "Edited since checking"
 msgstr ""
 
 #: assets/src/components/coverage-panel.js:70
@@ -1769,16 +1928,8 @@ msgstr ""
 msgid "Scan a page"
 msgstr ""
 
-#: assets/src/components/scan-picker.js:74
-msgid "Search your content"
-msgstr ""
-
 #: assets/src/components/scan-picker.js:78
 msgid "Search by title"
-msgstr ""
-
-#: assets/src/components/scan-picker.js:88
-msgid "Loading your content…"
 msgstr ""
 
 #: assets/src/components/scan-picker.js:107
@@ -1835,6 +1986,10 @@ msgstr ""
 #: assets/src/components/scan-picker.js:215
 #, js-format
 msgid "Scan “%s”"
+msgstr ""
+
+#: assets/src/components/scan-picker.js:222
+msgid "Scan"
 msgstr ""
 
 #: assets/src/components/score-card.js:15
@@ -1985,10 +2140,6 @@ msgstr ""
 
 #: assets/src/components/statement-settings.js:373
 msgid "Preview"
-msgstr ""
-
-#: assets/src/components/states.js:23
-msgid "Loading…"
 msgstr ""
 
 #: assets/src/scanner/repair.js:60

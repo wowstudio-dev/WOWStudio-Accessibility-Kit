@@ -1004,6 +1004,211 @@
 	box-shadow: var(--wsak-shadow-lift);
 }
 
+/* Bulk scanning ------------------------------------------------------------ */
+
+.wsak-bulk {
+	background: var(--wsak-surface);
+	border: 1px solid var(--wsak-line);
+	border-radius: var(--wsak-radius);
+	box-shadow: var(--wsak-shadow);
+	margin-bottom: var(--wsak-space-6);
+	padding: var(--wsak-space-6);
+}
+
+.wsak-bulk__title {
+	margin: 0 0 var(--wsak-space-3);
+	color: var(--wsak-ink);
+	font-size: 16px;
+	font-weight: 650;
+	letter-spacing: -0.01em;
+}
+
+.wsak-bulk__types {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--wsak-space-2);
+	margin-bottom: var(--wsak-space-5);
+}
+
+/*
+ * The count sits inside the button next to the label, so it needs its own space
+ * — JSX collapses the whitespace between two elements and the two words ran
+ * together as "Pages9".
+ */
+.wsak-bulk__count {
+	margin-inline-start: var(--wsak-space-2);
+	opacity: 0.7;
+	font-variant-numeric: tabular-nums;
+}
+
+.wsak-bulk__picks {
+	align-items: center;
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--wsak-space-2);
+	margin-bottom: var(--wsak-space-3);
+}
+
+.wsak-bulk__picks-label {
+	color: var(--wsak-muted);
+	font-size: 13px;
+}
+
+.wsak-bulk__list {
+	border: 1px solid var(--wsak-line);
+	border-radius: var(--wsak-radius-sm);
+	list-style: none;
+	margin: 0 0 var(--wsak-space-5);
+	max-height: 26rem;
+	overflow-y: auto;
+	padding: 0;
+}
+
+.wsak-bulk__item {
+	align-items: center;
+	border-bottom: 1px solid var(--wsak-line);
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--wsak-space-3);
+	justify-content: space-between;
+	margin: 0;
+	padding: var(--wsak-space-3) var(--wsak-space-4);
+}
+
+.wsak-bulk__item:last-child {
+	border-bottom: 0;
+}
+
+.wsak-bulk__item .components-base-control {
+	margin-bottom: 0;
+}
+
+.wsak-bulk__item-meta,
+.wsak-run__page-meta {
+	align-items: center;
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--wsak-space-2);
+}
+
+.wsak-bulk__score,
+.wsak-run__page-count {
+	color: var(--wsak-muted);
+	font-size: 12.5px;
+	font-variant-numeric: tabular-nums;
+}
+
+/*
+ * Coverage badges. Two positive states that have to be told apart at a glance,
+ * so they differ in weight as well as tint — "content checked" is deliberately
+ * quieter than "fully checked", because it is the smaller claim.
+ */
+.wsak-badge--full {
+	background: var(--wsak-good-bg);
+	border-color: #bfe3ca;
+	color: var(--wsak-good);
+}
+
+.wsak-badge--content {
+	background: var(--wsak-raised);
+	border-color: var(--wsak-line-strong);
+	color: var(--wsak-muted);
+}
+
+.wsak-badge--never {
+	background: var(--wsak-minor-bg);
+	border-color: #e4e4e7;
+	color: var(--wsak-minor);
+}
+
+.wsak-badge--stale {
+	background: var(--wsak-moderate-bg);
+	border-color: #f2e6b8;
+	color: var(--wsak-moderate);
+}
+
+.wsak-run {
+	background: var(--wsak-raised);
+	border-radius: var(--wsak-radius);
+	margin-top: var(--wsak-space-5);
+	padding: var(--wsak-space-5);
+}
+
+.wsak-run__head {
+	align-items: center;
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--wsak-space-4);
+	justify-content: space-between;
+	margin-bottom: var(--wsak-space-3);
+}
+
+.wsak-run__title {
+	margin: 0;
+	color: var(--wsak-ink);
+	font-size: 14.5px;
+	font-weight: 650;
+}
+
+.wsak-run__bar {
+	appearance: none;
+	block-size: 8px;
+	border: 0;
+	border-radius: 999px;
+	inline-size: 100%;
+	overflow: hidden;
+}
+
+.wsak-run__bar::-webkit-progress-bar {
+	background: var(--wsak-line);
+	border-radius: 999px;
+}
+
+.wsak-run__bar::-webkit-progress-value {
+	background: var(--wsak-indigo);
+	border-radius: 999px;
+}
+
+.wsak-run__bar::-moz-progress-bar {
+	background: var(--wsak-indigo);
+	border-radius: 999px;
+}
+
+.wsak-run__counts {
+	margin: var(--wsak-space-2) 0 var(--wsak-space-3);
+	color: var(--wsak-muted);
+	font-size: 13px;
+	font-variant-numeric: tabular-nums;
+}
+
+.wsak-run__pages {
+	list-style: none;
+	margin: var(--wsak-space-4) 0 0;
+	padding: 0;
+}
+
+.wsak-run__page {
+	align-items: center;
+	border-top: 1px solid var(--wsak-line);
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--wsak-space-3);
+	justify-content: space-between;
+	padding: var(--wsak-space-3) 0;
+}
+
+.wsak-run__page-title {
+	color: var(--wsak-ink);
+	font-size: 13.5px;
+	font-weight: 620;
+}
+
+.wsak-run__page-error {
+	color: var(--wsak-serious);
+	font-size: 12.5px;
+	max-width: 60ch;
+}
+
 /* CSS fix review ----------------------------------------------------------- */
 
 .wsak-css-fix {
