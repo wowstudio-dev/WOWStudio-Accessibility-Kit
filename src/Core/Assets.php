@@ -29,6 +29,14 @@ final class Assets implements Registrable {
 	private const HANDLE = 'wsak-admin';
 
 	/**
+	 * Script handle for the block editor panel.
+	 *
+	 * @since 0.14.0
+	 * @var string
+	 */
+	private const EDITOR_HANDLE = 'wsak-editor';
+
+	/**
 	 * Hooks asset loading.
 	 *
 	 * @since 0.4.0
@@ -37,10 +45,64 @@ final class Assets implements Registrable {
 	 */
 	public function register(): void {
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue' ) );
+
+		/*
+		 * enqueue_block_editor_assets rather than admin_enqueue_scripts with a
+		 * screen check. It fires for the post editor, the site editor and any
+		 * other screen that mounts the block editor, which is exactly the set
+		 * this panel belongs on and a set that would otherwise have to be
+		 * guessed at from hook suffixes.
+		 */
+		add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue_editor' ) );
 	}
 
 	/**
 	 * Enqueues the built app on the plugin screen.
+	 *
+	 * Loads the accessibility panel into the block editor.
+	 *
+	 * @since 0.14.0
+	 *
+	 * @return void
+	 */
+	public function enqueue_editor(): void {
+		// The panel edits content, so it is offered to people who may edit
+		// content and checked again by the route it calls. Somebody who can
+		// open the editor but not run a scan simply does not see it.
+		if ( ! current_user_can( Capabilities::RUN_SCAN ) ) {
+			return;
+		}
+
+		$asset_path = WSAK_PATH . 'build/editor.asset.php';
+
+		if ( ! file_exists( $asset_path ) ) {
+			return;
+		}
+
+		$asset = require $asset_path;
+
+		wp_enqueue_script(
+			self::EDITOR_HANDLE,
+			WSAK_URL . 'build/editor.js',
+			$asset['dependencies'] ?? array(),
+			$asset['version'] ?? WSAK_VERSION,
+			true
+		);
+
+		wp_set_script_translations( self::EDITOR_HANDLE, 'wowstudio-accessibility-kit', WSAK_PATH . 'languages' );
+
+		wp_enqueue_style(
+			self::EDITOR_HANDLE,
+			WSAK_URL . 'build/editor.css',
+			array(),
+			$asset['version'] ?? WSAK_VERSION
+		);
+
+		wp_style_add_data( self::EDITOR_HANDLE, 'rtl', 'replace' );
+	}
+
+	/**
+	 * Loads the admin app on its own screen.
 	 *
 	 * Loading a 200KB admin bundle on every screen of somebody's site to serve
 	 * one page of our own would be rude, so this checks the hook first.

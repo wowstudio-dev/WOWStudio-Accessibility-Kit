@@ -1,0 +1,65 @@
+/**
+ * The editor sidebar.
+ *
+ * Deliberately small: this panel lives inside somebody else's interface, and
+ * the editor already has a visual language. Anything styled here is styled
+ * because the editor has no opinion about it, not to make the panel look like
+ * the plugin's own screens.
+ */
+
+.wsak-editor__status {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin: 0 0 8px;
+	font-weight: 600;
+}
+
+.wsak-editor__scope {
+	margin: 0 0 16px;
+	color: #757575;
+	font-size: 12px;
+}
+
+.wsak-editor__block {
+	margin-bottom: 16px;
+	padding-bottom: 16px;
+	border-bottom: 1px solid #e0e0e0;
+}
+
+.wsak-editor__block:last-child {
+	margin-bottom: 0;
+	padding-bottom: 0;
+	border-bottom: 0;
+}
+
+.wsak-editor__findings {
+	margin: 8px 0 0;
+	padding: 0;
+	list-style: none;
+}
+
+.wsak-editor__finding + .wsak-editor__finding {
+	margin-top: 12px;
+}
+
+.wsak-editor__finding-title {
+	margin: 0;
+	font-weight: 600;
+}
+
+.wsak-editor__finding-why,
+.wsak-editor__finding-plan,
+.wsak-editor__fix-note {
+	margin: 4px 0 0;
+	color: #757575;
+	font-size: 12px;
+}
+
+.wsak-editor__fix {
+	margin-top: 12px;
+}
+
+.wsak-editor__fix-actions {
+	margin-top: 8px;
+}

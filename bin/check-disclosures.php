@@ -97,6 +97,16 @@ const WSAK_SURFACES = array(
 		'the auto-detected honesty tag'       => '/Auto-detected/',
 		'the needs-manual-review honesty tag' => '/Needs manual review/',
 	),
+	// The editor panel checks what it can see from inside the editor, which is
+	// less than a scan sees. A panel that goes quiet reads as "this page is
+	// fine", so the scope has to be stated on every reply rather than only when
+	// nothing is found.
+	'src/Rest/BlockCheckController.php'           => array(
+		'the editor-scope caveat' => '/Colour, text size and layout need the page open in a browser/i',
+	),
+	'assets/src/editor/block-finding.js'          => array(
+		'the writes-into-your-content note' => '/writes into the block itself/i',
+	),
 	// Authored server-side, because the sentence is composed with the provider's
 	// own name and sent to the interface rather than written into it.
 	'src/Rest/AltTextRunController.php'           => array(

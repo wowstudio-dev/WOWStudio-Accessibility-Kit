@@ -359,7 +359,7 @@ msgstr ""
 msgid "Reviewed and approved by %1$s on %2$s."
 msgstr ""
 
-#: src/Core/Assets.php:110
+#: src/Core/Assets.php:172
 msgid "The Accessibility Kit interface has not been built. Run \"npm install && npm run build\" in the plugin directory."
 msgstr ""
 
@@ -637,6 +637,14 @@ msgstr ""
 
 #: src/Rest/AltTextRunController.php:225
 msgid "Each image is one request to your own provider account, and they bill you for it directly. We never see what it costs, so we will not guess at a figure — check their pricing if you want one before you start."
+msgstr ""
+
+#: src/Rest/BlockCheckController.php:118
+msgid "You do not have permission to run accessibility checks."
+msgstr ""
+
+#: src/Rest/BlockCheckController.php:194
+msgid "This checks the blocks you are editing. Colour, text size and layout need the page open in a browser, and the theme around your content is checked separately."
 msgstr ""
 
 #: src/Rest/CssFixController.php:68
@@ -2351,6 +2359,53 @@ msgstr ""
 #: assets/src/components/statement-settings.js:373
 msgid "Preview"
 msgstr ""
+
+#: assets/src/editor/api.js:25
+msgid "The check could not run just now. It will try again as you write."
+msgstr ""
+
+#. translators: %s: block type, such as "Image".
+#: assets/src/editor/block-finding.js:44
+#, js-format
+msgid "Go to this %s"
+msgstr ""
+
+#: assets/src/editor/block-finding.js:50
+msgid "Go to this block"
+msgstr ""
+
+#: assets/src/editor/block-finding.js:118
+msgid "Describe this image"
+msgstr ""
+
+#: assets/src/editor/block-finding.js:122
+msgid "Say what somebody would miss if the image did not load. If it is purely decorative, save it empty — that tells a screen reader to skip it."
+msgstr ""
+
+#: assets/src/editor/block-finding.js:137
+msgid "Add it"
+msgstr ""
+
+#: assets/src/editor/block-finding.js:141
+msgid "This writes into the block itself, so it is part of your content and undo works on it like any other edit."
+msgstr ""
+
+#: assets/src/editor/panel.js:101
+#: assets/src/editor/panel.js:107
+msgid "Accessibility"
+msgstr ""
+
+#: assets/src/editor/panel.js:119
+msgid "Checking what you have written…"
+msgstr ""
+
+#. translators: %d: number of findings.
+#: assets/src/editor/panel.js:125
+#, js-format
+msgid "%d thing to look at."
+msgid_plural "%d things to look at."
+msgstr[0] ""
+msgstr[1] ""
 
 #: assets/src/scanner/repair.js:60
 msgid "This one needs tabindex=\"0\" and a label on the scrolling container. Those are attributes in the markup, and no stylesheet can add them — it has to be changed in your theme or the block that produced it."
