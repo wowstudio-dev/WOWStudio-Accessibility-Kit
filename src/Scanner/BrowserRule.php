@@ -45,6 +45,7 @@ final class BrowserRule implements RuleDescriptor {
 	 * @param string       $title       Short human-readable name.
 	 * @param string       $description What fails, who it affects, how to fix it.
 	 * @param FixPlan|null $fix_plan    What can be done about it.
+	 * @param string       $consequence One sentence on who this shuts out.
 	 */
 	public function __construct(
 		private readonly string $id,
@@ -53,7 +54,8 @@ final class BrowserRule implements RuleDescriptor {
 		private readonly Detection $detection,
 		private readonly string $title,
 		private readonly string $description,
-		private readonly ?FixPlan $fix_plan = null
+		private readonly ?FixPlan $fix_plan = null,
+		private readonly string $consequence = ''
 	) {}
 
 	/**
@@ -131,6 +133,17 @@ final class BrowserRule implements RuleDescriptor {
 	 */
 	public function description(): string {
 		return $this->description;
+	}
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * @since 0.13.0
+	 *
+	 * @return string
+	 */
+	public function consequence(): string {
+		return $this->consequence;
 	}
 
 	/**

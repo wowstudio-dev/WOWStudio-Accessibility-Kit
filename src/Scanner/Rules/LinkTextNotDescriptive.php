@@ -106,6 +106,17 @@ final class LinkTextNotDescriptive implements Rule {
 	 *
 	 * @since 0.13.0
 	 *
+	 * @return string
+	 */
+	public function consequence(): string {
+		return __( 'Screen reader users often pull up a list of every link on a page. In that list, this one says nothing about where it goes.', 'wowstudio-accessibility-kit' );
+	}
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * @since 0.13.0
+	 *
 	 * @return FixPlan
 	 */
 	public function fix_plan(): FixPlan {

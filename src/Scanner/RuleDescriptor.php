@@ -95,6 +95,25 @@ interface RuleDescriptor {
 	public function description(): string;
 
 	/**
+	 * Returns one sentence on what this costs an actual person.
+	 *
+	 * Separate from description() because they answer different questions and
+	 * are read at different moments. A description explains the fault and how to
+	 * repair it; this says who is shut out and how, in a single line short
+	 * enough to sit in a list of ninety.
+	 *
+	 * Deliberately free of specification vocabulary. "Button has no accessible
+	 * name" describes what a checker noticed. "A screen reader announces this as
+	 * button and nothing else" describes what happens to somebody, and it is the
+	 * one a person who does not write markup for a living can act on.
+	 *
+	 * @since 0.13.0
+	 *
+	 * @return string
+	 */
+	public function consequence(): string;
+
+	/**
 	 * Returns what can be done about findings from this rule.
 	 *
 	 * Declared here rather than worked out by the interface, because a coverage

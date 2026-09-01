@@ -103,6 +103,17 @@ final class MainLandmarkMissing implements Rule {
 	 *
 	 * @since 0.13.0
 	 *
+	 * @return string
+	 */
+	public function consequence(): string {
+		return __( 'There is no way to skip past the header, so keyboard and screen reader users go through it again on every page.', 'wowstudio-accessibility-kit' );
+	}
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * @since 0.13.0
+	 *
 	 * @return FixPlan
 	 */
 	public function fix_plan(): FixPlan {

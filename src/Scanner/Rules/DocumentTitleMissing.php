@@ -102,6 +102,17 @@ final class DocumentTitleMissing implements Rule {
 	 *
 	 * @since 0.13.0
 	 *
+	 * @return string
+	 */
+	public function consequence(): string {
+		return __( 'Browser tabs, bookmarks and search results have nothing to show for this page but its address.', 'wowstudio-accessibility-kit' );
+	}
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * @since 0.13.0
+	 *
 	 * @return FixPlan
 	 */
 	public function fix_plan(): FixPlan {

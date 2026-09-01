@@ -106,6 +106,17 @@ final class ImageAltMissing implements Rule {
 	 *
 	 * @since 0.13.0
 	 *
+	 * @return string
+	 */
+	public function consequence(): string {
+		return __( 'Anyone using a screen reader hears the file name read out instead of what the picture shows.', 'wowstudio-accessibility-kit' );
+	}
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * @since 0.13.0
+	 *
 	 * @return FixPlan
 	 */
 	public function fix_plan(): FixPlan {

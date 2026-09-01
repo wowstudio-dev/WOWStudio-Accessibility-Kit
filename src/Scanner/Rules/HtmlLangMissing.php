@@ -103,6 +103,17 @@ final class HtmlLangMissing implements Rule {
 	 *
 	 * @since 0.13.0
 	 *
+	 * @return string
+	 */
+	public function consequence(): string {
+		return __( 'A screen reader may read the whole page in the wrong accent, which can make it genuinely hard to follow.', 'wowstudio-accessibility-kit' );
+	}
+
+	/**
+	 * {@inheritDoc}
+	 *
+	 * @since 0.13.0
+	 *
 	 * @return FixPlan
 	 */
 	public function fix_plan(): FixPlan {

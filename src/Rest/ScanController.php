@@ -10,6 +10,7 @@ namespace WOWStudio\AccessibilityKit\Rest;
 use WOWStudio\AccessibilityKit\Core\Registrable;
 use WOWStudio\AccessibilityKit\Db\IssueRepository;
 use WOWStudio\AccessibilityKit\Db\ScanRepository;
+use WOWStudio\AccessibilityKit\Remediation\WorkList;
 use WOWStudio\AccessibilityKit\Scanner\BrowserPassStatus;
 use WOWStudio\AccessibilityKit\Scanner\BrowserRules;
 use WOWStudio\AccessibilityKit\Scanner\Detection;
@@ -624,12 +625,19 @@ final class ScanController implements Registrable {
 	private function present_issues( int $scan_id, IssueRepository $issues ): array {
 		$presented = array();
 		$registry  = ( new Engine() )->registry();
+		$work      = new WorkList( $registry->descriptors() );
 
 		foreach ( $issues->find_by_scan( $scan_id ) as $issue ) {
 			$rule = $registry->descriptor( $issue->rule_id );
 
 			$presented[] = array(
 				'rule_title'      => null === $rule ? $issue->rule_id : $rule->title(),
+				// What this costs a person, in one line. Sent alongside the
+				// technical description rather than instead of it: the reader
+				// who wants the success criterion still gets it, one level down.
+				'consequence'     => null === $rule ? '' : $rule->consequence(),
+				'band'            => $work->band_for( $issue->rule_id )->value,
+				'fix'             => null === $rule ? array() : $rule->fix_plan()->to_array(),
 				'how_to_fix'      => null === $rule ? '' : $rule->description(),
 				// Only findings about a specific image can be handed to the
 				// alt-text generator, so resolve the media item here rather than
@@ -650,6 +658,8 @@ final class ScanController implements Registrable {
 			);
 		}
 
-		return $presented;
+		// Ordered here rather than in the interface, so every surface that
+		// renders findings gets the same order without having to agree on one.
+		return $work->order( $presented );
 	}
 }

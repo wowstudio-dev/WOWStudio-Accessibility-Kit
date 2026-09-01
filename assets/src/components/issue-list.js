@@ -30,6 +30,18 @@ function IssueCard( { issue, postId } ) {
 						severity={ issue.severity }
 						label={ issue.severity_label }
 					/>
+					{ /*
+					 * This used to sit on the group heading, when the groups
+					 * were "settled" and "needs a person". The groups now say
+					 * what a finding asks of you instead — but whether the
+					 * scanner decided a thing or merely noticed it is not a
+					 * detail we get to drop when the layout changes, so it
+					 * moves onto the card.
+					 */ }
+					<DetectionTag
+						detection={ issue.detection }
+						label={ issue.detection_label }
+					/>
 					<span className="wsak-tag wsak-tag--sc">
 						{ sprintf(
 							/* translators: %s: WCAG success criterion number. */
@@ -39,6 +51,10 @@ function IssueCard( { issue, postId } ) {
 					</span>
 				</div>
 			</div>
+
+			{ issue.consequence && (
+				<p className="wsak-issue__consequence">{ issue.consequence }</p>
+			) }
 
 			<p className="wsak-issue__message">{ issue.message }</p>
 
@@ -98,6 +114,57 @@ function IssueCard( { issue, postId } ) {
 }
 
 /**
+ * The four things a finding can ask of you, in the order they are worked through.
+ *
+ * Findings used to be split by how the scanner decided them — settled, or
+ * needing a person. That is a true and important distinction, and it answers a
+ * question about the tool rather than about the reader's afternoon. It stays,
+ * on every card, as the honesty tag it always was.
+ *
+ * What sorts the list now is what each finding asks of you, cheapest first. Not
+ * because those matter most — they often matter least — but because a list that
+ * opens with something you can finish is a list people finish, and one that
+ * opens with "ask your developer" is a list people close.
+ */
+const BANDS = [
+	{
+		id: 'now',
+		title: __( 'Fix these now', 'wowstudio-accessibility-kit' ),
+		blurb: __(
+			'There is one correct answer and we already know it. Nothing here is a guess, so nothing here needs checking first.',
+			'wowstudio-accessibility-kit'
+		),
+	},
+	{
+		id: 'review',
+		title: __( 'Read, then apply', 'wowstudio-accessibility-kit' ),
+		blurb: __(
+			'We can draft these, but a draft is not an answer. Read what it says before you apply it — it was written by a model that cannot see why your page exists.',
+			'wowstudio-accessibility-kit'
+		),
+	},
+	{
+		id: 'decide',
+		title: __( 'Needs a decision from you', 'wowstudio-accessibility-kit' ),
+		blurb: __(
+			'These depend on what your content means, which is not something any tool can work out for you. Each one explains what to weigh up.',
+			'wowstudio-accessibility-kit'
+		),
+	},
+	{
+		id: 'delegate',
+		title: __(
+			'For whoever looks after your theme',
+			'wowstudio-accessibility-kit'
+		),
+		blurb: __(
+			'These are in your theme rather than your content, so nothing here can reach them. Each one comes with what to change and where.',
+			'wowstudio-accessibility-kit'
+		),
+	},
+];
+
+/**
  * One group of findings, with a heading that says what the group means.
  *
  * @param {Object} props        Component props.
@@ -152,8 +219,13 @@ function IssueGroup( { id, title, blurb, issues, postId } ) {
  * @return {Element} The list.
  */
 export default function IssueList( { issues, postId } ) {
-	const auto = issues.filter( ( issue ) => issue.detection === 'auto' );
-	const manual = issues.filter( ( issue ) => issue.detection !== 'auto' );
+	// The server has already ordered these and told each one which band it is
+	// in. Re-deriving that here would mean two answers to the same question,
+	// and the one on this side would be the one that drifts.
+	const bands = BANDS.map( ( band ) => ( {
+		...band,
+		issues: issues.filter( ( issue ) => issue.band === band.id ),
+	} ) ).filter( ( band ) => band.issues.length > 0 );
 
 	if ( ! issues.length ) {
 		return (
@@ -172,43 +244,16 @@ export default function IssueList( { issues, postId } ) {
 
 	return (
 		<div className="wsak-results">
-			<IssueGroup
-				id="wsak-group-auto"
-				title={
-					<>
-						<DetectionTag detection="auto" />{ ' ' }
-						{ __(
-							'Detected automatically',
-							'wowstudio-accessibility-kit'
-						) }
-					</>
-				}
-				blurb={ __(
-					'These are failures the scanner could settle on its own from the page markup.',
-					'wowstudio-accessibility-kit'
-				) }
-				issues={ auto }
-				postId={ postId }
-			/>
-
-			<IssueGroup
-				id="wsak-group-manual"
-				title={
-					<>
-						<DetectionTag detection="manual" />{ ' ' }
-						{ __(
-							'Needs a person to check',
-							'wowstudio-accessibility-kit'
-						) }
-					</>
-				}
-				blurb={ __(
-					'The scanner spotted something worth a look but cannot decide it alone. These may turn out to be perfectly fine.',
-					'wowstudio-accessibility-kit'
-				) }
-				issues={ manual }
-				postId={ postId }
-			/>
+			{ bands.map( ( band ) => (
+				<IssueGroup
+					key={ band.id }
+					id={ `wsak-group-${ band.id }` }
+					title={ band.title }
+					blurb={ band.blurb }
+					issues={ band.issues }
+					postId={ postId }
+				/>
+			) ) }
 		</div>
 	);
 }

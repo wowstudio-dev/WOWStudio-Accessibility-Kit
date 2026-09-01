@@ -47,7 +47,7 @@ msgstr ""
 
 #: src/Admin/Menu.php:93
 #: src/Rest/FixController.php:163
-#: src/Rest/ScanController.php:205
+#: src/Rest/ScanController.php:206
 #: src/Rest/StatementController.php:116
 msgid "You do not have permission to view accessibility reports."
 msgstr ""
@@ -372,6 +372,45 @@ msgstr ""
 msgid "That run could not be found."
 msgstr ""
 
+#: src/Remediation/ActionBand.php:110
+#: assets/src/components/issue-list.js:132
+msgid "Fix these now"
+msgstr ""
+
+#: src/Remediation/ActionBand.php:111
+#: assets/src/components/issue-list.js:140
+msgid "Read, then apply"
+msgstr ""
+
+#: src/Remediation/ActionBand.php:112
+#: assets/src/components/issue-list.js:148
+msgid "Needs a decision from you"
+msgstr ""
+
+#: src/Remediation/ActionBand.php:113
+#: assets/src/components/issue-list.js:156
+msgid "For whoever looks after your theme"
+msgstr ""
+
+#: src/Remediation/ActionBand.php:126
+#: assets/src/components/issue-list.js:133
+msgid "There is one correct answer and we already know it. Nothing here is a guess, so nothing here needs checking first."
+msgstr ""
+
+#: src/Remediation/ActionBand.php:127
+msgid "We can draft these, but a draft is not an answer. Read what it says before you apply it — it was written by a model that cannot see why the page exists."
+msgstr ""
+
+#: src/Remediation/ActionBand.php:128
+#: assets/src/components/issue-list.js:149
+msgid "These depend on what your content means, which is not something any tool can work out for you. Each one explains what to weigh up."
+msgstr ""
+
+#: src/Remediation/ActionBand.php:129
+#: assets/src/components/issue-list.js:160
+msgid "These are in your theme rather than your content, so nothing here can reach them. Each one comes with what to change and where."
+msgstr ""
+
 #: src/Remediation/CssFixManager.php:86
 #: src/Remediation/FixManager.php:146
 #: src/Remediation/FixManager.php:238
@@ -561,48 +600,48 @@ msgid "The reviewed markup. Sanitised again before it is stored."
 msgstr ""
 
 #: src/Rest/FixController.php:246
-#: src/Rest/ScanController.php:244
-#: src/Rest/ScanController.php:353
-#: src/Rest/ScanController.php:506
+#: src/Rest/ScanController.php:245
+#: src/Rest/ScanController.php:354
+#: src/Rest/ScanController.php:507
 msgid "You do not have permission to read that content."
 msgstr ""
 
-#: src/Rest/ScanController.php:76
+#: src/Rest/ScanController.php:77
 msgid "The post or page to scan."
 msgstr ""
 
-#: src/Rest/ScanController.php:96
+#: src/Rest/ScanController.php:97
 msgid "The scan to read."
 msgstr ""
 
-#: src/Rest/ScanController.php:115
+#: src/Rest/ScanController.php:116
 msgid "Filter the list by title."
 msgstr ""
 
-#: src/Rest/ScanController.php:147
+#: src/Rest/ScanController.php:148
 msgid "Whether the browser pass completed."
 msgstr ""
 
-#: src/Rest/ScanController.php:152
+#: src/Rest/ScanController.php:153
 msgid "Findings the browser pass produced."
 msgstr ""
 
-#: src/Rest/ScanController.php:186
+#: src/Rest/ScanController.php:187
 msgid "You do not have permission to run accessibility scans."
 msgstr ""
 
-#: src/Rest/ScanController.php:236
+#: src/Rest/ScanController.php:237
 #: src/Scanner/PageSource.php:169
 #: src/Scanner/PageSource.php:224
 msgid "That content could not be found."
 msgstr ""
 
-#: src/Rest/ScanController.php:277
+#: src/Rest/ScanController.php:278
 msgid "The scan could not be recorded. Check that the plugin tables exist."
 msgstr ""
 
-#: src/Rest/ScanController.php:345
-#: src/Rest/ScanController.php:498
+#: src/Rest/ScanController.php:346
+#: src/Rest/ScanController.php:499
 msgid "That scan could not be found."
 msgstr ""
 
@@ -650,52 +689,72 @@ msgstr ""
 msgid "A colour that clears the required ratio can be computed, and it is written into the site's own Additional CSS. The proposal keeps the hue and saturation already chosen and moves only as far as it must."
 msgstr ""
 
-#: src/Scanner/BrowserRules.php:67
-msgid "Link inside text is marked only by colour"
+#: src/Scanner/BrowserRules.php:61
+msgid "Anyone with low vision or colour blindness — and anyone reading on a phone in daylight — will struggle to make this out."
 msgstr ""
 
 #: src/Scanner/BrowserRules.php:68
+msgid "Link inside text is marked only by colour"
+msgstr ""
+
+#: src/Scanner/BrowserRules.php:69
 msgid "This link sits inside a paragraph and is distinguished from the surrounding words by colour alone. Anyone who cannot separate those two colours cannot tell it is a link. Add an underline, or another visible difference that does not depend on colour."
 msgstr ""
 
-#: src/Scanner/BrowserRules.php:72
+#: src/Scanner/BrowserRules.php:73
 msgid "An underline is what the criterion asks for and what readers already recognise. One rule, no judgement."
 msgstr ""
 
-#: src/Scanner/BrowserRules.php:80
+#: src/Scanner/BrowserRules.php:75
+msgid "Anyone who cannot tell those two colours apart cannot tell there is a link here at all."
+msgstr ""
+
+#: src/Scanner/BrowserRules.php:82
 msgid "Clickable target is smaller than 24 by 24 pixels"
 msgstr ""
 
-#: src/Scanner/BrowserRules.php:81
+#: src/Scanner/BrowserRules.php:83
 msgid "This control is small enough to be hard to hit accurately, which matters for anyone with a tremor, limited dexterity, or simply a phone in one hand on a moving bus. Make it at least 24 by 24 CSS pixels, or leave enough clear space around it that a near miss does not activate something else."
 msgstr ""
 
-#: src/Scanner/BrowserRules.php:85
+#: src/Scanner/BrowserRules.php:87
 msgid "A minimum size of 24 by 24 is the criterion itself. Applied as a floor, so the control can still grow."
 msgstr ""
 
-#: src/Scanner/BrowserRules.php:93
+#: src/Scanner/BrowserRules.php:89
+msgid "Hard to hit accurately for anyone with a tremor, limited dexterity, or a phone in one hand on a moving bus."
+msgstr ""
+
+#: src/Scanner/BrowserRules.php:96
 msgid "Scrollable area cannot be reached by keyboard"
 msgstr ""
 
-#: src/Scanner/BrowserRules.php:94
+#: src/Scanner/BrowserRules.php:97
 msgid "This area scrolls, but nothing inside it can be focused, so somebody using a keyboard rather than a mouse can never scroll it and cannot read whatever is out of sight. Give the container tabindex=\"0\", and an accessible name so it announces as something meaningful when focus lands on it."
 msgstr ""
 
-#: src/Scanner/BrowserRules.php:98
+#: src/Scanner/BrowserRules.php:101
 msgid "The container needs tabindex and an accessible name. The attribute is mechanical; the name is a description of what is inside, and both live in the theme."
 msgstr ""
 
-#: src/Scanner/BrowserRules.php:106
+#: src/Scanner/BrowserRules.php:103
+msgid "Anyone using a keyboard rather than a mouse can never scroll this, so whatever is out of sight stays out of reach."
+msgstr ""
+
+#: src/Scanner/BrowserRules.php:110
 msgid "Element is hidden from screen readers but still focusable"
 msgstr ""
 
-#: src/Scanner/BrowserRules.php:107
+#: src/Scanner/BrowserRules.php:111
 msgid "This element is marked aria-hidden=\"true\", so a screen reader will not describe it, but it can still receive keyboard focus. The result is a focus stop that announces nothing — the user tabs, something happens, and there is no way to tell what. Either remove aria-hidden or take the element out of the tab order."
 msgstr ""
 
-#: src/Scanner/BrowserRules.php:111
+#: src/Scanner/BrowserRules.php:115
 msgid "Either the element should be revealed or it should leave the tab order, and only somebody who knows why it is hidden can say which."
+msgstr ""
+
+#: src/Scanner/BrowserRules.php:117
+msgid "Keyboard users land on something that announces nothing. Focus moves and there is no way to tell where it went."
 msgstr ""
 
 #: src/Scanner/Detection.php:42
@@ -774,11 +833,15 @@ msgstr ""
 msgid "Someone using a screen reader hears only \"button\" and cannot tell what it does. Icon-only buttons need an aria-label, or visually hidden text describing the action."
 msgstr ""
 
-#: src/Scanner/Rules/ButtonNameMissing.php:113
+#: src/Scanner/Rules/ButtonNameMissing.php:109
+msgid "A screen reader announces this as “button” and nothing else, so there is no way to tell what it does."
+msgstr ""
+
+#: src/Scanner/Rules/ButtonNameMissing.php:124
 msgid "A button's name has to describe what it does. Proposed, then reviewed."
 msgstr ""
 
-#: src/Scanner/Rules/ButtonNameMissing.php:142
+#: src/Scanner/Rules/ButtonNameMissing.php:153
 msgid "This button has no text or label, so its purpose is not announced."
 msgstr ""
 
@@ -790,15 +853,19 @@ msgstr ""
 msgid "The page title is the first thing a screen reader announces, and the label people see in browser tabs, bookmarks, and search results. Give the page a title that describes what is on it."
 msgstr ""
 
-#: src/Scanner/Rules/DocumentTitleMissing.php:112
+#: src/Scanner/Rules/DocumentTitleMissing.php:108
+msgid "Browser tabs, bookmarks and search results have nothing to show for this page but its address."
+msgstr ""
+
+#: src/Scanner/Rules/DocumentTitleMissing.php:123
 msgid "WordPress writes the title itself once the theme declares support for it, and a plugin can declare that support on the theme's behalf before wp_loaded. One right answer, and somewhere to put it."
 msgstr ""
 
-#: src/Scanner/Rules/DocumentTitleMissing.php:142
+#: src/Scanner/Rules/DocumentTitleMissing.php:153
 msgid "The page has no title element."
 msgstr ""
 
-#: src/Scanner/Rules/DocumentTitleMissing.php:143
+#: src/Scanner/Rules/DocumentTitleMissing.php:154
 msgid "The page title is empty."
 msgstr ""
 
@@ -810,12 +877,16 @@ msgstr ""
 msgid "This field is not labelled, so someone using a screen reader cannot tell what to type into it. Add a <label for> pointing at the field, or an aria-label. Placeholder text does not count."
 msgstr ""
 
-#: src/Scanner/Rules/FormControlLabelMissing.php:114
+#: src/Scanner/Rules/FormControlLabelMissing.php:110
+msgid "Anyone using a screen reader arrives at this field and is never told what to put in it."
+msgstr ""
+
+#: src/Scanner/Rules/FormControlLabelMissing.php:125
 msgid "What a field should be called is a judgement about what it is asking for. A model can propose wording from the surrounding markup; a person confirms it."
 msgstr ""
 
 #. translators: %s: form field name attribute, or the element name.
-#: src/Scanner/Rules/FormControlLabelMissing.php:162
+#: src/Scanner/Rules/FormControlLabelMissing.php:173
 #, php-format
 msgid "The form field \"%s\" has no label."
 msgstr ""
@@ -828,12 +899,16 @@ msgstr ""
 msgid "People using a screen reader navigate by moving through headings, so the levels need to descend one step at a time. Jumping a level makes the page outline look like a section is missing. Change the heading level, or add the missing intermediate heading."
 msgstr ""
 
-#: src/Scanner/Rules/HeadingLevelSkipped.php:114
+#: src/Scanner/Rules/HeadingLevelSkipped.php:110
+msgid "Most screen reader users move around a page by jumping between headings. This one leaves a gap in that path."
+msgstr ""
+
+#: src/Scanner/Rules/HeadingLevelSkipped.php:125
 msgid "Renumbering the heading is one possible fix; the other is that a section is genuinely missing and should be written. Choosing between those is a judgement about the document, not a correction to it."
 msgstr ""
 
 #. translators: 1: previous heading level, 2: this heading level.
-#: src/Scanner/Rules/HeadingLevelSkipped.php:154
+#: src/Scanner/Rules/HeadingLevelSkipped.php:165
 #, php-format
 msgid "This heading jumps from level %1$d to level %2$d."
 msgstr ""
@@ -846,11 +921,15 @@ msgstr ""
 msgid "The page does not say what language it is written in, so a screen reader may read it with the wrong pronunciation. Set a lang attribute on the html element, such as lang=\"en\"."
 msgstr ""
 
-#: src/Scanner/Rules/HtmlLangMissing.php:113
+#: src/Scanner/Rules/HtmlLangMissing.php:109
+msgid "A screen reader may read the whole page in the wrong accent, which can make it genuinely hard to follow."
+msgstr ""
+
+#: src/Scanner/Rules/HtmlLangMissing.php:124
 msgid "The right value is known — it is the site's own language setting — but the html element is printed by the theme and no filter reaches it. Knowing the answer is not the same as being able to write it, which is why this is a hand-off rather than a button."
 msgstr ""
 
-#: src/Scanner/Rules/HtmlLangMissing.php:146
+#: src/Scanner/Rules/HtmlLangMissing.php:157
 msgid "The page does not declare a language."
 msgstr ""
 
@@ -862,11 +941,15 @@ msgstr ""
 msgid "Screen readers let people jump between frames on a page, but an untitled frame shows up in that list with no name. Add a title attribute describing what the frame contains, such as the name of an embedded video."
 msgstr ""
 
-#: src/Scanner/Rules/IframeTitleMissing.php:113
+#: src/Scanner/Rules/IframeTitleMissing.php:109
+msgid "Anyone moving through the page by its regions meets this embedded content with no idea what it is."
+msgstr ""
+
+#: src/Scanner/Rules/IframeTitleMissing.php:124
 msgid "The title has to describe what is embedded, which means looking at it. Proposed, then reviewed."
 msgstr ""
 
-#: src/Scanner/Rules/IframeTitleMissing.php:142
+#: src/Scanner/Rules/IframeTitleMissing.php:153
 msgid "This frame has no title, so it is announced without a name."
 msgstr ""
 
@@ -878,16 +961,20 @@ msgstr ""
 msgid "Someone using a screen reader gets nothing useful from this image, and often hears the file name read out instead. Add alt text describing what the image conveys, or alt=\"\" if it is purely decorative and should be skipped."
 msgstr ""
 
-#: src/Scanner/Rules/ImageAltMissing.php:116
+#: src/Scanner/Rules/ImageAltMissing.php:112
+msgid "Anyone using a screen reader hears the file name read out instead of what the picture shows."
+msgstr ""
+
+#: src/Scanner/Rules/ImageAltMissing.php:127
 msgid "A description of a photograph is not something a rule can compute — it depends on why the image is on the page. A model can draft one; a person has to agree with it. Written to the media library, so it applies wherever that image is used and survives this plugin being removed."
 msgstr ""
 
-#: src/Scanner/Rules/ImageAltMissing.php:144
+#: src/Scanner/Rules/ImageAltMissing.php:155
 msgid "This image has no alt attribute."
 msgstr ""
 
 #. translators: %s: image file name.
-#: src/Scanner/Rules/ImageAltMissing.php:147
+#: src/Scanner/Rules/ImageAltMissing.php:158
 #, php-format
 msgid "The image \"%s\" has no alt attribute."
 msgstr ""
@@ -900,12 +987,16 @@ msgstr ""
 msgid "This link announces nothing, so someone using a screen reader hears only \"link\" and cannot tell where it goes. Add visible text, an aria-label, or alt text on the image inside it."
 msgstr ""
 
-#: src/Scanner/Rules/LinkNameMissing.php:114
+#: src/Scanner/Rules/LinkNameMissing.php:110
+msgid "A screen reader announces this as “link” and nothing else, so there is no way to tell where it goes."
+msgstr ""
+
+#: src/Scanner/Rules/LinkNameMissing.php:125
 msgid "A link's name has to describe where it goes, which nothing here knows for certain. Proposed, then reviewed."
 msgstr ""
 
 #. translators: %s: link target.
-#: src/Scanner/Rules/LinkNameMissing.php:145
+#: src/Scanner/Rules/LinkNameMissing.php:156
 #, php-format
 msgid "The link to \"%s\" has no text or label."
 msgstr ""
@@ -918,12 +1009,16 @@ msgstr ""
 msgid "Screen reader users often browse a list of every link on the page, with no surrounding text. Phrases like 'read more' or 'click here' give them nothing to go on. Consider rewriting the link to name its destination. If the wording is genuinely clear in context, mark this as reviewed."
 msgstr ""
 
-#: src/Scanner/Rules/LinkTextNotDescriptive.php:116
+#: src/Scanner/Rules/LinkTextNotDescriptive.php:112
+msgid "Screen reader users often pull up a list of every link on a page. In that list, this one says nothing about where it goes."
+msgstr ""
+
+#: src/Scanner/Rules/LinkTextNotDescriptive.php:127
 msgid "Better wording depends on where the link goes and what the sentence around it already says. Proposed, then reviewed."
 msgstr ""
 
 #. translators: %s: the link text.
-#: src/Scanner/Rules/LinkTextNotDescriptive.php:172
+#: src/Scanner/Rules/LinkTextNotDescriptive.php:183
 #, php-format
 msgid "The link text \"%s\" may not make sense when read on its own."
 msgstr ""
@@ -936,11 +1031,15 @@ msgstr ""
 msgid "Landmarks let someone using a screen reader jump straight to the content instead of listening through the header and navigation on every page. Wrap the primary content of the page in a main element."
 msgstr ""
 
-#: src/Scanner/Rules/MainLandmarkMissing.php:113
+#: src/Scanner/Rules/MainLandmarkMissing.php:109
+msgid "There is no way to skip past the header, so keyboard and screen reader users go through it again on every page."
+msgstr ""
+
+#: src/Scanner/Rules/MainLandmarkMissing.php:124
 msgid "The landmark has to wrap the page's main content, which is a decision about the template and belongs in the theme."
 msgstr ""
 
-#: src/Scanner/Rules/MainLandmarkMissing.php:140
+#: src/Scanner/Rules/MainLandmarkMissing.php:151
 msgid "The page has no main landmark, so there is no quick way to skip to the content."
 msgstr ""
 
@@ -952,12 +1051,16 @@ msgstr ""
 msgid "A page normally has one h1 naming what the page is about. More than one gives it competing titles and muddles the outline people navigate by. Check whether the extra headings should be h2 instead."
 msgstr ""
 
-#: src/Scanner/Rules/MultipleTopHeadings.php:114
+#: src/Scanner/Rules/MultipleTopHeadings.php:110
+msgid "The page says it is about two different things at once, which makes its outline unreliable for anyone navigating by it."
+msgstr ""
+
+#: src/Scanner/Rules/MultipleTopHeadings.php:125
 msgid "Which of the two should stop being a top-level heading depends on which one the page is actually about."
 msgstr ""
 
 #. translators: %d: position of this top-level heading on the page.
-#: src/Scanner/Rules/MultipleTopHeadings.php:155
+#: src/Scanner/Rules/MultipleTopHeadings.php:166
 #, php-format
 msgid "This is top-level heading number %d on the page."
 msgstr ""
@@ -970,11 +1073,15 @@ msgstr ""
 msgid "If this is a data table, someone using a screen reader cannot tell which column or row a cell belongs to, so the numbers lose their meaning. Mark the header cells up as th with a scope attribute. If the table is only being used for layout, it needs no headers and you can mark this as reviewed."
 msgstr ""
 
-#: src/Scanner/Rules/TableHeadersMissing.php:115
+#: src/Scanner/Rules/TableHeadersMissing.php:111
+msgid "A screen reader reads the cells out one after another, with nothing to say which column or row each one belongs to."
+msgstr ""
+
+#: src/Scanner/Rules/TableHeadersMissing.php:126
 msgid "Which cells are headers is a statement about what the data means. Guessing would produce a table that reads confidently and wrongly to a screen reader."
 msgstr ""
 
-#: src/Scanner/Rules/TableHeadersMissing.php:148
+#: src/Scanner/Rules/TableHeadersMissing.php:159
 msgid "This table has no header cells. If it presents data rather than layout, its headers need marking up."
 msgstr ""
 
@@ -1364,14 +1471,14 @@ msgstr ""
 
 #. translators: %d: number of items in this group.
 #: assets/src/components/coverage-panel.js:174
-#: assets/src/components/issue-list.js:123
+#: assets/src/components/issue-list.js:190
 #, js-format
 msgid "(%d)"
 msgstr ""
 
 #. translators: %s: WCAG success criterion number.
 #: assets/src/components/coverage-panel.js:188
-#: assets/src/components/issue-list.js:36
+#: assets/src/components/issue-list.js:48
 #, js-format
 msgid "WCAG %s"
 msgstr ""
@@ -1633,41 +1740,29 @@ msgid "Preview of the page being inspected"
 msgstr ""
 
 #. translators: %s: name of the accessibility check.
-#: assets/src/components/issue-list.js:57
+#: assets/src/components/issue-list.js:73
 #, js-format
 msgid "Markup for: %s"
 msgstr ""
 
-#: assets/src/components/issue-list.js:77
+#: assets/src/components/issue-list.js:93
 msgid "How to fix this"
 msgstr ""
 
-#: assets/src/components/issue-list.js:86
+#: assets/src/components/issue-list.js:102
 msgid "Element:"
 msgstr ""
 
-#: assets/src/components/issue-list.js:161
+#: assets/src/components/issue-list.js:141
+msgid "We can draft these, but a draft is not an answer. Read what it says before you apply it — it was written by a model that cannot see why your page exists."
+msgstr ""
+
+#: assets/src/components/issue-list.js:233
 msgid "Nothing found by the automated checks"
 msgstr ""
 
-#: assets/src/components/issue-list.js:165
+#: assets/src/components/issue-list.js:237
 msgid "None of the checks we can run automatically flagged anything on this page. That is a good sign, and it is not the same as the page being accessible — most of WCAG needs a person. The manual checklists are the next step."
-msgstr ""
-
-#: assets/src/components/issue-list.js:180
-msgid "Detected automatically"
-msgstr ""
-
-#: assets/src/components/issue-list.js:186
-msgid "These are failures the scanner could settle on its own from the page markup."
-msgstr ""
-
-#: assets/src/components/issue-list.js:199
-msgid "Needs a person to check"
-msgstr ""
-
-#: assets/src/components/issue-list.js:205
-msgid "The scanner spotted something worth a look but cannot decide it alone. These may turn out to be perfectly fine."
 msgstr ""
 
 #: assets/src/components/scan-picker.js:69

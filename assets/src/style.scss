@@ -556,6 +556,18 @@
 	gap: var(--wsak-space-2);
 }
 
+/*
+ * The line that says who this shuts out. Above the technical message and set in
+ * the body colour rather than the muted one, because for most readers it is the
+ * more useful half and it should not look like a footnote to the jargon.
+ */
+.wsak-issue__consequence {
+	margin: var(--wsak-space-2) 0 0;
+	max-width: 74ch;
+	font-size: 13.5px;
+	color: var(--wsak-text);
+}
+
 .wsak-issue__message {
 	margin: var(--wsak-space-2) 0 var(--wsak-space-3);
 	max-width: 78ch;

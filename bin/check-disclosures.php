@@ -53,7 +53,15 @@ const WSAK_SURFACES = array(
 		'the browser-pass caveat'          => '/A scheduled scan, or a scan of a page that will not open in a frame, does not include them/i',
 	),
 	'assets/src/components/issue-list.js'         => array(
-		'the nothing-found caveat' => '/not the same as the page being accessible/i',
+		'the nothing-found caveat'             => '/not the same as the page being accessible/i',
+		// The groups became "what this asks of you" in 0.13.0, so the honesty
+		// tag moved from the group heading onto every card. It must still be
+		// rendered somewhere in this file.
+		'the per-finding honesty tag'          => '/<DetectionTag/',
+		// Said once, at the top of the band that offers unreviewed fixes.
+		'the nothing-here-is-a-guess claim'    => '/Nothing here is a guess/i',
+		// And the matching admission at the top of the band that does guess.
+		'the a-draft-is-not-an-answer warning' => '/a draft is not an answer/i',
 	),
 	'assets/src/components/fix-action.js'         => array(
 		'the read-before-applying warning' => '/valid and still wrong for your page/i',

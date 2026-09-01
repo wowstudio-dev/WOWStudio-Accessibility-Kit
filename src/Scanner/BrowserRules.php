@@ -57,7 +57,8 @@ final class BrowserRules {
 					FixKind::Deterministic,
 					FixTarget::Css,
 					__( 'A colour that clears the required ratio can be computed, and it is written into the site\'s own Additional CSS. The proposal keeps the hue and saturation already chosen and moves only as far as it must.', 'wowstudio-accessibility-kit' )
-				)
+				),
+				__( 'Anyone with low vision or colour blindness — and anyone reading on a phone in daylight — will struggle to make this out.', 'wowstudio-accessibility-kit' )
 			),
 			new BrowserRule(
 				'link-marked-by-colour-alone',
@@ -70,7 +71,8 @@ final class BrowserRules {
 					FixKind::Deterministic,
 					FixTarget::Css,
 					__( 'An underline is what the criterion asks for and what readers already recognise. One rule, no judgement.', 'wowstudio-accessibility-kit' )
-				)
+				),
+				__( 'Anyone who cannot tell those two colours apart cannot tell there is a link here at all.', 'wowstudio-accessibility-kit' )
 			),
 			new BrowserRule(
 				'target-too-small',
@@ -83,7 +85,8 @@ final class BrowserRules {
 					FixKind::Deterministic,
 					FixTarget::Css,
 					__( 'A minimum size of 24 by 24 is the criterion itself. Applied as a floor, so the control can still grow.', 'wowstudio-accessibility-kit' )
-				)
+				),
+				__( 'Hard to hit accurately for anyone with a tremor, limited dexterity, or a phone in one hand on a moving bus.', 'wowstudio-accessibility-kit' )
 			),
 			new BrowserRule(
 				'scrolling-region-not-reachable',
@@ -96,7 +99,8 @@ final class BrowserRules {
 					FixKind::Manual,
 					FixTarget::Theme,
 					__( 'The container needs tabindex and an accessible name. The attribute is mechanical; the name is a description of what is inside, and both live in the theme.', 'wowstudio-accessibility-kit' )
-				)
+				),
+				__( 'Anyone using a keyboard rather than a mouse can never scroll this, so whatever is out of sight stays out of reach.', 'wowstudio-accessibility-kit' )
 			),
 			new BrowserRule(
 				'hidden-element-still-focusable',
@@ -109,7 +113,8 @@ final class BrowserRules {
 					FixKind::Manual,
 					FixTarget::Theme,
 					__( 'Either the element should be revealed or it should leave the tab order, and only somebody who knows why it is hidden can say which.', 'wowstudio-accessibility-kit' )
-				)
+				),
+				__( 'Keyboard users land on something that announces nothing. Focus moves and there is no way to tell where it went.', 'wowstudio-accessibility-kit' )
 			),
 		);
 
