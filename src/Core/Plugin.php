@@ -15,6 +15,7 @@ use WOWStudio\AccessibilityKit\Rest\AiController;
 use WOWStudio\AccessibilityKit\Jobs\Worker;
 use WOWStudio\AccessibilityKit\Rest\CssFixController;
 use WOWStudio\AccessibilityKit\Remediation\TitleTagFix;
+use WOWStudio\AccessibilityKit\Rest\AltTextRunController;
 use WOWStudio\AccessibilityKit\Rest\ReviewController;
 use WOWStudio\AccessibilityKit\Rest\RunController;
 use WOWStudio\AccessibilityKit\Rest\FixController;
@@ -149,6 +150,7 @@ final class Plugin {
 			'rest.fix.css'   => new CssFixController(),
 			'rest.runs'      => new RunController(),
 			'rest.review'    => new ReviewController(),
+			'rest.alt.bulk'  => new AltTextRunController(),
 			'fix.title'      => new TitleTagFix(),
 			'jobs.worker'    => new Worker(),
 			'overrides'      => new OverrideStore(),

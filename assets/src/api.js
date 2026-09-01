@@ -391,3 +391,78 @@ export function reopenIssue( issueId ) {
 		method: 'POST',
 	} );
 }
+
+/**
+ * Lists images that have never been described.
+ *
+ * @param {number} page One-based page number.
+ * @return {Promise<Object>} Images, paging, and what a run would involve.
+ */
+export function fetchUndescribedMedia( page = 1 ) {
+	return apiFetch( { path: `/${ namespace }/media?page=${ page }` } );
+}
+
+/**
+ * Queues a set of images for description.
+ *
+ * @param {Array} attachmentIds Images to describe.
+ * @return {Promise<Object>} The run.
+ */
+export function startAltTextRun( attachmentIds ) {
+	return apiFetch( {
+		path: `/${ namespace }/alt-text/runs`,
+		method: 'POST',
+		data: { attachment_ids: attachmentIds },
+	} );
+}
+
+/**
+ * Reads an alt-text run.
+ *
+ * @param {number} runId Run to read.
+ * @return {Promise<Object>} The run.
+ */
+export function fetchAltTextRun( runId ) {
+	return apiFetch( { path: `/${ namespace }/alt-text/runs/${ runId }` } );
+}
+
+/**
+ * Stops an alt-text run, keeping whatever it already described.
+ *
+ * @param {number} runId Run to stop.
+ * @return {Promise<Object>} The run.
+ */
+export function cancelAltTextRun( runId ) {
+	return apiFetch( {
+		path: `/${ namespace }/alt-text/runs/${ runId }`,
+		method: 'DELETE',
+	} );
+}
+
+/**
+ * Writes a reviewed description onto the image.
+ *
+ * @param {number} attachmentId Image to describe.
+ * @param {string} text         The reviewed description.
+ * @return {Promise<Object>} The image's new state.
+ */
+export function approveAltText( attachmentId, text ) {
+	return apiFetch( {
+		path: `/${ namespace }/alt-text/${ attachmentId }/approve`,
+		method: 'POST',
+		data: { text },
+	} );
+}
+
+/**
+ * Discards a suggestion without writing it.
+ *
+ * @param {number} attachmentId Image whose suggestion is rejected.
+ * @return {Promise<Object>} The image's new state.
+ */
+export function rejectAltText( attachmentId ) {
+	return apiFetch( {
+		path: `/${ namespace }/alt-text/${ attachmentId }/reject`,
+		method: 'POST',
+	} );
+}

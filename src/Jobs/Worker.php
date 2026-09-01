@@ -7,6 +7,7 @@
 
 namespace WOWStudio\AccessibilityKit\Jobs;
 
+use WOWStudio\AccessibilityKit\AltText\AltTextRun;
 use WOWStudio\AccessibilityKit\Core\Registrable;
 
 defined( 'ABSPATH' ) || exit;
@@ -33,6 +34,7 @@ final class Worker implements Registrable {
 	 */
 	public function register(): void {
 		add_action( Queue::HOOK, array( $this, 'scan_page' ), 10, 1 );
+		add_action( Queue::ALT_HOOK, array( $this, 'describe_image' ), 10, 1 );
 	}
 
 	/**
@@ -51,5 +53,23 @@ final class Worker implements Registrable {
 		}
 
 		( new BulkScan() )->step( $scan_id );
+	}
+
+	/**
+	 * Describes one queued image.
+	 *
+	 * @since 0.13.0
+	 *
+	 * @param mixed $attachment_id Image the action was queued with.
+	 * @return void
+	 */
+	public function describe_image( $attachment_id ): void {
+		$attachment_id = absint( $attachment_id );
+
+		if ( 0 === $attachment_id ) {
+			return;
+		}
+
+		( new AltTextRun() )->step( $attachment_id );
 	}
 }

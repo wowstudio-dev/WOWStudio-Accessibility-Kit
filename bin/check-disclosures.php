@@ -66,6 +66,13 @@ const WSAK_SURFACES = array(
 	'assets/src/components/fix-action.js'         => array(
 		'the read-before-applying warning' => '/valid and still wrong for your page/i',
 	),
+	'assets/src/components/alt-text-bulk.js'      => array(
+		// Bulk generation is the most obviously automatable thing here, which
+		// is exactly why the admission that a person still reads every one has
+		// to be on the screen rather than in a decision record.
+		'the model-cannot-see-your-page warning' => '/cannot see why this image is on your page/i',
+		'the nothing-saved-until-read promise'   => '/Nothing is saved until you have read each one/i',
+	),
 	'assets/src/components/alt-text-action.js'    => array(
 		'the model-cannot-know-the-purpose warning' => '/cannot know why this image is on the page/i',
 	),
@@ -89,6 +96,11 @@ const WSAK_SURFACES = array(
 	'assets/src/components/tags.js'               => array(
 		'the auto-detected honesty tag'       => '/Auto-detected/',
 		'the needs-manual-review honesty tag' => '/Needs manual review/',
+	),
+	// Authored server-side, because the sentence is composed with the provider's
+	// own name and sent to the interface rather than written into it.
+	'src/Rest/AltTextRunController.php'           => array(
+		'the we-will-not-guess-at-cost line' => '/we will not guess at a figure/i',
 	),
 	'src/Conformance/StatementGenerator.php'      => array(
 		'the automated-testing-is-partial caveat'   => '/Automated testing finds only some accessibility problems/iu',

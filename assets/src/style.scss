@@ -1257,6 +1257,112 @@
 	max-width: 60ch;
 }
 
+/* Media and the review queue ----------------------------------------------- */
+
+.wsak-bulk__lede {
+	margin: 0 0 var(--wsak-space-4);
+	max-width: 74ch;
+	color: var(--wsak-muted);
+	font-size: 13.5px;
+}
+
+.wsak-alt-bulk__billing {
+	margin: 0 0 var(--wsak-space-5);
+	padding: var(--wsak-space-3) var(--wsak-space-4);
+	max-width: 78ch;
+	border-inline-start: 3px solid var(--wsak-line-strong);
+	border-radius: 0 var(--wsak-radius-sm) var(--wsak-radius-sm) 0;
+	background: var(--wsak-raised);
+	color: var(--wsak-muted);
+	font-size: 12.5px;
+}
+
+.wsak-media {
+	display: grid;
+	gap: var(--wsak-space-3);
+	grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+	list-style: none;
+	margin: 0 0 var(--wsak-space-5);
+	padding: 0;
+}
+
+.wsak-media__item {
+	display: flex;
+	align-items: center;
+	gap: var(--wsak-space-3);
+	margin: 0;
+	padding: var(--wsak-space-3);
+	border: 1px solid var(--wsak-line);
+	border-radius: var(--wsak-radius-sm);
+}
+
+.wsak-media__item .components-base-control {
+	margin-bottom: 0;
+	min-width: 0;
+}
+
+.wsak-media__thumb {
+	flex: none;
+	width: 44px;
+	height: 44px;
+	border-radius: var(--wsak-radius-sm);
+	object-fit: cover;
+}
+
+.wsak-review {
+	list-style: none;
+	margin: var(--wsak-space-4) 0 0;
+	padding: 0;
+}
+
+.wsak-review__item {
+	display: flex;
+	gap: var(--wsak-space-4);
+	margin: 0;
+	padding: var(--wsak-space-4) 0;
+	border-top: 1px solid var(--wsak-line);
+}
+
+.wsak-review__thumb {
+	flex: none;
+	width: 88px;
+	height: 88px;
+	border: 1px solid var(--wsak-line-strong);
+	border-radius: var(--wsak-radius-sm);
+	object-fit: cover;
+}
+
+.wsak-review__body {
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+.wsak-review__file {
+	margin: 0 0 var(--wsak-space-2);
+	color: var(--wsak-muted);
+	font-size: 12px;
+	word-break: break-all;
+}
+
+.wsak-review__error {
+	margin: 0;
+	color: var(--wsak-serious);
+	font-size: 12.5px;
+}
+
+.wsak-review__saved {
+	margin: 0;
+	color: var(--wsak-good);
+	font-size: 12.5px;
+}
+
+.wsak-review__actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--wsak-space-2);
+	margin-top: var(--wsak-space-3);
+}
+
 /* CSS fix review ----------------------------------------------------------- */
 
 .wsak-css-fix {

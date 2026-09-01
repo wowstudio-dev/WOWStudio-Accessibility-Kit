@@ -38,6 +38,19 @@ class Queue {
 	public const HOOK = 'wsak_scan_page';
 
 	/**
+	 * The action fired for each image in an alt-text run.
+	 *
+	 * A separate hook rather than a payload flag on the first, so cancelling a
+	 * scan cannot reach an alt-text run that happens to share a number, and so
+	 * the two show up distinctly in Action Scheduler's own admin screen when
+	 * somebody is working out why their site is busy.
+	 *
+	 * @since 0.13.0
+	 * @var string
+	 */
+	public const ALT_HOOK = 'wsak_describe_image';
+
+	/**
 	 * Returns the Action Scheduler group for one run.
 	 *
 	 * A group per run rather than one group for the plugin, so cancelling a run
@@ -51,6 +64,18 @@ class Queue {
 	 */
 	public static function group_for( int $run_id ): string {
 		return 'wsak-run-' . $run_id;
+	}
+
+	/**
+	 * Returns the Action Scheduler group for one alt-text run.
+	 *
+	 * @since 0.13.0
+	 *
+	 * @param int $run_id Run identifier.
+	 * @return string
+	 */
+	public static function alt_group_for( int $run_id ): string {
+		return 'wsak-alt-' . $run_id;
 	}
 
 	/**
@@ -102,5 +127,44 @@ class Queue {
 		}
 
 		as_unschedule_all_actions( '', array(), self::group_for( $run_id ) );
+	}
+
+	/**
+	 * Queues one image for description.
+	 *
+	 * @since 0.13.0
+	 *
+	 * @param int $run_id        Run the image belongs to.
+	 * @param int $attachment_id Image to describe.
+	 * @return bool Whether the action was accepted.
+	 */
+	public function enqueue_alt_text( int $run_id, int $attachment_id ): bool {
+		if ( ! $this->is_available() ) {
+			return false;
+		}
+
+		$action_id = as_enqueue_async_action(
+			self::ALT_HOOK,
+			array( 'attachment_id' => $attachment_id ),
+			self::alt_group_for( $run_id )
+		);
+
+		return $action_id > 0;
+	}
+
+	/**
+	 * Drops everything still scheduled for an alt-text run.
+	 *
+	 * @since 0.13.0
+	 *
+	 * @param int $run_id Run to stop.
+	 * @return void
+	 */
+	public function cancel_alt_text( int $run_id ): void {
+		if ( ! $this->is_available() ) {
+			return;
+		}
+
+		as_unschedule_all_actions( '', array(), self::alt_group_for( $run_id ) );
 	}
 }

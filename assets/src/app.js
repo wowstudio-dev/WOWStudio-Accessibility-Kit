@@ -12,6 +12,7 @@ import StatementSettings from './components/statement-settings';
 import CoveragePanel from './components/coverage-panel';
 import Inspector from './components/inspector';
 import IssueList from './components/issue-list';
+import AltTextBulk from './components/alt-text-bulk';
 import BulkScan from './components/bulk-scan';
 import ScanPicker from './components/scan-picker';
 import ScoreCard from './components/score-card';
@@ -146,6 +147,15 @@ export default function App() {
 						{ __( 'Your content', 'wowstudio-accessibility-kit' ) }
 					</Button>
 				) }
+				{ capabilities.applyFix && (
+					<Button
+						variant={ view === 'images' ? 'primary' : 'tertiary' }
+						aria-current={ view === 'images' ? 'page' : undefined }
+						onClick={ () => setView( 'images' ) }
+					>
+						{ __( 'Images', 'wowstudio-accessibility-kit' ) }
+					</Button>
+				) }
 				{ capabilities.manage && (
 					<Button
 						variant={ view === 'settings' ? 'primary' : 'tertiary' }
@@ -206,6 +216,8 @@ export default function App() {
 					} }
 				/>
 			) }
+
+			{ view === 'images' && <AltTextBulk /> }
 
 			{ view === 'settings' && <AiSettings /> }
 
