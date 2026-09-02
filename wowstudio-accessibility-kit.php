@@ -11,7 +11,7 @@
  * Plugin Name:       WOWStudio Accessibility Kit
  * Plugin URI:        https://wowstudio.dev/accessibility-kit/
  * Description:       Helps you find, fix, document, and monitor WCAG accessibility issues at the code level. Real markup fixes with preview and undo — not an overlay.
- * Version:           0.14.0
+ * Version:           0.15.0
  * Requires at least: 6.8
  * Requires PHP:      8.1
  * Author:            WOWStudio
@@ -31,7 +31,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'WSAK_VERSION', '0.14.0' );
+define( 'WSAK_VERSION', '0.15.0' );
 define( 'WSAK_FILE', __FILE__ );
 define( 'WSAK_PATH', plugin_dir_path( __FILE__ ) );
 define( 'WSAK_URL', plugin_dir_url( __FILE__ ) );

@@ -4,7 +4,7 @@ Tags: accessibility, wcag, a11y, alt text, accessibility scanner
 Requires at least: 6.8
 Tested up to: 7.1
 Requires PHP: 8.1
-Stable tag: 0.14.0
+Stable tag: 0.15.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -133,6 +133,9 @@ AI features are bring-your-own-key. You connect your own provider account, and y
 
 == Changelog ==
 
+= 0.15.0 =
+* The opt-in screen can now send its confirmation to an address you choose, instead of only the one on your WordPress account. If that address is one nobody reads, the confirmation used to go nowhere and the opt-in could not be finished. Opting in is still optional and the plugin still works fully without it.
+
 = 0.14.0 =
 * Added an accessibility panel inside the block editor, checking what you write as you write it. Fixes you apply there go straight into the block, so they are part of your content and undo works on them like any other edit.
 * A finished bulk check can now go on to check colour, text size and layout, working through your pages in your own browser. That part only runs while the tab is open, and it says so before it starts.
@@ -202,6 +205,9 @@ AI features are bring-your-own-key. You connect your own provider account, and y
 * Initial scaffold: plugin bootstrap, capabilities, activation and uninstall handling.
 
 == Upgrade Notice ==
+
+= 0.15.0 =
+You can now opt in with an email address of your choosing, rather than only the one on your WordPress account.
 
 = 0.14.0 =
 Adds an accessibility panel to the block editor, a separate report for your theme, and colour and layout checking across a whole run.

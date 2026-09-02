@@ -6,6 +6,19 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Still outstanding
+
+- Capped **bulk** alt-text generation. Single-image generation is complete and
+  the cap is enforced, but a bulk run means many multi-second provider calls in
+  one request, which is exactly the kind of work CLAUDE.md says must go through
+  Action Scheduler. Shipping a synchronous loop that times out halfway would be
+  worse than not shipping it, so bulk lands with the queue.
+- Driving the redesigned admin in a real browser with a screen reader, and
+  testing with disabled users. The contrast guard checks 60 colour pairings on
+  every push, which is not the same thing as somebody using the interface.
+
+## [0.15.0] - 2026-09-02
+
 ### Added
 
 - A "use a different email address" option on the Freemius opt-in screen. The
@@ -20,17 +33,6 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   release can only cost the option rather than the opt-in, and it gates nothing:
   skipping still leaves the plugin fully usable, as WordPress.org requires and
   as decision F1 promises.
-
-### Still outstanding
-
-- Capped **bulk** alt-text generation. Single-image generation is complete and
-  the cap is enforced, but a bulk run means many multi-second provider calls in
-  one request, which is exactly the kind of work CLAUDE.md says must go through
-  Action Scheduler. Shipping a synchronous loop that times out halfway would be
-  worse than not shipping it, so bulk lands with the queue.
-- Driving the redesigned admin in a real browser with a screen reader, and
-  testing with disabled users. The contrast guard checks 60 colour pairings on
-  every push, which is not the same thing as somebody using the interface.
 
 ## [0.14.0] - 2026-09-01
 
