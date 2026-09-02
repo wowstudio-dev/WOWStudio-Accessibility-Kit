@@ -6,6 +6,21 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- A "use a different email address" option on the Freemius opt-in screen. The
+  SDK reads the address off the WordPress account and offers no way to change
+  it, so on a site where that address is a placeholder — the
+  `wordpress@example.com` a local environment ships with, a role account nobody
+  reads — the confirmation mail goes nowhere and the opt-in can never be
+  completed. The new field hands the address to the SDK's own `opt_in()`, which
+  accepts one for exactly this purpose; everything after that, including the
+  pending notice, the re-send button and the redirect once the link is clicked,
+  is still the SDK's. It is additive rather than a replacement, so a future SDK
+  release can only cost the option rather than the opt-in, and it gates nothing:
+  skipping still leaves the plugin fully usable, as WordPress.org requires and
+  as decision F1 promises.
+
 ### Still outstanding
 
 - Capped **bulk** alt-text generation. Single-image generation is complete and

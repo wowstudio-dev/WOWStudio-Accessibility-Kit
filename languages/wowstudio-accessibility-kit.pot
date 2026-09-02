@@ -398,6 +398,39 @@ msgstr ""
 msgid "That run could not be found."
 msgstr ""
 
+#: src/Optin/EmailOptin.php:116
+msgid "Use a different email address"
+msgstr ""
+
+#: src/Optin/EmailOptin.php:120
+msgid "By default the confirmation goes to the address on your WordPress account. If you do not read that mailbox, enter one you do — we will send the confirmation there instead."
+msgstr ""
+
+#: src/Optin/EmailOptin.php:133
+#: assets/src/components/statement-settings.js:215
+msgid "Email address"
+msgstr ""
+
+#: src/Optin/EmailOptin.php:155
+msgid "Send the confirmation here"
+msgstr ""
+
+#: src/Optin/EmailOptin.php:178
+msgid "You are not allowed to do that."
+msgstr ""
+
+#: src/Optin/EmailOptin.php:187
+msgid "The licensing component is not available on this site."
+msgstr ""
+
+#: src/Optin/EmailOptin.php:195
+msgid "That does not look like an email address. Please check it and try again."
+msgstr ""
+
+#: src/Optin/EmailOptin.php:201
+msgid "We could not start the confirmation just now. Please try again in a moment."
+msgstr ""
+
 #: src/Remediation/ActionBand.php:110
 #: assets/src/components/issue-list.js:156
 msgid "Fix these now"
@@ -2465,10 +2498,6 @@ msgstr ""
 
 #: assets/src/components/statement-settings.js:209
 msgid "How people reach you"
-msgstr ""
-
-#: assets/src/components/statement-settings.js:215
-msgid "Email address"
 msgstr ""
 
 #: assets/src/components/statement-settings.js:222

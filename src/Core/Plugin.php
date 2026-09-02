@@ -14,6 +14,7 @@ use WOWStudio\AccessibilityKit\Scanner\Preview;
 use WOWStudio\AccessibilityKit\Rest\AiController;
 use WOWStudio\AccessibilityKit\Jobs\Worker;
 use WOWStudio\AccessibilityKit\Rest\CssFixController;
+use WOWStudio\AccessibilityKit\Optin\EmailOptin;
 use WOWStudio\AccessibilityKit\Remediation\TitleTagFix;
 use WOWStudio\AccessibilityKit\Rest\AltTextRunController;
 use WOWStudio\AccessibilityKit\Rest\BlockCheckController;
@@ -157,6 +158,7 @@ final class Plugin {
 			'overrides'      => new OverrideStore(),
 			'preview'        => new Preview(),
 			'statement'      => new StatementBlock(),
+			'optin.email'    => new EmailOptin(),
 			'rest.statement' => new StatementController(),
 		);
 
