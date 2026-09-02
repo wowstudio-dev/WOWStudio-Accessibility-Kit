@@ -13,10 +13,20 @@ use WOWStudio\AccessibilityKit\Remediation\CustomCss;
 use WOWStudio\AccessibilityKit\Support\Capabilities;
 
 defined( 'ABSPATH' ) || exit;
-defined( 'WP_UNINSTALL_PLUGIN' ) || exit;
 
 /**
  * Removes the plugin's data, if the site owner asked for that.
+ *
+ * Reached through an uninstall hook rather than an uninstall.php file, because
+ * Freemius rejects a deployment whose main folder contains one. That is not
+ * arbitrary: WordPress runs uninstall.php *instead of* the uninstall hooks
+ * (wp-admin/includes/plugin.php), so the file would silently prevent the SDK
+ * from ever reporting the uninstall.
+ *
+ * That relocation is also why there is no longer a WP_UNINSTALL_PLUGIN guard
+ * here. Core defines that constant only in the uninstall.php branch; in the
+ * hook branch it is absent, so keeping the guard would have made this class
+ * exit immediately and quietly delete nothing at all.
  *
  * @since 0.1.0
  */

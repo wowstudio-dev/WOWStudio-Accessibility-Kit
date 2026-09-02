@@ -1,7 +1,7 @@
 # Security review
 
 *Phase 1, step 9. Reviewed: 2026-08-30, against 0.8.0 + the step 9 changes.
-Scope: the plugin's own code — `src/`, `assets/src/`, `uninstall.php`, and the
+Scope: the plugin's own code — `src/`, `assets/src/`, and the
 build scripts. The vendored Freemius SDK in `freemius/` is out of scope.*
 
 One real finding, fixed and regression-tested. Everything else below is a record

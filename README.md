@@ -128,8 +128,8 @@ php bin/check-free-build.php dist/free.zip
 ## Repository layout
 
 ```
-wowstudio-accessibility-kit.php   Bootstrap: headers, constants, Freemius init
-uninstall.php                     Entry point for src/Uninstaller.php
+wowstudio-accessibility-kit.php   Bootstrap: headers, constants, Freemius init,
+                                  lifecycle hooks including uninstall
 src/Core/                         Orchestrator, activation, installation
 src/Db/                           Schema, repositories, typed records
 src/Scanner/                      Engine, rules, registry, page fetching

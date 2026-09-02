@@ -255,6 +255,28 @@ require_once WSAK_PATH . 'vendor/woocommerce/action-scheduler/action-scheduler.p
 register_activation_hook( __FILE__, array( 'WOWStudio\AccessibilityKit\Core\Activator', 'activate' ) );
 register_deactivation_hook( __FILE__, array( 'WOWStudio\AccessibilityKit\Core\Deactivator', 'deactivate' ) );
 
+/*
+ * Uninstall cleanup, wired here at file scope rather than in a service.
+ *
+ * WordPress runs the uninstall hooks by including this file and firing
+ * uninstall_{plugin} — plugins_loaded never fires, so Plugin::boot() and every
+ * service it registers are absent. Anything that must survive an uninstall has
+ * to be attached before that point, which is here.
+ *
+ * Freemius's own hook is preferred when the SDK is present. It runs the SDK's
+ * uninstall reporting first, and it deliberately does not fire when the other
+ * flavour of the plugin is still installed — deleting the site's data because
+ * somebody removed the free copy while the paid one is still active would be a
+ * bug, and inheriting that check is free. Without the SDK there is nothing to
+ * defer to, so the WordPress hook is registered instead; it fires on the same
+ * uninstall_{plugin} action, and the guard means the two can never both run.
+ */
+if ( function_exists( 'wsak_fs' ) ) {
+	wsak_fs()->add_action( 'after_uninstall', array( 'WOWStudio\AccessibilityKit\Uninstaller', 'run' ) );
+} else {
+	register_uninstall_hook( __FILE__, array( 'WOWStudio\AccessibilityKit\Uninstaller', 'run' ) );
+}
+
 add_action(
 	'plugins_loaded',
 	function () {

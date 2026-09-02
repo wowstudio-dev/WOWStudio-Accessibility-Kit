@@ -7,7 +7,6 @@ parameters:
 		- src
 		- bin
 		- wowstudio-accessibility-kit.php
-		- uninstall.php
 	bootstrapFiles:
 		- tests/constants.php
 	# Loads Freemius SDK symbols without analysing the vendored SDK itself.

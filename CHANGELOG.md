@@ -19,6 +19,25 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [0.15.0] - 2026-09-02
 
+### Changed
+
+- Uninstall cleanup moved off `uninstall.php` and onto an uninstall hook, and
+  the file removed. Freemius refuses a deployment whose main folder contains
+  one, for a reason worth recording: WordPress runs `uninstall.php` *instead of*
+  the uninstall hooks, so the file would have stopped the SDK ever seeing the
+  uninstall. The cleanup now runs on the SDK's `after_uninstall`, which also
+  declines to fire while the other flavour of the plugin is still installed —
+  so removing the free copy can no longer delete data the paid one is using.
+  Without the SDK, `register_uninstall_hook()` covers the same ground.
+
+  This also meant dropping the `WP_UNINSTALL_PLUGIN` guard: core defines that
+  constant only in the `uninstall.php` branch, so on the hook path it would have
+  made the cleanup exit immediately and delete nothing while still looking
+  correct. Pinned by tests, since it fails silently.
+
+  Note this supersedes the scaffold step in SPEC.md and CLAUDE.md, both of which
+  still call for an `uninstall.php`.
+
 ### Added
 
 - A "use a different email address" option on the Freemius opt-in screen. The

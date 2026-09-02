@@ -13,8 +13,8 @@ defined( 'ABSPATH' ) || exit;
  * Stands the plugin down without destroying anything.
  *
  * Deactivation must be reversible: no user data, settings, or capabilities are
- * removed here. Destructive cleanup belongs in uninstall.php, and only when the
- * site owner has opted in.
+ * removed here. Destructive cleanup belongs in Uninstaller, reached through the
+ * uninstall hook, and only when the site owner has opted in.
  *
  * @since 0.1.0
  */
