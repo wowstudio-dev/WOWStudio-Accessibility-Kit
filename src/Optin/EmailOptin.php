@@ -112,7 +112,24 @@ final class EmailOptin implements Registrable {
 
 		$error = $this->current_error();
 		?>
-		<details class="wsak-optin-email">
+		<style>
+			/*
+			 * Scoped to this block on purpose. It renders inside the SDK's
+			 * .fs-actions container, whose children are laid out with floats,
+			 * so without neutralising them here the button floats right and the
+			 * SDK's own text wraps around it. Kept next to the markup rather
+			 * than in the plugin stylesheet because the two have to change
+			 * together, and the stylesheet is not loaded on this screen.
+			 */
+			.wsak-optin-email { clear: both; float: none; display: flow-root; width: 100%; margin: 1em 0 0; text-align: left; }
+			.wsak-optin-email summary { cursor: pointer; }
+			.wsak-optin-email form { float: none; display: block; margin: 0; }
+			.wsak-optin-email__submit { float: none; display: inline-block; }
+			.wsak-optin-email p { margin: 0.6em 0; }
+			.wsak-optin-email input[type="email"] { width: 100%; max-width: 22em; }
+		</style>
+		<?php // Held open after a rejected address, or the message bounced back would render inside a collapsed disclosure and never be seen. ?>
+		<details class="wsak-optin-email"<?php echo '' !== $error ? ' open' : ''; ?>>
 			<summary><?php esc_html_e( 'Use a different email address', 'wowstudio-accessibility-kit' ); ?></summary>
 
 			<p id="wsak-optin-email-help">
@@ -151,7 +168,7 @@ final class EmailOptin implements Registrable {
 				<?php endif; ?>
 
 				<p>
-					<button type="submit" class="button button-secondary">
+					<button type="submit" class="button wsak-optin-email__submit">
 						<?php esc_html_e( 'Send the confirmation here', 'wowstudio-accessibility-kit' ); ?>
 					</button>
 				</p>
