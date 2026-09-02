@@ -24,3 +24,4 @@ Thumbs.db
 # Local dev-server config for the design preview. Points at generated files, so
 # it is one developer's convenience rather than something to share.
 /.claude/launch.json
+/.wp-env.override.json
