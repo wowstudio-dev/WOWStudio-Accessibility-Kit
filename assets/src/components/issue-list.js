@@ -2,8 +2,10 @@
  * The findings, split by whether a machine settled them.
  */
 
+import { Button } from '@wordpress/components';
 import { __, sprintf } from '@wordpress/i18n';
 
+import { CSS_FIXABLE } from '../scanner/repair';
 import AltTextAction from './alt-text-action';
 import DismissAction from './dismiss-action';
 import FixAction from './fix-action';
@@ -11,17 +13,79 @@ import { DetectionTag, SeverityTag } from './tags';
 import { EmptyState } from './states';
 
 /**
+ * Sends a style-answerable finding to the inspector.
+ *
+ * These have one correct answer and need no model, but the declarations are
+ * measured off the live element — its computed colours, its rendered size — and
+ * this view has no rendered page to measure. Offering the AI button here would
+ * promise a provider key for work that needs none, which is what the list used
+ * to do.
+ *
+ * @param {Object}   props             Component props.
+ * @param {Function} [props.onInspect] Switches to the inspector.
+ * @return {Element} The handoff row.
+ */
+function CssHandoff( { onInspect } ) {
+	if ( ! onInspect ) {
+		return (
+			<p className="wsak-issue__handoff">
+				<span className="wsak-issue__handoff-note">
+					{ __(
+						'This one is answered by a style rule measured off the element itself, so it is fixed in the page view — which needs a preview of this page, and this scan has none.',
+						'wowstudio-accessibility-kit'
+					) }
+				</span>
+			</p>
+		);
+	}
+
+	return (
+		<p className="wsak-issue__handoff">
+			<Button variant="secondary" onClick={ onInspect }>
+				{ __( 'Fix this on the page', 'wowstudio-accessibility-kit' ) }
+			</Button>
+			<span className="wsak-issue__handoff-note">
+				{ __(
+					'Answered by a style rule measured off the element itself, so it is fixed in the page view. No AI is involved.',
+					'wowstudio-accessibility-kit'
+				) }
+			</span>
+		</p>
+	);
+}
+
+/**
  * One finding.
  *
  * How to fix it is behind a disclosure rather than always open: a page with
  * thirty findings would otherwise be a wall of text nobody reads.
  *
- * @param {Object} props        Component props.
- * @param {Object} props.issue  The finding.
- * @param {number} props.postId Page the finding is on.
+ * @param {Object}   props             Component props.
+ * @param {Object}   props.issue       The finding.
+ * @param {number}   props.postId      Page the finding is on.
+ * @param {Function} [props.onInspect] Switches to the inspector, when there is
+ *                                     a preview to switch to.
  * @return {Element} The card.
  */
-function IssueCard( { issue, postId } ) {
+function IssueCard( { issue, postId, onInspect } ) {
+	// Worked out before the markup rather than as a chain of conditions inside
+	// it, because which action a finding gets is the decision this component
+	// exists to make and it should be readable in one place.
+	let action = null;
+
+	if ( 'img-alt-missing' === issue.rule_id ) {
+		action = (
+			<AltTextAction
+				attachmentId={ issue.attachment_id }
+				postId={ postId }
+			/>
+		);
+	} else if ( CSS_FIXABLE.includes( issue.rule_id ) ) {
+		action = <CssHandoff onInspect={ onInspect } />;
+	} else if ( issue.detection === 'auto' ) {
+		action = <FixAction issueId={ issue.id } />;
+	}
+
 	return (
 		<li className="wsak-issue">
 			<div className="wsak-issue__head">
@@ -94,14 +158,7 @@ function IssueCard( { issue, postId } ) {
 				</pre>
 			) }
 
-			{ 'img-alt-missing' === issue.rule_id ? (
-				<AltTextAction
-					attachmentId={ issue.attachment_id }
-					postId={ postId }
-				/>
-			) : (
-				issue.detection === 'auto' && <FixAction issueId={ issue.id } />
-			) }
+			{ action }
 
 			{ issue.how_to_fix && (
 				<details className="wsak-issue__fix">
@@ -191,15 +248,16 @@ const BANDS = [
 /**
  * One group of findings, with a heading that says what the group means.
  *
- * @param {Object} props        Component props.
- * @param {string} props.id     Heading id, for aria-labelledby.
- * @param {string} props.title  Group heading.
- * @param {string} props.blurb  What this group means.
- * @param {Array}  props.issues Findings in the group.
- * @param {number} props.postId Page the findings are on.
+ * @param {Object}   props             Component props.
+ * @param {string}   props.id          Heading id, for aria-labelledby.
+ * @param {string}   props.title       Group heading.
+ * @param {string}   props.blurb       What this group means.
+ * @param {Array}    props.issues      Findings in the group.
+ * @param {number}   props.postId      Page the findings are on.
+ * @param {Function} [props.onInspect] Switches to the inspector.
  * @return {?Element} The group, or nothing when empty.
  */
-function IssueGroup( { id, title, blurb, issues, postId } ) {
+function IssueGroup( { id, title, blurb, issues, postId, onInspect } ) {
 	if ( ! issues.length ) {
 		return null;
 	}
@@ -222,6 +280,7 @@ function IssueGroup( { id, title, blurb, issues, postId } ) {
 					<IssueCard
 						issue={ issue }
 						postId={ postId }
+						onInspect={ onInspect }
 						key={ issue.id }
 					/>
 				) ) }
@@ -237,12 +296,13 @@ function IssueGroup( { id, title, blurb, issues, postId } ) {
  * difference between "this is wrong" and "somebody needs to look at this" is
  * the difference between a tool that helps and a tool that misleads.
  *
- * @param {Object} props        Component props.
- * @param {Array}  props.issues Findings.
- * @param {number} props.postId Page the findings are on.
+ * @param {Object}   props             Component props.
+ * @param {Array}    props.issues      Findings.
+ * @param {number}   props.postId      Page the findings are on.
+ * @param {Function} [props.onInspect] Switches to the inspector.
  * @return {Element} The list.
  */
-export default function IssueList( { issues, postId } ) {
+export default function IssueList( { issues, postId, onInspect } ) {
 	// The server has already ordered these and told each one which band it is
 	// in. Re-deriving that here would mean two answers to the same question,
 	// and the one on this side would be the one that drifts.
@@ -276,6 +336,7 @@ export default function IssueList( { issues, postId } ) {
 					blurb={ band.blurb }
 					issues={ band.issues }
 					postId={ postId }
+					onInspect={ onInspect }
 				/>
 			) ) }
 		</div>

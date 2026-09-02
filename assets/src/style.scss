@@ -1023,6 +1023,24 @@
 	font-weight: 620;
 }
 
+// Where a finding is handed to the inspector rather than to a model. Laid out
+// like the plan note above it rather than like an action row: it is one button
+// and a sentence explaining why the button is not "fix it here".
+.wsak-issue__handoff {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--wsak-space-2);
+	align-items: center;
+	margin: var(--wsak-space-3) 0 0;
+}
+
+.wsak-issue__handoff-note {
+	flex: 1 1 24ch;
+	max-width: 74ch;
+	color: var(--wsak-muted);
+	font-size: 12.5px;
+}
+
 .wsak-dismiss {
 	margin-top: var(--wsak-space-3);
 }

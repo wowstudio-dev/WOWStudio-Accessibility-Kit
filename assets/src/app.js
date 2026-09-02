@@ -347,6 +347,11 @@ export default function App() {
 						<IssueList
 							issues={ scan.issues ?? [] }
 							postId={ scan.post_id }
+							onInspect={
+								scan.preview_url
+									? () => setResultView( 'inspect' )
+									: undefined
+							}
 						/>
 					) }
 				</section>
