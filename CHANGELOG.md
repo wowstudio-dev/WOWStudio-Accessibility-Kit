@@ -17,6 +17,24 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   testing with disabled users. The contrast guard checks 60 colour pairings on
   every push, which is not the same thing as somebody using the interface.
 
+## [0.15.1] - 2026-09-02
+
+### Fixed
+
+- The findings list offered an AI button for the three findings a stylesheet
+  answers. It chose between the fix actions on `detection` alone — which says
+  whether a machine settled a finding, not whether answering it needs a model —
+  so colour contrast, links marked by colour alone, and targets under 24 by 24
+  were sent to a provider and stopped at "No AI provider is set up yet",
+  directly beneath a heading promising there was one correct answer and nothing
+  was a guess.
+
+  They now hand off to the page view, which has had the deterministic fix all
+  along. That is where it belongs rather than a workaround: the declarations are
+  measured off the live element's computed colour and rendered size, and the
+  list has no rendered page to measure. The decision reads from the shared
+  `CSS_FIXABLE` list rather than a second copy, so the two cannot drift.
+
 ## [0.15.0] - 2026-09-02
 
 ### Changed

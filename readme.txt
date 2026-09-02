@@ -4,7 +4,7 @@ Tags: accessibility, wcag, a11y, alt text, accessibility scanner
 Requires at least: 6.8
 Tested up to: 7.1
 Requires PHP: 8.1
-Stable tag: 0.15.0
+Stable tag: 0.15.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -133,6 +133,9 @@ AI features are bring-your-own-key. You connect your own provider account, and y
 
 == Changelog ==
 
+= 0.15.1 =
+* Fixed: findings that a style rule answers — colour contrast, links marked by colour alone, and targets under 24 by 24 — offered a button that asked for an AI provider key. They need no AI at all. They now send you to the page view, where the fix has always been, and say so.
+
 = 0.15.0 =
 * The opt-in screen can now send its confirmation to an address you choose, instead of only the one on your WordPress account. If that address is one nobody reads, the confirmation used to go nowhere and the opt-in could not be finished. Opting in is still optional and the plugin still works fully without it.
 
@@ -205,6 +208,9 @@ AI features are bring-your-own-key. You connect your own provider account, and y
 * Initial scaffold: plugin bootstrap, capabilities, activation and uninstall handling.
 
 == Upgrade Notice ==
+
+= 0.15.1 =
+Contrast, colour-only links and small targets no longer ask for an AI key to fix something that needs no AI.
 
 = 0.15.0 =
 You can now opt in with an email address of your choosing, rather than only the one on your WordPress account.
