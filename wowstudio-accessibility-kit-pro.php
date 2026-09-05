@@ -1,6 +1,6 @@
 <?php
 /**
- * WOWStudio Accessibility Kit
+ * WOWStudio Accessibility Kit Pro
  *
  * @package           WOWStudio\AccessibilityKit
  * @author            WOWStudio
@@ -8,9 +8,9 @@
  * @license           GPL-2.0-or-later
  *
  * @wordpress-plugin
- * Plugin Name:       WOWStudio Accessibility Kit
- * Plugin URI:        https://wowstudio.dev/accessibility-kit/
- * Description:       Helps you find, fix, document, and monitor WCAG accessibility issues at the code level. Real markup fixes with preview and undo — not an overlay.
+ * Plugin Name:       WOWStudio Accessibility Kit Pro
+ * Plugin URI:        https://wowstudio.dev/accessibility-kit/pro/
+ * Description:       Adds scheduled monitoring, client-ready reports, AI assistance, and team controls to WOWStudio Accessibility Kit. Requires the free plugin.
  * Version:           0.15.1
  * Requires at least: 6.8
  * Requires PHP:      8.1
