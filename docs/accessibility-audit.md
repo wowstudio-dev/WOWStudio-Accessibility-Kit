@@ -1,5 +1,11 @@
 # Accessibility audit — the plugin's own admin UI
 
+> **Dated record.** Audited 0.11.0 plus the Phase 3 screens on 2026-09-01. Two
+> screens it covers — the AI settings panel and the bulk alt-text generator —
+> were removed in 0.16.0, and the alt-text editor that replaced the latter has
+> never been audited. Section 4, what has never been checked, is the part to
+> read first; it must not shrink by accident.
+
 *Standard audited against: WCAG 2.2 level AA. Last run: 2026-09-01, against 0.11.0 plus every Phase 3 surface. The previous run covered 0.7.0 and predated six screens.*
 
 A tool that reports accessibility failures has no business shipping them, so

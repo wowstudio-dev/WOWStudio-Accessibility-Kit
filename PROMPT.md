@@ -1,5 +1,12 @@
 # PROMPT.md — Claude Code kickoff (WOWStudio Accessibility Kit)
 
+> **Historical.** This is the prompt that started the project, kept as a record.
+> It describes a two-tier Freemius product with an AI remediation engine, none
+> of which exists: 0.16.0 removed the licensing SDK and the whole AI layer, and
+> there is one free plugin with nothing gated. Do not follow the steps below.
+> `CLAUDE.md` is the current brief, and the superseded block at the top of
+> `SPEC.md` explains what changed and why.
+
 > Paste the block below as your first message in Claude Code. It assumes `CLAUDE.md` and `SPEC.md`
 > are in the repo root (they'll be auto-loaded / referenced). Leave out "continue automatically" to
 > have Claude pause after each of the 9 Phase-1 steps for your review; add it once you trust the rhythm.

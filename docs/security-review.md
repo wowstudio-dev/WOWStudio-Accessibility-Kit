@@ -1,5 +1,14 @@
 # Security review
 
+> **Dated record — partly obsolete since 0.16.0.** Sections about provider API
+> keys, the encrypted key store, `_wsak_skip_ai` and Freemius describe code that
+> has since been deleted: there is no AI, no key storage and no licensing SDK,
+> and the plugin now makes no outbound request of any kind. Those findings are
+> not wrong, they are simply about a surface that no longer exists — and the
+> attack surface they described is gone rather than fixed. Everything about
+> capabilities, nonces, SQL preparation, output escaping and the override layer
+> still applies. Re-run this review before release.
+
 *Phase 1, step 9. Reviewed: 2026-08-30, against 0.8.0 + the step 9 changes.
 Scope: the plugin's own code — `src/`, `assets/src/`, and the
 build scripts. The vendored Freemius SDK in `freemius/` is out of scope.*

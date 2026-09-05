@@ -3,19 +3,6 @@
 Things that cannot be verified from inside the codebase, and must be confirmed
 by a human before any public release. Items marked **TODO(human)** are open.
 
-## Freemius dashboard
-
-- [ ] **TODO(human)** Plans exist with the exact slugs `free` and `pro`. Gating
-      calls `wsak_fs()->is_plan( 'pro', true )` by slug; a mismatch silently
-      leaves Pro features locked for paying customers.
-- [ ] **TODO(human)** Trial on `pro` set to **7 days, payment method required**.
-      The `trial` argument in the plugin only mirrors the dashboard; the
-      dashboard is authoritative.
-- [ ] **TODO(human)** Telemetry configured as opt-in only (SPEC.md rule: never
-      silent tracking).
-- [ ] Re-run `composer check-free-build -- dist/free.zip` against the **generated
-      free zip**, not just the source tree, before submitting to WordPress.org.
-
 ## WordPress.org submission
 
 - [ ] **TODO(human)** `Contributors:` in readme.txt is a real WordPress.org
@@ -29,31 +16,19 @@ by a human before any public release. Items marked **TODO(human)** are open.
       actually edits; check both.
 - [ ] Plugin Check passes with no errors (`npm run plugin-check`).
 
-      This runs against the **built** plugin in `dist/`, not the working tree,
-      and excludes `freemius/`. That exclusion is deliberate and needs to be
-      understood rather than forgotten: the vendored Freemius SDK produces 525
-      errors and 1,239 warnings of its own (measured against SDK 2.13.4, mostly
-      `WordPress.Security.EscapeOutput`). It is third-party code we cannot
-      modify, and it ships inside a large number of plugins already on
-      WordPress.org. Our own code is clean. If a reviewer raises the SDK, the
-      answer is that it is unmodified upstream Freemius, not our output.
-- [x] **External services disclosure** — written in 0.9.0. readme.txt now has an
-      `== External services ==` section covering all four providers, the exact
-      endpoint each request goes to, what is sent and when, the 300-character
-      cap on page context, the `_wsak_skip_ai` opt-out, and Freemius. It landed
-      four steps later than planned: the item said "step 5" and the adapters
-      shipped in 0.5.0 without it.
-- [x] Every link in that section was checked on 2026-09-01. Thirteen of sixteen
-      answered 200 directly. `www.gnu.org/licenses/gpl-2.0.html` answers 302 to
-      `old-licenses/gpl-2.0.html` and then 200 — it works, and the redirect is
-      worth knowing. The three OpenAI URLs answer 403 with
-      `cf-mitigated: challenge`, which is Cloudflare refusing an automated
-      client rather than a missing page; a browser passes. Their *content* was
-      therefore not confirmed from here.
-      The endpoint URLs were read out of the provider adapters and are correct;
-      the terms and privacy-policy URLs were written from knowledge and have
-      **not** been fetched. Providers move these pages. A dead link in this
-      section is a rejection just as surely as a missing section.
+      This runs against the **built** plugin in `dist/`, not the working tree.
+      There is nothing excluded from it any more: the vendored Freemius SDK was
+      the one exclusion, it produced 525 errors and 1,239 warnings of its own,
+      and it is gone. Every file that ships is now our own and is checked.
+- [x] **External services disclosure** — rewritten in 0.16.0. There are no
+      external services. The section now states plainly that the plugin
+      contacts nothing, has no API, no account and no telemetry, and works the
+      same on a server with no internet access. That is a much easier section to
+      keep true than the one it replaced, which listed four AI providers and
+      sixteen links that all had to stay alive.
+- [ ] Confirm the claim is still true before each release: `grep -rn` the
+      shipped tree for `wp_remote_`, `curl_`, and `file_get_contents` against a
+      URL. One added request turns a simple promise into a false one.
 - [ ] Screenshots and banner assets prepared.
 
 ## Our own accessibility
@@ -68,9 +43,9 @@ by a human before any public release. Items marked **TODO(human)** are open.
       accident, and any claim moved out of it needs the evidence that moved it.
 - [ ] **TODO(human)** Drive the admin dashboard in a browser with axe-core, and
       through at least one screen reader. The last live DOM run was 2026-08-23
-      (146 elements, zero findings) against the **step 4** dashboard — the AI
-      settings panel, the fix preview and diff, the statement panel and every
-      0.8.0 change landed afterwards and have never been in a live run.
+      (146 elements, zero findings) against the **step 4** dashboard. Everything
+      since — the statement panel, the redesigned charts, the overview screen
+      and the 0.16.0 alt-text editor — has never been in a live run.
       Everything since is computed from source or from server-rendered output,
       and the live-region fix in 0.8.0 is reasoned from the specification rather
       than confirmed against a real screen reader. Automating this needs the
@@ -81,35 +56,16 @@ by a human before any public release. Items marked **TODO(human)** are open.
       any of this works, and shipping an accessibility tool that has never been
       near one is the criticism this product exists to avoid.
 
-## Tier boundary (from Phase 3 onward)
+## Nothing is gated
 
-- [x] **Every paid route refuses a free site.** Checked mechanically by
-      `bin/check-tiers.php`, which runs in the gate. It asserts the gate is near
-      the top of each paid handler, before any work — a check buried after the
-      side effects is not a gate. Adding a paid feature means adding a line to
-      that file, and the guard fails until the gate exists.
-- [x] **The boundary is F1:** the free tier fixes a page, the paid tier fixes a
-      site and keeps it fixed. Free keeps single-page scanning, the inspector,
-      the editor panel, the theme report, every check and every one-at-a-time
-      fix, unlimited. Paid is bulk scanning, bulk alt text, and the uncapped
-      allowance.
-- [x] **Pro-only implementations are stripped, not merely switched off.**
-      Resolved 2026-09-01. `Jobs\BulkScan`, `AltText\AltTextRun`,
-      `AltText\MediaIndex` and `Rest\AltTextRunController` carry
-      `@fs_premium_only`, and every place that reaches for them checks
-      `class_exists()` first — the worker before registering its hooks, the
-      plugin before constructing the controller, and `RunController` before
-      declaring the run routes at all. Registering a hook or a route whose
-      handler cannot exist would answer with a fatal rather than a refusal.
-
-      Verified by deleting all four files and booting: the plugin came up, no
-      paid route was registered, and `/coverage`, `/theme`, `/content/types` and
-      `/check-blocks` all still answered 200. That is a simulation of stripping,
-      not stripping itself — see the item below.
-- [ ] Re-run `php bin/check-free-build.php dist/free.zip` against a
-      **Freemius-generated** zip and confirm the four files are absent. Our own
-      `--free` build deliberately refuses to guess at stripping, so this is the
-      one step that cannot be done locally.
+- [x] **Confirmed 0.16.0.** There is no paid tier, no licensing SDK, no
+      `@fs_premium_only`, no tier check, and no build-time stripping. One build
+      ships, so what the gate tested is what the user installs.
+- [ ] Before each release, confirm no locked control, upgrade prompt or usage
+      cap has crept back in. The free plugin has to stay complete: a feature
+      that has shipped in a free WordPress.org release cannot be taken back
+      later without it reading as a bait-and-switch, which is why the line has
+      to hold from the first release rather than be negotiated afterwards.
 
 ## Third-party code (from Phase 2 onward)
 

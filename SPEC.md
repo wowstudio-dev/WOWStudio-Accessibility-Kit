@@ -1,6 +1,51 @@
 # WOWStudio Accessibility Kit — Product & Build Spec
-### Accessibility Remediation + Conformance, with AI Alt-Text & Media SEO
-*Publisher: WOWStudio · Status: ready for development · Monetization: Freemius (Free + Pro)*
+### Accessibility Remediation + Conformance
+*Publisher: WOWStudio · Status: partly superseded, see below · Monetization: none, the plugin is free*
+
+---
+
+## ⚠️ Superseded on 2026-09-06 — read this before anything else
+
+This document was written for a two-tier product with an AI remediation engine
+sold through Freemius. **That product does not exist.** As of 0.16.0 there is
+one plugin, it is free, nothing is gated, there is no licensing SDK, and there
+is no AI of any kind. The plugin makes no outbound requests at all.
+
+The decision, in short: held against an established free competitor
+(Equalize Digital's Accessibility Checker — 44 checks, 11 free site-wide fixes,
+version 1.49.0), a paywall in the same place theirs is buys nothing. Market
+validation belongs to the incumbent, and an unknown plugin is only ever judged
+on its free tier. So the free tier is the whole product for now.
+
+**These sections no longer describe the code and must not be built from:**
+
+| Section | Status |
+|---|---|
+| Monetization & licensing — Freemius | Gone. No SDK, no plans, no gating, no telemetry. |
+| C. AI Remediation Engine | Gone. `src/AI/` and the generative fix path were deleted. |
+| D. AI Alt-Text & Media SEO | Replaced by a manual bulk alt-text editor. Nothing is generated. |
+| H. Agency / Multisite | Not started, and not a tier. |
+| Tier boundary (mapped to Freemius plans) | Gone. Nothing is tiered. |
+| Freemius integration details | Gone. |
+| AI integration | Gone. |
+| Every `[Free]` / `[Pro]` / `[Agency]` tag below | Ignore. Everything is free. |
+
+**These sections still stand and are still the source of truth:** the guiding
+product rules, B (scanning engine), E (conformance documentation), F
+(monitoring — still entirely unbuilt), G (dashboard), I (manual-testing aids),
+K (platform, performance & privacy), L (dogfooding), the anti-features
+stop-list, the repository structure, the data model, the coding standards, and
+the whole Phase 2 and Phase 3 decision record from "Phase 2, step 1" onward.
+Those decisions were made against real problems and the reasoning is still good;
+where one of them turns on a tier or on a model, the tier is gone and the model
+is gone, and the rest of the reasoning holds.
+
+**For what is being built now**, see `CLAUDE.md` → "Where the work is". For the
+planned paid add-on and the line it would draw, see `PRO-NOTES.md` on the frozen
+`Pro` branch. The tag `pro-seed-0.15.1` is the last tree containing the removed
+Freemius and AI code.
+
+---
 
 > This file doubles as the Claude Code project brief. Drop it in the repo root as `SPEC.md` (or reference it from `CLAUDE.md`). Build in the order given under **Getting started for Claude Code**.
 
@@ -13,12 +58,16 @@
 | WordPress.org slug | `wowstudio-accessibility-kit` |
 | Text domain | `wowstudio-accessibility-kit` |
 | Namespace / prefix | `WOWStudio\AccessibilityKit` · `wsak_` · DB tables `wp_wsak_*` |
-| Requires WP | 6.8+ (first-class support for WP 7.0 AI Client / Abilities API) — raised from 6.6 by decision F10 |
-| Requires PHP | 8.1+ (min declared 8.0) |
+| Requires WP | 6.8+ — raised from 6.6 by decision F10 (Action Scheduler 4.x) |
+| Requires PHP | 8.1+ (min declared 8.0). Held at 8.1 on 2026-09-06 despite the competitor's 7.4 floor. |
 | License | GPLv2 or later (WordPress.org requirement) |
-| Monetization | **Freemius** — Free on WordPress.org, Pro via Freemius checkout |
+| Monetization | None. The plugin is free and nothing is gated. |
 
-**Tiers = Freemius plans:** `[Free]` = funnel (WordPress.org) · `[Pro]` = paid Freemius plan · `[Agency]` = future 3rd Freemius plan (multisite / white-label). Where a whole module is one tier it's noted at the header; per-feature tags override.
+**Tier tags are dead.** `[Free]`, `[Pro]` and `[Agency]` appear throughout the
+sections below and mean nothing now — everything is free. They are left in place
+rather than stripped because the paid add-on will need to know which features
+were once thought worth charging for, and because rewriting 900 lines to delete
+a bracket would bury the decisions the lines actually record.
 
 ---
 
@@ -32,7 +81,10 @@
 
 ---
 
-## Monetization & licensing — Freemius
+## Monetization & licensing — Freemius *(SUPERSEDED — none of this exists)*
+
+> Removed in 0.16.0. Kept only as the record of what was built and then taken
+> out; do not implement any of it. See the superseded block at the top.
 
 - **Free version** ships to WordPress.org (the funnel). **Pro** is delivered and licensed through Freemius (checkout, subscriptions, trials, auto-updates, license management, analytics). Freemius deploy produces both the free (.org) zip and the premium zip from one codebase.
 - **Feature gating** uses the Freemius SDK, not homegrown license checks. Pattern:
@@ -63,7 +115,14 @@
 - `[Free]` False-positive / ignore management (per-issue and rule-level), with notes.
 - `[Pro]` Custom scan rules & per-rule severity overrides (hooks/filters).
 
-## C. AI Remediation Engine *(the differentiator)*
+## C. AI Remediation Engine *(SUPERSEDED — removed in 0.16.0)*
+
+> `src/AI/`, the four provider adapters, the WP AI Client bridge, the encrypted
+> key store and the generative fix path were all deleted. The override layer,
+> the preview/diff/undo contract and `FixKind` × `FixTarget` survive and are
+> still correct — it is only the thing that produced the suggestion that is
+> gone.
+
 - `[Free]` One-at-a-time AI fix suggestions (capped) via WP 7.0 AI Client / BYOK (OpenAI, Anthropic, Gemini, OpenRouter).
 - `[Pro]` **Bulk AI remediation** across the site.
 - Fix types (AI-generated, reviewable):
@@ -82,7 +141,14 @@
 - `[Free]` "Explain this issue" AI tutor — why it fails, who it affects, how to fix.
 - `[Pro]` Remediation changelog / rollback history.
 
-## D. AI Alt-Text & Media SEO *(free on-ramp + Pro depth)*
+## D. Alt Text *(rewritten in 0.16.0 — nothing is generated)*
+
+> Replaced by a manual bulk editor: every image in the media library that has
+> never been described, listed with a field beside each. It writes
+> `_wp_attachment_image_alt`, so a description applies wherever the image is
+> used and survives the plugin being deleted. Images already marked decorative
+> are excluded — an empty alt is somebody's decision, not a gap.
+
 - `[Free]` **AI alt-text generation** for images via vision model (BYOK) — single image + limited/capped bulk. *This is the funnel.*
 - `[Free]` Context-aware alt text (uses surrounding text, page/post title).
 - `[Free]` Decorative-image detection → correct empty `alt=""` handling.
@@ -100,7 +166,11 @@
 - `[Pro]` **Evidence log / audit trail** — every scan, fix, and date, exportable, to support "disproportionate burden" or due-diligence records.
 - `[Pro]` Statement & report versioning.
 
-## F. Monitoring & Alerts *(recurring-revenue core — `[Pro]`)*
+## F. Monitoring & Alerts *(STILL UNBUILT — and "monitor" is in the plugin header)*
+
+> The largest gap between what this product says and what it does. No longer a
+> paid tier; it is simply missing.
+
 - Scheduled re-scans with drift detection.
 - Change-detection: new/edited content and updated plugins/themes re-checked automatically.
 - Regression alerts (a previously-fixed issue reappears).
@@ -116,7 +186,8 @@
 - `[Pro]` Trend charts and historical snapshots.
 - `[Agency]` White-label, client-branded PDF reports + scheduled delivery.
 
-## H. Agency / Multisite *(`[Agency]`)*
+## H. Agency / Multisite *(not started, and no longer a tier)*
+
 - WordPress Multisite network support.
 - Per-site licensing / central management (via Freemius multisite licensing).
 - White-label branding (plugin name, logo, report headers).
@@ -153,7 +224,10 @@
 
 ---
 
-## Tier boundary (mapped to Freemius plans)
+## Tier boundary *(SUPERSEDED — there are no tiers)*
+
+> Nothing below is gated. Kept as the record of where the line was once drawn.
+
 
 *Revised 2026-08-31 — see Phase 3, decision F1. The line is scale, not
 capability: **the free tier fixes a page, the paid tier fixes a site and keeps
@@ -195,12 +269,12 @@ integrations.
 ---
 
 ## Explicitly NOT included (anti-features)
-- ❌ No overlay / accessibility widget or toolbar on the front end.
+- ❌ No overlay / accessibility widget or toolbar on the front end. **Reaffirmed 2026-09-06** against a specific proposal to add one: a toolbar with font-size, contrast, greyscale and link-highlight controls. Rejected, and the reasoning is worth keeping because the proposal will recur. None of the four fixes anything — they sit on top of a site that is still broken underneath. All four are already done better by the browser and the operating system (page zoom, forced-colors, OS greyscale, reader mode). And the audience this product is trying to win is the accessibility community, which treats overlays as actively harmful; shipping one is the fastest available way to be dismissed by exactly the people whose word-of-mouth we need. What *was* taken from that proposal is the half that is real: skip links, focus indicators, keyboard-navigation fixes and ARIA repairs, all of which are genuine code changes and all of which are on the build list.
 - ❌ No "guaranteed compliance," "ADA/EAA compliant," or "lawsuit protection" claims anywhere.
 - ❌ No silent, unreviewed auto-fixes to live content.
 - ❌ No auto-published conformance report asserting a level without human attestation.
-- ❌ No storing/transmitting user content to AI beyond what a fix requires, without disclosure.
-- ❌ No premium code shipped in the free WordPress.org zip (enforced by Freemius stripping).
+- ❌ No outbound requests at all. There is no AI, no API, no account and no telemetry, and `readme.txt` promises as much. Adding one would break that promise.
+- ❌ No gating. No locked control, no upgrade prompt, no usage cap, no tier check. If a paid add-on ever ships it attaches to this plugin and only ever adds.
 - ❌ No buffering and rewriting the whole front-end page at runtime. See Phase 3, decision F6: it would "fix" far more than a filter can reach, and it is the accessiBe pattern wearing our clothes.
 
 ---
@@ -257,7 +331,8 @@ wowstudio-accessibility-kit/
 └── languages/
 ```
 
-## Freemius integration details
+## Freemius integration details *(SUPERSEDED — the SDK is gone)*
+
 Init in the main plugin file **before** loading the rest of the plugin. **Copy the current integration snippet from the Freemius Developer Dashboard** rather than hand-typing this — since Aug 2025 the snippet embeds a wp.org gatekeeper marker that blocks accidental premium-code submissions (and is stripped from the generated free build on deploy). The block below is illustrative of the shape only:
 ```php
 if ( ! function_exists( 'wsak_fs' ) ) {
@@ -290,7 +365,8 @@ Gating conventions:
 - Pro-only methods → `bulk_remediate__premium_only()`; Pro-only files → `class-bulk-remediation-premium.php`; partial premium blocks → `@fs_premium_only` doc tag. Freemius strips these from the free zip on deploy.
 - Configure `free`, `pro` (and later `agency`) plans in the Freemius dashboard; map every `[Pro]`/`[Agency]` feature accordingly.
 
-## AI integration
+## AI integration *(SUPERSEDED — there is no AI)*
+
 - One `ProviderInterface` (`generateText`, `generateAltText(image, context)`), with adapters per provider and an `AiClientBridge` that prefers the WP 7.0 AI Client when available, else BYOK.
 - **Key storage:** encrypt at rest (libsodium via `sodium_crypto_secretbox`, key derived from `wp_salt()`); never log keys; never expose via REST.
 - **Privacy:** "only send what's needed" mode (send the failing node + minimal context, not whole pages); per-page opt-out for sensitive content; disclose provider/subprocessor in settings.

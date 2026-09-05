@@ -9,13 +9,24 @@ It is not an overlay, and it never tells a user their site is compliant. See
 
 ## Status
 
-Phase 1, step 7 of 9: scanner, dashboard, AI alt text, reviewable fixes, and the accessibility statement. Disclaimer review and the QA gate remain.
+One plugin, free, nothing gated. 0.16.0 removed the Freemius SDK and the whole
+AI layer; see [`CHANGELOG.md`](CHANGELOG.md) for what went and why.
+
+What works: the two-pass scanner (17 checks), the inspector with a live page
+preview, the block-editor panel, deterministic CSS fixes with preview and undo,
+site-wide scanning, the bulk alt-text editor, theme triage, the overview
+dashboard, and the accessibility-statement generator.
+
+What is next, in order: getting the check count from 17 to ~48, building the
+site-wide fix layer, then scheduled monitoring — which is the one thing the
+plugin header promises and does not yet do. [`CLAUDE.md`](CLAUDE.md) has the
+list.
 
 ## Requirements
 
 | | |
 |---|---|
-| WordPress | 6.6+ |
+| WordPress | 6.8+ |
 | PHP | 8.1+ |
 | Node | 20+ |
 | Docker | required for `wp-env` and for running the PHP test suite locally |
@@ -44,15 +55,22 @@ That runs, in order:
 | `composer phpstan` | Static analysis at level 6 |
 | `composer test` | PHPUnit unit suite |
 | `composer check-claims` | No unqualified compliance claims anywhere |
-| `composer check-free-build` | No premium code or Freemius secret in the free build |
+| `composer check-disclosures` | Every honesty caveat is still on the screen that needs it |
 | `npm run plugin-check` | The official WordPress Plugin Check |
+
+`composer lint` is the PHP half. The full 10-step gate — which also covers the
+JavaScript, the stylesheet, the colour contrast of our own interface, and the
+staleness of the translation template — is:
+
+```bash
+bash bin/gate.sh
+```
 
 `npm run plugin-check` and `npm run makepot` both build the plugin into `dist/`
 first and run against that, not the working tree — otherwise they see
 `node_modules`, dev Composer dependencies, and tooling config as shipped files.
-Plugin Check excludes `freemius/`, the vendored SDK we cannot modify; see
-[`docs/RELEASE-CHECKLIST.md`](docs/RELEASE-CHECKLIST.md) for the numbers behind
-that decision.
+See [`docs/RELEASE-CHECKLIST.md`](docs/RELEASE-CHECKLIST.md) for what a release
+run involves.
 
 Build the release artifact with:
 
@@ -60,39 +78,11 @@ Build the release artifact with:
 npm run dist:zip
 ```
 
-## Testing the free experience
+## One build
 
-The working tree is the **premium** codebase (`is_premium => true`), because
-Freemius generates the WordPress.org build from it on deploy. Installing it
-locally therefore shows you the Pro install, not what a free user sees.
-
-To install and test the free flavour without deploying:
-
-```bash
-npm run dist:free:zip
-```
-
-That writes `dist/wowstudio-accessibility-kit-free.zip` with `is_premium` set to
-`false` and the gatekeeper secret removed. Install it and confirm for yourself
-that it activates with no licence and no blocking screen.
-
-Freemius's own deploy output remains authoritative. This local build applies
-only the header transformations; it deliberately **refuses to run** if our code
-ever contains `__premium_only` or `@fs_premium_only`, because guessing at that
-stripping would give false confidence. When that day comes, test the zip
-Freemius generates.
-
-### A licence prompt that will not go away
-
-No licence is required for the free plan, and none is required to *use* the
-premium codebase either — Pro features simply stay locked. If you do see a
-prompt that never clears, the cause is almost certainly stale Freemius state:
-if a request dies part-way through activation, Freemius can be left believing an
-opt-in is still in flight. Clear it with:
-
-```bash
-npm run fs:reset
-```
+There is one build and no flavours. `bin/build.sh` produces exactly what ships,
+so what the gate tests is what a user installs — which was never quite true
+while a server-side stripper generated the real zip from a premium tree.
 
 ### Running tests locally
 
@@ -115,26 +105,24 @@ It fails on any unqualified use of "compliant", "certified", "guaranteed",
 negates the claim, carries a `wsak:claim-reviewed` annotation, or appears
 verbatim in `bin/claims-allowlist.txt`.
 
-**`bin/check-free-build.php`** makes sure no Pro-only code and no Freemius
-gatekeeper secret can reach the free WordPress.org zip. Freemius strips these on
-deploy; this is the second lock, because a stripping failure is only discovered
-once the code is already public. Run it against the generated free zip, not just
-the source tree:
-
-```bash
-php bin/check-free-build.php dist/free.zip
-```
+**`bin/check-disclosures.php`** is the other half of the same idea. The claim
+guard stops the plugin saying something it must not; this stops it quietly
+dropping something it must say. Product rules 1, 4 and 5 all rest on ordinary
+strings — the caveat under the score, the coverage lede, the draft banner on an
+unsigned statement — and any of those can be deleted in a routine refactor
+without breaking a test. Each surface it names must keep carrying its
+disclosure; reword them freely, but update the pattern when you do.
 
 ## Repository layout
 
 ```
-wowstudio-accessibility-kit.php   Bootstrap: headers, constants, Freemius init,
-                                  lifecycle hooks including uninstall
+wowstudio-accessibility-kit.php   Bootstrap: headers, constants, requirement
+                                  checks, lifecycle hooks including uninstall
 src/Core/                         Orchestrator, activation, installation
 src/Db/                           Schema, repositories, typed records
 src/Scanner/                      Engine, rules, registry, page fetching
-src/AI/                           Providers, key storage, WP AI Client bridge
-src/AltText/                      Alt-text generation and the daily cap
+src/AltText/                      Finding images that have never been described
+src/Jobs/                         Action Scheduler queue and the bulk-scan worker
 src/Remediation/                  The override layer, diffing, and fix review
 src/Conformance/                  The accessibility statement and its sign-off
 src/Rest/                         REST controllers
@@ -143,13 +131,10 @@ build/                            Compiled admin app (generated, not tracked)
 src/Admin/                        Admin menu
 src/Support/                      Shared helpers (capabilities)
 bin/build.sh                      Release build (honours .distignore)
+bin/gate.sh                       The 10-step quality gate
 bin/                              Product guards
-freemius/                         Freemius SDK (vendored, committed)
 docs/RELEASE-CHECKLIST.md         What a human must verify before release
 ```
-
-Later steps add `src/Remediation/`, `src/AI/`, `src/AltText/`,
-`src/Conformance/`, and the React admin app under `assets/src/`. See `SPEC.md`.
 
 ## Scanning
 
@@ -158,14 +143,14 @@ POST /wp-json/wsak/v1/scan       { "post_id": 12 }  requires wsak_run_scan
 GET  /wp-json/wsak/v1/scans/<id>                    requires wsak_view_reports
 GET  /wp-json/wsak/v1/scannable                     requires wsak_view_reports
 GET  /wp-json/wsak/v1/coverage                      requires wsak_view_reports
-GET  /wp-json/wsak/v1/ai/settings                   requires wsak_manage_settings
-POST /wp-json/wsak/v1/ai/settings                   requires wsak_manage_settings
-POST /wp-json/wsak/v1/alt-text                      requires wsak_apply_fix
-POST /wp-json/wsak/v1/alt-text/apply                requires wsak_apply_fix
-POST /wp-json/wsak/v1/fixes/preview                 requires wsak_apply_fix
-POST /wp-json/wsak/v1/fixes/apply                   requires wsak_apply_fix
-POST /wp-json/wsak/v1/fixes/<id>/revert             requires wsak_apply_fix
-GET  /wp-json/wsak/v1/fixes?post_id=<id>            requires wsak_view_reports
+GET  /wp-json/wsak/v1/overview                      requires wsak_view_reports
+GET  /wp-json/wsak/v1/media                         requires wsak_apply_fix
+POST /wp-json/wsak/v1/media/alt                     requires wsak_apply_fix
+GET  /wp-json/wsak/v1/fixes/css                     requires wsak_apply_fix
+POST /wp-json/wsak/v1/fixes/css                     requires wsak_apply_fix
+DEL  /wp-json/wsak/v1/fixes/css/<issue_id>          requires wsak_apply_fix
+POST /wp-json/wsak/v1/runs                          requires wsak_run_scan
+GET  /wp-json/wsak/v1/runs/<id>                     requires wsak_view_reports
 GET  /wp-json/wsak/v1/statement                     requires wsak_view_reports
 POST /wp-json/wsak/v1/statement                     requires wsak_manage_settings
 POST /wp-json/wsak/v1/statement/attest              requires wsak_manage_settings
