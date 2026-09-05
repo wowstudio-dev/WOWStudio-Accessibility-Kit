@@ -41,6 +41,14 @@ enum FixKind: string {
 	 * bulk, but never applied unreviewed: what a model writes about an image it
 	 * cannot see the purpose of is a guess with good grammar.
 	 *
+	 * **Nothing in this plugin produces one.** Generation was removed in 0.16.0
+	 * along with the whole AI layer, and the six rules that declared this kind
+	 * now declare Manual, which is what they always were underneath. The case
+	 * is kept because the distinction it draws is the reason one-click fixes
+	 * can exist here at all — a fix that is computed and a fix that is guessed
+	 * must never share a button — and because the planned paid add-on
+	 * reintroduces generation against this same contract.
+	 *
 	 * @since 0.13.0
 	 */
 	case Generative = 'generative';

@@ -6,9 +6,8 @@ import { Button } from '@wordpress/components';
 import { __, sprintf } from '@wordpress/i18n';
 
 import { CSS_FIXABLE } from '../scanner/repair';
-import AltTextAction from './alt-text-action';
+import AltTextHandoff from './alt-text-handoff';
 import DismissAction from './dismiss-action';
-import FixAction from './fix-action';
 import { DetectionTag, SeverityTag } from './tags';
 import { EmptyState } from './states';
 
@@ -62,28 +61,20 @@ function CssHandoff( { onInspect } ) {
  *
  * @param {Object}   props             Component props.
  * @param {Object}   props.issue       The finding.
- * @param {number}   props.postId      Page the finding is on.
  * @param {Function} [props.onInspect] Switches to the inspector, when there is
  *                                     a preview to switch to.
  * @return {Element} The card.
  */
-function IssueCard( { issue, postId, onInspect } ) {
+function IssueCard( { issue, onInspect } ) {
 	// Worked out before the markup rather than as a chain of conditions inside
 	// it, because which action a finding gets is the decision this component
 	// exists to make and it should be readable in one place.
 	let action = null;
 
 	if ( 'img-alt-missing' === issue.rule_id ) {
-		action = (
-			<AltTextAction
-				attachmentId={ issue.attachment_id }
-				postId={ postId }
-			/>
-		);
+		action = <AltTextHandoff attachmentId={ issue.attachment_id } />;
 	} else if ( CSS_FIXABLE.includes( issue.rule_id ) ) {
 		action = <CssHandoff onInspect={ onInspect } />;
-	} else if ( issue.detection === 'auto' ) {
-		action = <FixAction issueId={ issue.id } />;
 	}
 
 	return (
@@ -253,11 +244,10 @@ const BANDS = [
  * @param {string}   props.title       Group heading.
  * @param {string}   props.blurb       What this group means.
  * @param {Array}    props.issues      Findings in the group.
- * @param {number}   props.postId      Page the findings are on.
  * @param {Function} [props.onInspect] Switches to the inspector.
  * @return {?Element} The group, or nothing when empty.
  */
-function IssueGroup( { id, title, blurb, issues, postId, onInspect } ) {
+function IssueGroup( { id, title, blurb, issues, onInspect } ) {
 	if ( ! issues.length ) {
 		return null;
 	}
@@ -279,7 +269,6 @@ function IssueGroup( { id, title, blurb, issues, postId, onInspect } ) {
 				{ issues.map( ( issue ) => (
 					<IssueCard
 						issue={ issue }
-						postId={ postId }
 						onInspect={ onInspect }
 						key={ issue.id }
 					/>
@@ -298,11 +287,10 @@ function IssueGroup( { id, title, blurb, issues, postId, onInspect } ) {
  *
  * @param {Object}   props             Component props.
  * @param {Array}    props.issues      Findings.
- * @param {number}   props.postId      Page the findings are on.
  * @param {Function} [props.onInspect] Switches to the inspector.
  * @return {Element} The list.
  */
-export default function IssueList( { issues, postId, onInspect } ) {
+export default function IssueList( { issues, onInspect } ) {
 	// The server has already ordered these and told each one which band it is
 	// in. Re-deriving that here would mean two answers to the same question,
 	// and the one on this side would be the one that drifts.
@@ -335,7 +323,6 @@ export default function IssueList( { issues, postId, onInspect } ) {
 					title={ band.title }
 					blurb={ band.blurb }
 					issues={ band.issues }
-					postId={ postId }
 					onInspect={ onInspect }
 				/>
 			) ) }

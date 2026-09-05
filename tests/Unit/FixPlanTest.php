@@ -77,13 +77,15 @@ final class FixPlanTest extends TestCase {
 			// not the same as being able to apply it.
 			'html-lang-missing'              => array( FixKind::Deterministic, FixTarget::Theme ),
 
-			// A model can draft these. A person still reads them.
-			'img-alt-missing'                => array( FixKind::Generative, FixTarget::Media ),
-			'form-control-label-missing'     => array( FixKind::Generative, FixTarget::Content ),
-			'link-name-missing'              => array( FixKind::Generative, FixTarget::Content ),
-			'button-name-missing'            => array( FixKind::Generative, FixTarget::Content ),
-			'iframe-title-missing'           => array( FixKind::Generative, FixTarget::Content ),
-			'link-text-not-descriptive'      => array( FixKind::Generative, FixTarget::Content ),
+			// Wording that depends on what the content means. These were
+			// Generative until 0.16.0, when the AI layer was removed — nothing
+			// drafts them now, so they are what they always were underneath.
+			'img-alt-missing'                => array( FixKind::Manual, FixTarget::Media ),
+			'form-control-label-missing'     => array( FixKind::Manual, FixTarget::Content ),
+			'link-name-missing'              => array( FixKind::Manual, FixTarget::Content ),
+			'button-name-missing'            => array( FixKind::Manual, FixTarget::Content ),
+			'iframe-title-missing'           => array( FixKind::Manual, FixTarget::Content ),
+			'link-text-not-descriptive'      => array( FixKind::Manual, FixTarget::Content ),
 
 			// Judgements about meaning. No button, ever.
 			'heading-level-skipped'          => array( FixKind::Manual, FixTarget::Content ),
@@ -120,6 +122,12 @@ final class FixPlanTest extends TestCase {
 	 * shipped as CSS. If this number grows, it should be because somebody meant
 	 * it — not because a rule was reclassified while its own tests still passed.
 	 *
+	 * Nothing is reviewable any more. That count is asserted at zero rather
+	 * than dropped, because "a draft somebody reads before applying" is a real
+	 * category this product intends to have again — and the moment something
+	 * claims to be one, it must be a deliberate act with this line changed to
+	 * match, not a rule quietly reclassifying itself.
+	 *
 	 * @return void
 	 */
 	public function test_the_tally_is_what_the_spec_says(): void {
@@ -141,9 +149,9 @@ final class FixPlanTest extends TestCase {
 		}
 
 		$this->assertSame( 4, $one_click, 'One-click fixes.' );
-		$this->assertSame( 6, $review, 'Fixes a model drafts and a person reviews.' );
+		$this->assertSame( 0, $review, 'Nothing drafts a fix, so nothing is a draft to review.' );
 		$this->assertSame( 4, $handoff, 'Findings that belong to whoever maintains the theme.' );
-		$this->assertSame( 3, $nothing, 'Findings only the content owner can settle.' );
+		$this->assertSame( 9, $nothing, 'Findings only the content owner can settle.' );
 		$this->assertCount( 17, $this->plans() );
 	}
 

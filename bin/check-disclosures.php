@@ -61,20 +61,23 @@ const WSAK_SURFACES = array(
 		// Said once, at the top of the band that offers unreviewed fixes.
 		'the nothing-here-is-a-guess claim'    => '/Nothing here is a guess/i',
 		// And the matching admission at the top of the band that does guess.
+		// That band has been unreachable since generation was removed in
+		// 0.16.0, so this currently guards a sentence nobody sees. It stays:
+		// the day something drafts a fix again, the warning has to already be
+		// there, and a guard that was quietly dropped in the meantime would
+		// not put it back.
 		'the a-draft-is-not-an-answer warning' => '/a draft is not an answer/i',
 	),
-	'assets/src/components/fix-action.js'         => array(
-		'the read-before-applying warning' => '/valid and still wrong for your page/i',
+	// The alt-text screen is the one place this plugin gathers up work it
+	// cannot do for you. Two things have to stay on it: that an empty
+	// description is somebody's decision rather than a gap, and that the media
+	// library is not the whole site.
+	'assets/src/components/alt-text-editor.js'    => array(
+		'the empty-is-a-decision note'  => '/an empty description is somebody’s decision, not a gap/iu',
+		'the not-the-whole-site caveat' => '/it does not cover images added by a theme, a plugin, or a page builder/iu',
 	),
-	'assets/src/components/alt-text-bulk.js'      => array(
-		// Bulk generation is the most obviously automatable thing here, which
-		// is exactly why the admission that a person still reads every one has
-		// to be on the screen rather than in a decision record.
-		'the model-cannot-see-your-page warning' => '/cannot see why this image is on your page/i',
-		'the nothing-saved-until-read promise'   => '/Nothing is saved until you have read each one/i',
-	),
-	'assets/src/components/alt-text-action.js'    => array(
-		'the model-cannot-know-the-purpose warning' => '/cannot know why this image is on the page/i',
+	'assets/src/components/alt-text-handoff.js'   => array(
+		'the nothing-can-write-it-for-you line' => '/nothing here can write it for you/i',
 	),
 	'assets/src/components/statement-settings.js' => array(
 		'the plugin-cannot-verify-this note' => '/Nothing in this plugin can verify it/i',
@@ -123,11 +126,6 @@ const WSAK_SURFACES = array(
 	),
 	'assets/src/editor/block-finding.js'          => array(
 		'the writes-into-your-content note' => '/writes into the block itself/i',
-	),
-	// Authored server-side, because the sentence is composed with the provider's
-	// own name and sent to the interface rather than written into it.
-	'src/Rest/AltTextRunController.php'           => array(
-		'the we-will-not-guess-at-cost line' => '/we will not guess at a figure/i',
 	),
 	'src/Conformance/StatementGenerator.php'      => array(
 		'the automated-testing-is-partial caveat'   => '/Automated testing finds only some accessibility problems/iu',

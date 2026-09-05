@@ -11,17 +11,14 @@ use WOWStudio\AccessibilityKit\Admin\Menu;
 use WOWStudio\AccessibilityKit\Conformance\StatementBlock;
 use WOWStudio\AccessibilityKit\Remediation\OverrideStore;
 use WOWStudio\AccessibilityKit\Scanner\Preview;
-use WOWStudio\AccessibilityKit\Rest\AiController;
 use WOWStudio\AccessibilityKit\Jobs\Worker;
 use WOWStudio\AccessibilityKit\Rest\CssFixController;
-use WOWStudio\AccessibilityKit\Optin\EmailOptin;
 use WOWStudio\AccessibilityKit\Remediation\TitleTagFix;
-use WOWStudio\AccessibilityKit\Rest\AltTextRunController;
+use WOWStudio\AccessibilityKit\Rest\AltTextController;
 use WOWStudio\AccessibilityKit\Rest\BlockCheckController;
 use WOWStudio\AccessibilityKit\Rest\OverviewController;
 use WOWStudio\AccessibilityKit\Rest\ReviewController;
 use WOWStudio\AccessibilityKit\Rest\RunController;
-use WOWStudio\AccessibilityKit\Rest\FixController;
 use WOWStudio\AccessibilityKit\Rest\StatementController;
 use WOWStudio\AccessibilityKit\Rest\ScanController;
 
@@ -148,9 +145,8 @@ final class Plugin {
 			'assets'         => new Assets(),
 			'admin.menu'     => new Menu(),
 			'rest.scan'      => new ScanController(),
-			'rest.ai'        => new AiController(),
-			'rest.fix'       => new FixController(),
 			'rest.fix.css'   => new CssFixController(),
+			'rest.media'     => new AltTextController(),
 			'rest.runs'      => new RunController(),
 			'rest.review'    => new ReviewController(),
 			'rest.blocks'    => new BlockCheckController(),
@@ -160,16 +156,8 @@ final class Plugin {
 			'overrides'      => new OverrideStore(),
 			'preview'        => new Preview(),
 			'statement'      => new StatementBlock(),
-			'optin.email'    => new EmailOptin(),
 			'rest.statement' => new StatementController(),
 		);
-
-		// Paid controllers whose files Freemius strips. Added only when present,
-		// so the free build boots with the routes simply absent rather than
-		// fatalling on a class that is not there.
-		if ( class_exists( AltTextRunController::class ) ) {
-			$services['rest.alt.bulk'] = new AltTextRunController();
-		}
 
 		/**
 		 * Filters the services the plugin boots.

@@ -2,15 +2,18 @@
  * Which action the findings list offers.
  *
  * There is no component-render setup in this project, and adding one to assert
- * a single branch would be a great deal of machinery for very little cover. So
- * this reads the source, the way the PHP suite already guards wiring that fails
- * silently rather than loudly.
+ * a couple of branches would be a great deal of machinery for very little
+ * cover. So this reads the source, the way the PHP suite already guards wiring
+ * that fails silently rather than loudly.
  *
- * What it protects is a real regression: the list used to choose between the
- * fix actions on `detection === 'auto'` alone, so the three findings a
+ * What it protects has changed shape once already. The list used to choose
+ * between fix actions on `detection === 'auto'` alone, so the three findings a
  * stylesheet answers were handed the AI button and died on "No AI provider is
- * set up yet" — under a heading promising there was one correct answer and
- * nothing here was a guess.
+ * set up yet" — under a heading promising there was one correct answer. The AI
+ * button is gone entirely now, which means the failure to guard against is the
+ * opposite one: a finding being offered a button that no longer exists, or a
+ * missing description being offered anything other than the screen that writes
+ * one.
  */
 
 import { readFileSync } from 'fs';
@@ -24,16 +27,22 @@ describe( 'the findings list', () => {
 		expect( source ).toContain( 'CSS_FIXABLE.includes( issue.rule_id )' );
 	} );
 
-	it( 'does not pick the fix action on detection alone', () => {
-		// The exact shape of the old bug. Detection says whether a machine
-		// settled the finding; it says nothing about whether answering it
-		// needs a model, which is the question being asked here.
-		expect( source ).not.toContain(
-			"issue.detection === 'auto' && <FixAction"
-		);
+	it( 'sends a missing description to the screen that writes one', () => {
+		expect( source ).toContain( '<AltTextHandoff' );
 	} );
 
-	it( 'still offers the model where a model is the answer', () => {
-		expect( source ).toContain( '<FixAction issueId={ issue.id } />' );
+	it( 'offers no generated fix, because nothing generates one', () => {
+		// Removed in 0.16.0 with the AI layer. A button that reaches a route
+		// which no longer exists fails at the click rather than at the build,
+		// which is the worst place for it to fail.
+		expect( source ).not.toContain( 'FixAction' );
+		expect( source ).not.toContain( 'AltTextAction' );
+	} );
+
+	it( 'does not pick an action on detection alone', () => {
+		// Detection says whether a machine settled the finding; it says nothing
+		// about whether anything here can answer it, which is the question this
+		// component is actually asking.
+		expect( source ).not.toContain( "issue.detection === 'auto' &&" );
 	} );
 } );

@@ -7,13 +7,12 @@ import { useCallback, useEffect, useRef, useState } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
 
 import { fetchScan, readableError, runScan } from './api';
-import AiSettings from './components/ai-settings';
 import StatementSettings from './components/statement-settings';
 import CoveragePanel from './components/coverage-panel';
 import Inspector from './components/inspector';
 import IssueList from './components/issue-list';
 import Overview from './components/overview';
-import AltTextBulk from './components/alt-text-bulk';
+import AltTextEditor from './components/alt-text-editor';
 import BulkScan from './components/bulk-scan';
 import ThemePanel from './components/theme-panel';
 import ScanPicker from './components/scan-picker';
@@ -174,17 +173,6 @@ export default function App() {
 						{ __( 'Theme', 'wowstudio-accessibility-kit' ) }
 					</Button>
 				) }
-				{ capabilities.manage && (
-					<Button
-						variant={ view === 'settings' ? 'primary' : 'tertiary' }
-						aria-current={
-							view === 'settings' ? 'page' : undefined
-						}
-						onClick={ () => setView( 'settings' ) }
-					>
-						{ __( 'AI settings', 'wowstudio-accessibility-kit' ) }
-					</Button>
-				) }
 				{ capabilities.viewReports && (
 					<Button
 						variant={
@@ -237,11 +225,9 @@ export default function App() {
 				/>
 			) }
 
-			{ view === 'images' && <AltTextBulk /> }
+			{ view === 'images' && <AltTextEditor /> }
 
 			{ view === 'theme' && <ThemePanel /> }
-
-			{ view === 'settings' && <AiSettings /> }
 
 			{ view === 'statement' && <StatementSettings /> }
 
@@ -357,7 +343,6 @@ export default function App() {
 					) : (
 						<IssueList
 							issues={ scan.issues ?? [] }
-							postId={ scan.post_id }
 							onInspect={
 								scan.preview_url
 									? () => setResultView( 'inspect' )

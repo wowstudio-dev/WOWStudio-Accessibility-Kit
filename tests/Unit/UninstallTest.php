@@ -32,17 +32,16 @@ final class UninstallTest extends TestCase {
 	/**
 	 * There must be no uninstall.php in the plugin root.
 	 *
-	 * Freemius refuses the deployment outright when one is present, with
-	 * "Please move its logic to the after_uninstall hook and remove the file."
-	 * The reason is not cosmetic: WordPress runs uninstall.php *instead of* the
-	 * uninstall hooks, so the file stops the SDK ever seeing the uninstall.
+	 * WordPress runs uninstall.php *instead of* the uninstall hooks, so adding
+	 * that file back would silently stop the registered callback ever running
+	 * and the plugin would leave its tables behind on every uninstall.
 	 *
 	 * @return void
 	 */
 	public function test_plugin_root_has_no_uninstall_php(): void {
 		$this->assertFileDoesNotExist(
 			__DIR__ . '/../../uninstall.php',
-			'uninstall.php blocks the Freemius deployment; the logic belongs on an uninstall hook.'
+			'uninstall.php overrides the uninstall hook; the cleanup belongs on the hook.'
 		);
 	}
 
@@ -76,14 +75,9 @@ final class UninstallTest extends TestCase {
 		$main = $this->source( 'wowstudio-accessibility-kit.php' );
 
 		$this->assertStringContainsString(
-			"'after_uninstall'",
-			$main,
-			'The SDK path should use Freemius\' own hook.'
-		);
-		$this->assertStringContainsString(
 			'register_uninstall_hook( __FILE__',
 			$main,
-			'Without the SDK there must still be a fallback that cleans up.'
+			'Nothing would clean up on uninstall without this.'
 		);
 		$this->assertStringNotContainsString(
 			'add_action( \'plugins_loaded\', array( \'WOWStudio\\AccessibilityKit\\Uninstaller\'',

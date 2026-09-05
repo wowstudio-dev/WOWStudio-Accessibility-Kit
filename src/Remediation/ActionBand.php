@@ -36,6 +36,14 @@ enum ActionBand: string {
 	/**
 	 * Something has been drafted for you. Read it, then apply it.
 	 *
+	 * **Nothing reaches this band.** It is derived from FixPlan::is_reviewable(),
+	 * which requires FixKind::Generative, and nothing has claimed that kind
+	 * since the AI layer was removed in 0.16.0. The case is kept for two
+	 * reasons: the value is stored on issue rows, so removing it would strand
+	 * anything written by an older version; and the distinction it draws —
+	 * between a fix that is computed and a fix that is merely plausible — is
+	 * the thing that stops the two ever sharing a button.
+	 *
 	 * @since 0.13.0
 	 */
 	case Review = 'review';

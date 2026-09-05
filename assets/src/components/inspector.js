@@ -16,9 +16,8 @@ import {
 import { frameDocument, highlight, clearHighlight } from '../scanner/highlight';
 import { runBrowserPass } from '../scanner/run';
 import { fetchCssFixes, recordBrowserPass, readableError } from '../api';
-import AltTextAction from './alt-text-action';
+import AltTextHandoff from './alt-text-handoff';
 import CssFixAction from './css-fix-action';
-import FixAction from './fix-action';
 import { DetectionTag, SeverityTag } from './tags';
 
 /**
@@ -475,20 +474,12 @@ export default function Inspector( {
 								{ activeId === issue.id && (
 									<div className="wsak-inspector__actions">
 										{ issue.rule_id ===
-										'img-alt-missing' ? (
-											<AltTextAction
+											'img-alt-missing' && (
+											<AltTextHandoff
 												attachmentId={
 													issue.attachment_id
 												}
-												postId={ issue.post_id }
 											/>
-										) : (
-											issue.detection === 'auto' &&
-											issue.found_by !== 'browser' && (
-												<FixAction
-													issueId={ issue.id }
-												/>
-											)
 										) }
 
 										{ issue.found_by === 'browser' &&

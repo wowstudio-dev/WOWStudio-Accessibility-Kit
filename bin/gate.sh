@@ -62,8 +62,6 @@ step "PHPStan"            php_in_container vendor/bin/phpstan analyse --memory-l
 step "PHPUnit"            php_in_container vendor/bin/phpunit
 step "Claim guard"        php_in_container bin/check-claims.php
 step "Disclosure guard"   php_in_container bin/check-disclosures.php
-step "Free-build guard"   php_in_container bin/check-free-build.php
-step "Tier guard"         php_in_container bin/check-tiers.php
 step "Contrast guard"     node bin/check-contrast.js
 step "JavaScript lint"    npm run lint:js
 step "Stylesheet lint"    npm run lint:css
@@ -77,4 +75,4 @@ if [ ${#FAILED[@]} -gt 0 ]; then
 	exit 1
 fi
 
-printf '\nGATE PASSED — all 12 steps.\n'
+printf '\nGATE PASSED — all 10 steps.\n'

@@ -1,6 +1,6 @@
 {
 	"name": "wowstudio-accessibility-kit",
-	"version": "0.15.1",
+	"version": "0.16.0",
 	"description": "Helps you find, fix, document, and monitor WCAG accessibility issues in WordPress at the code level.",
 	"author": "WOWStudio",
 	"license": "GPL-2.0-or-later",
@@ -15,7 +15,6 @@
 		"lint:css": "wp-scripts lint-style \"assets/src/**/*.scss\"",
 		"lint:contrast": "node bin/check-contrast.js",
 		"test:js": "wp-scripts test-unit-js",
-		"check:tiers": "php bin/check-tiers.php",
 		"gate": "bin/gate.sh",
 		"format": "wp-scripts format",
 		"packages-update": "wp-scripts packages-update",
@@ -23,12 +22,9 @@
 		"env:stop": "wp-env stop",
 		"env:destroy": "wp-env destroy",
 		"makepot": "bin/makepot.sh",
-		"plugin-check": "bin/build.sh && wp-env run cli --env-cwd=wp-content/plugins/wowstudio-accessibility-kit wp plugin check dist/wowstudio-accessibility-kit --exclude-directories=freemius --format=table",
+		"plugin-check": "bin/build.sh && wp-env run cli --env-cwd=wp-content/plugins/wowstudio-accessibility-kit wp plugin check dist/wowstudio-accessibility-kit --format=table",
 		"dist": "bin/build.sh",
-		"dist:zip": "bin/build.sh --zip",
-		"dist:free": "bin/build.sh --free",
-		"dist:free:zip": "bin/build.sh --free --zip",
-		"fs:reset": "bin/reset-freemius.sh"
+		"dist:zip": "bin/build.sh --zip"
 	},
 	"devDependencies": {
 		"@wordpress/api-fetch": "^7.53.0",

@@ -50,7 +50,6 @@
 		"phpcbf": "phpcbf",
 		"phpstan": "phpstan analyse --memory-limit=1G",
 		"test": "phpunit",
-		"check-free-build": "@php bin/check-free-build.php",
 		"check-claims": "@php bin/check-claims.php",
 		"check-disclosures": "@php bin/check-disclosures.php",
 		"lint": [
@@ -58,8 +57,7 @@
 			"@phpstan",
 			"@test",
 			"@check-claims",
-			"@check-disclosures",
-			"@check-free-build"
+			"@check-disclosures"
 		]
 	},
 	"scripts-descriptions": {
@@ -67,7 +65,6 @@
 		"phpcbf": "Auto-fix what the WordPress Coding Standards can fix.",
 		"phpstan": "Run static analysis at level 6.",
 		"test": "Run the PHPUnit suite. Requires PHP 8.1-8.4; Brain Monkey does not run on PHP 8.5.",
-		"check-free-build": "Assert no premium-only code or Freemius secret would ship in the free build.",
 		"check-claims": "Assert nothing shipped claims the user's site is compliant or certified.",
 		"check-disclosures": "Assert every conformance surface still carries its honesty disclosure.",
 		"lint": "Run the full quality gate."

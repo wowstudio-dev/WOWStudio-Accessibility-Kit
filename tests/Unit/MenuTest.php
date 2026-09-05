@@ -36,30 +36,31 @@ final class MenuTest extends TestCase {
 	}
 
 	/**
-	 * The menu slug must match the one handed to Freemius.
+	 * The menu slug must match the plugin's text domain.
 	 *
-	 * This is the regression test for a real failure: Freemius shows its own
-	 * temporary top-level menu while the opt-in is pending, then removes it once
-	 * the user opts in or skips and expects the plugin's menu to exist at that
-	 * slug. When the two drift apart, the plugin disappears from the sidebar
-	 * and the Freemius Account and Upgrade pages are orphaned.
+	 * One name should identify the plugin everywhere: the directory, the text
+	 * domain, the WordPress.org slug, and this menu. The slug is also the
+	 * parent that `add_submenu_page()` needs, so anything hanging a screen off
+	 * this menu — the planned paid add-on included — is holding a copy of this
+	 * string. Changing it here without changing it there orphans those pages
+	 * silently, which is why it is asserted rather than trusted.
 	 *
 	 * @return void
 	 */
-	public function test_slug_matches_the_freemius_menu_slug(): void {
+	public function test_slug_matches_the_text_domain(): void {
 		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Reading a local source file in a unit test; WordPress is not loaded.
 		$bootstrap = (string) file_get_contents( WSAK_PATH . 'wowstudio-accessibility-kit.php' );
 
 		$this->assertSame(
 			1,
-			preg_match( "/'menu'\s*=>\s*array\(\s*'slug'\s*=>\s*'([^']+)'/", $bootstrap, $matches ),
-			'Could not find the Freemius menu slug in the bootstrap file.'
+			preg_match( '/^ \* Text Domain:\s+(\S+)$/m', $bootstrap, $matches ),
+			'Could not find the Text Domain header in the bootstrap file.'
 		);
 
 		$this->assertSame(
 			Menu::SLUG,
 			$matches[1],
-			'Menu::SLUG and the Freemius menu slug have drifted apart. The plugin will vanish from the admin sidebar once a user skips or completes the opt-in.'
+			'Menu::SLUG and the plugin text domain have drifted apart.'
 		);
 	}
 

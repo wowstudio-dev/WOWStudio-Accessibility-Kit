@@ -122,9 +122,9 @@ final class ImageAltMissing implements Rule {
 	public function fix_plan(): FixPlan {
 		// A description of a photograph is not something a rule can compute — it depends on why the image is on the page.
 		return new FixPlan(
-			FixKind::Generative,
+			FixKind::Manual,
 			FixTarget::Media,
-			__( 'A description of a photograph is not something a rule can compute — it depends on why the image is on the page. A model can draft one; a person has to agree with it. Written to the media library, so it applies wherever that image is used and survives this plugin being removed.', 'wowstudio-accessibility-kit' )
+			__( 'A description of a photograph is not something a rule can compute — it depends on why the image is on the page, which only you know. The Alt text screen lists every undescribed image so you can write them in one pass. What you write goes to the media library, so it applies wherever that image is used and survives this plugin being removed.', 'wowstudio-accessibility-kit' )
 		);
 	}
 

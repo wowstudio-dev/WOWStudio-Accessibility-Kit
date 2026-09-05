@@ -8,14 +8,80 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Still outstanding
 
-- Capped **bulk** alt-text generation. Single-image generation is complete and
-  the cap is enforced, but a bulk run means many multi-second provider calls in
-  one request, which is exactly the kind of work CLAUDE.md says must go through
-  Action Scheduler. Shipping a synchronous loop that times out halfway would be
-  worse than not shipping it, so bulk lands with the queue.
+- The check count. Seventeen is well under what the established free competitor
+  ships, and the gap is widest in checks that are cheap to add — empty buttons
+  and links, duplicate labels, `aria-labelledby` pointing at nothing, links to
+  PDFs and Office files, justified text, tiny text. That list is the next block
+  of work.
+- Scheduled re-scans. The word "monitor" is in the plugin header and the
+  description, and nothing re-scans on its own yet — every score in the
+  interface is the result of somebody pressing a button. Until that exists, the
+  charts say "by scan" rather than "over time", which is honest but is not the
+  feature.
+- WP-CLI. There is no command-line entry point at all, which rules the plugin
+  out of CI and staging audits.
 - Driving the redesigned admin in a real browser with a screen reader, and
-  testing with disabled users. The contrast guard checks 60 colour pairings on
+  testing with disabled users. The contrast guard checks 91 colour pairings on
   every push, which is not the same thing as somebody using the interface.
+
+## [0.16.0] - 2026-09-06
+
+The plugin becomes one free thing. There is no paid tier, no licensing SDK, and
+no AI.
+
+### Removed
+
+- **Freemius, entirely.** The vendored SDK (3.9 MB), the opt-in screen and its
+  email flow, `Support\Plan`, the tier checks on the two paid routes, the
+  free-build and tier guards, and the free/premium split in `bin/build.sh`.
+  There is one build now, and what is tested is exactly what ships.
+- **The AI layer, entirely.** `src/AI/` and its four provider adapters, the
+  WordPress AI Client bridge, the encrypted key store, the daily usage meter,
+  alt-text generation, the generative fix path (`FixManager`, `FixController`,
+  `fix-action.js`), and the AI settings screen. The plugin now makes no
+  outbound request of any kind. Nothing is metered because nothing is paid for
+  per page.
+- `uninstall.php` stays absent and the cleanup stays on `register_uninstall_hook`.
+  The reason changed — it was a Freemius deployment rule, and is now simply that
+  WordPress runs that file *instead of* the hooks — but the guard in
+  `UninstallTest` is the same one.
+
+### Added
+
+- **An Images screen.** Every image in the media library that has never been
+  described, listed with a field beside each, a per-row save and a save-all.
+  Writes `_wp_attachment_image_alt` — WordPress's own field, not an override —
+  so a description applies wherever that image is used, is read by every theme
+  and plugin without knowing this one exists, and survives this plugin being
+  deleted. A fix that only works while our code is installed is not a fix.
+- A "decorative" checkbox, and a refusal to write an empty description without
+  it. An empty alt is a real answer that tells a screen reader to skip an image;
+  it is also what an empty field looks like, and writing one by accident hides
+  a real image from somebody who needed to know it was there.
+- Images already marked decorative are excluded from the list, so a deliberate
+  decision is never offered up for overwriting.
+
+### Changed
+
+- **Site-wide scanning is free.** It was the paid line. Held against a free
+  competitor that also charges for it, the sharper position is not to — and
+  bulk scanning is a poor thing to rent, because it is a job most sites need
+  once. What a subscription should be for is work that recurs.
+- The six rules that declared `FixKind::Generative` now declare `Manual`. That
+  is not a downgrade so much as an admission: what an image is for, what a link
+  promises, what a button does are questions about intent, and with nothing
+  drafting an answer they are exactly what `Manual` has always meant. They move
+  from "Read, then apply" to "Needs a decision from you".
+- `FixKind::Generative` and `ActionBand::Review` are both kept although nothing
+  can now produce either. `Review` is a stored value on issue rows, so removing
+  it would strand anything an older version wrote; and the distinction the pair
+  draws — between a fix that is computed and a fix that is merely plausible —
+  is the thing that stops the two ever sharing a button.
+
+### Fixed
+
+- `Queue` no longer carries the alt-text run's hook, group and enqueue methods,
+  which scheduled work for a handler that no longer exists.
 
 ## [0.15.1] - 2026-09-02
 

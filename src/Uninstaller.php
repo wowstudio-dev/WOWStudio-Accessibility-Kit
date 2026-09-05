@@ -17,16 +17,15 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Removes the plugin's data, if the site owner asked for that.
  *
- * Reached through an uninstall hook rather than an uninstall.php file, because
- * Freemius rejects a deployment whose main folder contains one. That is not
- * arbitrary: WordPress runs uninstall.php *instead of* the uninstall hooks
- * (wp-admin/includes/plugin.php), so the file would silently prevent the SDK
- * from ever reporting the uninstall.
+ * Reached through an uninstall hook rather than an uninstall.php file. The two
+ * are not interchangeable: WordPress runs uninstall.php *instead of* the
+ * uninstall hooks (wp-admin/includes/plugin.php), so adding that file back
+ * would silently stop this class ever being reached.
  *
- * That relocation is also why there is no longer a WP_UNINSTALL_PLUGIN guard
- * here. Core defines that constant only in the uninstall.php branch; in the
- * hook branch it is absent, so keeping the guard would have made this class
- * exit immediately and quietly delete nothing at all.
+ * That is also why there is no WP_UNINSTALL_PLUGIN guard here. Core defines
+ * that constant only in the uninstall.php branch; on the hook path it is
+ * absent, so the guard would have made this class exit immediately and quietly
+ * delete nothing at all.
  *
  * @since 0.1.0
  */

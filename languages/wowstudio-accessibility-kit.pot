@@ -2,7 +2,7 @@
 # This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: WOWStudio Accessibility Kit 0.15.1\n"
+"Project-Id-Version: WOWStudio Accessibility Kit 0.16.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wowstudio-accessibility-kit\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,8 +15,8 @@ msgstr ""
 
 #. Plugin Name of the plugin
 #: wowstudio-accessibility-kit.php
-#: src/Admin/Menu.php:70
-#: src/Admin/Menu.php:103
+#: src/Admin/Menu.php:68
+#: src/Admin/Menu.php:101
 msgid "WOWStudio Accessibility Kit"
 msgstr ""
 
@@ -40,169 +40,24 @@ msgstr ""
 msgid "https://wowstudio.dev/"
 msgstr ""
 
-#: src/Admin/Menu.php:71
-#: assets/src/app.js:118
+#: src/Admin/Menu.php:69
+#: assets/src/app.js:117
 msgid "Accessibility Kit"
 msgstr ""
 
-#: src/Admin/Menu.php:93
-#: src/Rest/FixController.php:163
-#: src/Rest/RunController.php:223
+#: src/Admin/Menu.php:91
+#: src/Rest/RunController.php:222
 #: src/Rest/ScanController.php:206
 #: src/Rest/StatementController.php:116
 msgid "You do not have permission to view accessibility reports."
 msgstr ""
 
-#: src/Admin/Menu.php:99
+#: src/Admin/Menu.php:97
 msgid "Loading the accessibility dashboard…"
 msgstr ""
 
-#: src/Admin/Menu.php:105
+#: src/Admin/Menu.php:103
 msgid "This dashboard needs JavaScript to run a scan and show results. Everything it does is also available through the REST API if you would rather not enable it."
-msgstr ""
-
-#: src/AI/AiClientBridge.php:103
-#: src/AltText/Generator.php:348
-msgid "The image file could not be read."
-msgstr ""
-
-#. translators: %s: the underlying error message.
-#: src/AI/AiClientBridge.php:123
-#, php-format
-msgid "The WordPress AI client could not describe this image: %s"
-msgstr ""
-
-#: src/AI/AiClientBridge.php:132
-msgid "The WordPress AI client returned no description for this image."
-msgstr ""
-
-#: src/AI/Providers/AbstractProvider.php:94
-msgid "The request to the AI provider could not be prepared."
-msgstr ""
-
-#. translators: 1: provider name, 2: underlying error.
-#: src/AI/Providers/AbstractProvider.php:112
-#, php-format
-msgid "Could not reach %1$s: %2$s"
-msgstr ""
-
-#. translators: 1: provider name, 2: HTTP status, 3: provider's message.
-#: src/AI/Providers/AbstractProvider.php:127
-#, php-format
-msgid "%1$s refused the request (HTTP %2$d): %3$s"
-msgstr ""
-
-#. translators: %s: provider name.
-#: src/AI/Providers/AbstractProvider.php:141
-#, php-format
-msgid "The response from %s could not be read."
-msgstr ""
-
-#: src/AI/Providers/AbstractProvider.php:174
-msgid "no reason given"
-msgstr ""
-
-#: src/AI/Providers/Anthropic.php:130
-msgid "Claude returned nothing."
-msgstr ""
-
-#: src/AI/Providers/Anthropic.php:188
-msgid "Claude returned no description for this image."
-msgstr ""
-
-#: src/AI/Providers/Gemini.php:113
-msgid "Gemini returned nothing."
-msgstr ""
-
-#: src/AI/Providers/Gemini.php:166
-msgid "Gemini returned no description for this image."
-msgstr ""
-
-#. translators: %s: provider name.
-#: src/AI/Providers/OpenAiCompatible.php:82
-#, php-format
-msgid "%s returned nothing."
-msgstr ""
-
-#. translators: %s: provider name.
-#: src/AI/Providers/OpenAiCompatible.php:142
-#, php-format
-msgid "%s returned no description for this image."
-msgstr ""
-
-#: src/AltText/AltTextRun.php:185
-msgid "The background scheduler is not running, so images cannot be described in bulk. Describing them one at a time still works."
-msgstr ""
-
-#: src/AltText/AltTextRun.php:201
-msgid "None of the selected images could be edited with your account, so there is nothing to describe."
-msgstr ""
-
-#. translators: %d: maximum images in one run.
-#: src/AltText/AltTextRun.php:211
-#, php-format
-msgid "One run covers at most %d images. Select fewer, and run again when it finishes."
-msgstr ""
-
-#: src/AltText/AltTextRun.php:227
-msgid "This image could not be added to the queue."
-msgstr ""
-
-#: src/AltText/AltTextRun.php:310
-#: src/AltText/Generator.php:303
-#: src/Rest/AiController.php:316
-msgid "That is not an image in the media library."
-msgstr ""
-
-#: src/AltText/AltTextRun.php:318
-#: src/Rest/AiController.php:324
-msgid "You do not have permission to edit that image."
-msgstr ""
-
-#: src/AltText/Generator.php:132
-#: src/Remediation/FixManager.php:362
-msgid "AI features are switched off for this site, so nothing was sent to a provider."
-msgstr ""
-
-#: src/AltText/Generator.php:140
-#: src/Remediation/FixManager.php:370
-msgid "This content is marked as not to be sent to an AI provider."
-msgstr ""
-
-#. translators: %d: number of images allowed per day.
-#: src/AltText/Generator.php:152
-#, php-format
-msgid "You have used today's %d free alt-text generations. The allowance resets at midnight UTC, and Pro removes it."
-msgstr ""
-
-#: src/AltText/Generator.php:217
-#: src/Remediation/FixManager.php:407
-msgid "No AI provider is set up yet. Choose one in the Accessibility settings and add your API key."
-msgstr ""
-
-#. translators: %s: provider name.
-#: src/AltText/Generator.php:245
-#: src/Remediation/FixManager.php:421
-#, php-format
-msgid "No API key is stored for %s. Add one in the Accessibility settings."
-msgstr ""
-
-#. translators: %s: the file's MIME type.
-#: src/AltText/Generator.php:315
-#, php-format
-msgid "Images of type %s cannot be described. JPEG, PNG, GIF, and WebP are supported."
-msgstr ""
-
-#: src/AltText/Generator.php:316
-msgid "unknown"
-msgstr ""
-
-#: src/AltText/Generator.php:327
-msgid "The image file could not be found on disk."
-msgstr ""
-
-#: src/AltText/Generator.php:337
-msgid "This image is too large to send. Regenerate the site's image sizes, or use a smaller original."
 msgstr ""
 
 #: src/Conformance/ConformanceStatus.php:51
@@ -359,120 +214,85 @@ msgstr ""
 msgid "Reviewed and approved by %1$s on %2$s."
 msgstr ""
 
-#: src/Core/Assets.php:173
+#: src/Core/Assets.php:172
 msgid "The Accessibility Kit interface has not been built. Run \"npm install && npm run build\" in the plugin directory."
 msgstr ""
 
-#: src/Jobs/BulkScan.php:115
+#: src/Jobs/BulkScan.php:106
 msgid "The background scheduler is not running, so a bulk scan cannot be started. Scanning one page at a time still works."
 msgstr ""
 
-#: src/Jobs/BulkScan.php:125
+#: src/Jobs/BulkScan.php:116
 msgid "No content was selected, so there is nothing to scan."
 msgstr ""
 
 #. translators: %d: maximum number of pages in one run.
-#: src/Jobs/BulkScan.php:135
+#: src/Jobs/BulkScan.php:126
 #, php-format
 msgid "A single run covers at most %d items. Select fewer, and run again when it finishes."
 msgstr ""
 
-#: src/Jobs/BulkScan.php:147
+#: src/Jobs/BulkScan.php:138
 msgid "The run could not be recorded. Check that the plugin tables exist."
 msgstr ""
 
-#: src/Jobs/BulkScan.php:166
+#: src/Jobs/BulkScan.php:157
 msgid "This page could not be added to the queue."
 msgstr ""
 
-#: src/Jobs/BulkScan.php:171
+#: src/Jobs/BulkScan.php:162
 msgid "Nothing could be added to the queue."
 msgstr ""
 
-#: src/Jobs/BulkScan.php:175
+#: src/Jobs/BulkScan.php:166
 msgid "None of the selected content could be added to the queue."
 msgstr ""
 
-#: src/Jobs/BulkScan.php:294
-#: src/Rest/RunController.php:331
+#: src/Jobs/BulkScan.php:285
+#: src/Rest/RunController.php:323
 msgid "That run could not be found."
 msgstr ""
 
-#: src/Optin/EmailOptin.php:133
-msgid "Use a different email address"
-msgstr ""
-
-#: src/Optin/EmailOptin.php:137
-msgid "By default the confirmation goes to the address on your WordPress account. If you do not read that mailbox, enter one you do — we will send the confirmation there instead."
-msgstr ""
-
-#: src/Optin/EmailOptin.php:150
-#: assets/src/components/statement-settings.js:215
-msgid "Email address"
-msgstr ""
-
-#: src/Optin/EmailOptin.php:172
-msgid "Send the confirmation here"
-msgstr ""
-
-#: src/Optin/EmailOptin.php:195
-msgid "You are not allowed to do that."
-msgstr ""
-
-#: src/Optin/EmailOptin.php:204
-msgid "The licensing component is not available on this site."
-msgstr ""
-
-#: src/Optin/EmailOptin.php:212
-msgid "That does not look like an email address. Please check it and try again."
-msgstr ""
-
-#: src/Optin/EmailOptin.php:218
-msgid "We could not start the confirmation just now. Please try again in a moment."
-msgstr ""
-
-#: src/Remediation/ActionBand.php:110
-#: assets/src/components/issue-list.js:213
+#: src/Remediation/ActionBand.php:118
+#: assets/src/components/issue-list.js:204
 msgid "Fix these now"
 msgstr ""
 
-#: src/Remediation/ActionBand.php:111
-#: assets/src/components/issue-list.js:221
+#: src/Remediation/ActionBand.php:119
+#: assets/src/components/issue-list.js:212
 msgid "Read, then apply"
 msgstr ""
 
-#: src/Remediation/ActionBand.php:112
-#: assets/src/components/issue-list.js:229
+#: src/Remediation/ActionBand.php:120
+#: assets/src/components/issue-list.js:220
 msgid "Needs a decision from you"
 msgstr ""
 
-#: src/Remediation/ActionBand.php:113
-#: assets/src/components/issue-list.js:237
+#: src/Remediation/ActionBand.php:121
+#: assets/src/components/issue-list.js:228
 msgid "For whoever looks after your theme"
 msgstr ""
 
-#: src/Remediation/ActionBand.php:126
-#: assets/src/components/issue-list.js:214
+#: src/Remediation/ActionBand.php:134
+#: assets/src/components/issue-list.js:205
 msgid "There is one correct answer and we already know it. Nothing here is a guess, so nothing here needs checking first."
 msgstr ""
 
-#: src/Remediation/ActionBand.php:127
+#: src/Remediation/ActionBand.php:135
 msgid "We can draft these, but a draft is not an answer. Read what it says before you apply it — it was written by a model that cannot see why the page exists."
 msgstr ""
 
-#: src/Remediation/ActionBand.php:128
-#: assets/src/components/issue-list.js:230
+#: src/Remediation/ActionBand.php:136
+#: assets/src/components/issue-list.js:221
 msgid "These depend on what your content means, which is not something any tool can work out for you. Each one explains what to weigh up."
 msgstr ""
 
-#: src/Remediation/ActionBand.php:129
-#: assets/src/components/issue-list.js:241
+#: src/Remediation/ActionBand.php:137
+#: assets/src/components/issue-list.js:232
 msgid "These are in your theme rather than your content, so nothing here can reach them. Each one comes with what to change and where."
 msgstr ""
 
 #: src/Remediation/CssFixManager.php:86
-#: src/Remediation/FixManager.php:146
-#: src/Remediation/FixManager.php:238
 msgid "That issue could not be found."
 msgstr ""
 
@@ -516,59 +336,16 @@ msgstr ""
 msgid "The fix contained no declarations, so there was nothing to write."
 msgstr ""
 
-#: src/Remediation/FixKind.php:70
+#: src/Remediation/FixKind.php:78
 msgid "Fix automatically"
 msgstr ""
 
-#: src/Remediation/FixKind.php:71
+#: src/Remediation/FixKind.php:79
 msgid "Suggest a fix to review"
 msgstr ""
 
-#: src/Remediation/FixKind.php:72
+#: src/Remediation/FixKind.php:80
 msgid "Needs a person"
-msgstr ""
-
-#: src/Remediation/FixManager.php:162
-msgid "This issue has no stored markup to correct. Re-scan the page and try again."
-msgstr ""
-
-#: src/Remediation/FixManager.php:173
-msgid "The markup for this issue is too long to correct automatically. It needs fixing in the editor or the theme."
-msgstr ""
-
-#: src/Remediation/FixManager.php:189
-msgid "The model returned the markup unchanged, so there is nothing to apply."
-msgstr ""
-
-#: src/Remediation/FixManager.php:197
-msgid "The suggested markup is far longer than the original, which usually means the model rewrote more than the problem. It was not offered as a fix."
-msgstr ""
-
-#: src/Remediation/FixManager.php:246
-#: src/Remediation/FixManager.php:318
-msgid "You do not have permission to change that content."
-msgstr ""
-
-#: src/Remediation/FixManager.php:256
-msgid "Nothing was left of the suggested markup once it had been checked for safety, so it was not applied."
-msgstr ""
-
-#: src/Remediation/FixManager.php:275
-msgid "The fix could not be stored."
-msgstr ""
-
-#: src/Remediation/FixManager.php:310
-msgid "That fix could not be found."
-msgstr ""
-
-#: src/Remediation/FixManager.php:326
-msgid "That fix has already been undone."
-msgstr ""
-
-#. translators: %d: number of AI requests allowed per day.
-#: src/Remediation/FixManager.php:380
-#, php-format
-msgid "You have used today's %d free AI requests, which alt text and fixes share. The allowance resets at midnight UTC, and Pro removes it."
 msgstr ""
 
 #: src/Remediation/FixStatus.php:39
@@ -655,53 +432,28 @@ msgstr ""
 msgid "This takes effect the next time a page is loaded."
 msgstr ""
 
-#: src/Rest/AiController.php:74
-msgid "A key to store for the named provider. Never returned by any route."
+#: src/Rest/AltTextController.php:96
+msgid "Descriptions to write, one per image."
 msgstr ""
 
-#: src/Rest/AiController.php:145
-#: src/Rest/StatementController.php:135
-msgid "You do not have permission to change accessibility settings."
+#: src/Rest/AltTextController.php:129
+msgid "You do not have permission to apply fixes."
 msgstr ""
 
-#: src/Rest/AiController.php:164
-#: src/Rest/CssFixController.php:123
-#: src/Rest/FixController.php:144
-msgid "You do not have permission to apply accessibility fixes."
+#: src/Rest/AltTextController.php:137
+msgid "Describing an image changes the media library, and your account cannot edit media."
 msgstr ""
 
-#: src/Rest/AiController.php:191
-msgid "Keys are encrypted before they are stored."
+#: src/Rest/AltTextController.php:211
+msgid "That image is no longer in the media library."
 msgstr ""
 
-#: src/Rest/AiController.php:192
-msgid "This server has no libsodium support, so keys cannot be stored securely. Storing a key is disabled rather than saving it unencrypted."
+#: src/Rest/AltTextController.php:219
+msgid "Your account cannot edit this image."
 msgstr ""
 
-#: src/Rest/AiController.php:237
-msgid "This server cannot encrypt secrets, so the key was not stored. Ask your host to enable the sodium extension."
-msgstr ""
-
-#: src/Rest/AiController.php:248
-msgid "That AI provider is not one this plugin knows about."
-msgstr ""
-
-#: src/Rest/AiController.php:256
-msgid "The key could not be stored."
-msgstr ""
-
-#: src/Rest/AltTextRunController.php:187
-msgid "You do not have permission to change the media library."
-msgstr ""
-
-#: src/Rest/AltTextRunController.php:235
-msgid "Each image is one request to your own provider account, and they bill you for it directly. We never see what it costs, so we will not guess at a figure — check their pricing if you want one before you start."
-msgstr ""
-
-#: src/Rest/AltTextRunController.php:249
-#: src/Support/Plan.php:99
-#: assets/src/components/alt-text-bulk.js:337
-msgid "Describing many images at once"
+#: src/Rest/AltTextController.php:236
+msgid "Write a description, or tick “decorative” if this image carries no meaning of its own."
 msgstr ""
 
 #: src/Rest/BlockCheckController.php:118
@@ -720,19 +472,12 @@ msgstr ""
 msgid "Property and value pairs, restricted to what the finding is about."
 msgstr ""
 
+#: src/Rest/CssFixController.php:123
+msgid "You do not have permission to apply accessibility fixes."
+msgstr ""
+
 #: src/Rest/CssFixController.php:131
 msgid "Applying this kind of fix edits your site's Additional CSS, which your account is not allowed to change. An administrator can apply it, or make the change in Appearance → Customise."
-msgstr ""
-
-#: src/Rest/FixController.php:84
-msgid "The reviewed markup. Sanitised again before it is stored."
-msgstr ""
-
-#: src/Rest/FixController.php:246
-#: src/Rest/ScanController.php:245
-#: src/Rest/ScanController.php:354
-#: src/Rest/ScanController.php:507
-msgid "You do not have permission to read that content."
 msgstr ""
 
 #: src/Rest/OverviewController.php:360
@@ -752,52 +497,46 @@ msgstr ""
 msgid "This fix changes how your theme renders every page, and your account is not allowed to change theme settings. An administrator can apply it."
 msgstr ""
 
-#: src/Rest/RunController.php:204
+#: src/Rest/RunController.php:203
 #: src/Rest/ScanController.php:187
 msgid "You do not have permission to run accessibility scans."
 msgstr ""
 
-#: src/Rest/RunController.php:282
-#: src/Support/Plan.php:98
-#: assets/src/components/bulk-scan.js:358
-msgid "Checking many pages at once"
-msgstr ""
-
-#: src/Rest/RunController.php:302
+#: src/Rest/RunController.php:294
 msgid "None of the selected content could be read with your account, so there is nothing to scan."
 msgstr ""
 
 #. translators: %s: theme name.
-#: src/Rest/RunController.php:510
+#: src/Rest/RunController.php:502
 #, php-format
 msgid "Accessibility changes needed in the %s theme"
 msgstr ""
 
-#: src/Rest/RunController.php:514
+#: src/Rest/RunController.php:506
 msgid "These are in theme files rather than in page content, so they cannot be changed from the WordPress admin. Each one lists what a person loses because of it, and the smallest change that would fix it."
 msgstr ""
 
-#: src/Rest/RunController.php:516
+#: src/Rest/RunController.php:508
 msgid "Found by WOWStudio Accessibility Kit. Automated checks cover part of WCAG, not all of it — this list is a starting point rather than a complete audit."
 msgstr ""
 
-#: src/Rest/RunController.php:532
+#: src/Rest/RunController.php:524
 msgid "Why it matters:"
 msgstr ""
 
-#: src/Rest/RunController.php:533
+#: src/Rest/RunController.php:525
 msgid "Where:"
 msgstr ""
 
-#: src/Rest/RunController.php:536
+#: src/Rest/RunController.php:528
 msgid "Current markup:"
 msgstr ""
 
-#: src/Rest/RunController.php:540
+#: src/Rest/RunController.php:532
 msgid "Change to:"
 msgstr ""
 
-#: src/Rest/RunController.php:543
+#: src/Rest/RunController.php:535
 msgid "WCAG:"
 msgstr ""
 
@@ -827,6 +566,12 @@ msgstr ""
 msgid "That content could not be found."
 msgstr ""
 
+#: src/Rest/ScanController.php:245
+#: src/Rest/ScanController.php:354
+#: src/Rest/ScanController.php:507
+msgid "You do not have permission to read that content."
+msgstr ""
+
 #: src/Rest/ScanController.php:278
 msgid "The scan could not be recorded. Check that the plugin tables exist."
 msgstr ""
@@ -834,6 +579,10 @@ msgstr ""
 #: src/Rest/ScanController.php:346
 #: src/Rest/ScanController.php:499
 msgid "That scan could not be found."
+msgstr ""
+
+#: src/Rest/StatementController.php:135
+msgid "You do not have permission to change accessibility settings."
 msgstr ""
 
 #: src/Rest/StatementController.php:242
@@ -1164,7 +913,7 @@ msgid "Anyone using a screen reader hears the file name read out instead of what
 msgstr ""
 
 #: src/Scanner/Rules/ImageAltMissing.php:127
-msgid "A description of a photograph is not something a rule can compute — it depends on why the image is on the page. A model can draft one; a person has to agree with it. Written to the media library, so it applies wherever that image is used and survives this plugin being removed."
+msgid "A description of a photograph is not something a rule can compute — it depends on why the image is on the page, which only you know. The Alt text screen lists every undescribed image so you can write them in one pass. What you write goes to the media library, so it applies wherever that image is used and survives this plugin being removed."
 msgstr ""
 
 #: src/Scanner/Rules/ImageAltMissing.php:155
@@ -1190,7 +939,7 @@ msgid "A screen reader announces this as “link” and nothing else, so there i
 msgstr ""
 
 #: src/Scanner/Rules/LinkNameMissing.php:125
-msgid "A link's name has to describe where it goes, which nothing here knows for certain. Proposed, then reviewed."
+msgid "A link's name has to describe where it goes, which nothing here can know. Edit the link in the content."
 msgstr ""
 
 #. translators: %s: link target.
@@ -1336,7 +1085,7 @@ msgid "Whole site"
 msgstr ""
 
 #: src/Scanner/ScanScope.php:53
-#: assets/src/app.js:174
+#: assets/src/app.js:173
 msgid "Theme"
 msgstr ""
 
@@ -1396,16 +1145,6 @@ msgstr ""
 msgid "Your theme could not be checked, because this site cannot make requests to itself. Everything else still works: pages are checked on their own content, and opening one in the inspector checks it in full."
 msgstr ""
 
-#. translators: %s: the feature that was asked for.
-#: src/Support/Plan.php:77
-#, php-format
-msgid "%s is part of the paid version. Checking and fixing one page at a time — including the inspector, the editor panel and your theme — stays free and is not limited."
-msgstr ""
-
-#: src/Support/Plan.php:100
-msgid "Unlimited AI suggestions"
-msgstr ""
-
 #. translators: 1: required PHP version, 2: PHP version running on the server.
 #: wowstudio-accessibility-kit.php:105
 #, php-format
@@ -1430,88 +1169,83 @@ msgstr ""
 msgid "Something went wrong and we could not say what. Please try again."
 msgstr ""
 
-#: assets/src/app.js:60
+#: assets/src/app.js:59
 msgid "Scanning the page…"
 msgstr ""
 
 #. translators: %d: number of findings.
-#: assets/src/app.js:69
+#: assets/src/app.js:68
 #, js-format
 msgid "Scan finished. %d findings."
 msgstr ""
 
-#: assets/src/app.js:80
+#: assets/src/app.js:79
 msgid "The scan failed."
 msgstr ""
 
-#: assets/src/app.js:124
+#: assets/src/app.js:123
 msgid "Find, fix, document, and monitor accessibility problems at the code level."
 msgstr ""
 
-#: assets/src/app.js:134
+#: assets/src/app.js:133
 msgid "Sections"
 msgstr ""
 
-#: assets/src/app.js:141
+#: assets/src/app.js:140
 msgid "Overview"
 msgstr ""
 
-#: assets/src/app.js:148
+#: assets/src/app.js:147
 msgid "One page"
 msgstr ""
 
-#: assets/src/app.js:156
+#: assets/src/app.js:155
 msgid "Your content"
 msgstr ""
 
-#: assets/src/app.js:165
+#: assets/src/app.js:164
 msgid "Images"
 msgstr ""
 
-#: assets/src/app.js:185
-#: assets/src/components/ai-settings.js:98
-msgid "AI settings"
-msgstr ""
-
-#: assets/src/app.js:198
+#: assets/src/app.js:186
 msgid "Statement"
 msgstr ""
 
-#: assets/src/app.js:216
+#: assets/src/app.js:204
 msgid "You can read results here but not start a scan. An administrator can grant that."
 msgstr ""
 
-#: assets/src/app.js:250
+#: assets/src/app.js:236
 msgid "Loading the scan…"
 msgstr ""
 
 #. translators: %s: content title.
-#: assets/src/app.js:272
+#: assets/src/app.js:258
 #, js-format
 msgid "Results for “%s”"
 msgstr ""
 
-#: assets/src/app.js:278
+#: assets/src/app.js:264
 msgid "Scan results"
 msgstr ""
 
-#: assets/src/app.js:301
+#: assets/src/app.js:287
 msgid "Show as a list"
 msgstr ""
 
-#: assets/src/app.js:305
+#: assets/src/app.js:291
 msgid "Show on the page"
 msgstr ""
 
-#: assets/src/app.js:314
+#: assets/src/app.js:300
 msgid "Back to your content"
 msgstr ""
 
-#: assets/src/app.js:325
+#: assets/src/app.js:311
 msgid "This scan covered less than usual."
 msgstr ""
 
-#: assets/src/app.js:384
+#: assets/src/app.js:369
 msgid "This plugin helps you find, fix, document, and monitor accessibility problems. It does not determine whether your site meets the ADA, the European Accessibility Act, Section 508, or any other legal requirement, and nothing here is legal advice."
 msgstr ""
 
@@ -1519,398 +1253,201 @@ msgstr ""
 msgid "Nothing to show yet. Write your accessibility statement in the Accessibility settings."
 msgstr ""
 
-#: assets/src/components/ai-settings.js:68
-msgid "Loading AI settings…"
+#: assets/src/components/alt-text-editor.js:76
+#: assets/src/components/alt-text-handoff.js:48
+msgid "(opens the media screen in a new tab)"
 msgstr ""
 
-#: assets/src/components/ai-settings.js:102
-msgid "Alt-text generation uses your own account with an AI provider. You pay them directly, we never see your key after it is stored, and nothing is sent anywhere until you ask for a suggestion."
-msgstr ""
-
-#: assets/src/components/ai-settings.js:116
-msgid "AI features are switched off for this site, so no suggestions can be generated. That switch belongs to the site or its host — the WP_AI_SUPPORT constant, or the wp_supports_ai filter — and this plugin will not work around it."
-msgstr ""
-
-#: assets/src/components/ai-settings.js:132
-msgid "WordPress has its own AI provider configured, and it will be used before the key stored here."
-msgstr ""
-
-#: assets/src/components/ai-settings.js:136
-msgid "This WordPress version has a built-in AI client. If you configure a provider there, it will be used before the key stored here."
-msgstr ""
-
-#: assets/src/components/ai-settings.js:145
-msgid "Provider"
-msgstr ""
-
-#: assets/src/components/ai-settings.js:149
-msgid "Not set"
-msgstr ""
-
-#. translators: 1: provider name, 2: masked key hint.
-#: assets/src/components/ai-settings.js:156
+#. translators: %s: title of the post the image was uploaded from.
+#: assets/src/components/alt-text-editor.js:88
 #, js-format
-msgid "%1$s — key stored (%2$s)"
+msgid "Uploaded from “%s”. It may be used elsewhere too."
 msgstr ""
 
-#: assets/src/components/ai-settings.js:170
-msgid "Provider saved."
+#: assets/src/components/alt-text-editor.js:100
+#: assets/src/components/alt-text-handoff.js:42
+#: assets/src/editor/block-finding.js:118
+msgid "Describe this image"
 msgstr ""
 
-#: assets/src/components/ai-settings.js:179
-msgid "Model"
+#: assets/src/components/alt-text-editor.js:104
+msgid "Say what the image tells the reader, not what it looks like."
 msgstr ""
 
-#: assets/src/components/ai-settings.js:180
-msgid "Larger models describe images more carefully and cost more per image at your provider."
+#: assets/src/components/alt-text-editor.js:118
+msgid "Decorative — this image carries no meaning of its own"
 msgstr ""
 
-#: assets/src/components/ai-settings.js:194
-msgid "Model saved."
+#: assets/src/components/alt-text-editor.js:122
+msgid "Saves an empty description, which tells a screen reader to skip the image. That is a real answer, not a blank one."
 msgstr ""
 
-#. translators: %s: provider name.
-#: assets/src/components/ai-settings.js:209
+#: assets/src/components/alt-text-editor.js:142
+msgid "Saved."
+msgstr ""
+
+#: assets/src/components/alt-text-editor.js:153
+msgid "Save"
+msgstr ""
+
+#. translators: 1: how many were saved. 2: how many failed.
+#: assets/src/components/alt-text-editor.js:293
 #, js-format
-msgid "API key for %s"
+msgid "%1$d saved, %2$d not saved."
 msgstr ""
 
-#. translators: %s: masked key hint.
-#: assets/src/components/ai-settings.js:219
-#, js-format
-msgid "A key ending %s is stored. Enter a new one to replace it."
+#: assets/src/components/alt-text-editor.js:313
+msgid "Looking for undescribed images…"
 msgstr ""
 
-#: assets/src/components/ai-settings.js:225
-msgid "Stored encrypted. It is never shown again, and never sent to your browser."
+#: assets/src/components/alt-text-editor.js:332
+msgid "Images without a description"
 msgstr ""
 
-#: assets/src/components/ai-settings.js:240
-msgid "Key stored."
+#: assets/src/components/alt-text-editor.js:339
+msgid "Every image here has never been described. Images already marked decorative are left alone — an empty description is somebody’s decision, not a gap. What you write goes into WordPress’s own alt text, so it applies everywhere that image is used and stays behind if this plugin is removed."
 msgstr ""
 
-#: assets/src/components/ai-settings.js:247
-msgid "Store key"
-msgstr ""
-
-#. translators: %s: provider name.
-#: assets/src/components/ai-settings.js:257
-#, js-format
-msgid "Get a key from %s"
-msgstr ""
-
-#: assets/src/components/ai-settings.js:270
-msgid "What gets sent"
-msgstr ""
-
-#: assets/src/components/ai-settings.js:275
-msgid "Send the page title and a little surrounding text"
-msgstr ""
-
-#: assets/src/components/ai-settings.js:279
-msgid "Context makes alt text markedly better, because the same photograph means different things on different pages. Turn this off to send the image alone."
-msgstr ""
-
-#: assets/src/components/ai-settings.js:287
-msgid "Privacy setting saved."
-msgstr ""
-
-#: assets/src/components/ai-settings.js:296
-msgid "Nothing else leaves your site: not the rest of the page, not other images, not your visitors’ data. Individual posts can be excluded entirely with the _wsak_skip_ai post meta."
-msgstr ""
-
-#: assets/src/components/ai-settings.js:303
-msgid "Your allowance today"
-msgstr ""
-
-#: assets/src/components/ai-settings.js:308
-msgid "Unlimited alt-text generation."
-msgstr ""
-
-#. translators: 1: number used, 2: daily cap.
-#: assets/src/components/ai-settings.js:314
-#, js-format
-msgid "%1$d of %2$d used. The allowance resets at midnight UTC."
-msgstr ""
-
-#: assets/src/components/alt-text-action.js:41
-msgid "This image is not in the media library, so alt text has to be added wherever it is defined."
-msgstr ""
-
-#: assets/src/components/alt-text-action.js:60
-msgid "Alt text suggested. Read it before saving."
-msgstr ""
-
-#: assets/src/components/alt-text-action.js:84
-msgid "Alt text saved. Re-scan the page to confirm the issue is resolved."
-msgstr ""
-
-#: assets/src/components/alt-text-action.js:110
-msgid "Suggest alt text"
-msgstr ""
-
-#: assets/src/components/alt-text-action.js:116
-#: assets/src/components/fix-action.js:182
-msgid "Asking your AI provider…"
-msgstr ""
-
-#: assets/src/components/alt-text-action.js:127
-msgid "The model judged this image decorative, which means empty alt text. Only save that if the image really adds nothing the surrounding text does not already say."
-msgstr ""
-
-#: assets/src/components/alt-text-action.js:135
-msgid "Suggested alt text — edit before saving"
-msgstr ""
-
-#: assets/src/components/alt-text-action.js:139
-msgid "A model cannot know why this image is on the page. Read it, and change it if it describes the picture rather than the point."
-msgstr ""
-
-#: assets/src/components/alt-text-action.js:156
-msgid "Save as decorative"
-msgstr ""
-
-#: assets/src/components/alt-text-action.js:160
-msgid "Save alt text"
-msgstr ""
-
-#: assets/src/components/alt-text-action.js:166
-#: assets/src/components/states.js:50
-msgid "Try again"
-msgstr ""
-
-#. translators: %d: media item ID.
-#: assets/src/components/alt-text-action.js:174
-#, js-format
-msgid "Saved to media item %d. Re-scan the page to confirm the issue is resolved."
-msgstr ""
-
-#: assets/src/components/alt-text-bulk.js:91
-msgid "Descriptions are ready to read."
-msgstr ""
-
-#. translators: %d: number of images queued.
-#: assets/src/components/alt-text-bulk.js:114
-#, js-format
-msgid "%d images queued. Nothing is saved until you have read each one."
-msgstr ""
-
-#: assets/src/components/alt-text-bulk.js:137
-msgid "Looking through your media library…"
-msgstr ""
-
-#: assets/src/components/alt-text-bulk.js:162
-msgid "Describe your images"
-msgstr ""
-
-#: assets/src/components/alt-text-bulk.js:173
-msgid "Images on this page of results that already have alt text"
-msgstr ""
-
-#: assets/src/components/alt-text-bulk.js:180
-msgid "Images here"
-msgstr ""
-
-#: assets/src/components/alt-text-bulk.js:187
-msgid "Already described"
-msgstr ""
-
-#: assets/src/components/alt-text-bulk.js:195
-msgid "Still to do"
-msgstr ""
-
-#: assets/src/components/alt-text-bulk.js:200
-msgid "An image that is purely decorative needs an empty alt attribute rather than a description, so this is a list to work through rather than a target to reach."
-msgstr ""
-
-#. translators: 1: generations left today, 2: daily cap.
-#: assets/src/components/alt-text-bulk.js:230
-#, js-format
-msgid "You have %1$d of today’s %2$d free descriptions left."
-msgstr ""
-
-#: assets/src/components/alt-text-bulk.js:244
+#: assets/src/components/alt-text-editor.js:361
 msgid "Every image has been described"
 msgstr ""
 
-#: assets/src/components/alt-text-bulk.js:248
-msgid "Nothing in your media library is missing a description. Images deliberately marked as decorative are left alone — an empty description is a decision, not a gap."
+#: assets/src/components/alt-text-editor.js:365
+msgid "Nothing in the media library is missing a description. That covers images this plugin can see in the library — it does not cover images added by a theme, a plugin, or a page builder that stores them elsewhere."
 msgstr ""
 
-#. translators: %d: number of images with no description.
-#: assets/src/components/alt-text-bulk.js:260
+#. translators: %d: how many images still have no description.
+#: assets/src/components/alt-text-editor.js:376
 #, js-format
-msgid "%d image in your library has never been described."
-msgid_plural "%d images in your library have never been described."
+msgid "%d image still needs a description."
+msgid_plural "%d images still need a description."
 msgstr[0] ""
 msgstr[1] ""
 
-#: assets/src/components/alt-text-bulk.js:272
-#: assets/src/components/bulk-scan.js:300
-msgid "Select the first"
-msgstr ""
-
-#: assets/src/components/alt-text-bulk.js:298
-#: assets/src/components/bulk-scan.js:320
-msgid "Clear"
-msgstr ""
-
-#. translators: %d: number of selected images.
-#: assets/src/components/alt-text-bulk.js:353
+#. translators: %d: how many rows have been filled in.
+#: assets/src/components/alt-text-editor.js:394
 #, js-format
-msgid "Describe %d image"
-msgid_plural "Describe %d images"
+msgid "Save %d description"
+msgid_plural "Save %d descriptions"
 msgstr[0] ""
 msgstr[1] ""
 
-#: assets/src/components/alt-text-bulk.js:361
-msgid "Select some images"
+#: assets/src/components/alt-text-editor.js:402
+msgid "Save descriptions"
 msgstr ""
 
-#: assets/src/components/alt-text-bulk.js:401
-msgid "Read each one before it is saved"
+#: assets/src/components/alt-text-editor.js:425
+msgid "Pages of images"
 msgstr ""
 
-#: assets/src/components/alt-text-bulk.js:405
-msgid "Describing…"
+#: assets/src/components/alt-text-editor.js:435
+msgid "Previous"
 msgstr ""
 
-#: assets/src/components/alt-text-bulk.js:409
-#: assets/src/components/rendered-queue.js:156
-msgid "Done"
-msgstr ""
-
-#: assets/src/components/alt-text-bulk.js:413
-#: assets/src/components/bulk-scan.js:438
-#: assets/src/components/rendered-queue.js:163
-msgid "Stop"
-msgstr ""
-
-#. translators: 1: images settled, 2: images in the run.
-#: assets/src/components/alt-text-bulk.js:427
+#. translators: 1: current page. 2: how many pages.
+#: assets/src/components/alt-text-editor.js:444
 #, js-format
-msgctxt "images described"
-msgid "%1$d of %2$d"
+msgid "Page %1$d of %2$d"
 msgstr ""
 
-#. translators: %d: number of images that could not be described.
-#: assets/src/components/alt-text-bulk.js:439
-#, js-format
-msgid "%d could not be described"
+#: assets/src/components/alt-text-editor.js:458
+msgid "Next"
 msgstr ""
 
-#: assets/src/components/alt-text-bulk.js:449
-#: assets/src/components/bulk-scan.js:485
-msgid "This runs in the background. You can leave this page and come back."
-msgstr ""
-
-#: assets/src/components/alt-text-bulk.js:522
-msgid "Waiting…"
-msgstr ""
-
-#: assets/src/components/alt-text-bulk.js:531
-msgid "Saved to your media library. It now describes this image everywhere it appears."
-msgstr ""
-
-#: assets/src/components/alt-text-bulk.js:542
-msgid "This looks decorative — an image that adds nothing a reader would miss. If that is right, save it with the box empty, which tells a screen reader to skip it."
-msgstr ""
-
-#: assets/src/components/alt-text-bulk.js:551
-msgid "Description"
-msgstr ""
-
-#: assets/src/components/alt-text-bulk.js:555
-msgid "Written by a model that cannot see why this image is on your page. Change anything that is wrong before saving."
-msgstr ""
-
-#: assets/src/components/alt-text-bulk.js:570
-msgid "Save this"
-msgstr ""
-
-#: assets/src/components/alt-text-bulk.js:580
-#: assets/src/components/css-fix-action.js:404
-#: assets/src/components/fix-action.js:235
-msgid "Discard"
+#: assets/src/components/alt-text-handoff.js:29
+msgid "What this image tells the reader depends on why it is on the page, so nothing here can write it for you. The Images screen lists every undescribed image with a field beside each, which is faster than opening them one at a time."
 msgstr ""
 
 #. translators: %d: number of pages checked.
-#: assets/src/components/bulk-scan.js:129
+#: assets/src/components/bulk-scan.js:127
 #, js-format
 msgid "Finished. %d pages checked."
 msgstr ""
 
 #. translators: %d: number of pages queued.
-#: assets/src/components/bulk-scan.js:165
+#: assets/src/components/bulk-scan.js:163
 #, js-format
 msgid "%d pages queued. This runs in the background — you can leave this page."
 msgstr ""
 
-#: assets/src/components/bulk-scan.js:184
+#: assets/src/components/bulk-scan.js:182
 msgid "Stopped. Everything already checked has been kept."
 msgstr ""
 
-#: assets/src/components/bulk-scan.js:196
+#: assets/src/components/bulk-scan.js:194
 #: assets/src/components/scan-picker.js:88
 msgid "Loading your content…"
 msgstr ""
 
-#: assets/src/components/bulk-scan.js:207
+#: assets/src/components/bulk-scan.js:205
 msgid "Check your content"
 msgstr ""
 
-#: assets/src/components/bulk-scan.js:229
+#: assets/src/components/bulk-scan.js:227
 msgid "This site cannot fetch its own pages, which is a common host setting and not a fault. Bulk checking still works and reads the content of every page you select. What it cannot do is check colour, text size and layout — those need the page open in a browser, so open a page in the inspector to check those."
 msgstr ""
 
-#: assets/src/components/bulk-scan.js:252
+#: assets/src/components/bulk-scan.js:250
 msgid "Filter by content type"
 msgstr ""
 
-#: assets/src/components/bulk-scan.js:275
+#: assets/src/components/bulk-scan.js:273
 #: assets/src/components/scan-picker.js:74
 msgid "Search your content"
 msgstr ""
 
-#: assets/src/components/bulk-scan.js:292
+#: assets/src/components/bulk-scan.js:290
 #: assets/src/components/states.js:23
 msgid "Loading…"
 msgstr ""
 
+#: assets/src/components/bulk-scan.js:298
+msgid "Select the first"
+msgstr ""
+
+#: assets/src/components/bulk-scan.js:318
+msgid "Clear"
+msgstr ""
+
 #. translators: %d: score out of 100.
-#: assets/src/components/bulk-scan.js:343
+#: assets/src/components/bulk-scan.js:341
 #, js-format
 msgid "%d / 100"
 msgstr ""
 
 #. translators: %d: number of selected items.
-#: assets/src/components/bulk-scan.js:378
+#: assets/src/components/bulk-scan.js:366
 #, js-format
 msgid "Check %d item"
 msgid_plural "Check %d items"
 msgstr[0] ""
 msgstr[1] ""
 
-#: assets/src/components/bulk-scan.js:386
+#: assets/src/components/bulk-scan.js:374
 msgid "Select something to check"
 msgstr ""
 
-#: assets/src/components/bulk-scan.js:433
+#: assets/src/components/bulk-scan.js:421
 msgid "Finished"
 msgstr ""
 
-#: assets/src/components/bulk-scan.js:434
+#: assets/src/components/bulk-scan.js:422
 msgid "Checking…"
 msgstr ""
 
+#: assets/src/components/bulk-scan.js:426
+#: assets/src/components/rendered-queue.js:163
+msgid "Stop"
+msgstr ""
+
 #. translators: 1: pages settled, 2: pages in the run.
-#: assets/src/components/bulk-scan.js:458
+#: assets/src/components/bulk-scan.js:446
 #, js-format
 msgid "%1$d of %2$d"
 msgstr ""
 
 #. translators: %d: number of pages that could not be checked.
-#: assets/src/components/bulk-scan.js:466
+#: assets/src/components/bulk-scan.js:454
 #, js-format
 msgid "%d could not be checked"
 msgid_plural "%d could not be checked"
@@ -1918,32 +1455,36 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %d: number of pages not checked because the run was stopped.
-#: assets/src/components/bulk-scan.js:478
+#: assets/src/components/bulk-scan.js:466
 #, js-format
 msgid "%d stopped"
 msgstr ""
 
+#: assets/src/components/bulk-scan.js:473
+msgid "This runs in the background. You can leave this page and come back."
+msgstr ""
+
 #. translators: %d: number of pages checked for content only.
-#: assets/src/components/bulk-scan.js:503
+#: assets/src/components/bulk-scan.js:491
 #, js-format
 msgid "%d page was checked for content only. Colour, text size and layout need the page open in a browser."
 msgid_plural "%d pages were checked for content only. Colour, text size and layout need the page open in a browser."
 msgstr[0] ""
 msgstr[1] ""
 
-#: assets/src/components/bulk-scan.js:516
+#: assets/src/components/bulk-scan.js:504
 msgid "Check colour and layout too"
 msgstr ""
 
 #. translators: %d: number of findings.
-#: assets/src/components/bulk-scan.js:551
+#: assets/src/components/bulk-scan.js:539
 #, js-format
 msgid "%d finding"
 msgid_plural "%d findings"
 msgstr[0] ""
 msgstr[1] ""
 
-#: assets/src/components/bulk-scan.js:567
+#: assets/src/components/bulk-scan.js:555
 msgid "Check the rest"
 msgstr ""
 
@@ -2033,14 +1574,14 @@ msgstr ""
 
 #. translators: %d: number of items in this group.
 #: assets/src/components/coverage-panel.js:174
-#: assets/src/components/issue-list.js:272
+#: assets/src/components/issue-list.js:262
 #, js-format
 msgid "(%d)"
 msgstr ""
 
 #. translators: %s: WCAG success criterion number.
 #: assets/src/components/coverage-panel.js:188
-#: assets/src/components/issue-list.js:113
+#: assets/src/components/issue-list.js:104
 #: assets/src/components/theme-panel.js:253
 #, js-format
 msgid "WCAG %s"
@@ -2130,6 +1671,10 @@ msgstr ""
 msgid "Apply this rule"
 msgstr ""
 
+#: assets/src/components/css-fix-action.js:404
+msgid "Discard"
+msgstr ""
+
 #: assets/src/components/css-fix-action.js:412
 msgid "Reloading the page and measuring again…"
 msgstr ""
@@ -2192,180 +1737,116 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: assets/src/components/fix-action.js:27
-msgid "What would change"
-msgstr ""
-
-#: assets/src/components/fix-action.js:33
-msgid "Proposed markup change"
-msgstr ""
-
-#: assets/src/components/fix-action.js:55
-msgid "Added:"
-msgstr ""
-
-#: assets/src/components/fix-action.js:59
-msgid "Removed:"
-msgstr ""
-
-#: assets/src/components/fix-action.js:66
-msgid "end of change."
-msgstr ""
-
-#: assets/src/components/fix-action.js:112
-msgid "A fix has been suggested. Review the proposed change before applying it."
-msgstr ""
-
-#: assets/src/components/fix-action.js:132
-msgid "Fix applied as an override. Your content is unchanged and this can be undone."
-msgstr ""
-
-#: assets/src/components/fix-action.js:153
-msgid "Fix undone."
-msgstr ""
-
-#: assets/src/components/fix-action.js:176
-msgid "Suggest a fix"
-msgstr ""
-
-#: assets/src/components/fix-action.js:193
-msgid "This markup is not in the post content — it comes from the theme, so an override cannot reach it. The change needs making in the theme or a template."
-msgstr ""
-
-#: assets/src/components/fix-action.js:203
-msgid "Read this before applying. A model can produce markup that is valid and still wrong for your page. Nothing is written to your content: applying stores an override that you can undo at any time."
-msgstr ""
-
-#: assets/src/components/fix-action.js:217
-msgid "Apply this fix"
-msgstr ""
-
-#: assets/src/components/fix-action.js:223
-msgid "Suggest another"
-msgstr ""
-
-#: assets/src/components/fix-action.js:243
-msgid "Undoing…"
-msgstr ""
-
-#: assets/src/components/fix-action.js:250
-msgid "Applied as an override. Your content is unchanged, and this can be undone at any time."
-msgstr ""
-
-#: assets/src/components/fix-action.js:256
-msgid "Undo this fix"
-msgstr ""
-
-#: assets/src/components/inspector.js:57
+#: assets/src/components/inspector.js:56
 msgid "This one is about the page as a whole rather than one spot on it, so there is nowhere in particular to point."
 msgstr ""
 
-#: assets/src/components/inspector.js:62
+#: assets/src/components/inspector.js:61
 msgid "This element is not in the page any more. It may have been edited since the scan, or it may only appear for some visitors."
 msgstr ""
 
-#: assets/src/components/inspector.js:67
+#: assets/src/components/inspector.js:66
 msgid "The page has changed shape since the scan, so we cannot be sure which element this refers to. Rather than point at the wrong one, we are pointing at none. Re-scan to place it again."
 msgstr ""
 
-#: assets/src/components/inspector.js:72
+#: assets/src/components/inspector.js:71
 msgid "This element is in the page but is not being displayed, so there is nothing to point at."
 msgstr ""
 
-#: assets/src/components/inspector.js:193
-#: assets/src/components/inspector.js:382
+#: assets/src/components/inspector.js:192
+#: assets/src/components/inspector.js:381
 msgid "Checking colour, size and layout on the page…"
 msgstr ""
 
 #. translators: %d: number of additional findings.
-#: assets/src/components/inspector.js:212
+#: assets/src/components/inspector.js:211
 #, js-format
 msgid "Page checks finished. %d further findings."
 msgstr ""
 
 #. translators: %s: name of the accessibility check.
-#: assets/src/components/inspector.js:272
+#: assets/src/components/inspector.js:271
 #, js-format
 msgid "Showing: %s"
 msgstr ""
 
-#: assets/src/components/inspector.js:338
+#: assets/src/components/inspector.js:337
 msgid "This content has no public address, so it cannot be shown here. The findings below still apply."
 msgstr ""
 
 #. translators: %s: content title.
-#: assets/src/components/inspector.js:356
+#: assets/src/components/inspector.js:355
 #, js-format
 msgid "Inspecting “%s”"
 msgstr ""
 
-#: assets/src/components/inspector.js:362
+#: assets/src/components/inspector.js:361
 msgid "Inspecting"
 msgstr ""
 
-#: assets/src/components/inspector.js:366
+#: assets/src/components/inspector.js:365
 msgid "Back to results"
 msgstr ""
 
-#: assets/src/components/inspector.js:396
+#: assets/src/components/inspector.js:395
 msgid "Choose a finding to see it on the page. Moving through this list with the keyboard works the same way."
 msgstr ""
 
-#: assets/src/components/inspector.js:404
+#: assets/src/components/inspector.js:403
 msgid "This scan read only your content, not the whole page, so findings from the markup cannot be pointed at here. Anything found on the page itself — colour, size, layout — still can be."
 msgstr ""
 
-#: assets/src/components/inspector.js:518
+#: assets/src/components/inspector.js:509
 msgid "This one is about how the page is styled. Fixing it writes a rule into your site’s Additional CSS, which your account is not allowed to change — an administrator can apply it, or make the change in Appearance → Customise."
 msgstr ""
 
-#: assets/src/components/inspector.js:535
+#: assets/src/components/inspector.js:526
 msgid "Your page would not open here."
 msgstr ""
 
-#: assets/src/components/inspector.js:540
+#: assets/src/components/inspector.js:531
 msgid "Some sites refuse to be shown inside another page, which is a reasonable security setting and not a fault. Findings from the markup are still listed, but nothing that depends on seeing the page — colour, text size, layout — was checked on this scan."
 msgstr ""
 
-#: assets/src/components/inspector.js:551
+#: assets/src/components/inspector.js:542
 msgid "Preview of the page being inspected"
 msgstr ""
 
-#: assets/src/components/issue-list.js:33
+#: assets/src/components/issue-list.js:32
 msgid "This one is answered by a style rule measured off the element itself, so it is fixed in the page view — which needs a preview of this page, and this scan has none."
 msgstr ""
 
-#: assets/src/components/issue-list.js:45
+#: assets/src/components/issue-list.js:44
 msgid "Fix this on the page"
 msgstr ""
 
-#: assets/src/components/issue-list.js:48
+#: assets/src/components/issue-list.js:47
 msgid "Answered by a style rule measured off the element itself, so it is fixed in the page view. No AI is involved."
 msgstr ""
 
 #. translators: %s: name of the accessibility check.
-#: assets/src/components/issue-list.js:153
+#: assets/src/components/issue-list.js:144
 #, js-format
 msgid "Markup for: %s"
 msgstr ""
 
-#: assets/src/components/issue-list.js:166
+#: assets/src/components/issue-list.js:157
 msgid "How to fix this"
 msgstr ""
 
-#: assets/src/components/issue-list.js:175
+#: assets/src/components/issue-list.js:166
 msgid "Element:"
 msgstr ""
 
-#: assets/src/components/issue-list.js:222
+#: assets/src/components/issue-list.js:213
 msgid "We can draft these, but a draft is not an answer. Read what it says before you apply it — it was written by a model that cannot see why your page exists."
 msgstr ""
 
-#: assets/src/components/issue-list.js:317
+#: assets/src/components/issue-list.js:305
 msgid "Nothing found by the automated checks"
 msgstr ""
 
-#: assets/src/components/issue-list.js:321
+#: assets/src/components/issue-list.js:309
 msgid "None of the checks we can run automatically flagged anything on this page. That is a good sign, and it is not the same as the page being accessible — most of WCAG needs a person. The manual checklists are the next step."
 msgstr ""
 
@@ -2450,14 +1931,6 @@ msgid_plural "The last %d scans, in the order they ran. This plugin does not re-
 msgstr[0] ""
 msgstr[1] ""
 
-#: assets/src/components/paid-notice.js:29
-msgid "is part of the paid version."
-msgstr ""
-
-#: assets/src/components/paid-notice.js:33
-msgid "Checking and fixing one page at a time is not limited in any way — every check, the inspector, the editor panel, your theme report, and as many pages as you like, one after another. What you are paying for is doing them all at once."
-msgstr ""
-
 #. translators: 1: page title, 2: position, 3: total pages.
 #: assets/src/components/rendered-queue.js:101
 #, js-format
@@ -2470,6 +1943,10 @@ msgstr ""
 
 #: assets/src/components/rendered-queue.js:142
 msgid "Checking colour and layout…"
+msgstr ""
+
+#: assets/src/components/rendered-queue.js:156
+msgid "Done"
 msgstr ""
 
 #. translators: 1: pages checked, 2: pages in the queue.
@@ -2665,6 +2142,10 @@ msgstr ""
 msgid "How people reach you"
 msgstr ""
 
+#: assets/src/components/statement-settings.js:215
+msgid "Email address"
+msgstr ""
+
 #: assets/src/components/statement-settings.js:222
 msgid "Contact form address"
 msgstr ""
@@ -2723,6 +2204,10 @@ msgstr ""
 
 #: assets/src/components/statement-settings.js:373
 msgid "Preview"
+msgstr ""
+
+#: assets/src/components/states.js:50
+msgid "Try again"
 msgstr ""
 
 #: assets/src/components/theme-panel.js:48
@@ -2817,10 +2302,6 @@ msgstr ""
 
 #: assets/src/editor/block-finding.js:50
 msgid "Go to this block"
-msgstr ""
-
-#: assets/src/editor/block-finding.js:118
-msgid "Describe this image"
 msgstr ""
 
 #: assets/src/editor/block-finding.js:122

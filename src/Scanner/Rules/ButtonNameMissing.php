@@ -119,7 +119,7 @@ final class ButtonNameMissing implements Rule {
 	public function fix_plan(): FixPlan {
 		// A button's name has to describe what it does.
 		return new FixPlan(
-			FixKind::Generative,
+			FixKind::Manual,
 			FixTarget::Content,
 			__( 'A button\'s name has to describe what it does. Proposed, then reviewed.', 'wowstudio-accessibility-kit' )
 		);

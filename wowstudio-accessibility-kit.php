@@ -11,7 +11,7 @@
  * Plugin Name:       WOWStudio Accessibility Kit
  * Plugin URI:        https://wowstudio.dev/accessibility-kit/
  * Description:       Helps you find, fix, document, and monitor WCAG accessibility issues at the code level. Real markup fixes with preview and undo — not an overlay.
- * Version:           0.15.1
+ * Version:           0.16.0
  * Requires at least: 6.8
  * Requires PHP:      8.1
  * Author:            WOWStudio
@@ -31,7 +31,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'WSAK_VERSION', '0.15.1' );
+define( 'WSAK_VERSION', '0.16.0' );
 define( 'WSAK_FILE', __FILE__ );
 define( 'WSAK_PATH', plugin_dir_path( __FILE__ ) );
 define( 'WSAK_URL', plugin_dir_url( __FILE__ ) );
@@ -169,74 +169,6 @@ if ( ! empty( $wsak_unmet ) ) {
 
 unset( $wsak_unmet );
 
-// The SDK is vendored, but a stripped or partial install must degrade to a
-// working free plugin rather than a fatal error.
-if ( ! function_exists( 'wsak_fs' ) && file_exists( WSAK_PATH . 'freemius/start.php' ) ) {
-	/**
-	 * Freemius SDK accessor.
-	 *
-	 * Renamed from the dashboard-generated wak_fs() so that every global symbol
-	 * carries the wsak_ prefix mandated by SPEC.md and enforced by PHPCS.
-	 *
-	 * @since 0.1.0
-	 *
-	 * @return Freemius
-	 */
-	function wsak_fs() {
-		global $wsak_fs;
-
-		if ( ! isset( $wsak_fs ) ) {
-			require_once WSAK_PATH . 'freemius/start.php';
-
-			$wsak_fs = fs_dynamic_init(
-				array(
-					'id'                  => '37652',
-					'slug'                => 'wowstudio-accessibility-kit',
-					'type'                => 'plugin',
-					'public_key'          => 'pk_191e8a177939d7b8c20be46d3aca9',
-					'is_premium'          => true,
-					'premium_suffix'      => 'Pro',
-					'has_premium_version' => true,
-					'has_addons'          => false,
-					'has_paid_plans'      => true,
-					// wsak:claim-reviewed -- Freemius SDK argument name (wp.org distribution), not a claim about the user's site.
-					'is_org_compliant'    => true,
-					// Mirrors the dashboard trial setting; the dashboard is authoritative.
-					'trial'               => array(
-						'days'               => 7,
-						'is_require_payment' => true,
-					),
-					// Automatically removed from the free version by Freemius on deploy.
-					'wp_org_gatekeeper'   => 'OA7#BoRiBNqdf52FvzEf!!074aRLPs8fspif$7K1#4u4Csys1fQlCecVcUTOs2mcpeVHi#C2j9d09fOTvbC0HloPT7fFee5WdS3G',
-					'menu'                => array(
-						'slug'    => 'wowstudio-accessibility-kit',
-						'support' => false,
-					),
-				)
-			);
-		}
-
-		return $wsak_fs;
-	}
-
-	wsak_fs();
-	do_action( 'wsak_fs_loaded' );
-}
-
-/**
- * Reports whether Pro code paths may run.
- *
- * Always use this rather than calling wsak_fs() directly: if the Freemius SDK
- * is absent the accessor does not exist, and every Pro check would be fatal.
- *
- * @since 0.1.0
- *
- * @return bool
- */
-function wsak_can_use_premium_code() {
-	return function_exists( 'wsak_fs' ) && wsak_fs()->can_use_premium_code();
-}
-
 require_once WSAK_PATH . 'vendor/autoload.php';
 
 /*
@@ -263,19 +195,11 @@ register_deactivation_hook( __FILE__, array( 'WOWStudio\AccessibilityKit\Core\De
  * service it registers are absent. Anything that must survive an uninstall has
  * to be attached before that point, which is here.
  *
- * Freemius's own hook is preferred when the SDK is present. It runs the SDK's
- * uninstall reporting first, and it deliberately does not fire when the other
- * flavour of the plugin is still installed — deleting the site's data because
- * somebody removed the free copy while the paid one is still active would be a
- * bug, and inheriting that check is free. Without the SDK there is nothing to
- * defer to, so the WordPress hook is registered instead; it fires on the same
- * uninstall_{plugin} action, and the guard means the two can never both run.
+ * There must be no uninstall.php beside this file. WordPress runs that file
+ * *instead of* the uninstall hooks, so its mere presence would stop this
+ * callback ever being reached.
  */
-if ( function_exists( 'wsak_fs' ) ) {
-	wsak_fs()->add_action( 'after_uninstall', array( 'WOWStudio\AccessibilityKit\Uninstaller', 'run' ) );
-} else {
-	register_uninstall_hook( __FILE__, array( 'WOWStudio\AccessibilityKit\Uninstaller', 'run' ) );
-}
+register_uninstall_hook( __FILE__, array( 'WOWStudio\AccessibilityKit\Uninstaller', 'run' ) );
 
 add_action(
 	'plugins_loaded',

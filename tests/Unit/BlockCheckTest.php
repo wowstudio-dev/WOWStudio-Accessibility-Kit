@@ -167,7 +167,10 @@ final class BlockCheckTest extends TestCase {
 
 		$this->assertNotSame( '', $finding['consequence'] );
 		$this->assertStringNotContainsStringIgnoringCase( 'alt attribute', $finding['consequence'] );
-		$this->assertSame( 'review', $finding['band'] );
+		// A missing description is banded 'decide' rather than 'review': the
+		// wording depends on why the image is on the page, and since 0.16.0
+		// nothing drafts a version of it for somebody to read.
+		$this->assertSame( 'decide', $finding['band'] );
 		$this->assertNotSame( '', $finding['fix']['summary'] );
 	}
 

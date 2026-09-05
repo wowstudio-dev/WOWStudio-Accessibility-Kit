@@ -15,13 +15,11 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Registers the plugin's top-level admin menu.
  *
- * This menu is not optional decoration. Freemius is configured to hang its own
- * pages (Account, Upgrade, Contact) off this exact slug, and while the opt-in
- * is pending it creates a temporary top-level menu of its own to host the
- * connect screen. The moment a user opts in or skips, Freemius removes that
- * placeholder and expects the plugin's real menu to be there. If it is not, the
- * plugin disappears from the sidebar entirely and its Freemius pages are
- * orphaned.
+ * The slug is a stable public identifier, not an implementation detail. It is
+ * what `add_submenu_page()` needs in order to hang anything beneath this menu,
+ * which is how the planned Pro add-on will attach its own screens. Renaming it
+ * would orphan every page anything else has hung off it, so it is a constant
+ * rather than a string typed in twice.
  *
  * @since 0.1.0
  */
@@ -30,8 +28,8 @@ final class Menu implements Registrable {
 	/**
 	 * Top-level menu slug.
 	 *
-	 * Must stay identical to the 'menu' => 'slug' value passed to Freemius in
-	 * the main plugin file. MenuTest asserts they match.
+	 * Matches the plugin's own directory and text domain, so that one name
+	 * identifies the plugin everywhere. MenuTest asserts it has not drifted.
 	 *
 	 * @since 0.1.0
 	 * @var string

@@ -60,9 +60,14 @@ final class WorkListTest extends TestCase {
 		$work = $this->list();
 
 		$this->assertSame( ActionBand::Now, $work->band_for( 'colour-contrast' ) );
-		$this->assertSame( ActionBand::Review, $work->band_for( 'img-alt-missing' ) );
 		$this->assertSame( ActionBand::Decide, $work->band_for( 'table-headers-missing' ) );
 		$this->assertSame( ActionBand::Delegate, $work->band_for( 'landmark-main-missing' ) );
+
+		// Review is unreachable: it is the band for a draft somebody reads
+		// before applying, and since 0.16.0 nothing drafts anything. Asserted
+		// rather than deleted, so that a rule claiming to be reviewable again
+		// has to be a deliberate change here as well as there.
+		$this->assertSame( ActionBand::Decide, $work->band_for( 'img-alt-missing' ) );
 	}
 
 	/**

@@ -1,4 +1,4 @@
-# Dependencies (rebuilt at release time; the Freemius SDK is vendored and committed).
+# Dependencies, rebuilt at release time.
 /vendor/
 /node_modules/
 
@@ -18,8 +18,6 @@
 Thumbs.db
 *.log
 
-# Freemius caches the downloaded plugin icon into the SDK directory at runtime.
-/freemius/assets/img/wowstudio-accessibility-kit.png
 
 # Local dev-server config for the design preview. Points at generated files, so
 # it is one developer's convenience rather than something to share.

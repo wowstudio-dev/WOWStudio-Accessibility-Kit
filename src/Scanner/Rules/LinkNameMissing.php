@@ -120,9 +120,9 @@ final class LinkNameMissing implements Rule {
 	public function fix_plan(): FixPlan {
 		// A link's name has to describe where it goes, which nothing here knows for certain.
 		return new FixPlan(
-			FixKind::Generative,
+			FixKind::Manual,
 			FixTarget::Content,
-			__( 'A link\'s name has to describe where it goes, which nothing here knows for certain. Proposed, then reviewed.', 'wowstudio-accessibility-kit' )
+			__( 'A link\'s name has to describe where it goes, which nothing here can know. Edit the link in the content.', 'wowstudio-accessibility-kit' )
 		);
 	}
 

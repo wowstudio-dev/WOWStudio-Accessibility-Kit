@@ -10,7 +10,6 @@ namespace WOWStudio\AccessibilityKit\Core;
 use WOWStudio\AccessibilityKit\Admin\Menu;
 use WOWStudio\AccessibilityKit\Rest\ScanController;
 use WOWStudio\AccessibilityKit\Support\Capabilities;
-use WOWStudio\AccessibilityKit\Support\Plan;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -190,8 +189,8 @@ final class Assets implements Registrable {
 	private function settings(): array {
 		return array(
 			'namespace'    => ScanController::REST_NAMESPACE,
+			'adminUrl'     => admin_url(),
 			'version'      => WSAK_VERSION,
-			'plan'         => ( new Plan() )->to_array(),
 			'capabilities' => array(
 				'runScan'     => current_user_can( Capabilities::RUN_SCAN ),
 				'applyFix'    => current_user_can( Capabilities::APPLY_FIX ),

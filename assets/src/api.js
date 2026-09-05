@@ -79,103 +79,6 @@ export function fetchCoverage() {
 }
 
 /**
- * Reads the AI configuration.
- *
- * Never returns an API key: only whether one is stored, and a masked hint.
- *
- * @return {Promise<Object>} The configuration.
- */
-export function fetchAiSettings() {
-	return apiFetch( { path: `/${ namespace }/ai/settings` } );
-}
-
-/**
- * Saves AI configuration, and optionally a key.
- *
- * @param {Object} data Fields to change.
- * @return {Promise<Object>} The configuration as it now stands.
- */
-export function saveAiSettings( data ) {
-	return apiFetch( {
-		path: `/${ namespace }/ai/settings`,
-		method: 'POST',
-		data,
-	} );
-}
-
-/**
- * Asks for a description of one image.
- *
- * @param {number} attachmentId Media item to describe.
- * @param {number} postId       Page it appears on, for context.
- * @return {Promise<Object>} The suggestion and the remaining allowance.
- */
-export function generateAltText( attachmentId, postId = 0 ) {
-	return apiFetch( {
-		path: `/${ namespace }/alt-text`,
-		method: 'POST',
-		data: { attachment_id: attachmentId, post_id: postId },
-	} );
-}
-
-/**
- * Saves reviewed alt text onto a media item.
- *
- * @param {number} attachmentId Media item to update.
- * @param {string} text         The reviewed alt text.
- * @return {Promise<Object>} The saved value and what it replaced.
- */
-export function applyAltText( attachmentId, text ) {
-	return apiFetch( {
-		path: `/${ namespace }/alt-text/apply`,
-		method: 'POST',
-		data: { attachment_id: attachmentId, text },
-	} );
-}
-
-/**
- * Asks for a proposed correction, without changing anything.
- *
- * @param {number} issueId Issue to fix.
- * @return {Promise<Object>} Before, after, and the diff between them.
- */
-export function previewFix( issueId ) {
-	return apiFetch( {
-		path: `/${ namespace }/fixes/preview`,
-		method: 'POST',
-		data: { issue_id: issueId },
-	} );
-}
-
-/**
- * Applies a reviewed correction as a reversible override.
- *
- * @param {number} issueId Issue being fixed.
- * @param {string} after   The reviewed markup.
- * @return {Promise<Object>} The stored override.
- */
-export function applyFix( issueId, after ) {
-	return apiFetch( {
-		path: `/${ namespace }/fixes/apply`,
-		method: 'POST',
-		data: { issue_id: issueId, after },
-	} );
-}
-
-/**
- * Undoes an applied override.
- *
- * @param {number} fixId Override to undo.
- * @return {Promise<Object>} The override, now marked undone.
- */
-export function revertFix( fixId ) {
-	return apiFetch( {
-		path: `/${ namespace }/fixes/${ fixId }/revert`,
-		method: 'POST',
-	} );
-}
-
-/**
  * Reads the accessibility statement and its settings.
  *
  * @return {Promise<Object>} Settings, preview, and what is still missing.
@@ -395,75 +298,37 @@ export function reopenIssue( issueId ) {
 /**
  * Lists images that have never been described.
  *
- * @param {number} page One-based page number.
- * @return {Promise<Object>} Images, paging, and what a run would involve.
- */
-export function fetchUndescribedMedia( page = 1 ) {
-	return apiFetch( { path: `/${ namespace }/media?page=${ page }` } );
-}
-
-/**
- * Queues a set of images for description.
+ * "Never described" is narrower than "has no alt text", and the difference
+ * matters: an image whose alt is an empty string has been described, as
+ * decorative, by somebody who decided it carries no meaning. That is a correct
+ * answer, and listing it again would invite overwriting it.
  *
- * @param {Array} attachmentIds Images to describe.
- * @return {Promise<Object>} The run.
+ * @param {number} page    One-based page number.
+ * @param {number} perPage How many per page.
+ * @return {Promise<Object>} Images and paging.
  */
-export function startAltTextRun( attachmentIds ) {
+export function fetchUndescribedMedia( page = 1, perPage = 25 ) {
 	return apiFetch( {
-		path: `/${ namespace }/alt-text/runs`,
-		method: 'POST',
-		data: { attachment_ids: attachmentIds },
+		path: `/${ namespace }/media?page=${ page }&per_page=${ perPage }`,
 	} );
 }
 
 /**
- * Reads an alt-text run.
+ * Writes descriptions onto images.
  *
- * @param {number} runId Run to read.
- * @return {Promise<Object>} The run.
- */
-export function fetchAltTextRun( runId ) {
-	return apiFetch( { path: `/${ namespace }/alt-text/runs/${ runId }` } );
-}
-
-/**
- * Stops an alt-text run, keeping whatever it already described.
+ * Takes a list even when there is one, because the screen saves a row and saves
+ * a page through the same path, and each item reports its own outcome. One
+ * image deleted in another tab should not throw away nineteen descriptions
+ * somebody just typed.
  *
- * @param {number} runId Run to stop.
- * @return {Promise<Object>} The run.
+ * @param {Array} items Rows of { id, text, decorative }.
+ * @return {Promise<Object>} A result per row.
  */
-export function cancelAltTextRun( runId ) {
+export function saveAltText( items ) {
 	return apiFetch( {
-		path: `/${ namespace }/alt-text/runs/${ runId }`,
-		method: 'DELETE',
-	} );
-}
-
-/**
- * Writes a reviewed description onto the image.
- *
- * @param {number} attachmentId Image to describe.
- * @param {string} text         The reviewed description.
- * @return {Promise<Object>} The image's new state.
- */
-export function approveAltText( attachmentId, text ) {
-	return apiFetch( {
-		path: `/${ namespace }/alt-text/${ attachmentId }/approve`,
+		path: `/${ namespace }/media/alt`,
 		method: 'POST',
-		data: { text },
-	} );
-}
-
-/**
- * Discards a suggestion without writing it.
- *
- * @param {number} attachmentId Image whose suggestion is rejected.
- * @return {Promise<Object>} The image's new state.
- */
-export function rejectAltText( attachmentId ) {
-	return apiFetch( {
-		path: `/${ namespace }/alt-text/${ attachmentId }/reject`,
-		method: 'POST',
+		data: { items },
 	} );
 }
 

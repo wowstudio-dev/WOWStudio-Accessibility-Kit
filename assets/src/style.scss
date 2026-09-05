@@ -479,9 +479,6 @@
  * as sloppiness long before anybody works out what it is.
  */
 .wsak-issue > *:last-child,
-.wsak-alt > *:last-child,
-.wsak-fix > *:last-child,
-.wsak-fix__review > *:last-child,
 .wsak-css-fix__review > *:last-child,
 .wsak-settings > *:last-child,
 .wsak-statement-panel > *:last-child {
@@ -699,59 +696,6 @@
 .wsak-boot {
 	color: var(--wsak-muted);
 	padding: var(--wsak-space-6) 0;
-}
-
-/* Alt text and fixes ------------------------------------------------------- */
-
-.wsak-alt,
-.wsak-fix {
-	margin: var(--wsak-space-3) 0 0;
-	padding: var(--wsak-space-4);
-	background: var(--wsak-raised);
-	border-radius: var(--wsak-radius-sm);
-}
-
-.wsak-alt__unavailable,
-.wsak-alt__saved,
-.wsak-fix__note,
-.wsak-fix__applied p {
-	color: var(--wsak-muted);
-	font-size: 12.5px;
-	max-width: 74ch;
-}
-
-.wsak-alt__actions,
-.wsak-fix__actions {
-	display: flex;
-	flex-wrap: wrap;
-	gap: var(--wsak-space-2);
-	margin-top: var(--wsak-space-3);
-}
-
-.wsak-diff__title {
-	margin: 0 0 var(--wsak-space-2);
-	font-size: 12.5px;
-	font-weight: 650;
-	color: var(--wsak-ink);
-}
-
-.wsak-diff__added {
-	background: #10391f;
-	color: #a7f3c4;
-	text-decoration: underline;
-
-	/* Sub-scale on purpose: these sit inside a line of code, and anything
-	   larger would push the lines apart wherever a change happened. */
-	padding: 1px 2px;
-	border-radius: 3px;
-}
-
-.wsak-diff__removed {
-	background: #451319;
-	color: #fecdd3;
-	text-decoration: line-through;
-	padding: 1px 2px;
-	border-radius: 3px;
 }
 
 /* Form controls ------------------------------------------------------------ */
@@ -1260,17 +1204,6 @@
 	max-width: 74ch;
 	color: var(--wsak-muted);
 	font-size: 13.5px;
-}
-
-.wsak-alt-bulk__billing {
-	margin: 0 0 var(--wsak-space-5);
-	padding: var(--wsak-space-3) var(--wsak-space-4);
-	max-width: 78ch;
-	border-inline-start: 3px solid var(--wsak-line-strong);
-	border-radius: 0 var(--wsak-radius-sm) var(--wsak-radius-sm) 0;
-	background: var(--wsak-raised);
-	color: var(--wsak-muted);
-	font-size: 12.5px;
 }
 
 .wsak-media {
@@ -2019,21 +1952,140 @@
 	}
 }
 
-/* ── Images: coverage summary ────────────────────────────────────────────── */
+/* ── Images: the alt-text screen ─────────────────────────────────────────── */
 
-.wsak-alt-summary {
-	display: grid;
-	grid-template-columns: minmax(7rem, 9rem) 1fr;
-	gap: var(--wsak-space-5);
-	align-items: center;
-	padding: var(--wsak-space-4);
+.wsak-alt__title {
+	margin: 0 0 var(--wsak-space-2);
+	font-size: 18px;
+	font-weight: 650;
+	color: var(--wsak-ink);
+}
+
+.wsak-alt__lede {
 	margin: 0 0 var(--wsak-space-5);
-	border-radius: var(--wsak-radius);
+	max-width: 74ch;
+	color: var(--wsak-muted);
+	font-size: 13.5px;
+}
+
+.wsak-alt__bar {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--wsak-space-3);
+	align-items: center;
+	justify-content: space-between;
+	margin: 0 0 var(--wsak-space-4);
+	padding: var(--wsak-space-3) var(--wsak-space-4);
+	border-radius: var(--wsak-radius-sm);
 	background: var(--wsak-raised);
 }
 
-.wsak-alt-summary__stats {
+.wsak-alt__count {
+	margin: 0;
+	color: var(--wsak-text);
+	font-size: 13.5px;
+	font-weight: 600;
+}
+
+.wsak-alt__list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
 	display: grid;
-	grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
 	gap: var(--wsak-space-3);
+}
+
+.wsak-alt-row {
+	display: grid;
+	grid-template-columns: auto minmax(0, 1fr) auto;
+	gap: var(--wsak-space-4);
+	align-items: start;
+	margin: 0;
+	padding: var(--wsak-space-4);
+	border: 1px solid var(--wsak-line);
+	border-radius: var(--wsak-radius);
+	background: var(--wsak-surface);
+	box-shadow: 0 1px 2px rgba(42, 38, 82, 0.04);
+}
+
+/*
+ * One column below the point where a thumbnail, a text field wide enough to
+ * write a sentence in, and a button stop fitting side by side. The field is
+ * the reason for the breakpoint: squeezed into a third of a narrow screen it
+ * shows about four words, which is not enough to read back what you wrote.
+ */
+@media (max-width: 782px) {
+
+	.wsak-alt-row {
+		grid-template-columns: minmax(0, 1fr);
+	}
+}
+
+.wsak-alt-row__thumb {
+	display: block;
+	width: 80px;
+	height: 80px;
+	object-fit: cover;
+	border-radius: var(--wsak-radius-sm);
+	background: var(--wsak-raised);
+}
+
+.wsak-alt-row__thumb--none {
+	border: 1px dashed var(--wsak-line-strong);
+}
+
+.wsak-alt-row__file {
+	margin: 0 0 var(--wsak-space-1);
+	font-size: 13.5px;
+	font-weight: 600;
+	word-break: break-word;
+}
+
+.wsak-alt-row__origin {
+	margin: 0 0 var(--wsak-space-3);
+	color: var(--wsak-muted);
+	font-size: 12.5px;
+}
+
+.wsak-alt-row__decorative {
+	margin-top: var(--wsak-space-3);
+}
+
+.wsak-alt-row__error {
+	margin: var(--wsak-space-2) 0 0;
+	color: var(--wsak-critical);
+	font-size: 12.5px;
+}
+
+.wsak-alt-row__saved {
+	margin: var(--wsak-space-2) 0 0;
+	color: var(--wsak-good);
+	font-size: 12.5px;
+	font-weight: 600;
+}
+
+.wsak-alt-row__actions {
+	display: flex;
+	align-items: start;
+}
+
+.wsak-alt__pages {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--wsak-space-3);
+	align-items: center;
+	justify-content: center;
+	margin-top: var(--wsak-space-5);
+}
+
+.wsak-alt__page {
+	color: var(--wsak-muted);
+	font-size: 13px;
+}
+
+.wsak-issue__handoff-link {
+	display: inline-block;
+	margin-top: var(--wsak-space-2);
+	font-size: 12.5px;
+	font-weight: 600;
 }

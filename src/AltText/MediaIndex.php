@@ -26,15 +26,6 @@ defined( 'ABSPATH' ) || exit;
  * dealt with, and worse, offering to overwrite a deliberate decision with a
  * generated sentence. So only the first counts as missing.
  *
- * @fs_premium_only
- *
- * Stripped from the free build by Freemius rather than merely switched off. The
- * tier check on the route refuses a free site, but a refusal still ships the
- * code, and CLAUDE.md asks for the stronger thing: the paid implementation is
- * absent from the zip that goes to WordPress.org. Every place that reaches for
- * this class therefore checks it exists first — on a free build it does not,
- * and the feature is not merely closed but genuinely not there.
- *
  * @since 0.13.0
  */
 final class MediaIndex {
@@ -88,7 +79,14 @@ final class MediaIndex {
 	}
 
 	/**
-	 * Describes one attachment, including any suggestion waiting on it.
+	 * Describes one attachment for the editor.
+	 *
+	 * `uploaded_to` is named for what it actually is. WordPress records the post
+	 * an image was uploaded from, which is not the same as where the image is
+	 * used — it may be used in ten other places, or nowhere at all. Finding the
+	 * real answer means searching every post's content for the attachment, and
+	 * a claim of "used on" that is quietly only "uploaded from" would send
+	 * somebody to the wrong page to check their work.
 	 *
 	 * @since 0.13.0
 	 *
@@ -96,19 +94,21 @@ final class MediaIndex {
 	 * @return array<string, mixed>
 	 */
 	public function describe( WP_Post $post ): array {
-		$state = (string) get_post_meta( $post->ID, AltTextRun::STATE_META, true );
+		$parent = (int) $post->post_parent;
 
 		return array(
-			'id'         => $post->ID,
-			'title'      => get_the_title( $post ),
-			'filename'   => wp_basename( (string) get_attached_file( $post->ID ) ),
-			'thumbnail'  => (string) wp_get_attachment_image_url( $post->ID, 'thumbnail' ),
-			'edit_url'   => (string) get_edit_post_link( $post->ID, 'raw' ),
-			'alt'        => (string) get_post_meta( $post->ID, '_wp_attachment_image_alt', true ),
-			'state'      => '' === $state ? AltTextRun::STATE_NONE : $state,
-			'suggestion' => (string) get_post_meta( $post->ID, AltTextRun::TEXT_META, true ),
-			'decorative' => (bool) get_post_meta( $post->ID, AltTextRun::DECORATIVE_META, true ),
-			'error'      => (string) get_post_meta( $post->ID, AltTextRun::ERROR_META, true ),
+			'id'          => $post->ID,
+			'title'       => get_the_title( $post ),
+			'filename'    => wp_basename( (string) get_attached_file( $post->ID ) ),
+			'thumbnail'   => (string) wp_get_attachment_image_url( $post->ID, 'thumbnail' ),
+			'full'        => (string) wp_get_attachment_image_url( $post->ID, 'large' ),
+			'edit_url'    => (string) get_edit_post_link( $post->ID, 'raw' ),
+			'alt'         => (string) get_post_meta( $post->ID, '_wp_attachment_image_alt', true ),
+			'uploaded_to' => $parent > 0 ? array(
+				'id'    => $parent,
+				'title' => get_the_title( $parent ),
+				'url'   => (string) get_permalink( $parent ),
+			) : null,
 		);
 	}
 

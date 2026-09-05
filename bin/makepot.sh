@@ -29,7 +29,7 @@ echo "==> Extracting strings"
 npx wp-env run cli --env-cwd="wp-content/plugins/${SLUG}" \
 	wp i18n make-pot "dist/${SLUG}" "languages/${SLUG}.pot" \
 	--domain="${SLUG}" \
-	--exclude=vendor,freemius,build \
+	--exclude=vendor,build \
 	> /dev/null
 
 # Drop POT-Creation-Date. WP-CLI stamps it with the current time on every run,

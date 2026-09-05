@@ -4,7 +4,7 @@ Tags: accessibility, wcag, a11y, alt text, accessibility scanner
 Requires at least: 6.8
 Tested up to: 7.1
 Requires PHP: 8.1
-Stable tag: 0.15.1
+Stable tag: 0.16.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -23,6 +23,8 @@ It is not an accessibility overlay. Nothing is injected into your front end, and
 * **Understand.** Every issue is tagged with its WCAG success criterion and severity, and labelled either *auto-detected* or *needs manual review*.
 * **Fix.** Suggested markup fixes are shown as a preview and a diff, and applied fixes are stored in a reversible override layer that never overwrites your content. Findings caused by styling instead get a style rule, written into your own Additional CSS — where you can read, edit or delete it without this plugin.
 * **Check the fix worked.** After a style rule is applied, the page is loaded again and measured again. If something in your theme overrode the rule, you are told that, rather than being told it is fixed.
+* **Describe your images.** One screen lists every image in your media library that has never been described, with a field beside each. Type, save, move on — instead of opening forty media screens.
+* **Do it site-wide.** Check every page and post in one run, in the background. There is no page limit and no paid tier.
 * **Document.** Generate an accessibility statement you edit and publish, including the feedback contact mechanism European rules expect.
 
 = Honesty about what automated testing can do =
@@ -41,71 +43,22 @@ This plugin **does not** determine or certify whether your site complies with th
 == Bundled libraries ==
 
 This plugin bundles **Action Scheduler** by Automattic, which runs the
-background work — bulk scans and bulk alt-text generation — so that long jobs
-never block an admin page or time out half-finished. It is licensed GPLv3 or
-later; this plugin's own code is GPLv2 or later.
+background work — checking many pages at once — so that long jobs never block
+an admin page or time out half-finished. It is licensed GPLv3 or later; this
+plugin's own code is GPLv2 or later.
 
 Action Scheduler makes no outbound requests of its own. Source and documentation:
 https://actionscheduler.org
 
 == External services ==
 
-This plugin does not contact any external service on its own. The scanner,
-the statement generator and the reports all run entirely on your own site.
+This plugin contacts no external service, ever. There is no API, no account, no
+telemetry, and no phone-home. The scanner, the fixes, the alt-text screen, the
+statement generator and the reports all run entirely on your own site, and the
+plugin works the same whether or not the server can reach the internet.
 
-The AI features are **bring your own key** and opt-in: nothing is sent anywhere
-until you have connected a provider account and then pressed a button asking for
-a suggestion. You choose the provider, you hold the account, and you are billed
-by them directly. If you never configure a provider, this plugin makes no
-outbound requests at all.
-
-= When a request is made =
-
-* **"Suggest alt text"** sends the image itself, its file name, and — only if the "Send the page title and a little surrounding text" setting is on, which it is by default — the page title and at most 300 characters of the text around the image. Turning that setting off sends the image alone.
-* **"Suggest a fix"** sends the markup of the single element that failed a check, plus a description of the check it failed. It does not send the rest of the page.
-
-Nothing else leaves your site: not your other content, not your visitors' data,
-not your database. Individual posts can be excluded entirely with the
-`_wsak_skip_ai` post meta, and the whole feature respects the site's own AI
-switch (`WP_AI_SUPPORT` / the `wp_supports_ai` filter).
-
-On WordPress 7.0 and later, if you have configured a provider in WordPress's own
-AI client, that is used in preference to the key stored here and the request is
-made by WordPress rather than by this plugin.
-
-= The providers you can choose =
-
-**OpenAI** — requests go to `https://api.openai.com/v1/chat/completions`.
-Get a key at https://platform.openai.com/api-keys
-Terms: https://openai.com/policies/terms-of-use
-Privacy: https://openai.com/policies/privacy-policy
-
-**Anthropic** — requests go to `https://api.anthropic.com/v1/messages`.
-Get a key at https://console.anthropic.com/settings/keys
-Terms: https://www.anthropic.com/legal/consumer-terms
-Privacy: https://www.anthropic.com/legal/privacy
-
-**Google Gemini** — requests go to `https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent`.
-Get a key at https://aistudio.google.com/app/apikey
-Terms: https://ai.google.dev/gemini-api/terms
-Privacy: https://policies.google.com/privacy
-
-**OpenRouter** — requests go to `https://openrouter.ai/api/v1/chat/completions`.
-OpenRouter is a router: it forwards your request to whichever model you pick,
-so that model's provider also receives the data.
-Get a key at https://openrouter.ai/keys
-Terms: https://openrouter.ai/terms
-Privacy: https://openrouter.ai/privacy
-
-Your API key is stored encrypted on your own site and is sent only to the
-provider it belongs to. It is never shown again after you save it, never
-returned to your browser, and never sent to WOWStudio.
-
-= Licensing =
-
-Licensing, updates and optional telemetry are handled by Freemius. Telemetry is
-opt-in: it is offered when you activate the plugin and you can decline. See
-https://freemius.com/privacy/ for what Freemius collects.
+That is also why there are no scanning limits. Nothing is metered because
+nothing is being paid for per page.
 
 == Installation ==
 
@@ -127,11 +80,27 @@ No. Overlays layer a script over your site at run time and are widely criticised
 
 Yes. Fixes are stored in a reversible override layer rather than being written over your content, and each one can be reverted.
 
-= Does it require an AI subscription? =
+= Does it use AI? =
 
-AI features are bring-your-own-key. You connect your own provider account, and you can use the scanner without any AI provider at all.
+No. Nothing here is generated, and nothing is sent anywhere. Where an answer depends on what your content means — what an image is for, what a link promises — the plugin says so and gives you the fastest way to write it yourself, rather than producing a plausible sentence and leaving you to notice it is wrong.
+
+= Is any of it paid? =
+
+No. Everything in this plugin is free, including checking your whole site at once. There are no locked buttons and no upgrade prompts.
+
+= Where is the alt text saved? =
+
+In WordPress's own alt text field on the media item. It therefore applies everywhere that image is used, works with every theme and plugin, and stays behind if you remove this plugin.
 
 == Changelog ==
+
+= 0.16.0 =
+* Everything in this plugin is now free. Checking your whole site at once was the paid feature; it is not paid any more, and there are no locked buttons left anywhere.
+* Removed the licensing SDK entirely. No account, no opt-in screen, no telemetry.
+* Removed the AI features. Nothing is generated and nothing leaves your site — this plugin now makes no outbound requests of any kind, to anyone, ever.
+* Added: an Images screen listing every image in your media library that has never been described, with a field beside each and one button to save them all. It writes WordPress's own alt text, so it applies wherever the image is used and stays behind if you remove the plugin.
+* Images already marked decorative are left alone. An empty description is a decision somebody made, not a gap to fill.
+* Findings whose wording depends on what your content means — alt text, link names, button names, labels — are now grouped under "Needs a decision from you" rather than offering a draft. That is what they always were.
 
 = 0.15.1 =
 * Fixed: findings that a style rule answers — colour contrast, links marked by colour alone, and targets under 24 by 24 — offered a button that asked for an AI provider key. They need no AI at all. They now send you to the page view, where the fix has always been, and say so.
@@ -208,6 +177,9 @@ AI features are bring-your-own-key. You connect your own provider account, and y
 * Initial scaffold: plugin bootstrap, capabilities, activation and uninstall handling.
 
 == Upgrade Notice ==
+
+= 0.16.0 =
+Everything is free now, and the AI features are gone. The plugin no longer contacts any external service. Site-wide scanning is no longer paid, and there is a new Images screen for writing alt text in bulk.
 
 = 0.15.1 =
 Contrast, colour-only links and small targets no longer ask for an AI key to fix something that needs no AI.

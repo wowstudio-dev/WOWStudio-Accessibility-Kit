@@ -7,7 +7,6 @@
 
 namespace WOWStudio\AccessibilityKit\Jobs;
 
-use WOWStudio\AccessibilityKit\AltText\AltTextRun;
 use WOWStudio\AccessibilityKit\Core\Registrable;
 
 defined( 'ABSPATH' ) || exit;
@@ -33,17 +32,7 @@ final class Worker implements Registrable {
 	 * @return void
 	 */
 	public function register(): void {
-		// Both handlers belong to paid features whose implementations Freemius
-		// strips from the free build. Registering a hook whose handler would
-		// fatal is worse than not registering it: the action would be claimed,
-		// run, and take the queue down with it.
-		if ( class_exists( BulkScan::class ) ) {
-			add_action( Queue::HOOK, array( $this, 'scan_page' ), 10, 1 );
-		}
-
-		if ( class_exists( AltTextRun::class ) ) {
-			add_action( Queue::ALT_HOOK, array( $this, 'describe_image' ), 10, 1 );
-		}
+		add_action( Queue::HOOK, array( $this, 'scan_page' ), 10, 1 );
 	}
 
 	/**
@@ -62,23 +51,5 @@ final class Worker implements Registrable {
 		}
 
 		( new BulkScan() )->step( $scan_id );
-	}
-
-	/**
-	 * Describes one queued image.
-	 *
-	 * @since 0.13.0
-	 *
-	 * @param mixed $attachment_id Image the action was queued with.
-	 * @return void
-	 */
-	public function describe_image( $attachment_id ): void {
-		$attachment_id = absint( $attachment_id );
-
-		if ( 0 === $attachment_id ) {
-			return;
-		}
-
-		( new AltTextRun() )->step( $attachment_id );
 	}
 }
