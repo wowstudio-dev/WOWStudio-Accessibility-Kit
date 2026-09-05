@@ -14,11 +14,10 @@ import { EmptyState } from './states';
 /**
  * Sends a style-answerable finding to the inspector.
  *
- * These have one correct answer and need no model, but the declarations are
- * measured off the live element — its computed colours, its rendered size — and
- * this view has no rendered page to measure. Offering the AI button here would
- * promise a provider key for work that needs none, which is what the list used
- * to do.
+ * These have one correct answer, but the declarations are measured off the live
+ * element — its computed colours, its rendered size — and this view has no
+ * rendered page to measure. So the finding is handed to the view that does,
+ * rather than being given a button here that could not compute anything.
  *
  * @param {Object}   props             Component props.
  * @param {Function} [props.onInspect] Switches to the inspector.
@@ -45,7 +44,7 @@ function CssHandoff( { onInspect } ) {
 			</Button>
 			<span className="wsak-issue__handoff-note">
 				{ __(
-					'Answered by a style rule measured off the element itself, so it is fixed in the page view. No AI is involved.',
+					'Answered by a style rule measured off the element itself, so it is fixed in the page view where the element can be measured.',
 					'wowstudio-accessibility-kit'
 				) }
 			</span>

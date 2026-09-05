@@ -254,27 +254,27 @@ msgid "That run could not be found."
 msgstr ""
 
 #: src/Remediation/ActionBand.php:118
-#: assets/src/components/issue-list.js:204
+#: assets/src/components/issue-list.js:203
 msgid "Fix these now"
 msgstr ""
 
 #: src/Remediation/ActionBand.php:119
-#: assets/src/components/issue-list.js:212
+#: assets/src/components/issue-list.js:211
 msgid "Read, then apply"
 msgstr ""
 
 #: src/Remediation/ActionBand.php:120
-#: assets/src/components/issue-list.js:220
+#: assets/src/components/issue-list.js:219
 msgid "Needs a decision from you"
 msgstr ""
 
 #: src/Remediation/ActionBand.php:121
-#: assets/src/components/issue-list.js:228
+#: assets/src/components/issue-list.js:227
 msgid "For whoever looks after your theme"
 msgstr ""
 
 #: src/Remediation/ActionBand.php:134
-#: assets/src/components/issue-list.js:205
+#: assets/src/components/issue-list.js:204
 msgid "There is one correct answer and we already know it. Nothing here is a guess, so nothing here needs checking first."
 msgstr ""
 
@@ -283,12 +283,12 @@ msgid "We can draft these, but a draft is not an answer. Read what it says befor
 msgstr ""
 
 #: src/Remediation/ActionBand.php:136
-#: assets/src/components/issue-list.js:221
+#: assets/src/components/issue-list.js:220
 msgid "These depend on what your content means, which is not something any tool can work out for you. Each one explains what to weigh up."
 msgstr ""
 
 #: src/Remediation/ActionBand.php:137
-#: assets/src/components/issue-list.js:232
+#: assets/src/components/issue-list.js:231
 msgid "These are in your theme rather than your content, so nothing here can reach them. Each one comes with what to change and where."
 msgstr ""
 
@@ -779,7 +779,7 @@ msgid "A screen reader announces this as “button” and nothing else, so there
 msgstr ""
 
 #: src/Scanner/Rules/ButtonNameMissing.php:124
-msgid "A button's name has to describe what it does. Proposed, then reviewed."
+msgid "A button's name has to describe what it does, which means knowing what it does. Edit the button in the content."
 msgstr ""
 
 #: src/Scanner/Rules/ButtonNameMissing.php:153
@@ -823,7 +823,7 @@ msgid "Anyone using a screen reader arrives at this field and is never told what
 msgstr ""
 
 #: src/Scanner/Rules/FormControlLabelMissing.php:125
-msgid "What a field should be called is a judgement about what it is asking for. A model can propose wording from the surrounding markup; a person confirms it."
+msgid "What a field should be called is a judgement about what it is asking for. Label it wherever the form is built — usually the form plugin rather than the page."
 msgstr ""
 
 #. translators: %s: form field name attribute, or the element name.
@@ -893,7 +893,7 @@ msgid "Anyone moving through the page by its regions meets this embedded content
 msgstr ""
 
 #: src/Scanner/Rules/IframeTitleMissing.php:124
-msgid "The title has to describe what is embedded, which means looking at it. Proposed, then reviewed."
+msgid "The title has to describe what is embedded, which means looking at it. Add a title attribute to the iframe in the content."
 msgstr ""
 
 #: src/Scanner/Rules/IframeTitleMissing.php:153
@@ -961,7 +961,7 @@ msgid "Screen reader users often pull up a list of every link on a page. In that
 msgstr ""
 
 #: src/Scanner/Rules/LinkTextNotDescriptive.php:127
-msgid "Better wording depends on where the link goes and what the sentence around it already says. Proposed, then reviewed."
+msgid "Better wording depends on where the link goes and what the sentence around it already says. Rewrite the link text in the content."
 msgstr ""
 
 #. translators: %s: the link text.
@@ -1574,14 +1574,14 @@ msgstr ""
 
 #. translators: %d: number of items in this group.
 #: assets/src/components/coverage-panel.js:174
-#: assets/src/components/issue-list.js:262
+#: assets/src/components/issue-list.js:261
 #, js-format
 msgid "(%d)"
 msgstr ""
 
 #. translators: %s: WCAG success criterion number.
 #: assets/src/components/coverage-panel.js:188
-#: assets/src/components/issue-list.js:104
+#: assets/src/components/issue-list.js:103
 #: assets/src/components/theme-panel.js:253
 #, js-format
 msgid "WCAG %s"
@@ -1812,41 +1812,41 @@ msgstr ""
 msgid "Preview of the page being inspected"
 msgstr ""
 
-#: assets/src/components/issue-list.js:32
+#: assets/src/components/issue-list.js:31
 msgid "This one is answered by a style rule measured off the element itself, so it is fixed in the page view — which needs a preview of this page, and this scan has none."
 msgstr ""
 
-#: assets/src/components/issue-list.js:44
+#: assets/src/components/issue-list.js:43
 msgid "Fix this on the page"
 msgstr ""
 
-#: assets/src/components/issue-list.js:47
-msgid "Answered by a style rule measured off the element itself, so it is fixed in the page view. No AI is involved."
+#: assets/src/components/issue-list.js:46
+msgid "Answered by a style rule measured off the element itself, so it is fixed in the page view where the element can be measured."
 msgstr ""
 
 #. translators: %s: name of the accessibility check.
-#: assets/src/components/issue-list.js:144
+#: assets/src/components/issue-list.js:143
 #, js-format
 msgid "Markup for: %s"
 msgstr ""
 
-#: assets/src/components/issue-list.js:157
+#: assets/src/components/issue-list.js:156
 msgid "How to fix this"
 msgstr ""
 
-#: assets/src/components/issue-list.js:166
+#: assets/src/components/issue-list.js:165
 msgid "Element:"
 msgstr ""
 
-#: assets/src/components/issue-list.js:213
+#: assets/src/components/issue-list.js:212
 msgid "We can draft these, but a draft is not an answer. Read what it says before you apply it — it was written by a model that cannot see why your page exists."
 msgstr ""
 
-#: assets/src/components/issue-list.js:305
+#: assets/src/components/issue-list.js:304
 msgid "Nothing found by the automated checks"
 msgstr ""
 
-#: assets/src/components/issue-list.js:309
+#: assets/src/components/issue-list.js:308
 msgid "None of the checks we can run automatically flagged anything on this page. That is a good sign, and it is not the same as the page being accessible — most of WCAG needs a person. The manual checklists are the next step."
 msgstr ""
 

@@ -121,7 +121,7 @@ final class ButtonNameMissing implements Rule {
 		return new FixPlan(
 			FixKind::Manual,
 			FixTarget::Content,
-			__( 'A button\'s name has to describe what it does. Proposed, then reviewed.', 'wowstudio-accessibility-kit' )
+			__( 'A button\'s name has to describe what it does, which means knowing what it does. Edit the button in the content.', 'wowstudio-accessibility-kit' )
 		);
 	}
 

@@ -121,7 +121,7 @@ final class IframeTitleMissing implements Rule {
 		return new FixPlan(
 			FixKind::Manual,
 			FixTarget::Content,
-			__( 'The title has to describe what is embedded, which means looking at it. Proposed, then reviewed.', 'wowstudio-accessibility-kit' )
+			__( 'The title has to describe what is embedded, which means looking at it. Add a title attribute to the iframe in the content.', 'wowstudio-accessibility-kit' )
 		);
 	}
 

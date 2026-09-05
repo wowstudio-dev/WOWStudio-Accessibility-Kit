@@ -124,7 +124,7 @@ final class LinkTextNotDescriptive implements Rule {
 		return new FixPlan(
 			FixKind::Manual,
 			FixTarget::Content,
-			__( 'Better wording depends on where the link goes and what the sentence around it already says. Proposed, then reviewed.', 'wowstudio-accessibility-kit' )
+			__( 'Better wording depends on where the link goes and what the sentence around it already says. Rewrite the link text in the content.', 'wowstudio-accessibility-kit' )
 		);
 	}
 

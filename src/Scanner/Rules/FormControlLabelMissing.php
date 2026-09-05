@@ -122,7 +122,7 @@ final class FormControlLabelMissing implements Rule {
 		return new FixPlan(
 			FixKind::Manual,
 			FixTarget::Content,
-			__( 'What a field should be called is a judgement about what it is asking for. A model can propose wording from the surrounding markup; a person confirms it.', 'wowstudio-accessibility-kit' )
+			__( 'What a field should be called is a judgement about what it is asking for. Label it wherever the form is built — usually the form plugin rather than the page.', 'wowstudio-accessibility-kit' )
 		);
 	}
 
