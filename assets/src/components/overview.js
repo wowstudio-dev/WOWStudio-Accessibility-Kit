@@ -6,40 +6,8 @@ import { useEffect, useState } from '@wordpress/element';
 import { __, _n, sprintf } from '@wordpress/i18n';
 
 import { fetchOverview } from '../api';
-import { BarList, Donut, Sparkline, Stat } from './charts';
+import { BarList, Donut, Sparkline, Stat, severityRows } from './charts';
 import { EmptyState } from './states';
-
-/**
- * Human names for the severities, in the order they should be read.
- *
- * Ordered by how much they matter rather than by how many there are: a chart
- * that reorders itself as counts change is one you have to re-read every time.
- */
-const SEVERITIES = [
-	[ 'critical', __( 'Critical', 'wowstudio-accessibility-kit' ) ],
-	[ 'serious', __( 'Serious', 'wowstudio-accessibility-kit' ) ],
-	[ 'moderate', __( 'Moderate', 'wowstudio-accessibility-kit' ) ],
-	[ 'minor', __( 'Minor', 'wowstudio-accessibility-kit' ) ],
-];
-
-/**
- * Turns the severity counts into ordered, labelled, toned rows.
- *
- * @param {Array} counts Rows of { key, count } from the server.
- * @return {Array} Rows ready for BarList.
- */
-function severityRows( counts ) {
-	const found = new Map(
-		( counts || [] ).map( ( row ) => [ row.key, row.count ] )
-	);
-
-	return SEVERITIES.map( ( [ key, label ] ) => ( {
-		key,
-		label,
-		tone: key,
-		count: found.get( key ) || 0,
-	} ) ).filter( ( row ) => row.count > 0 );
-}
 
 /**
  * The overview.

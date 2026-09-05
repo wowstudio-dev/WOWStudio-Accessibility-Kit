@@ -4,6 +4,8 @@
 
 import { __, _n, sprintf } from '@wordpress/i18n';
 
+import { BarList, Donut, severityRows } from './charts';
+
 /**
  * Describes what a score band means, in plain words.
  *
@@ -43,37 +45,31 @@ function band( score ) {
  * person, and with a plain statement that it is not a measure of compliance.
  * A lone number would invite exactly the reading this product exists to avoid.
  *
- * @param {Object} props        Component props.
- * @param {number} props.score  Score out of 100.
- * @param {number} props.auto   Auto-detected findings.
- * @param {number} props.manual Findings needing review.
+ * @param {Object} props            Component props.
+ * @param {number} props.score      Score out of 100.
+ * @param {number} props.auto       Auto-detected findings.
+ * @param {number} props.manual     Findings needing review.
+ * @param {Object} [props.severity] This page's findings, keyed by severity.
  * @return {Element} The score card.
  */
-export default function ScoreCard( { score, auto, manual } ) {
+export default function ScoreCard( { score, auto, manual, severity } ) {
+	const rows = severityRows( severity );
+
 	return (
 		<div className="wsak-score">
 			{ /*
-			 * The dial is drawn from this custom property. It is decoration
-			 * over a number that is already written out beside it, so nothing
-			 * here is the only way to read the score.
+			 * The same ring the overview uses. One vocabulary for "a score out
+			 * of a hundred" across the plugin, and one place where its text
+			 * alternative and its reduced-motion behaviour are decided.
 			 */ }
-			<div
-				className="wsak-score__figure"
-				style={ {
-					'--wsak-score': Math.max( 0, Math.min( 100, score ) ),
-				} }
-			>
-				<span className="wsak-score__value">{ score }</span>
-				<span className="wsak-score__outof" aria-hidden="true">
-					/ 100
-				</span>
-				<span className="screen-reader-text">
-					{ sprintf(
-						/* translators: %d: score out of 100. */
-						__( '%d out of 100', 'wowstudio-accessibility-kit' ),
-						score
+			<div className="wsak-score__figure">
+				<Donut
+					value={ score }
+					label={ __(
+						'Score for this page',
+						'wowstudio-accessibility-kit'
 					) }
-				</span>
+				/>
 			</div>
 
 			<div className="wsak-score__detail">
@@ -104,6 +100,18 @@ export default function ScoreCard( { score, auto, manual } ) {
 						) }
 					</li>
 				</ul>
+				{ rows.length > 0 && (
+					<div className="wsak-score__breakdown">
+						<BarList
+							items={ rows }
+							label={ __(
+								'This page\u2019s findings by severity',
+								'wowstudio-accessibility-kit'
+							) }
+						/>
+					</div>
+				) }
+
 				<p className="wsak-score__caveat">
 					{ __(
 						'This score counts only what automated testing can settle, which is a part of WCAG rather than all of it. It does not tell you whether your site meets any legal requirement.',

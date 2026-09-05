@@ -21,6 +21,7 @@ import {
 	startAltTextRun,
 } from '../api';
 import PaidNotice from './paid-notice';
+import { Donut, Stat } from './charts';
 import { Busy, EmptyState, Skeleton } from './states';
 
 /**
@@ -144,6 +145,17 @@ export default function AltTextBulk() {
 	const items = listing.items ?? [];
 	const billing = run?.billing ?? listing.billing ?? {};
 
+	// Counted from the page in hand rather than the whole library: the listing
+	// is paged, and a coverage figure that silently described one page of
+	// results as the whole site would be the kind of number this plugin exists
+	// not to print.
+	const described = items.filter(
+		( item ) => '' !== String( item.alt ?? '' ).trim()
+	).length;
+	const coverage = items.length
+		? Math.round( ( described / items.length ) * 100 )
+		: 0;
+
 	return (
 		<section className="wsak-bulk" aria-labelledby="wsak-alt-title">
 			<h2 className="wsak-bulk__title" id="wsak-alt-title">
@@ -153,6 +165,46 @@ export default function AltTextBulk() {
 			<p className="screen-reader-text" role="status" aria-live="polite">
 				{ announcement }
 			</p>
+
+			{ items.length > 0 && (
+				<div className="wsak-alt-summary">
+					<Donut
+						value={ coverage }
+						label={ __(
+							'Images on this page of results that already have alt text',
+							'wowstudio-accessibility-kit'
+						) }
+					/>
+					<div className="wsak-alt-summary__stats">
+						<Stat
+							label={ __(
+								'Images here',
+								'wowstudio-accessibility-kit'
+							) }
+							value={ items.length }
+						/>
+						<Stat
+							label={ __(
+								'Already described',
+								'wowstudio-accessibility-kit'
+							) }
+							value={ described }
+							tone={ described ? 'good' : undefined }
+						/>
+						<Stat
+							label={ __(
+								'Still to do',
+								'wowstudio-accessibility-kit'
+							) }
+							value={ items.length - described }
+							note={ __(
+								'An image that is purely decorative needs an empty alt attribute rather than a description, so this is a list to work through rather than a target to reach.',
+								'wowstudio-accessibility-kit'
+							) }
+						/>
+					</div>
+				</div>
+			) }
 
 			{ error && (
 				<Notice status="error" isDismissible={ false }>

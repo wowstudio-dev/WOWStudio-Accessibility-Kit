@@ -27,6 +27,45 @@ function ScreenReaderText( { children } ) {
 }
 
 /**
+ * Severities, in the order they should be read.
+ *
+ * Ordered by how much each matters rather than by how many there are. A chart
+ * that reorders itself as counts change is one you have to re-read every time,
+ * and these four have a fixed meaning that the ordering should carry.
+ */
+const SEVERITIES = [
+	[ 'critical', __( 'Critical', 'wowstudio-accessibility-kit' ) ],
+	[ 'serious', __( 'Serious', 'wowstudio-accessibility-kit' ) ],
+	[ 'moderate', __( 'Moderate', 'wowstudio-accessibility-kit' ) ],
+	[ 'minor', __( 'Minor', 'wowstudio-accessibility-kit' ) ],
+];
+
+/**
+ * Turns severity counts into ordered, labelled, toned rows.
+ *
+ * Accepts either shape the server sends: the overview groups them as a list of
+ * { key, count }, a single scan reports them as an object keyed by severity.
+ * Normalising here keeps that difference out of both screens.
+ *
+ * @param {Array|Object} counts Severity counts in either shape.
+ * @return {Array} Rows ready for BarList, empty ones dropped.
+ */
+export function severityRows( counts ) {
+	const found = new Map(
+		Array.isArray( counts )
+			? counts.map( ( row ) => [ row.key, row.count ] )
+			: Object.entries( counts || {} )
+	);
+
+	return SEVERITIES.map( ( [ key, label ] ) => ( {
+		key,
+		label,
+		tone: key,
+		count: found.get( key ) || 0,
+	} ) ).filter( ( row ) => row.count > 0 );
+}
+
+/**
  * A ring showing one number out of a hundred.
  *
  * The ring is drawn from a single circle with a dash pattern rather than an arc
@@ -68,20 +107,27 @@ export function Donut( { value, label, caption } ) {
 					fill="none"
 					strokeWidth="12"
 				/>
-				<circle
-					className="wsak-donut__fill"
-					cx="60"
-					cy="60"
-					r={ radius }
-					fill="none"
-					strokeWidth="12"
-					strokeLinecap="round"
-					strokeDasharray={ `${ filled } ${ circumference }` }
-					// The ring starts at three o'clock without this, which reads
-					// as a progress bar that began somewhere arbitrary.
-					transform="rotate(-90 60 60)"
-					style={ { '--wsak-donut-length': circumference } }
-				/>
+				{ /*
+				 * Zero draws nothing at all. A round cap on a zero-length arc
+				 * still paints a dot, which reads as a small amount of
+				 * something rather than as none of it.
+				 */ }
+				{ clamped > 0 && (
+					<circle
+						className="wsak-donut__fill"
+						cx="60"
+						cy="60"
+						r={ radius }
+						fill="none"
+						strokeWidth="12"
+						strokeLinecap="round"
+						strokeDasharray={ `${ filled } ${ circumference }` }
+						// The ring starts at three o'clock without this, which
+						// reads as a progress bar that began somewhere arbitrary.
+						transform="rotate(-90 60 60)"
+						style={ { '--wsak-donut-length': circumference } }
+					/>
+				) }
 			</svg>
 
 			<div className="wsak-donut__centre" aria-hidden="true">

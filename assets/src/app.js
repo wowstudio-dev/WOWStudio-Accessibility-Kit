@@ -335,6 +335,7 @@ export default function App() {
 						score={ scan.score ?? 0 }
 						auto={ byDetection.auto ?? 0 }
 						manual={ byDetection.manual ?? 0 }
+						severity={ scan.summary?.by_severity }
 					/>
 
 					{ resultView === 'inspect' && scan.preview_url ? (
