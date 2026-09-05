@@ -466,3 +466,16 @@ export function rejectAltText( attachmentId ) {
 		method: 'POST',
 	} );
 }
+
+/**
+ * Reads the site-wide summary behind the overview screen.
+ *
+ * One request rather than several: every figure on that screen is counted from
+ * the same two tables, and computing them separately would let the parts of one
+ * picture disagree with each other.
+ *
+ * @return {Promise<Object>} Scanned counts, score, issue totals and breakdowns.
+ */
+export function fetchOverview() {
+	return apiFetch( { path: `/${ namespace }/overview` } );
+}

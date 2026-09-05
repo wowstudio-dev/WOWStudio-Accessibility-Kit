@@ -18,6 +18,7 @@ use WOWStudio\AccessibilityKit\Optin\EmailOptin;
 use WOWStudio\AccessibilityKit\Remediation\TitleTagFix;
 use WOWStudio\AccessibilityKit\Rest\AltTextRunController;
 use WOWStudio\AccessibilityKit\Rest\BlockCheckController;
+use WOWStudio\AccessibilityKit\Rest\OverviewController;
 use WOWStudio\AccessibilityKit\Rest\ReviewController;
 use WOWStudio\AccessibilityKit\Rest\RunController;
 use WOWStudio\AccessibilityKit\Rest\FixController;
@@ -153,6 +154,7 @@ final class Plugin {
 			'rest.runs'      => new RunController(),
 			'rest.review'    => new ReviewController(),
 			'rest.blocks'    => new BlockCheckController(),
+			'rest.overview'  => new OverviewController(),
 			'fix.title'      => new TitleTagFix(),
 			'jobs.worker'    => new Worker(),
 			'overrides'      => new OverrideStore(),

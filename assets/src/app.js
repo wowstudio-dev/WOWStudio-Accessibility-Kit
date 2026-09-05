@@ -12,6 +12,7 @@ import StatementSettings from './components/statement-settings';
 import CoveragePanel from './components/coverage-panel';
 import Inspector from './components/inspector';
 import IssueList from './components/issue-list';
+import Overview from './components/overview';
 import AltTextBulk from './components/alt-text-bulk';
 import BulkScan from './components/bulk-scan';
 import ThemePanel from './components/theme-panel';
@@ -33,7 +34,7 @@ export default function App() {
 	const [ loading, setLoading ] = useState( false );
 	const [ error, setError ] = useState( '' );
 	const [ announcement, setAnnouncement ] = useState( '' );
-	const [ view, setView ] = useState( 'scan' );
+	const [ view, setView ] = useState( 'overview' );
 
 	// How a finished scan is presented. The inspector puts each finding beside
 	// the page it came from, which is the more useful of the two whenever the
@@ -133,6 +134,13 @@ export default function App() {
 				aria-label={ __( 'Sections', 'wowstudio-accessibility-kit' ) }
 			>
 				<Button
+					variant={ view === 'overview' ? 'primary' : 'tertiary' }
+					aria-current={ view === 'overview' ? 'page' : undefined }
+					onClick={ () => setView( 'overview' ) }
+				>
+					{ __( 'Overview', 'wowstudio-accessibility-kit' ) }
+				</Button>
+				<Button
 					variant={ view === 'scan' ? 'primary' : 'tertiary' }
 					aria-current={ view === 'scan' ? 'page' : undefined }
 					onClick={ () => setView( 'scan' ) }
@@ -218,6 +226,8 @@ export default function App() {
 			 * screen with a mode. Opening a page from a bulk result drops into
 			 * the single-page view, which is where the browser pass runs.
 			 */ }
+			{ view === 'overview' && <Overview /> }
+
 			{ view === 'bulk' && (
 				<BulkScan
 					onInspect={ ( postId ) => {

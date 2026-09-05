@@ -41,7 +41,7 @@ msgid "https://wowstudio.dev/"
 msgstr ""
 
 #: src/Admin/Menu.php:71
-#: assets/src/app.js:117
+#: assets/src/app.js:118
 msgid "Accessibility Kit"
 msgstr ""
 
@@ -735,6 +735,11 @@ msgstr ""
 msgid "You do not have permission to read that content."
 msgstr ""
 
+#: src/Rest/OverviewController.php:360
+#: assets/src/components/scan-picker.js:164
+msgid "(no title)"
+msgstr ""
+
 #: src/Rest/ReviewController.php:65
 msgid "Why this is not a problem. Kept with the finding."
 msgstr ""
@@ -966,6 +971,7 @@ msgid "Open"
 msgstr ""
 
 #: src/Scanner/IssueStatus.php:44
+#: assets/src/components/overview.js:167
 msgid "Fixed"
 msgstr ""
 
@@ -1330,7 +1336,7 @@ msgid "Whole site"
 msgstr ""
 
 #: src/Scanner/ScanScope.php:53
-#: assets/src/app.js:166
+#: assets/src/app.js:174
 msgid "Theme"
 msgstr ""
 
@@ -1355,18 +1361,22 @@ msgid "Stopped"
 msgstr ""
 
 #: src/Scanner/Severity.php:48
+#: assets/src/components/overview.js:19
 msgid "Critical"
 msgstr ""
 
 #: src/Scanner/Severity.php:49
+#: assets/src/components/overview.js:20
 msgid "Serious"
 msgstr ""
 
 #: src/Scanner/Severity.php:50
+#: assets/src/components/overview.js:21
 msgid "Moderate"
 msgstr ""
 
 #: src/Scanner/Severity.php:51
+#: assets/src/components/overview.js:22
 msgid "Minor"
 msgstr ""
 
@@ -1420,84 +1430,88 @@ msgstr ""
 msgid "Something went wrong and we could not say what. Please try again."
 msgstr ""
 
-#: assets/src/app.js:59
+#: assets/src/app.js:60
 msgid "Scanning the page…"
 msgstr ""
 
 #. translators: %d: number of findings.
-#: assets/src/app.js:68
+#: assets/src/app.js:69
 #, js-format
 msgid "Scan finished. %d findings."
 msgstr ""
 
-#: assets/src/app.js:79
+#: assets/src/app.js:80
 msgid "The scan failed."
 msgstr ""
 
-#: assets/src/app.js:123
+#: assets/src/app.js:124
 msgid "Find, fix, document, and monitor accessibility problems at the code level."
 msgstr ""
 
-#: assets/src/app.js:133
+#: assets/src/app.js:134
 msgid "Sections"
 msgstr ""
 
-#: assets/src/app.js:140
-msgid "One page"
+#: assets/src/app.js:141
+msgid "Overview"
 msgstr ""
 
 #: assets/src/app.js:148
+msgid "One page"
+msgstr ""
+
+#: assets/src/app.js:156
 msgid "Your content"
 msgstr ""
 
-#: assets/src/app.js:157
+#: assets/src/app.js:165
 msgid "Images"
 msgstr ""
 
-#: assets/src/app.js:177
+#: assets/src/app.js:185
 #: assets/src/components/ai-settings.js:98
 msgid "AI settings"
 msgstr ""
 
-#: assets/src/app.js:190
+#: assets/src/app.js:198
 msgid "Statement"
 msgstr ""
 
-#: assets/src/app.js:208
+#: assets/src/app.js:216
 msgid "You can read results here but not start a scan. An administrator can grant that."
 msgstr ""
 
-#: assets/src/app.js:240
+#: assets/src/app.js:250
 msgid "Loading the scan…"
 msgstr ""
 
 #. translators: %s: content title.
-#: assets/src/app.js:262
+#: assets/src/app.js:272
 #, js-format
 msgid "Results for “%s”"
 msgstr ""
 
-#: assets/src/app.js:268
+#: assets/src/app.js:278
 msgid "Scan results"
 msgstr ""
 
-#: assets/src/app.js:291
+#: assets/src/app.js:301
 msgid "Show as a list"
 msgstr ""
 
-#: assets/src/app.js:295
+#: assets/src/app.js:305
 msgid "Show on the page"
 msgstr ""
 
-#: assets/src/app.js:304
+#: assets/src/app.js:314
 msgid "Back to your content"
 msgstr ""
 
-#: assets/src/app.js:315
+#: assets/src/app.js:325
 msgid "This scan covered less than usual."
 msgstr ""
 
-#: assets/src/app.js:373
+#: assets/src/app.js:383
 msgid "This plugin helps you find, fix, document, and monitor accessibility problems. It does not determine whether your site meets the ADA, the European Accessibility Act, Section 508, or any other legal requirement, and nothing here is legal advice."
 msgstr ""
 
@@ -1913,6 +1927,46 @@ msgstr[1] ""
 msgid "Check the rest"
 msgstr ""
 
+#. translators: 1: what the number measures. 2: the number, out of 100.
+#: assets/src/components/charts.js:55
+#, js-format
+msgid "%1$s: %2$d out of 100."
+msgstr ""
+
+#: assets/src/components/charts.js:90
+msgid "/ 100"
+msgstr ""
+
+#: assets/src/components/charts.js:117
+msgid "Nothing to show yet."
+msgstr ""
+
+#: assets/src/components/charts.js:123
+msgid "findings"
+msgstr ""
+
+#. translators: 1: what the chart shows. 2: the figures, already joined into a sentence.
+#: assets/src/components/charts.js:130
+#, js-format
+msgid "%1$s. %2$s"
+msgstr ""
+
+#. translators: 1: row name. 2: how many. 3: what is being counted.
+#: assets/src/components/charts.js:136
+#, js-format
+msgid "%1$s: %2$d %3$s."
+msgstr ""
+
+#: assets/src/components/charts.js:193
+msgid "A line appears here once a page has been scanned more than once."
+msgstr ""
+
+#. translators: 1: how many scans. 2: the first score. 3: the most recent score.
+#: assets/src/components/charts.js:234
+#, js-format
+msgid "Scores across the last %1$d scans, from %2$d to %3$d out of 100."
+msgstr ""
+
 #: assets/src/components/coverage-badge.js:29
 msgid "This page has been edited since it was checked, so what we found may no longer be what is there."
 msgstr ""
@@ -2295,6 +2349,87 @@ msgstr ""
 msgid "None of the checks we can run automatically flagged anything on this page. That is a good sign, and it is not the same as the page being accessible — most of WCAG needs a person. The manual checklists are the next step."
 msgstr ""
 
+#: assets/src/components/overview.js:63
+msgid "The summary could not be loaded."
+msgstr ""
+
+#: assets/src/components/overview.js:82
+msgid "Adding it up…"
+msgstr ""
+
+#: assets/src/components/overview.js:93
+msgid "Nothing has been scanned yet"
+msgstr ""
+
+#: assets/src/components/overview.js:97
+msgid "Check a page on the One page tab and this fills in. It counts only what has actually been scanned, so it starts empty rather than starting at a hundred."
+msgstr ""
+
+#: assets/src/components/overview.js:126
+msgid "Across what has been scanned"
+msgstr ""
+
+#: assets/src/components/overview.js:134
+msgid "Mean score across scanned pages"
+msgstr ""
+
+#. translators: 1: pages scanned. 2: pages published.
+#: assets/src/components/overview.js:148
+#, js-format
+msgid "The average of the latest score for each of %1$d scanned pages, out of %2$d published. It counts only what automated checks can settle, which is part of WCAG rather than all of it, and it does not tell you whether your site meets any legal requirement."
+msgstr ""
+
+#: assets/src/components/overview.js:160
+msgid "Open findings"
+msgstr ""
+
+#: assets/src/components/overview.js:172
+msgid "Set aside"
+msgstr ""
+
+#: assets/src/components/overview.js:179
+msgid "Checks available"
+msgstr ""
+
+#. translators: 1: server-pass checks. 2: browser-pass checks. 3: pages that have had a browser pass.
+#: assets/src/components/overview.js:186
+#, js-format
+msgid "%1$d run on the server, %2$d need the page view — which %3$d scanned pages have had."
+msgstr ""
+
+#: assets/src/components/overview.js:204
+#: assets/src/components/overview.js:211
+msgid "Open findings by severity"
+msgstr ""
+
+#: assets/src/components/overview.js:220
+msgid "What comes up most"
+msgstr ""
+
+#: assets/src/components/overview.js:227
+msgid "Open findings by check"
+msgstr ""
+
+#: assets/src/components/overview.js:236
+msgid "Pages with the most to do"
+msgstr ""
+
+#: assets/src/components/overview.js:243
+msgid "Open findings by page"
+msgstr ""
+
+#: assets/src/components/overview.js:252
+msgid "Score by scan"
+msgstr ""
+
+#. translators: %d: how many scans are plotted.
+#: assets/src/components/overview.js:258
+#, js-format
+msgid "The last %d scan, in the order it ran. This plugin does not re-scan on its own, so the spacing is however often somebody pressed the button — it is a sequence, not a timeline."
+msgid_plural "The last %d scans, in the order they ran. This plugin does not re-scan on its own, so the spacing is however often somebody pressed the button — it is a sequence, not a timeline."
+msgstr[0] ""
+msgstr[1] ""
+
 #: assets/src/components/paid-notice.js:29
 msgid "is part of the paid version."
 msgstr ""
@@ -2396,10 +2531,6 @@ msgstr ""
 
 #: assets/src/components/scan-picker.js:151
 msgid "Actions"
-msgstr ""
-
-#: assets/src/components/scan-picker.js:164
-msgid "(no title)"
 msgstr ""
 
 #. translators: %d: score out of 100.

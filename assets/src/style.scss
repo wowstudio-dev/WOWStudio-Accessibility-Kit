@@ -1764,3 +1764,287 @@
 		text-align: start;
 	}
 }
+
+/* ── Overview: cards ──────────────────────────────────────────────────────
+ *
+ * A panel, a heading and a footnote. Deliberately plain: the charts inside
+ * carry the colour, and a container that competes with them makes a page of
+ * six panels harder to read rather than easier.
+ */
+
+.wsak-card {
+	padding: var(--wsak-space-4);
+	border: 1px solid var(--wsak-line);
+	border-radius: var(--wsak-radius);
+	background: var(--wsak-surface);
+}
+
+.wsak-card__title {
+	margin: 0 0 var(--wsak-space-3);
+	color: var(--wsak-ink);
+	font-size: 14px;
+	font-weight: 660;
+}
+
+.wsak-card__note {
+	margin: var(--wsak-space-3) 0 0;
+	color: var(--wsak-muted);
+	font-size: 12px;
+	line-height: 1.5;
+}
+
+/* ── Overview: charts ─────────────────────────────────────────────────────
+ *
+ * Every animation here is decoration on something already readable without
+ * it, which is what makes it safe to switch all of it off at the bottom of
+ * this block. Nothing moves that carries meaning by moving.
+ */
+
+.wsak-overview__loading {
+	color: var(--wsak-muted);
+}
+
+.wsak-overview__top {
+	display: grid;
+	grid-template-columns: minmax(15rem, 22rem) 1fr;
+	gap: var(--wsak-space-4);
+	align-items: start;
+	margin-bottom: var(--wsak-space-4);
+}
+
+.wsak-overview__grid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
+	gap: var(--wsak-space-4);
+}
+
+.wsak-overview__qualifier {
+	margin: var(--wsak-space-3) 0 0;
+	color: var(--wsak-muted);
+	font-size: 12.5px;
+	line-height: 1.5;
+}
+
+.wsak-overview__stats {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+	gap: var(--wsak-space-3);
+}
+
+.wsak-stat {
+	padding: var(--wsak-space-3);
+	border: 1px solid var(--wsak-line);
+	border-radius: var(--wsak-radius-sm);
+	background: var(--wsak-surface);
+}
+
+.wsak-stat__value {
+	display: block;
+	color: var(--wsak-ink);
+	font-size: 28px;
+	font-weight: 680;
+	line-height: 1.1;
+}
+
+.wsak-stat--good .wsak-stat__value {
+	color: var(--wsak-good);
+}
+
+.wsak-stat__label {
+	display: block;
+	margin-top: 2px;
+	color: var(--wsak-text);
+	font-size: 13px;
+}
+
+.wsak-stat__note {
+	display: block;
+	margin-top: var(--wsak-space-2);
+	color: var(--wsak-muted);
+	font-size: 12px;
+	line-height: 1.45;
+}
+
+.wsak-donut {
+	position: relative;
+	width: 100%;
+	max-width: 12rem;
+	margin: 0 auto;
+}
+
+.wsak-donut__svg {
+	display: block;
+	width: 100%;
+	height: auto;
+}
+
+.wsak-donut__track {
+	stroke: var(--wsak-line);
+}
+
+.wsak-donut__fill {
+	stroke: var(--wsak-violet);
+	animation: wsak-donut-draw 900ms ease-out both;
+}
+
+@keyframes wsak-donut-draw {
+
+	from {
+		stroke-dashoffset: var(--wsak-donut-length);
+	}
+
+	to {
+		stroke-dashoffset: 0;
+	}
+}
+
+.wsak-donut__centre {
+	position: absolute;
+	inset: 0;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+}
+
+.wsak-donut__value {
+	color: var(--wsak-ink);
+	font-size: 34px;
+	font-weight: 700;
+	line-height: 1;
+}
+
+.wsak-donut__of {
+	margin-top: 2px;
+	color: var(--wsak-muted);
+	font-size: 12px;
+}
+
+.wsak-chart__empty {
+	margin: 0;
+	color: var(--wsak-muted);
+	font-size: 12.5px;
+}
+
+.wsak-bars__list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.wsak-bars__row {
+	display: grid;
+	grid-template-columns: minmax(6rem, 11rem) 1fr auto;
+	gap: var(--wsak-space-3);
+	align-items: center;
+	padding: 5px 0;
+}
+
+.wsak-bars__label {
+	overflow: hidden;
+	color: var(--wsak-text);
+	font-size: 12.5px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+/* The track is 1.08:1 against the card, and deliberately left that way —
+ * unlike .wsak-run__bar, which carries a hairline because a progress bar has
+ * no other way to say how far along it is. Here every row prints its own
+ * count beside the bar, so the track conveys nothing on its own and is
+ * decoration under SC 1.4.11. The fill, which does carry meaning, clears 3:1
+ * against it in every tone (lowest is serious at 5.01:1). */
+.wsak-bars__track {
+	overflow: hidden;
+	height: 9px;
+	border-radius: 999px;
+	background: var(--wsak-raised);
+}
+
+.wsak-bars__fill {
+	display: block;
+	width: var(--wsak-bar-width);
+	height: 100%;
+	border-radius: 999px;
+	background: var(--wsak-violet);
+	animation: wsak-bar-grow 700ms ease-out both;
+}
+
+.wsak-bars__fill--critical {
+	background: var(--wsak-critical);
+}
+
+.wsak-bars__fill--serious {
+	background: var(--wsak-serious);
+}
+
+.wsak-bars__fill--moderate {
+	background: var(--wsak-moderate);
+}
+
+.wsak-bars__fill--minor {
+	background: var(--wsak-minor);
+}
+
+@keyframes wsak-bar-grow {
+
+	from {
+		width: 0;
+	}
+
+	to {
+		width: var(--wsak-bar-width);
+	}
+}
+
+.wsak-bars__count {
+	color: var(--wsak-ink);
+	font-size: 12.5px;
+	font-variant-numeric: tabular-nums;
+	font-weight: 640;
+}
+
+.wsak-spark__svg {
+	display: block;
+	width: 100%;
+	height: 5.5rem;
+}
+
+.wsak-spark__area {
+	fill: var(--wsak-raised);
+}
+
+.wsak-spark__line {
+	stroke: var(--wsak-violet);
+	stroke-linecap: round;
+	stroke-linejoin: round;
+	stroke-width: 2px;
+	vector-effect: non-scaling-stroke;
+	stroke-dasharray: 1;
+	animation: wsak-spark-draw 1100ms ease-out both;
+}
+
+@keyframes wsak-spark-draw {
+
+	from {
+		stroke-dashoffset: 1;
+	}
+
+	to {
+		stroke-dashoffset: 0;
+	}
+}
+
+/* The whole point of the block above, honoured in one place. */
+@media (prefers-reduced-motion: reduce) {
+
+	.wsak-donut__fill,
+	.wsak-bars__fill,
+	.wsak-spark__line {
+		animation: none;
+	}
+
+	.wsak-spark__line {
+		stroke-dasharray: none;
+	}
+}
