@@ -32,6 +32,29 @@ abstract class TestCase extends PHPUnitTestCase {
 		Monkey\Functions\when( 'wp_basename' )->alias(
 			static fn( string $path ): string => basename( str_replace( '\\', '/', $path ) )
 		);
+
+		/*
+		 * Missing this one cost an afternoon. The engine catches a throwing
+		 * rule so that one bad check cannot lose the findings of the other
+		 * twenty-three — which is right in production and means an
+		 * undefined-function fatal in a rule looks, from the outside, exactly
+		 * like a rule that found nothing. Two new rules were doing that, and
+		 * the only thing that noticed was EngineTest asserting how many rules
+		 * ran. Keep that assertion.
+		 */
+		Monkey\Functions\when( 'wp_parse_url' )->alias(
+			/**
+			 * Stands in for WordPress's wp_parse_url().
+			 *
+			 * @param string $url       URL to parse.
+			 * @param int    $component Component to return, or -1 for all.
+			 * @return array<string, mixed>|string|int|false|null
+			 */
+			static function ( string $url, int $component = -1 ) {
+				// phpcs:ignore WordPress.WP.AlternativeFunctions.parse_url_parse_url -- Standing in for the WordPress function; this is what it wraps.
+				return -1 === $component ? parse_url( $url ) : parse_url( $url, $component );
+			}
+		);
 	}
 
 	/**

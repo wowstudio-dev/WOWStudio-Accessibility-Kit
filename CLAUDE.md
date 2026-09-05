@@ -79,16 +79,26 @@ See `SPEC.md` → "Explicitly NOT included (anti-features)" for the full stop-li
 
 ## Where the work is
 Roughly in order. The competitor ships 44 checks and 11 free site-wide fixes;
-we ship 17 checks and 4 one-click fixes, so the gap is the plan.
+we ship 29 checks and 4 one-click fixes, so the gap is the plan.
 
-1. **Checks, 17 → ~48.** Images (empty/filename/too-long/redundant alt, linked
-   images, image maps, animated GIF), links (PDF, Office and other non-HTML
-   files, unwarned `target="_blank"`, `<a>` without href, broken skip anchors),
-   structure (no headings, empty heading, bold-as-heading, empty paragraph),
-   forms and tables (duplicate label, empty table header), ARIA
-   (`aria-hidden` on focusable content, broken `aria-labelledby`), media (video
-   captions, audio transcript), visual (justified, blinking, `<u>` misuse, tiny
-   text, locked viewport), behaviour (positive tabindex, carousel present).
+1. **Checks, 29 → ~48.** Twelve landed in 0.17.0: alt text that is a file name,
+   a placeholder or a repeated caption; alt long enough to be a paragraph;
+   image-map regions with no name; links that open a new tab or download a file
+   without saying so; in-page links and ARIA references pointing at ids that do
+   not exist; anchors that click but cannot be tabbed to; empty headings; pages
+   with no headings at all; labels attached to nothing or doubled up.
+
+   Still to come: structure (bold-as-heading, empty paragraph), tables (empty
+   header cell), media (video captions, audio transcript), visual (justified
+   text, blinking, `<u>` misuse, tiny text, locked viewport), behaviour
+   (positive tabindex, carousel present), and animated GIFs — which needs
+   reading frame counts out of the file rather than guessing from the
+   extension.
+
+   **Every new rule needs a pair of tests**, one that trips it and one on the
+   nearest correct markup that must not. `tests/Unit/ContentRulesTest.php` is
+   the pattern. A check that fires on everything is worse than no check: it
+   trains people to skim past the findings that matter.
 2. **Site-wide fixes, through the override layer** with preview and undo: skip
    link, focus outline, link underline, `lang`/`dir`, scalable viewport, strip
    positive tabindex, strip redundant `title`, new-window warning, comment and

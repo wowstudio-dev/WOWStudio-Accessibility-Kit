@@ -33,7 +33,7 @@ final class RuleRegistryTest extends TestCase {
 	public function test_defaults_are_registered_by_id(): void {
 		$registry = RuleRegistry::with_defaults();
 
-		$this->assertCount( 12, $registry->all() );
+		$this->assertCount( 24, $registry->all() );
 		$this->assertInstanceOf( ImageAltMissing::class, $registry->get( 'img-alt-missing' ) );
 		$this->assertNull( $registry->get( 'not-a-rule' ) );
 	}
@@ -89,7 +89,7 @@ final class RuleRegistryTest extends TestCase {
 	public function test_coverage_reports_detection_for_every_rule(): void {
 		$coverage = RuleRegistry::with_defaults()->coverage();
 
-		$this->assertCount( 17, $coverage, '12 server checks plus 5 browser checks.' );
+		$this->assertCount( 29, $coverage, '24 server checks plus 5 browser checks.' );
 
 		$valid  = array( Detection::Auto->value, Detection::Manual->value );
 		$passes = array( ScanPass::Server->value, ScanPass::Browser->value );
@@ -131,7 +131,7 @@ final class RuleRegistryTest extends TestCase {
 
 		// Executable rules are still only the server ones — the engine must not
 		// try to evaluate a check that has no PHP implementation.
-		$this->assertCount( 12, RuleRegistry::with_defaults()->all() );
+		$this->assertCount( 24, RuleRegistry::with_defaults()->all() );
 	}
 
 	/**

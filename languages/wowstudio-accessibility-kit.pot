@@ -2,7 +2,7 @@
 # This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: WOWStudio Accessibility Kit 0.16.0\n"
+"Project-Id-Version: WOWStudio Accessibility Kit 0.17.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wowstudio-accessibility-kit\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -766,6 +766,28 @@ msgstr ""
 msgid "Only this content was scanned, not the whole page, because %s. Checks that depend on the surrounding page — its language, its title, its landmarks — were skipped, so this scan covers less than usual. Ask your host about loopback requests to enable full-page scanning."
 msgstr ""
 
+#: src/Scanner/Rules/AriaReferenceBroken.php:116
+msgid "ARIA attribute points at an element that does not exist"
+msgstr ""
+
+#: src/Scanner/Rules/AriaReferenceBroken.php:127
+msgid "This element names another element by id, and nothing on the page has that id. The reference resolves to nothing, and in most browsers a broken aria-labelledby also suppresses the name the element would otherwise have had — so the markup looks like an accessibility improvement while leaving the control anonymous. Correct the id, or remove the attribute."
+msgstr ""
+
+#: src/Scanner/Rules/AriaReferenceBroken.php:138
+msgid "The element loses the name it was meant to have, and often the one it already had."
+msgstr ""
+
+#: src/Scanner/Rules/AriaReferenceBroken.php:153
+msgid "Which element was meant to be pointed at is something only whoever wrote the markup knows. These attributes are usually emitted by a theme or a plugin template rather than typed into your content."
+msgstr ""
+
+#. translators: 1: the ARIA attribute name. 2: the ids it points at that do not exist, comma separated.
+#: src/Scanner/Rules/AriaReferenceBroken.php:191
+#, php-format
+msgid "This element's %1$s points at %2$s, and nothing on the page has that id."
+msgstr ""
+
 #: src/Scanner/Rules/ButtonNameMissing.php:87
 msgid "Button has no accessible name"
 msgstr ""
@@ -830,6 +852,62 @@ msgstr ""
 #: src/Scanner/Rules/FormControlLabelMissing.php:173
 #, php-format
 msgid "The form field \"%s\" has no label."
+msgstr ""
+
+#: src/Scanner/Rules/FormLabelOrphaned.php:103
+msgid "Form label is attached to the wrong thing"
+msgstr ""
+
+#: src/Scanner/Rules/FormLabelOrphaned.php:114
+msgid "A label here either points at a field that does not exist, or a single field has been given two labels. Both look correct on screen and neither is: an unattached label leaves the field announced as blank and stops clicking the label from focusing it, and two labels produce a name that differs between browsers and screen readers. Point the label's for attribute at the field's id, and use exactly one."
+msgstr ""
+
+#: src/Scanner/Rules/FormLabelOrphaned.php:125
+msgid "The field is announced without its name, or with a different name depending on the software used."
+msgstr ""
+
+#: src/Scanner/Rules/FormLabelOrphaned.php:140
+msgid "Which field a label belongs to, and which of two labels is the right one, are questions about the form rather than the markup. Forms are usually built by a plugin, so the fix is normally in that plugin's form editor."
+msgstr ""
+
+#. translators: %s: the id the label points at.
+#: src/Scanner/Rules/FormLabelOrphaned.php:183
+#, php-format
+msgid "A label points at the id \"%s\", and no field on this page has it."
+msgstr ""
+
+#. translators: 1: the label text. 2: the id the label points at.
+#: src/Scanner/Rules/FormLabelOrphaned.php:188
+#, php-format
+msgid "The label \"%1$s\" points at the id \"%2$s\", and no field on this page has it."
+msgstr ""
+
+#. translators: %s: the id shared by both labels.
+#: src/Scanner/Rules/FormLabelOrphaned.php:210
+#, php-format
+msgid "The field \"%s\" has more than one label, so which name a reader hears depends on their browser."
+msgstr ""
+
+#: src/Scanner/Rules/HeadingEmpty.php:98
+msgid "Heading is empty"
+msgstr ""
+
+#: src/Scanner/Rules/HeadingEmpty.php:109
+msgid "This heading contains no text, so a screen reader announces a heading and then nothing. People who navigate by jumping between headings get a stop on that route that tells them nothing about where they are. Either give the heading text, or remove it — an empty heading is usually left over from editing."
+msgstr ""
+
+#: src/Scanner/Rules/HeadingEmpty.php:120
+msgid "Anyone navigating by headings lands on one that announces nothing."
+msgstr ""
+
+#: src/Scanner/Rules/HeadingEmpty.php:135
+msgid "Whether this heading wants text or wants deleting depends on why it is there, which is a question about the page. Both are edits in the editor."
+msgstr ""
+
+#. translators: %s: the heading element name, for example h2.
+#: src/Scanner/Rules/HeadingEmpty.php:169
+#, php-format
+msgid "This %s contains no text."
 msgstr ""
 
 #: src/Scanner/Rules/HeadingLevelSkipped.php:88
@@ -900,6 +978,40 @@ msgstr ""
 msgid "This frame has no title, so it is announced without a name."
 msgstr ""
 
+#: src/Scanner/Rules/ImageAltIsFilename.php:146
+msgid "Alt text is a file name or a placeholder"
+msgstr ""
+
+#: src/Scanner/Rules/ImageAltIsFilename.php:157
+msgid "The alt attribute is filled in, but with the file name or a placeholder word rather than a description. This is worse than leaving it empty in one specific way: it looks answered, so nothing else will flag it. Replace it with what the image tells the reader, or with alt=\"\" if the image is decorative."
+msgstr ""
+
+#: src/Scanner/Rules/ImageAltIsFilename.php:168
+msgid "A screen reader reads the file name aloud, letter by letter, in place of what the picture shows."
+msgstr ""
+
+#: src/Scanner/Rules/ImageAltIsFilename.php:183
+msgid "What the image conveys depends on why it is on the page, so the wording is yours. The Images screen is the quickest route: it lists undescribed images with a field beside each, and what you write goes to the media library."
+msgstr ""
+
+#. translators: %s: the alt text found on the image.
+#: src/Scanner/Rules/ImageAltIsFilename.php:247
+#, php-format
+msgid "The alt text is a file name: \"%s\"."
+msgstr ""
+
+#. translators: %s: the alt text found on the image.
+#: src/Scanner/Rules/ImageAltIsFilename.php:255
+#, php-format
+msgid "The alt text is \"%s\", which describes nothing about this particular image."
+msgstr ""
+
+#. translators: %s: the alt text found on the image.
+#: src/Scanner/Rules/ImageAltIsFilename.php:273
+#, php-format
+msgid "The alt text repeats the image file name: \"%s\"."
+msgstr ""
+
 #: src/Scanner/Rules/ImageAltMissing.php:90
 msgid "Image has no alt attribute"
 msgstr ""
@@ -926,6 +1038,106 @@ msgstr ""
 msgid "The image \"%s\" has no alt attribute."
 msgstr ""
 
+#: src/Scanner/Rules/ImageAltRedundant.php:95
+msgid "Alt text repeats the caption or title"
+msgstr ""
+
+#: src/Scanner/Rules/ImageAltRedundant.php:106
+msgid "This image's alt text is word-for-word the same as its caption or its title attribute, so a screen reader announces the same sentence twice in a row. Either describe the image differently in the alt — what it shows, rather than what the caption already says about it — or mark it decorative with alt=\"\" and let the caption do the work."
+msgstr ""
+
+#: src/Scanner/Rules/ImageAltRedundant.php:117
+msgid "The same sentence is announced twice in a row to anyone listening to the page."
+msgstr ""
+
+#: src/Scanner/Rules/ImageAltRedundant.php:132
+msgid "Which of the two should change depends on what each is for: the caption is usually the context, the alt is usually what the picture shows. Sometimes the right answer is an empty alt."
+msgstr ""
+
+#: src/Scanner/Rules/ImageAltRedundant.php:162
+msgid "This image's alt text and title attribute are identical, so both are announced."
+msgstr ""
+
+#: src/Scanner/Rules/ImageAltRedundant.php:177
+msgid "This image's alt text is word-for-word its caption, so the same sentence is announced twice."
+msgstr ""
+
+#: src/Scanner/Rules/ImageAltTooLong.php:113
+msgid "Alt text may be too long to listen to"
+msgstr ""
+
+#: src/Scanner/Rules/ImageAltTooLong.php:124
+msgid "Alt text is announced in one run, with no way to pause it, skim it or go back a sentence. Anything this long is usually content the page itself should carry — in a caption, or a paragraph beside the image — where everyone can read it and anyone can navigate it. Consider shortening the alt to what the image conveys at a glance and moving the detail onto the page."
+msgstr ""
+
+#: src/Scanner/Rules/ImageAltTooLong.php:135
+msgid "Someone using a screen reader has to sit through a paragraph they cannot pause, skim or re-read."
+msgstr ""
+
+#: src/Scanner/Rules/ImageAltTooLong.php:150
+msgid "Whether this detail belongs in the alt text or on the page is a question about the content, and sometimes the long version is right. Shorten it in the media library if it is not."
+msgstr ""
+
+#. translators: 1: how many characters the alt text is. 2: the length at which this rule starts reporting.
+#: src/Scanner/Rules/ImageAltTooLong.php:184
+#, php-format
+msgid "This alt text is %1$d characters long; anything over about %2$d is usually better as a caption or a paragraph."
+msgstr ""
+
+#: src/Scanner/Rules/ImageMapAreaAltMissing.php:97
+msgid "Image map region has no alt text"
+msgstr ""
+
+#: src/Scanner/Rules/ImageMapAreaAltMissing.php:108
+msgid "A clickable region of an image map is a link, and an area element has nowhere to put visible text — its alt attribute is the only name it can have. Without one, a screen reader announces the raw URL or nothing at all. Add an alt attribute naming where the region goes."
+msgstr ""
+
+#: src/Scanner/Rules/ImageMapAreaAltMissing.php:119
+msgid "A screen reader reaches a link it cannot name, and reads out the URL instead of the destination."
+msgstr ""
+
+#: src/Scanner/Rules/ImageMapAreaAltMissing.php:134
+msgid "Naming the region means knowing which part of the picture it covers and where it goes, which is a question about the map rather than the markup. Add an alt attribute to each area."
+msgstr ""
+
+#: src/Scanner/Rules/ImageMapAreaAltMissing.php:172
+msgid "This image map region has no alt text."
+msgstr ""
+
+#. translators: %s: the URL the region links to.
+#: src/Scanner/Rules/ImageMapAreaAltMissing.php:175
+#, php-format
+msgid "The image map region linking to %s has no alt text."
+msgstr ""
+
+#: src/Scanner/Rules/LinkAnchorBroken.php:110
+msgid "In-page link points at nothing"
+msgstr ""
+
+#: src/Scanner/Rules/LinkAnchorBroken.php:121
+msgid "This link jumps to a part of the page that does not exist, so activating it does nothing at all — focus stays where it was, with no error and no message. If it is a skip link, keyboard users are tabbing through your whole header on every page. Either give the target element the matching id, or correct the link."
+msgstr ""
+
+#: src/Scanner/Rules/LinkAnchorBroken.php:132
+msgid "The link does nothing when activated, and nothing says so — focus simply stays put."
+msgstr ""
+
+#: src/Scanner/Rules/LinkAnchorBroken.php:147
+msgid "Two ends, and only you know which one moved: either the target lost its id, or the link points at the wrong name. Skip links and their targets almost always live in the theme header rather than in your content."
+msgstr ""
+
+#. translators: %s: the fragment the link points at, including the hash.
+#: src/Scanner/Rules/LinkAnchorBroken.php:197
+#, php-format
+msgid "A link points to %s, but nothing on this page has that id."
+msgstr ""
+
+#. translators: 1: the link text. 2: the fragment the link points at, including the hash.
+#: src/Scanner/Rules/LinkAnchorBroken.php:202
+#, php-format
+msgid "The link \"%1$s\" points to %2$s, but nothing on this page has that id."
+msgstr ""
+
 #: src/Scanner/Rules/LinkNameMissing.php:88
 msgid "Link has no accessible name"
 msgstr ""
@@ -948,6 +1160,58 @@ msgstr ""
 msgid "The link to \"%s\" has no text or label."
 msgstr ""
 
+#: src/Scanner/Rules/LinkNotKeyboardReachable.php:110
+msgid "Clickable link cannot be reached by keyboard"
+msgstr ""
+
+#: src/Scanner/Rules/LinkNotKeyboardReachable.php:121
+msgid "This element does something when clicked, but it has no href, so the browser does not treat it as a link. It cannot be tabbed to, it does not appear in a screen reader's list of links, and pressing Enter on it does nothing. Give it a real href if it goes somewhere, or make it a button element if it performs an action."
+msgstr ""
+
+#: src/Scanner/Rules/LinkNotKeyboardReachable.php:132
+msgid "Anyone not using a mouse cannot reach this control at all — it does not exist for them."
+msgstr ""
+
+#: src/Scanner/Rules/LinkNotKeyboardReachable.php:147
+msgid "Which element it should be depends on what it does: somewhere to go is a link with a real href, something to happen is a button. Both are keyboard-operable for free; a div or a bare anchor never is."
+msgstr ""
+
+#: src/Scanner/Rules/LinkNotKeyboardReachable.php:186
+msgid "This element responds to a click but has no href, so the keyboard cannot reach it."
+msgstr ""
+
+#. translators: %s: the element's text.
+#: src/Scanner/Rules/LinkNotKeyboardReachable.php:189
+#, php-format
+msgid "\"%s\" responds to a click but has no href, so the keyboard cannot reach it."
+msgstr ""
+
+#: src/Scanner/Rules/LinkOpensNewWindow.php:119
+msgid "Link opens a new tab without saying so"
+msgstr ""
+
+#: src/Scanner/Rules/LinkOpensNewWindow.php:130
+msgid "This link opens in a new tab, and nothing in its text or title says it will. A new tab removes the back button, which is a quiet problem for a sighted user and a confusing one for somebody who cannot see that a tab opened. Either say so in the link text — \"(opens in a new tab)\" — or let the link open normally and leave the choice to the reader."
+msgstr ""
+
+#: src/Scanner/Rules/LinkOpensNewWindow.php:141
+msgid "The reader lands somewhere new with no announcement, and pressing Back does nothing."
+msgstr ""
+
+#: src/Scanner/Rules/LinkOpensNewWindow.php:156
+msgid "Two possible answers, and choosing between them is an editorial call: add the warning to the link text, or stop opening a new tab. Both are edits to the link in your content."
+msgstr ""
+
+#: src/Scanner/Rules/LinkOpensNewWindow.php:205
+msgid "This link opens in a new tab and does not say so."
+msgstr ""
+
+#. translators: %s: the link text.
+#: src/Scanner/Rules/LinkOpensNewWindow.php:208
+#, php-format
+msgid "The link \"%s\" opens in a new tab and does not say so."
+msgstr ""
+
 #: src/Scanner/Rules/LinkTextNotDescriptive.php:90
 msgid "Link text may not make sense on its own"
 msgstr ""
@@ -968,6 +1232,34 @@ msgstr ""
 #: src/Scanner/Rules/LinkTextNotDescriptive.php:183
 #, php-format
 msgid "The link text \"%s\" may not make sense when read on its own."
+msgstr ""
+
+#: src/Scanner/Rules/LinkToFile.php:141
+msgid "Link downloads a file without saying so"
+msgstr ""
+
+#: src/Scanner/Rules/LinkToFile.php:152
+msgid "This link points at a document rather than a page, and its text does not say so. Following it will start a download or open another application, which is a surprise for anybody and an expensive one for a reader who cannot easily see what just happened. Name the format in the link text — \"Annual report (PDF)\" — so the choice is made before the click, not after."
+msgstr ""
+
+#: src/Scanner/Rules/LinkToFile.php:163
+msgid "The reader expects a page and gets a download, with no warning and an awkward way back."
+msgstr ""
+
+#: src/Scanner/Rules/LinkToFile.php:178
+msgid "Add the format to the link text, in the words that suit the sentence it sits in. Adding the file size too is a kindness on a slow connection."
+msgstr ""
+
+#. translators: %s: the file format, for example PDF.
+#: src/Scanner/Rules/LinkToFile.php:233
+#, php-format
+msgid "This link opens a %s file and does not say so."
+msgstr ""
+
+#. translators: 1: the link text. 2: the file format, for example PDF.
+#: src/Scanner/Rules/LinkToFile.php:238
+#, php-format
+msgid "The link \"%1$s\" opens a %2$s file and does not say so."
 msgstr ""
 
 #: src/Scanner/Rules/MainLandmarkMissing.php:87
@@ -1014,6 +1306,26 @@ msgstr ""
 #: src/Scanner/Rules/MultipleTopHeadings.php:186
 #, php-format
 msgid "This is top-level heading number %d on the page."
+msgstr ""
+
+#: src/Scanner/Rules/PageHasNoHeadings.php:98
+msgid "Page has no headings"
+msgstr ""
+
+#: src/Scanner/Rules/PageHasNoHeadings.php:109
+msgid "There is not a single heading element on this page. Screen reader users navigate long pages by pulling up a list of headings and jumping to the part they want; with none, the only way through is from the top, in order. If the page looks like it has headings, they are probably paragraphs made large and bold — which conveys structure to the eye and nothing to anything else."
+msgstr ""
+
+#: src/Scanner/Rules/PageHasNoHeadings.php:120
+msgid "There is no way to skim or jump around this page; it can only be read from the top."
+msgstr ""
+
+#: src/Scanner/Rules/PageHasNoHeadings.php:135
+msgid "Which parts of the page are headings is a judgement about what the page says, and only you can make it. In the editor, change the blocks that act as headings from paragraph to heading."
+msgstr ""
+
+#: src/Scanner/Rules/PageHasNoHeadings.php:162
+msgid "This page contains no heading elements at all."
 msgstr ""
 
 #: src/Scanner/Rules/TableHeadersMissing.php:89

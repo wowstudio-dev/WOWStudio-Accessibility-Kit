@@ -24,6 +24,71 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   testing with disabled users. The contrast guard checks 91 colour pairings on
   every push, which is not the same thing as somebody using the interface.
 
+## [0.17.0] - 2026-09-06
+
+Twelve new checks. The scanner goes from 17 to 29 — 24 on the server, 5 in the
+browser.
+
+### Added
+
+**Images**
+
+- `img-alt-is-filename` — alt text that is the file name, a placeholder word, or
+  the `src` with its punctuation tidied. Worse than a missing attribute in one
+  specific way: it looks answered, so no other check will ever flag it.
+- `img-alt-too-long` — over 150 characters. Reported as needing review rather
+  than settled, because long alt text is not a WCAG failure; it is a signal the
+  content might belong in a caption, where it can be skimmed and re-read.
+- `img-alt-redundant` — alt matching the caption or the `title` word for word,
+  so the same sentence is announced twice. Exact matches only: alt that
+  *overlaps* a caption is usually two jobs done well.
+- `image-map-area-alt-missing` — an `<area>` is the one kind of link with
+  nowhere to put visible text, so its `alt` is the only name it can have.
+
+**Links**
+
+- `link-opens-new-window` — `target="_blank"` with no mention of it in the link
+  name or title. Reported as needing review: WCAG has no criterion a bare
+  `_blank` fails outright, and saying otherwise would be overstating it.
+- `link-to-file` — links to PDFs, Office documents, archives and media whose
+  text does not name the format. Deliberately one rule where the obvious
+  competitor ships three, because it is one habit with one fix and naming the
+  format in the message is more useful than sorting findings by it.
+- `link-anchor-broken` — `href="#thing"` where nothing has that id. Matters most
+  for skip links, which stay visible, still look right, and silently do nothing
+  once their target is renamed.
+- `link-not-keyboard-reachable` — an `<a>` with a click handler but no `href`,
+  which the browser treats as a span: not focusable, not in the links list, not
+  activated by Enter. Narrow on purpose, so bare named anchors are not swept up.
+
+**Structure, forms and ARIA**
+
+- `heading-empty` — announces "heading level two" and then nothing. Alt text
+  inside the heading counts as text, because that is what alt text is for.
+- `page-has-no-headings` — no headings at all, so there is no list to jump
+  through and the page can only be read from the top.
+- `form-label-orphaned` — a `<label for>` pointing at a missing id, or two
+  labels on one field. Both look correct on screen and neither is.
+- `aria-reference-broken` — `aria-labelledby` and its six siblings pointing at
+  ids that are not on the page. A broken `aria-labelledby` does not just fail to
+  add a name, it suppresses the one the element already had.
+
+### Changed
+
+- `EngineTest` now asserts that the number of rules that ran equals the number
+  registered, rather than a hard-coded number. The engine deliberately swallows
+  a throwing rule so one bad check cannot lose the findings of the other
+  twenty-three — which means a rule that fatals is indistinguishable from a rule
+  that found nothing. That assertion is the only thing that tells them apart,
+  and it immediately caught two of these twelve calling `wp_parse_url()`, which
+  the test harness did not stub.
+
+### Fixed
+
+- `wp_parse_url()` is now stubbed in `tests/TestCase.php`. Without it, any rule
+  using it silently found nothing under test while working correctly in
+  production.
+
 ## [0.16.0] - 2026-09-06
 
 The plugin becomes one free thing. There is no paid tier, no licensing SDK, and

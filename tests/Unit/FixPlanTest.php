@@ -87,6 +87,24 @@ final class FixPlanTest extends TestCase {
 			'iframe-title-missing'           => array( FixKind::Manual, FixTarget::Content ),
 			'link-text-not-descriptive'      => array( FixKind::Manual, FixTarget::Content ),
 
+			// Added in 0.17.0. Every one is Manual: each asks what a piece of
+			// content is *for*, and none of those answers can be computed.
+			'img-alt-is-filename'            => array( FixKind::Manual, FixTarget::Media ),
+			'img-alt-too-long'               => array( FixKind::Manual, FixTarget::Media ),
+			'img-alt-redundant'              => array( FixKind::Manual, FixTarget::Content ),
+			'image-map-area-alt-missing'     => array( FixKind::Manual, FixTarget::Content ),
+			'link-opens-new-window'          => array( FixKind::Manual, FixTarget::Content ),
+			'link-to-file'                   => array( FixKind::Manual, FixTarget::Content ),
+			'link-not-keyboard-reachable'    => array( FixKind::Manual, FixTarget::Content ),
+			'heading-empty'                  => array( FixKind::Manual, FixTarget::Content ),
+			'page-has-no-headings'           => array( FixKind::Manual, FixTarget::Content ),
+			'form-label-orphaned'            => array( FixKind::Manual, FixTarget::Content ),
+			// Both of these are usually emitted by a theme or plugin template
+			// rather than typed into a post, so they hand off rather than
+			// pointing at the editor.
+			'link-anchor-broken'             => array( FixKind::Manual, FixTarget::Theme ),
+			'aria-reference-broken'          => array( FixKind::Manual, FixTarget::Theme ),
+
 			// Judgements about meaning. No button, ever.
 			'heading-level-skipped'          => array( FixKind::Manual, FixTarget::Content ),
 			'heading-multiple-h1'            => array( FixKind::Manual, FixTarget::Content ),
@@ -118,7 +136,7 @@ final class FixPlanTest extends TestCase {
 	/**
 	 * The counts, so a quiet drift upward is loud.
 	 *
-	 * Four one-click fixes out of seventeen checks, three of which already
+	 * Four one-click fixes out of twenty-nine checks, three of which already
 	 * shipped as CSS. If this number grows, it should be because somebody meant
 	 * it — not because a rule was reclassified while its own tests still passed.
 	 *
@@ -150,9 +168,9 @@ final class FixPlanTest extends TestCase {
 
 		$this->assertSame( 4, $one_click, 'One-click fixes.' );
 		$this->assertSame( 0, $review, 'Nothing drafts a fix, so nothing is a draft to review.' );
-		$this->assertSame( 4, $handoff, 'Findings that belong to whoever maintains the theme.' );
-		$this->assertSame( 9, $nothing, 'Findings only the content owner can settle.' );
-		$this->assertCount( 17, $this->plans() );
+		$this->assertSame( 6, $handoff, 'Findings that belong to whoever maintains the theme.' );
+		$this->assertSame( 19, $nothing, 'Findings only the content owner can settle.' );
+		$this->assertCount( 29, $this->plans() );
 	}
 
 	/**

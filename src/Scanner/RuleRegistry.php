@@ -13,6 +13,18 @@ use WOWStudio\AccessibilityKit\Scanner\Rules\FormControlLabelMissing;
 use WOWStudio\AccessibilityKit\Scanner\Rules\HeadingLevelSkipped;
 use WOWStudio\AccessibilityKit\Scanner\Rules\HtmlLangMissing;
 use WOWStudio\AccessibilityKit\Scanner\Rules\IframeTitleMissing;
+use WOWStudio\AccessibilityKit\Scanner\Rules\AriaReferenceBroken;
+use WOWStudio\AccessibilityKit\Scanner\Rules\FormLabelOrphaned;
+use WOWStudio\AccessibilityKit\Scanner\Rules\HeadingEmpty;
+use WOWStudio\AccessibilityKit\Scanner\Rules\ImageAltIsFilename;
+use WOWStudio\AccessibilityKit\Scanner\Rules\ImageAltRedundant;
+use WOWStudio\AccessibilityKit\Scanner\Rules\ImageAltTooLong;
+use WOWStudio\AccessibilityKit\Scanner\Rules\ImageMapAreaAltMissing;
+use WOWStudio\AccessibilityKit\Scanner\Rules\LinkAnchorBroken;
+use WOWStudio\AccessibilityKit\Scanner\Rules\LinkNotKeyboardReachable;
+use WOWStudio\AccessibilityKit\Scanner\Rules\LinkOpensNewWindow;
+use WOWStudio\AccessibilityKit\Scanner\Rules\LinkToFile;
+use WOWStudio\AccessibilityKit\Scanner\Rules\PageHasNoHeadings;
 use WOWStudio\AccessibilityKit\Scanner\Rules\ImageAltMissing;
 use WOWStudio\AccessibilityKit\Scanner\Rules\LinkNameMissing;
 use WOWStudio\AccessibilityKit\Scanner\Rules\LinkTextNotDescriptive;
@@ -64,6 +76,21 @@ final class RuleRegistry {
 			new TableHeadersMissing(),
 			new MainLandmarkMissing(),
 			new MultipleTopHeadings(),
+
+			// 0.17.0. Ordered by what they are about rather than by when they
+			// were added, so the list reads as a description of the coverage.
+			new ImageAltIsFilename(),
+			new ImageAltRedundant(),
+			new ImageAltTooLong(),
+			new ImageMapAreaAltMissing(),
+			new LinkAnchorBroken(),
+			new LinkNotKeyboardReachable(),
+			new LinkOpensNewWindow(),
+			new LinkToFile(),
+			new HeadingEmpty(),
+			new PageHasNoHeadings(),
+			new FormLabelOrphaned(),
+			new AriaReferenceBroken(),
 		);
 
 		/**

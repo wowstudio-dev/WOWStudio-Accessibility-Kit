@@ -4,7 +4,7 @@ Tags: accessibility, wcag, a11y, alt text, accessibility scanner
 Requires at least: 6.8
 Tested up to: 7.1
 Requires PHP: 8.1
-Stable tag: 0.16.0
+Stable tag: 0.17.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -94,6 +94,12 @@ In WordPress's own alt text field on the media item. It therefore applies everyw
 
 == Changelog ==
 
+= 0.17.0 =
+* Twelve new checks, taking the scanner from 17 to 29.
+* Images: alt text that is really a file name or a placeholder; alt text long enough to be a paragraph; alt text that just repeats the caption; image-map regions with no name.
+* Links: links that open a new tab without saying so; links that download a PDF, spreadsheet or archive without saying so; in-page links pointing at a section that does not exist — which is how skip links quietly stop working; links that respond to a click but cannot be reached by keyboard.
+* Structure and forms: empty headings; pages with no headings at all; labels attached to a field that is not there, or two labels on one field; ARIA attributes naming an element that does not exist.
+
 = 0.16.0 =
 * Everything in this plugin is now free. Checking your whole site at once was the paid feature; it is not paid any more, and there are no locked buttons left anywhere.
 * Removed the licensing SDK entirely. No account, no opt-in screen, no telemetry.
@@ -177,6 +183,9 @@ In WordPress's own alt text field on the media item. It therefore applies everyw
 * Initial scaffold: plugin bootstrap, capabilities, activation and uninstall handling.
 
 == Upgrade Notice ==
+
+= 0.17.0 =
+Twelve new checks, covering alt-text quality, links that surprise you, broken skip links, empty headings and mislabelled form fields.
 
 = 0.16.0 =
 Everything is free now, and the AI features are gone. The plugin no longer contacts any external service. Site-wide scanning is no longer paid, and there is a new Images screen for writing alt text in bulk.

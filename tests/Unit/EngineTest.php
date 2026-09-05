@@ -11,6 +11,7 @@ namespace WOWStudio\AccessibilityKit\Tests\Unit;
 
 use WOWStudio\AccessibilityKit\Scanner\Detection;
 use WOWStudio\AccessibilityKit\Scanner\Engine;
+use WOWStudio\AccessibilityKit\Scanner\RuleRegistry;
 use WOWStudio\AccessibilityKit\Scanner\Finding;
 use WOWStudio\AccessibilityKit\Tests\TestCase;
 
@@ -250,7 +251,19 @@ HTML;
 		$summary = $result->summary();
 
 		$this->assertSame( 12, $summary['total'] );
-		$this->assertSame( 12, $summary['rules_run'] );
+
+		/*
+		 * Every registered rule, not a number that happens to be right. The
+		 * engine swallows a throwing rule so that one bad check cannot lose the
+		 * findings of the rest, which means a rule that fatals looks exactly
+		 * like a rule that found nothing. This assertion is the only thing that
+		 * tells them apart, and it has already caught two.
+		 */
+		$this->assertSame(
+			count( RuleRegistry::with_defaults()->all() ),
+			$summary['rules_run'],
+			'A rule threw and the engine swallowed it.'
+		);
 		$this->assertTrue( $summary['full_page'] );
 	}
 }
