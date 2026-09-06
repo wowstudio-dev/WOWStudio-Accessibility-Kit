@@ -42,15 +42,33 @@ final class PageBuilderTest extends TestCase {
 	}
 
 	/**
-	 * An empty content field is not the end of the attempt.
+	 * The builder is asked first, not as a fallback for empty content.
+	 *
+	 * The ordering is the entire fix and it is easy to reverse by accident,
+	 * because asking-when-empty reads like the more conservative choice. It is
+	 * not. Elementor writes a stripped text copy of the page into
+	 * `post_content` for search engines — on a real home page, 3,808 bytes of
+	 * bare headings against 69,503 bytes of page. A fallback that waits for
+	 * empty never fires on that, and the scan reports a confident hundred out of
+	 * a hundred on a page nobody has really looked at.
 	 *
 	 * @return void
 	 */
-	public function test_empty_content_falls_through_to_the_builder(): void {
+	public function test_the_builder_is_asked_before_the_content_filter(): void {
 		$source = $this->source( 'src/Scanner/PageSource.php' );
 
 		$this->assertStringContainsString( 'private function builder_content(', $source );
-		$this->assertStringContainsString( '$content = $this->builder_content( $post->ID );', $source );
+
+		$builder_call = strpos( $source, '$this->builder_content(' );
+		$content_call = strpos( $source, "apply_filters( 'the_content'" );
+
+		$this->assertIsInt( $builder_call );
+		$this->assertIsInt( $content_call );
+		$this->assertLessThan(
+			$content_call,
+			$builder_call,
+			'The builder has to be asked before the_content, or a builder that leaves a stub behind is scanned as the page.'
+		);
 	}
 
 	/**

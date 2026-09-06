@@ -19,4 +19,7 @@ parameters:
 		- stubs/wp-ai-client.php
 		# WP-CLI is the environment src/Cli/ may run inside, never a dependency.
 		- stubs/wp-cli.php
+		# Elementor is a plugin this one may run beside; every reach into it is
+		# guarded at runtime because none of it is guaranteed to be present.
+		- stubs/elementor.php
 	treatPhpDocTypesAsCertain: false

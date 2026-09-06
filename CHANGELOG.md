@@ -25,6 +25,20 @@ Page-builder content, and a statement anybody can read.
 
 ### Fixed
 
+- **Elementor pages scanned against a search-engine stub.** Caught on a real
+  Elementor page after the first fix looked like it worked. Elementor writes a
+  stripped text copy of the page into `post_content` — on that page, 3,808 bytes
+  of bare headings against 69,503 bytes of actual page. The first fix only asked
+  the builder when `post_content` rendered to *nothing*, so it never fired, and
+  the scan read the stub and reported a confident hundred out of a hundred.
+
+  A false clean bill of health is the worst thing this plugin can produce.
+  Everything else it does is hedged precisely so nobody reads more into a result
+  than it can carry, and a confident 100 on a page nobody has really looked at
+  undoes all of it. The builder is now asked **first**: where one owns the page,
+  its output *is* the page, and `post_content` is a search engine's copy rather
+  than a second opinion.
+
 - **Elementor pages scanned as though they were empty.** Found by building a
   real Elementor page and looking, not by reading documentation. Elementor keeps
   nothing in `post_content` — a JSON tree in postmeta, rendered through hooks

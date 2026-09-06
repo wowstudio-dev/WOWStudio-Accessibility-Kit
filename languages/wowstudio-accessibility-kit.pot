@@ -804,7 +804,7 @@ msgstr ""
 msgid "Only this content was scanned, not the whole page, because %s. Checks that depend on the surrounding page — its language, its title, its landmarks — were skipped, so this scan covers less than usual. Ask your host about loopback requests to enable full-page scanning."
 msgstr ""
 
-#: src/Scanner/PageSource.php:305
+#: src/Scanner/PageSource.php:310
 msgid "There was nothing to check: this page's content field is empty, and no page builder supplied anything either. If visitors do see content here, something is producing it that this scan cannot reach — reaching it means fetching the whole page, so ask your host about loopback requests or whether a security plugin is blocking them."
 msgstr ""
 

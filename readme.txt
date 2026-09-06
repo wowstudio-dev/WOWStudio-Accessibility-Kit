@@ -96,7 +96,7 @@ In WordPress's own alt text field on the media item. It therefore applies everyw
 == Changelog ==
 
 = 0.27.0 =
-* Fixed: pages built with Elementor were scanned as though they had no content on them, on sites where the plugin cannot fetch the whole page. Elementor stores its content outside WordPress's own content field; the scan now asks it directly. Divi and WP Bakery were never affected.
+* Fixed: pages built with Elementor were not being scanned properly on sites where the plugin cannot fetch the whole page. Elementor keeps the real page outside WordPress's own content field and leaves a short text summary in its place, so the scan was reading the summary — and reporting a clean result for a page it had barely seen. It now asks Elementor for the page itself. Divi and WP Bakery were never affected.
 * Fixed: when there is genuinely nothing to scan, the message now says so and names what to check, instead of reporting that the page could not be parsed.
 * Changed: the generated accessibility statement is written in plainer language, and now passes this plugin's own reading-level check.
 

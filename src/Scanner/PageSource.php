@@ -249,24 +249,27 @@ final class PageSource {
 	/**
 	 * Renders a post's content the way a visitor would see it.
 	 *
-	 * Core's `the_content` first, which handles blocks, shortcodes and every
-	 * builder that keeps its output in `post_content` — Divi and WP Bakery
-	 * store shortcodes there, so they come out correctly with no special
-	 * handling at all.
+	 * **The page builder is asked first, and that ordering is the whole point.**
 	 *
-	 * Then the case that made this method necessary. Elementor keeps nothing in
-	 * `post_content`: it stores a JSON tree in postmeta and renders it through
-	 * hooks that only fire inside the loop on a real request. Applying
-	 * `the_content` to the empty string it leaves behind returns the empty
-	 * string, so a site where loopback is blocked would scan every Elementor
-	 * page as though it had no content in it. Verified rather than assumed: an
-	 * Elementor page with four faults in it produced zero bytes here while the
-	 * rendered page was eighty kilobytes.
+	 * It started as a fallback for empty content, which fixed the obvious half
+	 * of the problem and missed the dangerous half. Elementor writes a stripped
+	 * text version of the page into `post_content` for search engines: on a real
+	 * home page that was 3,808 bytes of bare headings against 69,503 bytes of
+	 * actual page. `the_content` returned the stub, the stub was not empty, so
+	 * the fallback never fired — and the scan reported a hundred out of a
+	 * hundred with one finding, on a page with eight images and a full
+	 * navigation in it.
 	 *
-	 * Failing that, an explicit error. This used to fall through to the parser,
-	 * which reported "the page could not be parsed as HTML" — true in a narrow
-	 * sense and useless, because it named the symptom and not one of the two
-	 * things the reader could actually do something about.
+	 * A false clean bill of health is the worst thing this plugin can produce.
+	 * Everything else it does is hedged and qualified precisely so that nobody
+	 * reads more into a result than it can carry; a confident 100 on a page
+	 * nobody has really looked at undoes all of it. So where a builder owns the
+	 * page, the builder's output *is* the page, and `post_content` is a search
+	 * engine's copy of it rather than a second opinion.
+	 *
+	 * Core's filter still runs for everything else, which is almost everything:
+	 * blocks, shortcodes, Divi and WP Bakery all keep their content in
+	 * `post_content` and come out correctly.
 	 *
 	 * @since 0.27.0
 	 *
@@ -279,15 +282,17 @@ final class PageSource {
 	 * @return string|WP_Error
 	 */
 	private function rendered_content( object $post ) {
-		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Applying core's content filter is the intent here, not declaring a new hook.
-		$content = apply_filters( 'the_content', $post->post_content );
-		$content = is_string( $content ) ? $content : '';
+		// A post object with no id cannot be owned by a builder, and asking
+		// would mean handing another plugin a zero to look up.
+		$content = isset( $post->ID ) ? $this->builder_content( (int) $post->ID ) : '';
 
 		if ( '' !== trim( $content ) ) {
 			return $content;
 		}
 
-		$content = $this->builder_content( $post->ID );
+		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Applying core's content filter is the intent here, not declaring a new hook.
+		$content = apply_filters( 'the_content', $post->post_content );
+		$content = is_string( $content ) ? $content : '';
 
 		if ( '' !== trim( $content ) ) {
 			return $content;
@@ -324,11 +329,7 @@ final class PageSource {
 	private function builder_content( int $post_id ): string {
 		$content = '';
 
-		if (
-			class_exists( '\Elementor\Plugin' )
-			&& isset( \Elementor\Plugin::$instance->frontend )
-			&& method_exists( \Elementor\Plugin::$instance->frontend, 'get_builder_content_for_display' )
-		) {
+		if ( $this->is_built_with_elementor( $post_id ) ) {
 			// Second argument asks Elementor to render rather than return the
 			// editor's own markup.
 			$content = (string) \Elementor\Plugin::$instance->frontend->get_builder_content_for_display( $post_id, true );
@@ -352,5 +353,46 @@ final class PageSource {
 		$content = (string) apply_filters( 'wsak_builder_content', $content, $post_id );
 
 		return $content;
+	}
+
+	/**
+	 * Reports whether Elementor owns this post, guarding every hop.
+	 *
+	 * Four checks before anything is called, because this reaches across a
+	 * version boundary into another plugin's internals: the class may not be
+	 * there, the singleton may not be built yet, the manager may be absent on an
+	 * early hook, and the method may be renamed in a release nobody here has
+	 * seen. Any one of those unguarded is a fatal error on somebody's dashboard,
+	 * caused by a plugin they installed to find accessibility problems.
+	 *
+	 * Asking the document rather than reading `_elementor_edit_mode` directly:
+	 * the meta is Elementor's private business and the method is the answer it
+	 * publishes.
+	 *
+	 * @since 0.27.0
+	 *
+	 * @param int $post_id The post.
+	 * @return bool
+	 */
+	private function is_built_with_elementor( int $post_id ): bool {
+		if ( ! class_exists( '\Elementor\Plugin' ) || ! isset( \Elementor\Plugin::$instance ) ) {
+			return false;
+		}
+
+		$elementor = \Elementor\Plugin::$instance;
+
+		if ( ! isset( $elementor->documents, $elementor->frontend ) ) {
+			return false;
+		}
+
+		if ( ! method_exists( $elementor->frontend, 'get_builder_content_for_display' ) ) {
+			return false;
+		}
+
+		$document = $elementor->documents->get( $post_id );
+
+		return $document && method_exists( $document, 'is_built_with_elementor' )
+			? (bool) $document->is_built_with_elementor()
+			: false;
 	}
 }
