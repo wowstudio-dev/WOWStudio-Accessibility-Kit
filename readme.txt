@@ -4,7 +4,7 @@ Tags: accessibility, wcag, a11y, alt text, accessibility scanner
 Requires at least: 6.8
 Tested up to: 7.1
 Requires PHP: 8.1
-Stable tag: 0.25.0
+Stable tag: 0.26.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -94,6 +94,9 @@ No. Everything in this plugin is free, including checking your whole site at onc
 In WordPress's own alt text field on the media item. It therefore applies everywhere that image is used, works with every theme and plugin, and stays behind if you remove this plugin.
 
 == Changelog ==
+
+= 0.26.0 =
+* For developers: hooks so a separate add-on can register a report export format, and restrict who may set a finding aside. Nothing changes for you — the dismissal hook can only ever narrow permission, never widen it, and no export control appears unless something has registered a format, so there are no locked buttons.
 
 = 0.25.0 =
 * New: reading level. Pages are checked against the Flesch–Kincaid grade level, and flagged when they read above lower secondary school level — the point at which WCAG 3.1.5 asks for a simpler version.
@@ -235,6 +238,9 @@ In WordPress's own alt text field on the media item. It therefore applies everyw
 * Initial scaffold: plugin bootstrap, capabilities, activation and uninstall handling.
 
 == Upgrade Notice ==
+
+= 0.26.0 =
+Developer hooks only; nothing changes in how the plugin behaves.
 
 = 0.25.0 =
 Adds reading-level checking and a plain-language summary field, for WCAG 3.1.5.

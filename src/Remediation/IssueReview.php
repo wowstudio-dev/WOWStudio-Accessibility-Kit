@@ -94,7 +94,30 @@ final class IssueReview {
 			);
 		}
 
-		if ( $issue->post_id > 0 && ! current_user_can( 'edit_post', $issue->post_id ) ) {
+		$allowed = 0 === $issue->post_id || current_user_can( 'edit_post', $issue->post_id );
+
+		/**
+		 * Filters whether somebody may set this finding aside.
+		 *
+		 * The seam that exists so restrictions can be added without this method
+		 * knowing what they are — an add-on limiting dismissal to particular
+		 * roles, or requiring approval, hooks here.
+		 *
+		 * It can only ever *narrow*. The capability check above has already
+		 * run, and a filter returning true cannot grant somebody the right to
+		 * make decisions about content they may not edit: that check is
+		 * WordPress's, not ours, and handing it to a filter would make it
+		 * possible for a plugin to open a door this one is responsible for.
+		 *
+		 * @since 0.26.0
+		 *
+		 * @param bool $allowed  Whether the capability check passed.
+		 * @param int  $issue_id The finding.
+		 * @param int  $user_id  Who is asking.
+		 */
+		$allowed = $allowed && (bool) apply_filters( 'wsak_can_dismiss', $allowed, $issue_id, $user_id );
+
+		if ( ! $allowed ) {
 			return new WP_Error(
 				'wsak_forbidden_post',
 				__( 'You do not have permission to make decisions about that content.', 'wowstudio-accessibility-kit' ),

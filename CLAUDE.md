@@ -153,12 +153,17 @@ both.
    Builder, Divi, Elementor, Oxygen, WP Bakery, WooCommerce.
 7. **1.0.0 and WordPress.org submission.**
 
-Two of the four extension seams exist: the scan runner (`BulkScan::start` and
-`wsak_bulk_scan_finished`, which the paid monitor drives) and the fix pipeline
-(`wsak_site_fixes`). Two are still owed — the report screen, so an exporter can
-register a format, and a hook on the dismissal flow so role restrictions can
-reach the capability check. Build both before those screens grow, because
-retrofitting a seam is expensive.
+All four extension seams exist, and `ExtensionSeamsTest` guards them — a renamed
+filter is a silent break for every add-on at once, with no error anywhere:
+
+- **Scan runner** — `BulkScan::start()` and `wsak_bulk_scan_finished`, which the
+  paid monitor drives.
+- **Fix pipeline** — `wsak_site_fixes`.
+- **Report** — `wsak_report_data` and `wsak_report_formats`. The free plugin
+  registers no format, so it shows no export control rather than a locked one.
+- **Dismissal** — `wsak_can_dismiss`. It narrows only: the capability check runs
+  first and is combined with `&&`, so no filter can grant rights over content
+  somebody may not edit.
 
 ## Quality floor (every PR)
 - Security: verify nonce + `current_user_can()` on every write/REST route;

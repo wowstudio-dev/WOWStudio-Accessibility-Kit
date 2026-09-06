@@ -104,21 +104,50 @@ final class OverviewController implements Registrable {
 	public function get_overview( WP_REST_Request $request ): WP_REST_Response {
 		unset( $request );
 
-		return new WP_REST_Response(
-			array(
-				'scanned'   => $this->scanned(),
-				'score'     => $this->score(),
-				'issues'    => $this->issue_counts(),
-				'by_band'   => $this->count_by( 'severity' ),
-				'by_rule'   => $this->by_rule(),
-				'by_pass'   => $this->count_by( 'found_by' ),
-				'detection' => $this->count_by( 'detection' ),
-				'history'   => $this->history(),
-				'worst'     => $this->worst_pages(),
-				'coverage'  => $this->coverage(),
-			),
-			200
+		$data = array(
+			'scanned'   => $this->scanned(),
+			'score'     => $this->score(),
+			'issues'    => $this->issue_counts(),
+			'by_band'   => $this->count_by( 'severity' ),
+			'by_rule'   => $this->by_rule(),
+			'by_pass'   => $this->count_by( 'found_by' ),
+			'detection' => $this->count_by( 'detection' ),
+			'history'   => $this->history(),
+			'worst'     => $this->worst_pages(),
+			'coverage'  => $this->coverage(),
 		);
+
+		/**
+		 * Filters the whole-site report before it reaches the interface.
+		 *
+		 * The seam an exporter attaches to. Everything the report screen shows
+		 * passes through here, so a CSV or PDF writer can take exactly what is
+		 * on screen rather than reassembling it from the tables and drifting
+		 * out of step with what somebody is looking at.
+		 *
+		 * @since 0.26.0
+		 *
+		 * @param array<string, mixed> $data The report.
+		 */
+		$data = (array) apply_filters( 'wsak_report_data', $data );
+
+		/**
+		 * Filters the export formats offered for the report.
+		 *
+		 * Each entry is keyed by an identifier and carries at least a `label`.
+		 * The free plugin registers none, because it offers no export, and the
+		 * interface shows the control only when something has registered one —
+		 * so nothing ever advertises a format that cannot be produced, and
+		 * there is no locked button.
+		 *
+		 * @since 0.26.0
+		 *
+		 * @param array<string, array<string, string>> $formats Export formats.
+		 * @param array<string, mixed>                 $data    The report.
+		 */
+		$data['exports'] = (array) apply_filters( 'wsak_report_formats', array(), $data );
+
+		return new WP_REST_Response( $data, 200 );
 	}
 
 	/**

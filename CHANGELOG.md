@@ -19,6 +19,29 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   testing with disabled users. The contrast guard checks 91 colour pairings on
   every push, which is not the same thing as somebody using the interface.
 
+## [0.26.0] - 2026-09-06
+
+The last two extension seams, before the screens around them grow.
+
+### Added
+
+- `wsak_report_data` and `wsak_report_formats` on the whole-site report. The
+  first lets an exporter take exactly what is on screen rather than
+  reassembling it from the tables and drifting out of step with what somebody is
+  looking at. The second is how an export control appears at all — the free
+  plugin registers none, so it shows no button rather than a locked one.
+- `wsak_can_dismiss`, so restrictions on who may set a finding aside can be
+  added without `IssueReview` knowing what they are.
+
+  It narrows and cannot widen. The capability check runs first and is combined
+  with `&&`, so a filter returning true still cannot hand somebody the right to
+  make decisions about content they may not edit. That check is WordPress's, and
+  passing responsibility for it to a third party would make it possible for
+  another plugin to open a door this one is answerable for.
+
+All four seams now exist and `ExtensionSeamsTest` guards them: a renamed filter
+is a silent break for every add-on at once, with no error anywhere.
+
 ## [0.25.0] - 2026-09-06
 
 Reading level and the plain-language summary — WCAG 3.1.5, and the last thing

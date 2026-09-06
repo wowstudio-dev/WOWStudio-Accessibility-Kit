@@ -2,7 +2,7 @@
 # This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: WOWStudio Accessibility Kit 0.25.0\n"
+"Project-Id-Version: WOWStudio Accessibility Kit 0.26.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wowstudio-accessibility-kit\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -411,7 +411,7 @@ msgid "Nowhere"
 msgstr ""
 
 #: src/Remediation/IssueReview.php:82
-#: src/Remediation/IssueReview.php:146
+#: src/Remediation/IssueReview.php:169
 msgid "That finding could not be found."
 msgstr ""
 
@@ -419,12 +419,12 @@ msgstr ""
 msgid "Say why this is not a problem. The reason is kept with the finding, and it is what makes this a record somebody can rely on later rather than an unexplained dismissal."
 msgstr ""
 
-#: src/Remediation/IssueReview.php:100
-#: src/Remediation/IssueReview.php:154
+#: src/Remediation/IssueReview.php:123
+#: src/Remediation/IssueReview.php:177
 msgid "You do not have permission to make decisions about that content."
 msgstr ""
 
-#: src/Remediation/IssueReview.php:108
+#: src/Remediation/IssueReview.php:131
 msgid "That decision could not be saved."
 msgstr ""
 
@@ -501,7 +501,7 @@ msgstr ""
 msgid "Applying this kind of fix edits your site's Additional CSS, which your account is not allowed to change. An administrator can apply it, or make the change in Appearance → Customise."
 msgstr ""
 
-#: src/Rest/OverviewController.php:360
+#: src/Rest/OverviewController.php:389
 #: assets/src/components/dismissed.js:124
 #: assets/src/components/scan-picker.js:164
 msgid "(no title)"
