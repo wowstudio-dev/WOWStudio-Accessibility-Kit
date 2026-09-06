@@ -4,7 +4,7 @@ Tags: accessibility, wcag, a11y, alt text, accessibility scanner
 Requires at least: 6.8
 Tested up to: 7.1
 Requires PHP: 8.1
-Stable tag: 0.22.0
+Stable tag: 0.23.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -93,6 +93,10 @@ No. Everything in this plugin is free, including checking your whole site at onc
 In WordPress's own alt text field on the media item. It therefore applies everywhere that image is used, works with every theme and plugin, and stays behind if you remove this plugin.
 
 == Changelog ==
+
+= 0.23.0 =
+* New: an Accessibility column on your Posts and Pages screens, showing each page's score and how many findings are open. Pages nobody has checked say "Not checked" rather than showing a zero.
+* New: a "Set aside" screen listing every finding somebody chose not to act on, with the reason they gave, who they were and when. Anybody who can view reports can read it, not only the people who can dismiss.
 
 = 0.22.0 =
 * Scheduled checking has been moved out of this plugin. It was added in 0.21.0 and is now part of a separate paid add-on, along with the change report that went with it.
@@ -220,6 +224,9 @@ In WordPress's own alt text field on the media item. It therefore applies everyw
 * Initial scaffold: plugin bootstrap, capabilities, activation and uninstall handling.
 
 == Upgrade Notice ==
+
+= 0.23.0 =
+Adds an accessibility column to your Posts and Pages lists, and a screen recording what has been set aside and why.
 
 = 0.22.0 =
 Scheduled checking has moved to a separate paid add-on. Everything else is unchanged and still free.

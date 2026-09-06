@@ -172,6 +172,86 @@ class IssueRepository {
 	}
 
 	/**
+	 * Returns findings somebody has set aside, most recent first.
+	 *
+	 * The record of what was dismissed, who dismissed it and why. Everything it
+	 * needs is already on the row — the note, `resolved_by`, `updated_at` — so
+	 * this is a query rather than a second store, and it cannot drift out of
+	 * step with the findings it describes.
+	 *
+	 * Scoped to the latest scan of each page. A finding set aside three scans
+	 * ago is recorded against a scan nobody is looking at any more, and listing
+	 * every historical copy would show the same decision five times over.
+	 *
+	 * @since 0.22.0
+	 *
+	 * @param int $limit  How many to return, capped at 200.
+	 * @param int $offset Where to start.
+	 * @return Issue[]
+	 */
+	public function dismissed( int $limit = 50, int $offset = 0 ): array {
+		global $wpdb;
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Custom tables; no core API covers them.
+		$rows = $wpdb->get_results(
+			$wpdb->prepare(
+				'SELECT i.* FROM %i AS i
+				INNER JOIN (
+					SELECT target_id, MAX(id) AS newest
+					FROM %i
+					WHERE scope = %s AND status = %s
+					GROUP BY target_id
+				) AS latest ON latest.newest = i.scan_id
+				WHERE i.status = %s
+				ORDER BY i.updated_at DESC, i.id DESC
+				LIMIT %d OFFSET %d',
+				Schema::issues_table(),
+				Schema::scans_table(),
+				'page',
+				'complete',
+				IssueStatus::Ignored->value,
+				max( 1, min( 200, $limit ) ),
+				max( 0, $offset )
+			)
+		);
+
+		return array_map(
+			static fn( object $row ): Issue => Issue::from_row( $row ),
+			is_array( $rows ) ? $rows : array()
+		);
+	}
+
+	/**
+	 * Counts how many findings are currently set aside.
+	 *
+	 * @since 0.22.0
+	 *
+	 * @return int
+	 */
+	public function dismissed_count(): int {
+		global $wpdb;
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Custom tables; no core API covers them.
+		return (int) $wpdb->get_var(
+			$wpdb->prepare(
+				'SELECT COUNT(*) FROM %i AS i
+				INNER JOIN (
+					SELECT target_id, MAX(id) AS newest
+					FROM %i
+					WHERE scope = %s AND status = %s
+					GROUP BY target_id
+				) AS latest ON latest.newest = i.scan_id
+				WHERE i.status = %s',
+				Schema::issues_table(),
+				Schema::scans_table(),
+				'page',
+				'complete',
+				IssueStatus::Ignored->value
+			)
+		);
+	}
+
+	/**
 	 * Counts a scan's issues grouped by one column.
 	 *
 	 * Grouping by detection is how the UI reports what automation could and

@@ -2,7 +2,7 @@
 # This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: WOWStudio Accessibility Kit 0.22.0\n"
+"Project-Id-Version: WOWStudio Accessibility Kit 0.23.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wowstudio-accessibility-kit\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -40,12 +40,37 @@ msgstr ""
 msgid "https://wowstudio.dev/"
 msgstr ""
 
+#: src/Admin/ContentColumns.php:153
+#: assets/src/editor/panel.js:101
+#: assets/src/editor/panel.js:107
+msgid "Accessibility"
+msgstr ""
+
+#: src/Admin/ContentColumns.php:208
+#: src/Scanner/ScanCoverage.php:75
+msgid "Not checked"
+msgstr ""
+
+#: src/Admin/ContentColumns.php:220
+msgid "Checked"
+msgstr ""
+
+#. translators: %d: number of findings.
+#: src/Admin/ContentColumns.php:225
+#: assets/src/components/bulk-scan.js:539
+#, php-format,js-format
+msgid "%d finding"
+msgid_plural "%d findings"
+msgstr[0] ""
+msgstr[1] ""
+
 #: src/Admin/Menu.php:69
-#: assets/src/app.js:118
+#: assets/src/app.js:119
 msgid "Accessibility Kit"
 msgstr ""
 
 #: src/Admin/Menu.php:91
+#: src/Rest/ReviewController.php:134
 #: src/Rest/RunController.php:222
 #: src/Rest/ScanController.php:206
 #: src/Rest/StatementController.php:116
@@ -473,19 +498,24 @@ msgid "Applying this kind of fix edits your site's Additional CSS, which your ac
 msgstr ""
 
 #: src/Rest/OverviewController.php:360
+#: assets/src/components/dismissed.js:124
 #: assets/src/components/scan-picker.js:164
 msgid "(no title)"
 msgstr ""
 
-#: src/Rest/ReviewController.php:64
+#: src/Rest/ReviewController.php:65
 msgid "Why this is not a problem. Kept with the finding."
 msgstr ""
 
-#: src/Rest/ReviewController.php:105
+#: src/Rest/ReviewController.php:167
+msgid "Somebody no longer on this site"
+msgstr ""
+
+#: src/Rest/ReviewController.php:194
 msgid "You do not have permission to make decisions about findings."
 msgstr ""
 
-#: src/Rest/ReviewController.php:131
+#: src/Rest/ReviewController.php:220
 msgid "This fix changes how your theme renders every page, and your account is not allowed to change theme settings. An administrator can apply it."
 msgstr ""
 
@@ -1598,10 +1628,6 @@ msgstr ""
 msgid " and "
 msgstr ""
 
-#: src/Scanner/ScanCoverage.php:75
-msgid "Not checked"
-msgstr ""
-
 #: src/Scanner/ScanCoverage.php:76
 msgid "Content checked"
 msgstr ""
@@ -1647,7 +1673,7 @@ msgid "Whole site"
 msgstr ""
 
 #: src/Scanner/ScanScope.php:53
-#: assets/src/app.js:183
+#: assets/src/app.js:193
 msgid "Theme"
 msgstr ""
 
@@ -1935,87 +1961,93 @@ msgstr ""
 msgid "Something went wrong and we could not say what. Please try again."
 msgstr ""
 
-#: assets/src/app.js:60
+#: assets/src/app.js:61
 msgid "Scanning the page…"
 msgstr ""
 
 #. translators: %d: number of findings.
-#: assets/src/app.js:69
+#: assets/src/app.js:70
 #, js-format
 msgid "Scan finished. %d findings."
 msgstr ""
 
-#: assets/src/app.js:80
+#: assets/src/app.js:81
 msgid "The scan failed."
 msgstr ""
 
-#: assets/src/app.js:124
+#: assets/src/app.js:125
 msgid "Find, fix and document accessibility problems at the code level."
 msgstr ""
 
-#: assets/src/app.js:134
+#: assets/src/app.js:135
 msgid "Sections"
 msgstr ""
 
-#: assets/src/app.js:141
+#: assets/src/app.js:142
 msgid "Overview"
 msgstr ""
 
-#: assets/src/app.js:148
+#: assets/src/app.js:149
 msgid "One page"
 msgstr ""
 
-#: assets/src/app.js:156
+#: assets/src/app.js:157
 msgid "Your content"
 msgstr ""
 
-#: assets/src/app.js:165
+#: assets/src/app.js:166
 msgid "Images"
 msgstr ""
 
-#: assets/src/app.js:174
+#: assets/src/app.js:175
+#: assets/src/components/dismissed.js:61
+#: assets/src/components/overview.js:140
+msgid "Set aside"
+msgstr ""
+
+#: assets/src/app.js:184
 msgid "Site fixes"
 msgstr ""
 
-#: assets/src/app.js:196
+#: assets/src/app.js:206
 msgid "Statement"
 msgstr ""
 
-#: assets/src/app.js:214
+#: assets/src/app.js:224
 msgid "You can read results here but not start a scan. An administrator can grant that."
 msgstr ""
 
-#: assets/src/app.js:248
+#: assets/src/app.js:260
 msgid "Loading the scan…"
 msgstr ""
 
 #. translators: %s: content title.
-#: assets/src/app.js:270
+#: assets/src/app.js:282
 #, js-format
 msgid "Results for “%s”"
 msgstr ""
 
-#: assets/src/app.js:276
+#: assets/src/app.js:288
 msgid "Scan results"
 msgstr ""
 
-#: assets/src/app.js:299
+#: assets/src/app.js:311
 msgid "Show as a list"
 msgstr ""
 
-#: assets/src/app.js:303
+#: assets/src/app.js:315
 msgid "Show on the page"
 msgstr ""
 
-#: assets/src/app.js:312
+#: assets/src/app.js:324
 msgid "Back to your content"
 msgstr ""
 
-#: assets/src/app.js:323
+#: assets/src/app.js:335
 msgid "This scan covered less than usual."
 msgstr ""
 
-#: assets/src/app.js:381
+#: assets/src/app.js:393
 msgid "This plugin helps you find, fix and document accessibility problems. It does not determine whether your site meets the ADA, the European Accessibility Act, Section 508, or any other legal requirement, and nothing here is legal advice."
 msgstr ""
 
@@ -2245,14 +2277,6 @@ msgstr[1] ""
 #: assets/src/components/bulk-scan.js:504
 msgid "Check colour and layout too"
 msgstr ""
-
-#. translators: %d: number of findings.
-#: assets/src/components/bulk-scan.js:539
-#, js-format
-msgid "%d finding"
-msgid_plural "%d findings"
-msgstr[0] ""
-msgstr[1] ""
 
 #: assets/src/components/bulk-scan.js:555
 msgid "Check the rest"
@@ -2507,6 +2531,36 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
+#: assets/src/components/dismissed.js:47
+msgid "Loading what has been set aside…"
+msgstr ""
+
+#: assets/src/components/dismissed.js:65
+msgid "Findings somebody decided not to act on, with the reason they gave. Setting something aside is a judgement rather than a fix — the barrier is still there — so this screen exists to make those judgements reviewable by somebody other than whoever made them."
+msgstr ""
+
+#: assets/src/components/dismissed.js:79
+msgid "Nothing has been set aside"
+msgstr ""
+
+#: assets/src/components/dismissed.js:83
+msgid "When somebody marks a finding as reviewed and not applicable, it appears here with their name, the date, and the reason they gave."
+msgstr ""
+
+#. translators: %d: how many findings are set aside.
+#: assets/src/components/dismissed.js:94
+#, js-format
+msgid "%d finding is currently set aside."
+msgid_plural "%d findings are currently set aside."
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: 1: who set it aside. 2: when.
+#: assets/src/components/dismissed.js:145
+#, js-format
+msgid "Set aside by %1$s on %2$s"
+msgstr ""
+
 #: assets/src/components/inspector.js:56
 msgid "This one is about the page as a whole rather than one spot on it, so there is nowhere in particular to point."
 msgstr ""
@@ -2652,10 +2706,6 @@ msgstr ""
 
 #: assets/src/components/overview.js:128
 msgid "Open findings"
-msgstr ""
-
-#: assets/src/components/overview.js:140
-msgid "Set aside"
 msgstr ""
 
 #: assets/src/components/overview.js:147
@@ -3134,11 +3184,6 @@ msgstr ""
 
 #: assets/src/editor/block-finding.js:141
 msgid "This writes into the block itself, so it is part of your content and undo works on it like any other edit."
-msgstr ""
-
-#: assets/src/editor/panel.js:101
-#: assets/src/editor/panel.js:107
-msgid "Accessibility"
 msgstr ""
 
 #: assets/src/editor/panel.js:119

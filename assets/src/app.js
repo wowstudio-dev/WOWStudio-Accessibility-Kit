@@ -14,6 +14,7 @@ import IssueList from './components/issue-list';
 import Overview from './components/overview';
 import AltTextEditor from './components/alt-text-editor';
 import SiteFixes from './components/site-fixes';
+import Dismissed from './components/dismissed';
 import BulkScan from './components/bulk-scan';
 import ThemePanel from './components/theme-panel';
 import ScanPicker from './components/scan-picker';
@@ -167,6 +168,15 @@ export default function App() {
 				) }
 				{ capabilities.viewReports && (
 					<Button
+						variant={ view === 'aside' ? 'primary' : 'tertiary' }
+						aria-current={ view === 'aside' ? 'page' : undefined }
+						onClick={ () => setView( 'aside' ) }
+					>
+						{ __( 'Set aside', 'wowstudio-accessibility-kit' ) }
+					</Button>
+				) }
+				{ capabilities.viewReports && (
+					<Button
 						variant={ view === 'fixes' ? 'primary' : 'tertiary' }
 						aria-current={ view === 'fixes' ? 'page' : undefined }
 						onClick={ () => setView( 'fixes' ) }
@@ -236,6 +246,8 @@ export default function App() {
 			) }
 
 			{ view === 'images' && <AltTextEditor /> }
+
+			{ view === 'aside' && <Dismissed /> }
 
 			{ view === 'fixes' && <SiteFixes /> }
 

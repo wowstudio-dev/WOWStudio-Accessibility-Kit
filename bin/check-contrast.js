@@ -161,6 +161,19 @@ const PAIRINGS = [
 	[ '.wsak-alt-row__error', 'critical', 'surface', 12.5, false ],
 	[ '.wsak-alt-row__saved', 'good', 'surface', 12.5, true ],
 
+	// 0.22.0 the accessibility column on the Posts and Pages screens. Uses the
+	// palette's own values so it is covered here rather than being a second
+	// set of colours nobody checks.
+	[ '.wsak-col--high', 'good', 'surface', 13, true ],
+	[ '.wsak-col--mid', 'serious', 'surface', 13, true ],
+	[ '.wsak-col--low', 'critical', 'surface', 13, true ],
+	[ '.wsak-col__count', 'muted', 'surface', 12, false ],
+	[ '.wsak-dismissed__lede', 'muted', 'surface', 13.5, false ],
+	[ '.wsak-dismissed__rule', 'ink', 'surface', 14, true ],
+	[ '.wsak-dismissed__where', 'muted', 'surface', 12.5, false ],
+	[ '.wsak-dismissed__note', 'text', 'raised', 12.5, false ],
+	[ '.wsak-dismissed__by', 'muted', 'surface', 12, false ],
+
 	// Score.
 	[ '.wsak-score__value', 'ink', 'raised', 34, true ],
 	[ '.wsak-score__band', 'ink', 'raised', 15, true ],

@@ -8,6 +8,7 @@
 namespace WOWStudio\AccessibilityKit\Rest;
 
 use WOWStudio\AccessibilityKit\Core\Registrable;
+use WOWStudio\AccessibilityKit\Db\IssueRepository;
 use WOWStudio\AccessibilityKit\Remediation\IssueReview;
 use WOWStudio\AccessibilityKit\Support\Capabilities;
 use WP_Error;
@@ -84,6 +85,94 @@ final class ReviewController implements Registrable {
 						),
 					),
 				),
+			)
+		);
+
+		register_rest_route(
+			ScanController::REST_NAMESPACE,
+			'/dismissed',
+			array(
+				array(
+					'methods'             => WP_REST_Server::READABLE,
+					'callback'            => array( $this, 'dismissed' ),
+					'permission_callback' => array( $this, 'can_read' ),
+					'args'                => array(
+						'limit'  => array(
+							'type'              => 'integer',
+							'default'           => 50,
+							'sanitize_callback' => 'absint',
+						),
+						'offset' => array(
+							'type'              => 'integer',
+							'default'           => 0,
+							'sanitize_callback' => 'absint',
+						),
+					),
+				),
+			)
+		);
+	}
+
+	/**
+	 * Reading the log needs only the reports capability.
+	 *
+	 * Deliberately wider than the capability needed to dismiss something. A
+	 * record of decisions that only the decision-makers can read is not much of
+	 * a record — the point of it is that somebody else can check the reasoning.
+	 *
+	 * @since 0.22.0
+	 *
+	 * @return bool|WP_Error
+	 */
+	public function can_read() {
+		if ( current_user_can( Capabilities::VIEW_REPORTS ) ) {
+			return true;
+		}
+
+		return new WP_Error(
+			'wsak_forbidden',
+			__( 'You do not have permission to view accessibility reports.', 'wowstudio-accessibility-kit' ),
+			array( 'status' => rest_authorization_required_code() )
+		);
+	}
+
+	/**
+	 * Returns what has been set aside, and who set it aside.
+	 *
+	 * @since 0.22.0
+	 *
+	 * @param WP_REST_Request $request Incoming request.
+	 * @return WP_REST_Response
+	 */
+	public function dismissed( WP_REST_Request $request ): WP_REST_Response {
+		$issues = new IssueRepository();
+
+		$rows = array();
+
+		foreach ( $issues->dismissed( (int) $request->get_param( 'limit' ), (int) $request->get_param( 'offset' ) ) as $issue ) {
+			$user = $issue->resolved_by > 0 ? get_userdata( $issue->resolved_by ) : false;
+
+			$rows[] = array(
+				'id'         => $issue->id,
+				'post_id'    => $issue->post_id,
+				'post_title' => (string) get_the_title( $issue->post_id ),
+				'edit_url'   => (string) get_edit_post_link( $issue->post_id, 'raw' ),
+				'rule_id'    => $issue->rule_id,
+				'wcag_sc'    => $issue->wcag_sc,
+				'severity'   => $issue->severity->value,
+				'message'    => $issue->message,
+				'note'       => $issue->note,
+				// Named, not just numbered. A log that says "user 4" is a log
+				// nobody can act on without another lookup.
+				'by'         => false !== $user ? $user->display_name : __( 'Somebody no longer on this site', 'wowstudio-accessibility-kit' ),
+				'at'         => $issue->updated_at,
+			);
+		}
+
+		return new WP_REST_Response(
+			array(
+				'total'     => $issues->dismissed_count(),
+				'dismissed' => $rows,
 			)
 		);
 	}

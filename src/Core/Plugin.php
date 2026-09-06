@@ -7,6 +7,7 @@
 
 namespace WOWStudio\AccessibilityKit\Core;
 
+use WOWStudio\AccessibilityKit\Admin\ContentColumns;
 use WOWStudio\AccessibilityKit\Admin\Menu;
 use WOWStudio\AccessibilityKit\Conformance\StatementBlock;
 use WOWStudio\AccessibilityKit\Remediation\OverrideStore;
@@ -144,6 +145,7 @@ final class Plugin {
 		$services = array(
 			'installer'      => new Installer(),
 			'assets'         => new Assets(),
+			'admin.columns'  => new ContentColumns(),
 			'admin.menu'     => new Menu(),
 			'rest.scan'      => new ScanController(),
 			'rest.fix.css'   => new CssFixController(),

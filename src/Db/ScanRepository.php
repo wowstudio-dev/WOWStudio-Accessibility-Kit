@@ -446,6 +446,71 @@ class ScanRepository {
 	}
 
 	/**
+	 * Returns the latest completed scan for each of several posts.
+	 *
+	 * One query for a whole screen of posts rather than one per row. The admin
+	 * list table is the reason this exists: a column that ran its own query per
+	 * row would add twenty to every page of the Posts screen, on a screen
+	 * people load constantly and that this plugin has no business slowing down.
+	 *
+	 * @since 0.22.0
+	 *
+	 * @param int[] $post_ids Posts to look up.
+	 * @return array<int, Scan> Scans keyed by post id; posts never scanned are absent.
+	 */
+	public function latest_for_posts( array $post_ids ): array {
+		global $wpdb;
+
+		$post_ids = array_values( array_unique( array_filter( array_map( 'intval', $post_ids ) ) ) );
+
+		if ( array() === $post_ids ) {
+			return array();
+		}
+
+		$placeholders = implode( ', ', array_fill( 0, count( $post_ids ), '%d' ) );
+
+		/*
+		 * The newest completed scan per post, found by joining the table to the
+		 * maximum id for each target rather than by sorting and de-duplicating
+		 * in PHP. Ordering by id and not by started_at on purpose: two scans of
+		 * the same page can share a timestamp to the second, and the id is the
+		 * only thing that reliably says which came second.
+		 */
+		// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber -- Custom table; the only interpolation is a generated list of %d placeholders, and every value is passed to prepare() as an array the sniff cannot count.
+		$rows = $wpdb->get_results(
+			$wpdb->prepare(
+				'SELECT s.* FROM %i AS s
+				INNER JOIN (
+					SELECT target_id, MAX(id) AS newest
+					FROM %i
+					WHERE scope = %s AND status = %s AND target_id IN (' . $placeholders . ')
+					GROUP BY target_id
+				) AS latest ON latest.newest = s.id',
+				array_merge(
+					array(
+						Schema::scans_table(),
+						Schema::scans_table(),
+						ScanScope::Page->value,
+						ScanStatus::Complete->value,
+					),
+					$post_ids
+				)
+			)
+		);
+
+		// phpcs:enable WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared, WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber
+
+		$scans = array();
+
+		foreach ( is_array( $rows ) ? $rows : array() as $row ) {
+			$scan                      = Scan::from_row( $row );
+			$scans[ $scan->target_id ] = $scan;
+		}
+
+		return $scans;
+	}
+
+	/**
 	 * Returns the most recent scans, newest first.
 	 *
 	 * @since 0.2.0

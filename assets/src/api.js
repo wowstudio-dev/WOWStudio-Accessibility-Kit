@@ -79,6 +79,16 @@ export function fetchCoverage() {
 }
 
 /**
+ * Reads the log of findings somebody has set aside.
+ *
+ * @param {number} limit How many to return.
+ * @return {Promise<Object>} The log, and how many there are in total.
+ */
+export function fetchDismissed( limit = 50 ) {
+	return apiFetch( { path: `/${ namespace }/dismissed?limit=${ limit }` } );
+}
+
+/**
  * Reads the site-wide fixes and which are switched on.
  *
  * @return {Promise<Object>} Every fix, with its state.

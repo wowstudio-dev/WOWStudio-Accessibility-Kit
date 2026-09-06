@@ -19,6 +19,38 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   testing with disabled users. The contrast guard checks 91 colour pairings on
   every push, which is not the same thing as somebody using the interface.
 
+## [0.23.0] - 2026-09-06
+
+Two things the obvious competitor charges for.
+
+### Added
+
+- **An accessibility column** on the Posts and Pages screens: the latest score
+  and how many findings are open. The dashboard is where somebody goes once they
+  have decided to think about accessibility; this is for the rest of the time,
+  when they are already on the Pages screen for another reason.
+
+  One query for the whole screen, not one per row — a column that queried per
+  row would add twenty queries to a screen people load constantly and that this
+  plugin is a guest on. "Not checked" is rendered as exactly that and never as a
+  zero: a page nobody has scanned and a page with no findings are different
+  statements, and conflating them would be our own version of the fault we
+  report elsewhere. The colour band carries no words, because calling a page
+  "good" on the strength of checks that cover part of WCAG is a verdict this
+  plugin does not issue.
+- **A "Set aside" screen** and `GET /wsak/v1/dismissed`: every finding somebody
+  chose not to act on, with the reason they gave, their name and the date.
+
+  Readable by anyone who can view reports, which is deliberately wider than the
+  capability needed to dismiss. Setting a finding aside is a judgement rather
+  than a fix — the barrier is still there — and a record of judgements that only
+  their authors can read is not much of a record.
+
+  It is a query, not a second store: the note, the user and the timestamp were
+  already on the finding, so this cannot drift out of step with what it
+  describes. Scoped to each page's most recent scan, so one decision is not
+  listed five times over.
+
 ## [0.22.0] - 2026-09-06
 
 Monitoring moves to the paid add-on, one release after it arrived.
