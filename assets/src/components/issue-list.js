@@ -287,9 +287,10 @@ function IssueGroup( { id, title, blurb, issues, onInspect } ) {
  * @param {Object}   props             Component props.
  * @param {Array}    props.issues      Findings.
  * @param {Function} [props.onInspect] Switches to the inspector.
+ * @param {Function} [props.onGo]      Opens another screen.
  * @return {Element} The list.
  */
-export default function IssueList( { issues, onInspect } ) {
+export default function IssueList( { issues, onInspect, onGo } ) {
 	// The server has already ordered these and told each one which band it is
 	// in. Re-deriving that here would mean two answers to the same question,
 	// and the one on this side would be the one that drifts.
@@ -325,6 +326,23 @@ export default function IssueList( { issues, onInspect } ) {
 					onInspect={ onInspect }
 				/>
 			) ) }
+
+			{ /*
+			 * At the foot of the findings rather than the top. Somebody who has
+			 * just read a list of problems is the person most likely to want to
+			 * know what was not looked for — and least likely to have wanted it
+			 * before they started.
+			 */ }
+			{ onGo && (
+				<p className="wsak-results__door">
+					<Button variant="link" onClick={ () => onGo( 'coverage' ) }>
+						{ __(
+							'What these checks cover, and what they cannot',
+							'wowstudio-accessibility-kit'
+						) }
+					</Button>
+				</p>
+			) }
 		</div>
 	);
 }

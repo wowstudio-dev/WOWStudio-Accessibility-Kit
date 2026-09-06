@@ -174,6 +174,10 @@ const PAIRINGS = [
 	[ '.wsak-dismissed__note', 'text', 'raised', 12.5, false ],
 	[ '.wsak-dismissed__by', 'muted', 'surface', 12, false ],
 
+	// 0.28.0 the next-step panel.
+	[ '.wsak-next__title', 'ink', 'raised', 15, true ],
+	[ '.wsak-next__body', 'text', 'raised', 13.5, false ],
+
 	// Score.
 	[ '.wsak-score__value', 'ink', 'raised', 34, true ],
 	[ '.wsak-score__band', 'ink', 'raised', 15, true ],

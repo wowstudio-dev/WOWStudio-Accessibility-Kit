@@ -2,7 +2,7 @@
 # This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: WOWStudio Accessibility Kit 0.27.0\n"
+"Project-Id-Version: WOWStudio Accessibility Kit 0.28.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wowstudio-accessibility-kit\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -241,6 +241,66 @@ msgstr ""
 
 #: src/Core/Assets.php:172
 msgid "The Accessibility Kit interface has not been built. Run \"npm install && npm run build\" in the plugin directory."
+msgstr ""
+
+#: src/Guidance/NextStep.php:136
+msgid "Check one page first"
+msgstr ""
+
+#: src/Guidance/NextStep.php:137
+msgid "Pick a page and check it. It takes a few seconds, nothing is changed, and it is the quickest way to see what this plugin actually reports on your site."
+msgstr ""
+
+#: src/Guidance/NextStep.php:138
+msgid "Check a page"
+msgstr ""
+
+#: src/Guidance/NextStep.php:148
+msgid "Switch on the site-wide fixes"
+msgstr ""
+
+#. translators: %d: how many site-wide fixes are switched off.
+#: src/Guidance/NextStep.php:151
+#, php-format
+msgid "There is %d fix you have not switched on. Each one supplies something your theme leaves out — a skip link, a visible focus outline — on every page at once, and switching it off again leaves your site exactly as it was."
+msgid_plural "There are %d fixes you have not switched on. Each supplies something your theme leaves out — a skip link, a visible focus outline — on every page at once, and switching them off again leaves your site exactly as it was."
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Guidance/NextStep.php:159
+msgid "See the fixes"
+msgstr ""
+
+#: src/Guidance/NextStep.php:169
+msgid "Describe your images"
+msgstr ""
+
+#. translators: %d: how many images have never been described.
+#: src/Guidance/NextStep.php:172
+#, php-format
+msgid "%d image in your media library has never been described. The Images screen lists them with a field beside each, which is faster than opening them one at a time."
+msgid_plural "%d images in your media library have never been described. The Images screen lists them with a field beside each, which is faster than opening them one at a time."
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Guidance/NextStep.php:180
+msgid "Open the Images screen"
+msgstr ""
+
+#: src/Guidance/NextStep.php:188
+msgid "Work through what is open"
+msgstr ""
+
+#. translators: %d: how many findings are open.
+#: src/Guidance/NextStep.php:191
+#, php-format
+msgid "%d finding is waiting. The page view puts each one beside the part of the page it is about, which is usually the quickest way to deal with them."
+msgid_plural "%d findings are waiting. The page view puts each one beside the part of the page it is about, which is usually the quickest way to deal with them."
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Guidance/NextStep.php:199
+msgid "Go to your content"
 msgstr ""
 
 #: src/Jobs/BulkScan.php:106
@@ -501,7 +561,7 @@ msgstr ""
 msgid "Applying this kind of fix edits your site's Additional CSS, which your account is not allowed to change. An administrator can apply it, or make the change in Appearance → Customise."
 msgstr ""
 
-#: src/Rest/OverviewController.php:389
+#: src/Rest/OverviewController.php:396
 #: assets/src/components/dismissed.js:124
 #: assets/src/components/scan-picker.js:164
 msgid "(no title)"
@@ -758,7 +818,7 @@ msgid "Open"
 msgstr ""
 
 #: src/Scanner/IssueStatus.php:44
-#: assets/src/components/overview.js:135
+#: assets/src/components/overview.js:154
 msgid "Fixed"
 msgstr ""
 
@@ -2031,7 +2091,7 @@ msgstr ""
 
 #: assets/src/app.js:175
 #: assets/src/components/dismissed.js:61
-#: assets/src/components/overview.js:140
+#: assets/src/components/overview.js:159
 msgid "Set aside"
 msgstr ""
 
@@ -2077,7 +2137,11 @@ msgstr ""
 msgid "This scan covered less than usual."
 msgstr ""
 
-#: assets/src/app.js:393
+#: assets/src/app.js:405
+msgid "← Back to the overview"
+msgstr ""
+
+#: assets/src/app.js:417
 msgid "This plugin helps you find, fix and document accessibility problems. It does not determine whether your site meets the ADA, the European Accessibility Act, Section 508, or any other legal requirement, and nothing here is legal advice."
 msgstr ""
 
@@ -2696,85 +2760,91 @@ msgstr ""
 msgid "We can draft these, but a draft is not an answer. Read what it says before you apply it — it was written by a model that cannot see why your page exists."
 msgstr ""
 
-#: assets/src/components/issue-list.js:304
+#: assets/src/components/issue-list.js:305
 msgid "Nothing found by the automated checks"
 msgstr ""
 
-#: assets/src/components/issue-list.js:308
+#: assets/src/components/issue-list.js:309
 msgid "None of the checks we can run automatically flagged anything on this page. That is a good sign, and it is not the same as the page being accessible — most of WCAG needs a person. The manual checklists are the next step."
 msgstr ""
 
-#: assets/src/components/overview.js:31
+#: assets/src/components/issue-list.js:339
+#: assets/src/components/overview.js:80
+#: assets/src/components/overview.js:259
+msgid "What these checks cover, and what they cannot"
+msgstr ""
+
+#: assets/src/components/overview.js:35
 msgid "The summary could not be loaded."
 msgstr ""
 
-#: assets/src/components/overview.js:50
+#: assets/src/components/overview.js:54
 msgid "Adding it up…"
 msgstr ""
 
-#: assets/src/components/overview.js:61
+#: assets/src/components/overview.js:66
 msgid "Nothing has been scanned yet"
 msgstr ""
 
-#: assets/src/components/overview.js:65
-msgid "Check a page on the One page tab and this fills in. It counts only what has actually been scanned, so it starts empty rather than starting at a hundred."
+#: assets/src/components/overview.js:70
+msgid "This fills in once a page has been checked. It counts only what has actually been scanned, so it starts empty rather than starting at a hundred."
 msgstr ""
 
-#: assets/src/components/overview.js:94
+#: assets/src/components/overview.js:113
 msgid "Across what has been scanned"
 msgstr ""
 
-#: assets/src/components/overview.js:102
+#: assets/src/components/overview.js:121
 msgid "Mean score across scanned pages"
 msgstr ""
 
 #. translators: 1: pages scanned. 2: pages published.
-#: assets/src/components/overview.js:116
+#: assets/src/components/overview.js:135
 #, js-format
 msgid "The average of the latest score for each of %1$d scanned pages, out of %2$d published. It counts only what automated checks can settle, which is part of WCAG rather than all of it, and it does not tell you whether your site meets any legal requirement."
 msgstr ""
 
-#: assets/src/components/overview.js:128
+#: assets/src/components/overview.js:147
 msgid "Open findings"
 msgstr ""
 
-#: assets/src/components/overview.js:147
+#: assets/src/components/overview.js:166
 msgid "Checks available"
 msgstr ""
 
 #. translators: 1: server-pass checks. 2: browser-pass checks. 3: pages that have had a browser pass.
-#: assets/src/components/overview.js:154
+#: assets/src/components/overview.js:173
 #, js-format
 msgid "%1$d run on the server, %2$d need the page view — which %3$d scanned pages have had."
 msgstr ""
 
-#: assets/src/components/overview.js:172
-#: assets/src/components/overview.js:179
+#: assets/src/components/overview.js:191
+#: assets/src/components/overview.js:198
 msgid "Open findings by severity"
 msgstr ""
 
-#: assets/src/components/overview.js:188
+#: assets/src/components/overview.js:207
 msgid "What comes up most"
 msgstr ""
 
-#: assets/src/components/overview.js:195
+#: assets/src/components/overview.js:214
 msgid "Open findings by check"
 msgstr ""
 
-#: assets/src/components/overview.js:204
+#: assets/src/components/overview.js:223
 msgid "Pages with the most to do"
 msgstr ""
 
-#: assets/src/components/overview.js:211
+#: assets/src/components/overview.js:230
 msgid "Open findings by page"
 msgstr ""
 
-#: assets/src/components/overview.js:220
+#: assets/src/components/overview.js:239
 msgid "Score by scan"
 msgstr ""
 
 #. translators: %d: how many scans are plotted.
-#: assets/src/components/overview.js:226
+#: assets/src/components/overview.js:245
 #, js-format
 msgid "The last %d scan, in the order it ran. This plugin does not re-scan on its own, so the spacing is however often somebody pressed the button — it is a sequence, not a timeline."
 msgid_plural "The last %d scans, in the order they ran. This plugin does not re-scan on its own, so the spacing is however often somebody pressed the button — it is a sequence, not a timeline."

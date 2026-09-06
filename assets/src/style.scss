@@ -2237,3 +2237,39 @@
 	font-size: 12px;
 	color: var(--wsak-muted);
 }
+
+/* ── What to do next ─────────────────────────────────────────────────────── */
+
+.wsak-next {
+	margin: 0 0 var(--wsak-space-5);
+	padding: var(--wsak-space-4) var(--wsak-space-5);
+	border: 1px solid var(--wsak-line);
+	border-inline-start: 3px solid var(--wsak-violet);
+	border-radius: var(--wsak-radius);
+	background: var(--wsak-raised);
+}
+
+.wsak-next__title {
+	margin: 0 0 var(--wsak-space-2);
+	font-size: 15px;
+	font-weight: 650;
+	color: var(--wsak-ink);
+}
+
+.wsak-next__body {
+	margin: 0 0 var(--wsak-space-4);
+	max-width: 74ch;
+	color: var(--wsak-text);
+	font-size: 13.5px;
+}
+
+.wsak-overview__door,
+.wsak-results__door,
+.wsak-back {
+	margin: var(--wsak-space-5) 0 0;
+	font-size: 13px;
+}
+
+.wsak-back {
+	margin: 0 0 var(--wsak-space-3);
+}

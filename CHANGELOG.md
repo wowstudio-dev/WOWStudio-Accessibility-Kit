@@ -19,6 +19,52 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   testing with disabled users. The contrast guard checks 91 colour pairings on
   every push, which is not the same thing as somebody using the interface.
 
+## [0.28.0] - 2026-09-06
+
+The first-run cliff, and a door to the coverage panel.
+
+### Added
+
+- **A "what to do next" panel** on the overview, computed from the site rather
+  than written in advance. Nothing scanned yet, so check a page. Everything
+  scanned but fourteen fixes switched off, so look at those. Fixes on but a
+  hundred images undescribed, so open the Images screen. Nothing outstanding, so
+  say nothing.
+
+  Three rules keep it from becoming the thing everybody hates. **One step, never
+  a checklist** — a list with ticks turns a tool into homework and its
+  unfinished items accuse somebody for months. **It goes quiet**: with nothing
+  worth suggesting it renders nothing, because a panel that always has something
+  to say is furniture within a week and then ignored on the day it matters. And
+  **it never invents urgency** — each step says what is available, not what is
+  wrong. The plugin already reports what is wrong; it does not also need to nag
+  about its own features.
+
+  Silence has its own tests, and it is silence rather than congratulation: a
+  clean automated scan means the checks passed, which is a much smaller
+  statement than the site being usable, and the empty dashboard is the last
+  place that should blur the two.
+
+- **A door to the coverage panel**, from the overview and from the foot of the
+  findings list. It documented all forty-one checks and rendered only after a
+  single-page scan, which meant nobody found it. It is a view rather than a new
+  tab: reference material people want twice — once starting out and once when a
+  finding surprises them — and a permanent tab for that is a tab everybody
+  scrolls past. The door at the foot of the findings is deliberate; somebody who
+  has just read a list of problems is the person most likely to want to know
+  what was *not* looked for.
+
+### Notes
+
+- `NextStep` takes two callables rather than the objects behind them, and calls
+  them only when the answer is needed. Counting undescribed images is a database
+  query, and on a site whose first suggestion is "check a page" nobody should pay
+  for it on the most-loaded screen in the plugin. It also means a test can say
+  "pretend six fixes are off" without `SiteFixManager` or `MediaIndex` giving up
+  being final — what this class depends on is two integers, and the signature now
+  says so.
+- `wsak_next_step` filters the suggestion, and returning null shows nothing.
+
 ## [0.27.0] - 2026-09-06
 
 Page-builder content, and a statement anybody can read.

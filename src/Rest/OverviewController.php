@@ -11,6 +11,7 @@ use WOWStudio\AccessibilityKit\Core\Registrable;
 use WOWStudio\AccessibilityKit\Scanner\RuleRegistry;
 use WOWStudio\AccessibilityKit\Support\Capabilities;
 use WP_REST_Request;
+use WOWStudio\AccessibilityKit\Guidance\NextStep;
 use WP_REST_Response;
 use WP_REST_Server;
 
@@ -116,6 +117,12 @@ final class OverviewController implements Registrable {
 			'worst'     => $this->worst_pages(),
 			'coverage'  => $this->coverage(),
 		);
+
+		/*
+		 * Worked out from the report rather than alongside it, so the suggestion
+		 * can never disagree with the numbers shown next to it.
+		 */
+		$data['next_step'] = ( new NextStep() )->for_overview( $data );
 
 		/**
 		 * Filters the whole-site report before it reaches the interface.

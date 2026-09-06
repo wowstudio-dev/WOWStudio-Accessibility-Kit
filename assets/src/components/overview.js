@@ -2,19 +2,23 @@
  * The whole site at a glance, without pretending to be a verdict.
  */
 
+import { Button } from '@wordpress/components';
 import { useEffect, useState } from '@wordpress/element';
 import { __, _n, sprintf } from '@wordpress/i18n';
 
 import { fetchOverview } from '../api';
 import { BarList, Donut, Sparkline, Stat, severityRows } from './charts';
+import NextStep from './next-step';
 import { EmptyState } from './states';
 
 /**
  * The overview.
  *
+ * @param {Object}   props      Component props.
+ * @param {Function} props.onGo Opens another screen.
  * @return {Element} The screen.
  */
-export default function Overview() {
+export default function Overview( { onGo } ) {
 	const [ data, setData ] = useState( null );
 	const [ error, setError ] = useState( '' );
 
@@ -57,16 +61,29 @@ export default function Overview() {
 
 	if ( ! scanned.pages ) {
 		return (
-			<EmptyState
-				title={ __(
-					'Nothing has been scanned yet',
-					'wowstudio-accessibility-kit'
-				) }
-				body={ __(
-					'Check a page on the One page tab and this fills in. It counts only what has actually been scanned, so it starts empty rather than starting at a hundred.',
-					'wowstudio-accessibility-kit'
-				) }
-			/>
+			<>
+				<EmptyState
+					title={ __(
+						'Nothing has been scanned yet',
+						'wowstudio-accessibility-kit'
+					) }
+					body={ __(
+						'This fills in once a page has been checked. It counts only what has actually been scanned, so it starts empty rather than starting at a hundred.',
+						'wowstudio-accessibility-kit'
+					) }
+				/>
+
+				<NextStep step={ data.next_step } onGo={ onGo } />
+
+				<p className="wsak-overview__door">
+					<Button variant="link" onClick={ () => onGo( 'coverage' ) }>
+						{ __(
+							'What these checks cover, and what they cannot',
+							'wowstudio-accessibility-kit'
+						) }
+					</Button>
+				</p>
+			</>
 		);
 	}
 
@@ -85,6 +102,8 @@ export default function Overview() {
 
 	return (
 		<div className="wsak-overview">
+			<NextStep step={ data.next_step } onGo={ onGo } />
+
 			<div className="wsak-overview__top">
 				<section
 					className="wsak-card wsak-overview__score"
@@ -234,6 +253,15 @@ export default function Overview() {
 					</p>
 				</section>
 			</div>
+
+			<p className="wsak-overview__door">
+				<Button variant="link" onClick={ () => onGo( 'coverage' ) }>
+					{ __(
+						'What these checks cover, and what they cannot',
+						'wowstudio-accessibility-kit'
+					) }
+				</Button>
+			</p>
 		</div>
 	);
 }

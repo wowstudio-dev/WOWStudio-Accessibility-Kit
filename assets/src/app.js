@@ -234,7 +234,7 @@ export default function App() {
 			 * screen with a mode. Opening a page from a bulk result drops into
 			 * the single-page view, which is where the browser pass runs.
 			 */ }
-			{ view === 'overview' && <Overview /> }
+			{ view === 'overview' && <Overview onGo={ setView } /> }
 
 			{ view === 'bulk' && (
 				<BulkScan
@@ -387,6 +387,30 @@ export default function App() {
 			) }
 
 			{ view === 'scan' && <CoveragePanel /> }
+
+			{ /*
+			 * Reachable as a view rather than a tab. It is reference material
+			 * people want twice — once when they start and once when a finding
+			 * surprises them — and a permanent tab for that is a tab everybody
+			 * scrolls past. The doors to it are on the overview and at the foot
+			 * of the findings list, which is where those two moments happen.
+			 */ }
+			{ view === 'coverage' && (
+				<>
+					<p className="wsak-back">
+						<Button
+							variant="link"
+							onClick={ () => setView( 'overview' ) }
+						>
+							{ __(
+								'← Back to the overview',
+								'wowstudio-accessibility-kit'
+							) }
+						</Button>
+					</p>
+					<CoveragePanel />
+				</>
+			) }
 
 			<footer className="wsak__footer">
 				<p>
