@@ -1,13 +1,114 @@
 /**
  * The record of what has been set aside, and why.
  */
-import { Notice } from '@wordpress/components';
-import { useEffect, useRef, useState } from '@wordpress/element';
+import { Button, Notice } from '@wordpress/components';
+import { useCallback, useEffect, useRef, useState } from '@wordpress/element';
 import { __, _n, sprintf } from '@wordpress/i18n';
 
-import { fetchDismissed, readableError } from '../api';
+import { fetchDismissed, readableError, reopenMarkup } from '../api';
 import { EmptyState, Skeleton } from './states';
 import { SeverityTag } from './tags';
+
+/**
+ * The judgements taken for the whole site.
+ *
+ * Listed here because they are listed nowhere else. Once one is taken the
+ * findings it covers are set aside, so it is absent from every screen showing
+ * open findings — which would leave a decision reaching thirty-seven pages with
+ * nothing displaying it and no way to undo it. A decision that cannot be
+ * withdrawn is not one worth offering, and this is where it is withdrawn.
+ *
+ * @param {Object}   props           Component props.
+ * @param {Array}    props.rows      The decisions.
+ * @param {boolean}  props.mayDecide Whether this person may withdraw them.
+ * @param {Function} props.onChange  Called after one is withdrawn.
+ * @return {?Element} The section, or nothing when there are none.
+ */
+function SiteWide( { rows, mayDecide, onChange } ) {
+	const [ busy, setBusy ] = useState( '' );
+	const [ error, setError ] = useState( '' );
+
+	if ( ! rows.length ) {
+		return null;
+	}
+
+	return (
+		<section
+			className="wsak-dismissed__sitewide"
+			aria-labelledby="wsak-sitewide-title"
+		>
+			<h3 id="wsak-sitewide-title">
+				{ __( 'Set aside everywhere', 'wowstudio-accessibility-kit' ) }
+			</h3>
+
+			<p className="wsak-dismissed__lede">
+				{ __(
+					'These cover one piece of markup wherever it appears, including on pages added since the decision was taken. Withdrawing one puts every finding it covers back on the list.',
+					'wowstudio-accessibility-kit'
+				) }
+			</p>
+
+			{ error && (
+				<Notice status="error" isDismissible={ false }>
+					{ error }
+				</Notice>
+			) }
+
+			<ul className="wsak-dismissed__list">
+				{ rows.map( ( row ) => (
+					<li className="wsak-dismissed__row" key={ row.fingerprint }>
+						<div className="wsak-dismissed__head">
+							<h4 className="wsak-dismissed__rule">
+								{ row.rule_title }
+							</h4>
+						</div>
+
+						{ row.note && (
+							<blockquote className="wsak-dismissed__note">
+								{ row.note }
+							</blockquote>
+						) }
+
+						<p className="wsak-dismissed__by">
+							{ sprintf(
+								/* translators: 1: who set it aside. 2: when. */
+								__(
+									'Set aside everywhere by %1$s on %2$s',
+									'wowstudio-accessibility-kit'
+								),
+								row.by,
+								row.at
+							) }
+						</p>
+
+						{ mayDecide && (
+							<Button
+								variant="link"
+								disabled={ busy === row.fingerprint }
+								onClick={ () => {
+									setBusy( row.fingerprint );
+									setError( '' );
+
+									reopenMarkup( row.fingerprint )
+										.then( onChange )
+										.catch( ( caught ) =>
+											setError( readableError( caught ) )
+										)
+										.finally( () => setBusy( '' ) );
+								} }
+							>
+								{ __(
+									'Put it back everywhere',
+									'wowstudio-accessibility-kit'
+								) }
+							</Button>
+						) }
+					</li>
+				) ) }
+			</ul>
+		</section>
+	);
+}
 
 /**
  * The dismissed log.
@@ -27,19 +128,23 @@ export default function Dismissed() {
 
 	const live = useRef( true );
 
-	useEffect( () => {
-		live.current = true;
-
+	const load = useCallback( () => {
 		fetchDismissed( 100 )
 			.then( ( result ) => live.current && setData( result ) )
 			.catch(
 				( err ) => live.current && setError( readableError( err ) )
 			);
+	}, [] );
+
+	useEffect( () => {
+		live.current = true;
+
+		load();
 
 		return () => {
 			live.current = false;
 		};
-	}, [] );
+	}, [ load ] );
 
 	if ( ! data && ! error ) {
 		return (
@@ -74,7 +179,17 @@ export default function Dismissed() {
 				</Notice>
 			) }
 
-			{ data && data.dismissed.length === 0 ? (
+			{ data && (
+				<SiteWide
+					rows={ data.site_wide ?? [] }
+					mayDecide={ Boolean( data.may_decide ) }
+					onChange={ load }
+				/>
+			) }
+
+			{ data &&
+			data.dismissed.length === 0 &&
+			( data.site_wide ?? [] ).length === 0 ? (
 				<EmptyState
 					title={ __(
 						'Nothing has been set aside',

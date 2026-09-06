@@ -58,6 +58,7 @@ msgstr ""
 #. translators: %d: number of findings.
 #: src/Admin/ContentColumns.php:225
 #: assets/src/components/bulk-scan.js:539
+#: assets/src/components/markup-groups.js:37
 #, php-format,js-format
 msgid "%d finding"
 msgid_plural "%d findings"
@@ -70,7 +71,7 @@ msgid "Accessibility Kit"
 msgstr ""
 
 #: src/Admin/Menu.php:91
-#: src/Rest/ReviewController.php:134
+#: src/Rest/ReviewController.php:191
 #: src/Rest/RunController.php:222
 #: src/Rest/ScanController.php:205
 #: src/Rest/StatementController.php:116
@@ -472,6 +473,7 @@ msgstr ""
 
 #: src/Remediation/IssueReview.php:96
 #: src/Remediation/IssueReview.php:198
+#: src/Remediation/SiteWideReview.php:249
 msgid "That finding could not be found."
 msgstr ""
 
@@ -486,6 +488,14 @@ msgstr ""
 
 #: src/Remediation/IssueReview.php:145
 msgid "That decision could not be saved."
+msgstr ""
+
+#: src/Remediation/SiteWideReview.php:200
+msgid "Say why this is not a problem. This decision covers every page carrying this markup, including pages you have not opened, so the reason is what lets somebody else check the judgement later."
+msgstr ""
+
+#: src/Remediation/SiteWideReview.php:264
+msgid "Setting a finding aside everywhere needs permission to edit other people's content. You can still set it aside one page at a time."
 msgstr ""
 
 #: src/Remediation/ThemeTriage.php:82
@@ -562,6 +572,7 @@ msgid "Applying this kind of fix edits your site's Additional CSS, which your ac
 msgstr ""
 
 #: src/Rest/IssueController.php:80
+#: src/Rest/IssueController.php:126
 msgid "Limit to one check."
 msgstr ""
 
@@ -569,26 +580,32 @@ msgstr ""
 msgid "Limit to one page."
 msgstr ""
 
-#: src/Rest/IssueController.php:237
+#: src/Rest/IssueController.php:289
+#: src/Rest/IssueController.php:358
 #: src/Rest/OverviewController.php:396
-#: assets/src/components/dismissed.js:124
+#: assets/src/components/dismissed.js:239
 #: assets/src/components/scan-picker.js:164
 msgid "(no title)"
 msgstr ""
 
-#: src/Rest/ReviewController.php:65
+#: src/Rest/ReviewController.php:68
 msgid "Why this is not a problem. Kept with the finding."
 msgstr ""
 
-#: src/Rest/ReviewController.php:167
+#: src/Rest/ReviewController.php:122
+msgid "Why this is not a problem anywhere it appears."
+msgstr ""
+
+#: src/Rest/ReviewController.php:224
+#: src/Rest/ReviewController.php:267
 msgid "Somebody no longer on this site"
 msgstr ""
 
-#: src/Rest/ReviewController.php:194
+#: src/Rest/ReviewController.php:289
 msgid "You do not have permission to make decisions about findings."
 msgstr ""
 
-#: src/Rest/ReviewController.php:220
+#: src/Rest/ReviewController.php:315
 msgid "This fix changes how your theme renders every page, and your account is not allowed to change theme settings. An administrator can apply it."
 msgstr ""
 
@@ -2099,7 +2116,7 @@ msgid "Images"
 msgstr ""
 
 #: assets/src/app.js:181
-#: assets/src/components/dismissed.js:61
+#: assets/src/components/dismissed.js:166
 #: assets/src/components/overview.js:160
 msgid "Set aside"
 msgstr ""
@@ -2631,27 +2648,46 @@ msgid "Set it aside"
 msgstr ""
 
 #: assets/src/components/dismiss-action.js:156
+#: assets/src/components/markup-groups.js:198
 msgid "Cancel"
 msgstr ""
 
-#: assets/src/components/dismissed.js:47
+#: assets/src/components/dismissed.js:41
+msgid "Set aside everywhere"
+msgstr ""
+
+#: assets/src/components/dismissed.js:45
+msgid "These cover one piece of markup wherever it appears, including on pages added since the decision was taken. Withdrawing one puts every finding it covers back on the list."
+msgstr ""
+
+#. translators: 1: who set it aside. 2: when.
+#: assets/src/components/dismissed.js:75
+#, js-format
+msgid "Set aside everywhere by %1$s on %2$s"
+msgstr ""
+
+#: assets/src/components/dismissed.js:100
+msgid "Put it back everywhere"
+msgstr ""
+
+#: assets/src/components/dismissed.js:152
 msgid "Loading what has been set aside…"
 msgstr ""
 
-#: assets/src/components/dismissed.js:65
+#: assets/src/components/dismissed.js:170
 msgid "Findings somebody decided not to act on, with the reason they gave. Setting something aside is a judgement rather than a fix — the barrier is still there — so this screen exists to make those judgements reviewable by somebody other than whoever made them."
 msgstr ""
 
-#: assets/src/components/dismissed.js:79
+#: assets/src/components/dismissed.js:194
 msgid "Nothing has been set aside"
 msgstr ""
 
-#: assets/src/components/dismissed.js:83
+#: assets/src/components/dismissed.js:198
 msgid "When somebody marks a finding as reviewed and not applicable, it appears here with their name, the date, and the reason they gave."
 msgstr ""
 
 #. translators: %d: how many findings are set aside.
-#: assets/src/components/dismissed.js:94
+#: assets/src/components/dismissed.js:209
 #, js-format
 msgid "%d finding is currently set aside."
 msgid_plural "%d findings are currently set aside."
@@ -2659,7 +2695,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: 1: who set it aside. 2: when.
-#: assets/src/components/dismissed.js:145
+#: assets/src/components/dismissed.js:260
 #, js-format
 msgid "Set aside by %1$s on %2$s"
 msgstr ""
@@ -2740,35 +2776,62 @@ msgid "Preview of the page being inspected"
 msgstr ""
 
 #. translators: %s: the check's name.
-#: assets/src/components/issue-drilldown.js:41
+#: assets/src/components/issue-drilldown.js:42
 #, js-format
 msgid "About %s"
 msgstr ""
 
 #. translators: %s: a WCAG success criterion number, e.g. 1.1.1.
-#: assets/src/components/issue-drilldown.js:69
+#: assets/src/components/issue-drilldown.js:70
 #, js-format
 msgid "WCAG success criterion %s"
 msgstr ""
 
-#: assets/src/components/issue-drilldown.js:94
+#: assets/src/components/issue-drilldown.js:95
 msgid "Edit this page"
 msgstr ""
 
-#: assets/src/components/issue-drilldown.js:99
+#: assets/src/components/issue-drilldown.js:100
 msgid "View this page"
 msgstr ""
 
-#: assets/src/components/issue-drilldown.js:162
+#: assets/src/components/issue-drilldown.js:172
 msgid "← Back to the report"
 msgstr ""
 
-#: assets/src/components/issue-drilldown.js:172
+#: assets/src/components/issue-drilldown.js:182
 msgid "Loading these findings…"
 msgstr ""
 
+#: assets/src/components/issue-drilldown.js:211
+msgid "How to list these"
+msgstr ""
+
+#: assets/src/components/issue-drilldown.js:221
+msgid "Every instance"
+msgstr ""
+
+#: assets/src/components/issue-drilldown.js:228
+msgid "By markup"
+msgstr ""
+
+#. translators: 1: distinct pieces of markup, already pluralised. 2: the findings they account for, already pluralised.
+#: assets/src/components/issue-drilldown.js:249
+#, js-format
+msgid "%1$s, accounting for %2$s"
+msgstr ""
+
+#. translators: %d: how many distinct pieces of markup.
+#: assets/src/components/issue-drilldown.js:255
+#, js-format
+msgid "%d distinct piece of markup"
+msgid_plural "%d distinct pieces of markup"
+msgstr[0] ""
+msgstr[1] ""
+
 #. translators: %d: how many findings are open.
-#: assets/src/components/issue-drilldown.js:209
+#: assets/src/components/issue-drilldown.js:265
+#: assets/src/components/issue-drilldown.js:276
 #, js-format
 msgid "%d open finding"
 msgid_plural "%d open findings"
@@ -2776,16 +2839,25 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: 1: how many are shown. 2: how many there are.
-#: assets/src/components/issue-drilldown.js:231
+#: assets/src/components/issue-drilldown.js:300
 #, js-format
 msgid "Showing the first %1$d of %2$d. Work through these and the rest will follow."
 msgstr ""
 
-#: assets/src/components/issue-drilldown.js:249
+#. translators: %d: how many findings have no identity yet.
+#: assets/src/components/issue-drilldown.js:314
+#, js-format
+msgid "%d finding was recorded before this version and cannot be grouped until its page is scanned again. It is being brought up to date in the background."
+msgid_plural "%d findings were recorded before this version and cannot be grouped until their pages are scanned again. They are being brought up to date in the background."
+msgstr[0] ""
+msgstr[1] ""
+
+#: assets/src/components/issue-drilldown.js:343
+#: assets/src/components/markup-groups.js:267
 msgid "Nothing open here"
 msgstr ""
 
-#: assets/src/components/issue-drilldown.js:253
+#: assets/src/components/issue-drilldown.js:347
 msgid "Everything this filter covers has been fixed or set aside. If that is a surprise, the pages behind it may not have been scanned since they changed."
 msgstr ""
 
@@ -2803,6 +2875,7 @@ msgstr ""
 
 #. translators: %s: name of the accessibility check.
 #: assets/src/components/issue-list.js:153
+#: assets/src/components/markup-groups.js:228
 #, js-format
 msgid "Markup for: %s"
 msgstr ""
@@ -2832,6 +2905,52 @@ msgstr ""
 #: assets/src/components/overview.js:81
 #: assets/src/components/overview.js:271
 msgid "What these checks cover, and what they cannot"
+msgstr ""
+
+#. translators: 1: how many findings this group holds. 2: how many pages carry the markup.
+#: assets/src/components/markup-groups.js:34
+#, js-format
+msgid "%1$s across %2$s"
+msgstr ""
+
+#. translators: %d: how many pages.
+#: assets/src/components/markup-groups.js:47
+#, js-format
+msgid "%d page"
+msgid_plural "%d pages"
+msgstr[0] ""
+msgstr[1] ""
+
+#: assets/src/components/markup-groups.js:101
+msgid "Setting this aside everywhere needs permission to edit other people’s content. You can still set it aside one page at a time, from the list of every instance."
+msgstr ""
+
+#: assets/src/components/markup-groups.js:116
+msgid "This is not a problem, anywhere"
+msgstr ""
+
+#. translators: %d: how many pages the decision covers.
+#: assets/src/components/markup-groups.js:141
+#, js-format
+msgid "This closes the finding on %d page, including pages you have not opened."
+msgid_plural "This closes the finding on %d pages, including pages you have not opened."
+msgstr[0] ""
+msgstr[1] ""
+
+#: assets/src/components/markup-groups.js:153
+msgid "Why is this not a problem anywhere it appears?"
+msgstr ""
+
+#: assets/src/components/markup-groups.js:157
+msgid "Required at this scope, not optional. A decision about one page is your shortcut; a decision about the whole site is a claim somebody else will inherit, and the reason is what lets them check it."
+msgstr ""
+
+#: assets/src/components/markup-groups.js:186
+msgid "Set it aside everywhere"
+msgstr ""
+
+#: assets/src/components/markup-groups.js:271
+msgid "Everything this check found has been fixed or set aside."
 msgstr ""
 
 #: assets/src/components/overview.js:36

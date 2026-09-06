@@ -110,6 +110,35 @@ final class IssueController implements Registrable {
 				),
 			)
 		);
+
+		register_rest_route(
+			ScanController::REST_NAMESPACE,
+			'/issues/grouped',
+			array(
+				array(
+					'methods'             => WP_REST_Server::READABLE,
+					'callback'            => array( $this, 'get_groups' ),
+					'permission_callback' => array( $this, 'can_read' ),
+					'args'                => array(
+						'rule'   => array(
+							'type'              => 'string',
+							'sanitize_callback' => 'sanitize_key',
+							'description'       => __( 'Limit to one check.', 'wowstudio-accessibility-kit' ),
+						),
+						'limit'  => array(
+							'type'              => 'integer',
+							'default'           => 50,
+							'sanitize_callback' => 'absint',
+						),
+						'offset' => array(
+							'type'              => 'integer',
+							'default'           => 0,
+							'sanitize_callback' => 'absint',
+						),
+					),
+				),
+			)
+		);
 	}
 
 	/**
@@ -171,6 +200,98 @@ final class IssueController implements Registrable {
 		);
 
 		return new WP_REST_Response( $data, 200 );
+	}
+
+	/**
+	 * Returns the findings grouped by the markup that produced them.
+	 *
+	 * Each group carries the pages it reaches by name rather than only by
+	 * count, because a decision covering thirty-seven pages is one somebody
+	 * should be able to see the extent of before taking it.
+	 *
+	 * @since 0.29.0
+	 *
+	 * @param WP_REST_Request $request The request.
+	 * @return WP_REST_Response
+	 */
+	public function get_groups( WP_REST_Request $request ): WP_REST_Response {
+		$issues = new IssueRepository();
+
+		$filters = array(
+			'rule_id' => (string) $request->get_param( 'rule' ),
+			'status'  => IssueStatus::Open,
+			'limit'   => min( self::MAX_PER_PAGE, max( 1, (int) $request->get_param( 'limit' ) ) ),
+			'offset'  => max( 0, (int) $request->get_param( 'offset' ) ),
+		);
+
+		$groups       = $issues->group_current( $filters );
+		$fingerprints = array_column( $groups, 'fingerprint' );
+		$pages        = $issues->pages_for( $fingerprints );
+		$presenter    = new IssuePresenter();
+
+		$out = array();
+
+		foreach ( $groups as $group ) {
+			$sample = $issues->find( $group['sample_id'] );
+
+			if ( null === $sample ) {
+				continue;
+			}
+
+			$presented = $presenter->present( array( $sample ) );
+
+			$out[] = array(
+				'fingerprint' => $group['fingerprint'],
+				'rule_id'     => $group['rule_id'],
+				'instances'   => $group['instances'],
+				'pages'       => $this->name_pages( $pages[ $group['fingerprint'] ] ?? array() ),
+				'sample'      => $presented[0] ?? array(),
+			);
+		}
+
+		return new WP_REST_Response(
+			array(
+				'groups'     => $out,
+				'total'      => $issues->count_groups( $filters ),
+				'instances'  => $issues->count_current( $filters ),
+				'rule'       => $this->describe_rule( $filters['rule_id'] ),
+				'may_decide' => current_user_can( 'edit_others_posts' ),
+
+				/*
+				 * Findings stored before 0.29.0 have no identity yet, so they
+				 * cannot be grouped and are missing from the list above. Said
+				 * out loud rather than quietly left out: a view that shows
+				 * fewer findings than the count beside it, with no explanation,
+				 * is one somebody stops trusting.
+				 */
+				'ungrouped'  => $issues->fingerprints_pending(),
+			),
+			200
+		);
+	}
+
+	/**
+	 * Puts titles to the pages a group reaches.
+	 *
+	 * @since 0.29.0
+	 *
+	 * @param int[] $post_ids Pages carrying this markup.
+	 * @return array<int, array{id: int, title: string, edit_link: string}>
+	 */
+	private function name_pages( array $post_ids ): array {
+		$named = array();
+
+		foreach ( $post_ids as $post_id ) {
+			$title = get_the_title( $post_id );
+
+			$named[] = array(
+				'id'        => $post_id,
+				'title'     => '' !== $title ? $title : __( '(no title)', 'wowstudio-accessibility-kit' ),
+				'edit_link' => (string) get_edit_post_link( $post_id, 'raw' ),
+			);
+		}
+
+		return $named;
 	}
 
 	/**

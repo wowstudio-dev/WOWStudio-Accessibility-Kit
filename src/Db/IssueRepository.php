@@ -406,6 +406,260 @@ class IssueRepository {
 	}
 
 	/**
+	 * Groups current findings by the markup that produced them.
+	 *
+	 * A theme prints the same social icons into every footer, so the same fault
+	 * arrives once per page and asks to be judged once per page. After the
+	 * fortieth identical decision people stop reading the findings and start
+	 * clearing them, which is the point at which the list has taught somebody
+	 * to ignore it. Grouping turns forty judgements back into one.
+	 *
+	 * Ordered by how many pages a group touches rather than by how many
+	 * findings it holds: the ones worth deciding once are the ones that reach
+	 * furthest.
+	 *
+	 * @since 0.29.0
+	 *
+	 * @param array<string, mixed> $args Same filters as find_current().
+	 * @return array<int, array{fingerprint: string, rule_id: string, sample_id: int, instances: int, pages: int}>
+	 */
+	public function group_current( array $args = array() ): array {
+		global $wpdb;
+
+		list( $where, $values ) = $this->current_conditions( $args );
+
+		/*
+		 * A row with no fingerprint has no identity, and grouping on the empty
+		 * string would collect every one of them into a single group that means
+		 * nothing — a group whose "set aside everywhere" would retire dozens of
+		 * unrelated findings in one click. Excluded rather than guessed at. The
+		 * backfill gives older rows their identity; until it reaches them they
+		 * are counted honestly as ungrouped instead of grouped wrongly.
+		 */
+		$where[]  = 'i.fingerprint <> %s';
+		$values[] = '';
+
+		$values[] = max( 1, min( 200, (int) ( $args['limit'] ?? 50 ) ) );
+		$values[] = max( 0, (int) ( $args['offset'] ?? 0 ) );
+
+		$sql = 'SELECT i.fingerprint AS fingerprint,
+				MIN(i.rule_id) AS rule_id,
+				MIN(i.id) AS sample_id,
+				COUNT(*) AS instances,
+				COUNT(DISTINCT i.post_id) AS pages
+			FROM %i AS i
+			LEFT JOIN %i AS p ON p.ID = i.post_id
+			WHERE ' . implode( ' AND ', $where )
+			. ' GROUP BY i.fingerprint
+			ORDER BY pages DESC, instances DESC, sample_id ASC
+			LIMIT %d OFFSET %d';
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared -- Conditions are fixed placeholder fragments; every value goes through prepare().
+		$rows = $wpdb->get_results( $wpdb->prepare( $sql, $values ) );
+
+		return array_map(
+			static fn( object $row ): array => array(
+				'fingerprint' => (string) $row->fingerprint,
+				'rule_id'     => (string) $row->rule_id,
+				'sample_id'   => (int) $row->sample_id,
+				'instances'   => (int) $row->instances,
+				'pages'       => (int) $row->pages,
+			),
+			is_array( $rows ) ? $rows : array()
+		);
+	}
+
+	/**
+	 * Counts findings still carrying no identity.
+	 *
+	 * Rows written before 0.29.0 have an empty fingerprint until their page is
+	 * scanned again or the backfill reaches them.
+	 *
+	 * @since 0.29.0
+	 *
+	 * @return int
+	 */
+	public function fingerprints_pending(): int {
+		global $wpdb;
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Custom table; no core API covers it.
+		return (int) $wpdb->get_var(
+			$wpdb->prepare(
+				'SELECT COUNT(*) FROM %i WHERE fingerprint = %s',
+				Schema::issues_table(),
+				''
+			)
+		);
+	}
+
+	/**
+	 * Gives a batch of older findings the identity they were stored without.
+	 *
+	 * Computed in PHP rather than in SQL, deliberately. The hash is over
+	 * whitespace-normalised markup, and MySQL's regular-expression support for
+	 * that is neither available on every version WordPress runs on nor certain
+	 * to normalise identically. A fingerprint that disagreed with the one
+	 * Fingerprint::of() produces would be worse than no fingerprint at all: it
+	 * would look like an identity and never match one, so decisions would go on
+	 * silently failing to carry with nothing to show for it.
+	 *
+	 * @since 0.29.0
+	 *
+	 * @param int $limit How many rows to do in this batch.
+	 * @return int Rows given an identity.
+	 */
+	public function backfill_fingerprints( int $limit = 200 ): int {
+		global $wpdb;
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Custom table; no core API covers it.
+		$rows = $wpdb->get_results(
+			$wpdb->prepare(
+				'SELECT id, rule_id, context FROM %i WHERE fingerprint = %s LIMIT %d',
+				Schema::issues_table(),
+				'',
+				max( 1, min( 1000, $limit ) )
+			)
+		);
+
+		$done = 0;
+
+		foreach ( (array) $rows as $row ) {
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Custom table; no core API covers it.
+			$updated = $wpdb->update(
+				Schema::issues_table(),
+				array( 'fingerprint' => Fingerprint::of( (string) $row->rule_id, (string) $row->context ) ),
+				array( 'id' => (int) $row->id ),
+				array( '%s' ),
+				array( '%d' )
+			);
+
+			if ( false !== $updated ) {
+				++$done;
+			}
+		}
+
+		return $done;
+	}
+
+	/**
+	 * Counts how many distinct pieces of markup match the filters.
+	 *
+	 * @since 0.29.0
+	 *
+	 * @param array<string, mixed> $args Same filters as find_current().
+	 * @return int
+	 */
+	public function count_groups( array $args = array() ): int {
+		global $wpdb;
+
+		list( $where, $values ) = $this->current_conditions( $args );
+
+		// As in group_current(): rows without an identity are not a group.
+		$where[]  = 'i.fingerprint <> %s';
+		$values[] = '';
+
+		$sql = 'SELECT COUNT(DISTINCT i.fingerprint) FROM %i AS i
+			LEFT JOIN %i AS p ON p.ID = i.post_id
+			WHERE ' . implode( ' AND ', $where );
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared -- As above.
+		return (int) $wpdb->get_var( $wpdb->prepare( $sql, $values ) );
+	}
+
+	/**
+	 * Lists which pages each of these groups appears on.
+	 *
+	 * Named, not counted. A decision covering thirty-seven pages is one
+	 * somebody should be able to see the extent of before taking it, and "37"
+	 * is not something anybody can check.
+	 *
+	 * @since 0.29.0
+	 *
+	 * @param string[] $fingerprints Groups to look up.
+	 * @return array<string, int[]> Post IDs keyed by fingerprint.
+	 */
+	public function pages_for( array $fingerprints ): array {
+		global $wpdb;
+
+		$fingerprints = array_values( array_unique( array_filter( $fingerprints ) ) );
+
+		if ( array() === $fingerprints ) {
+			return array();
+		}
+
+		$slots  = implode( ', ', array_fill( 0, count( $fingerprints ), '%s' ) );
+		$values = array_merge( array( Schema::issues_table() ), $fingerprints, array( IssueStatus::Open->value ) );
+
+		$sql = "SELECT DISTINCT fingerprint, post_id FROM %i
+			WHERE fingerprint IN ( {$slots} ) AND status = %s AND post_id > 0
+			ORDER BY post_id ASC";
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared -- The IN list is placeholders only; every value goes through prepare().
+		$rows = $wpdb->get_results( $wpdb->prepare( $sql, $values ) );
+
+		$pages = array();
+
+		foreach ( (array) $rows as $row ) {
+			$pages[ (string) $row->fingerprint ][] = (int) $row->post_id;
+		}
+
+		return $pages;
+	}
+
+	/**
+	 * Applies a decision to every current finding with this markup.
+	 *
+	 * The decisions table is the record; this brings the rows the interface
+	 * reads into line with it, so a site-wide judgement takes effect on pages
+	 * that were scanned before it was made rather than only on ones scanned
+	 * after.
+	 *
+	 * Pages that have already made their own call about this finding are left
+	 * alone. Somebody who looked at one page and decided the opposite has said
+	 * something more specific than the site-wide sweep knows, and overwriting
+	 * it here would quietly undo a judgement made with the page in front of
+	 * them — the same precedence DecisionRepository::for_fingerprints() applies
+	 * on the way out, enforced on the way in.
+	 *
+	 * @since 0.29.0
+	 *
+	 * @param string      $fingerprint Which finding.
+	 * @param IssueStatus $status      What was decided.
+	 * @param string      $note        Why.
+	 * @param int         $user_id     Who decided.
+	 * @return int Rows brought into line.
+	 */
+	public function apply_everywhere( string $fingerprint, IssueStatus $status, string $note, int $user_id ): int {
+		global $wpdb;
+
+		if ( '' === $fingerprint ) {
+			return 0;
+		}
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Custom tables; no core API covers them.
+		$updated = $wpdb->query(
+			$wpdb->prepare(
+				'UPDATE %i AS i
+				SET i.status = %s, i.note = %s, i.resolved_by = %d, i.updated_at = %s
+				WHERE i.fingerprint = %s
+				  AND NOT EXISTS (
+					SELECT 1 FROM %i AS d
+					WHERE d.fingerprint = i.fingerprint AND d.post_id = i.post_id
+				  )',
+				Schema::issues_table(),
+				$status->value,
+				$note,
+				$user_id,
+				gmdate( 'Y-m-d H:i:s' ),
+				$fingerprint,
+				Schema::decisions_table()
+			)
+		);
+
+		return false === $updated ? 0 : (int) $updated;
+	}
+
+	/**
 	 * Builds the shared WHERE for the two site-wide queries.
 	 *
 	 * One place, so a filter cannot apply to the list and not to the count that

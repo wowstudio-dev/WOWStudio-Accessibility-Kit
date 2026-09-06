@@ -10,6 +10,8 @@ namespace WOWStudio\AccessibilityKit\Core;
 use WOWStudio\AccessibilityKit\Db\DecisionRepository;
 use WOWStudio\AccessibilityKit\Db\IssueRepository;
 use WOWStudio\AccessibilityKit\Db\Schema;
+use WOWStudio\AccessibilityKit\Jobs\Backfill;
+use WOWStudio\AccessibilityKit\Jobs\Queue;
 use WOWStudio\AccessibilityKit\Scanner\Fingerprint;
 use WOWStudio\AccessibilityKit\Scanner\IssueStatus;
 use WOWStudio\AccessibilityKit\SiteFixes\Fixes\PageTitle;
@@ -232,7 +234,22 @@ final class Installer implements Registrable {
 			);
 		}
 
-		( new IssueRepository() )->prune_all_superseded();
+		$issues = new IssueRepository();
+
+		$issues->prune_all_superseded();
+
+		/*
+		 * Older rows carry no fingerprint, so until they have one a decision
+		 * cannot travel with them and identical markup cannot be grouped. One
+		 * batch runs here, which finishes a small site outright; the rest goes
+		 * through the scheduler rather than holding this request open while a
+		 * large site's table is rewritten.
+		 */
+		$issues->backfill_fingerprints( Backfill::BATCH );
+
+		if ( $issues->fingerprints_pending() > 0 ) {
+			( new Queue() )->enqueue_backfill();
+		}
 
 		update_option( self::DECISIONS_MIGRATED_OPTION, true, true );
 	}

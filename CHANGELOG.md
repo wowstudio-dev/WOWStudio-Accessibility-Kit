@@ -25,6 +25,26 @@ Findings that keep their identity, and figures you can open.
 
 ### Added
 
+- **The same markup, decided once.** A theme prints its social icons into every
+  footer, so the same fault arrives once per page and asks to be judged once per
+  page. After the fortieth identical decision people stop reading findings and
+  start clearing them, which is the point at which the list has taught somebody
+  to ignore it — and the finding that mattered is the one they clear on
+  autopilot afterwards.
+
+  A rule-scoped list can now be grouped by the markup behind it, with one
+  decision covering every instance. On the development site nine "clickable
+  target is too small" findings collapse to two groups; seventeen skipped
+  headings stay seventeen, because they are genuinely seventeen different
+  problems.
+
+  This is more careful than the per-page dismissal rather than less, because it
+  retires findings on pages nobody has opened. The reason is required with no
+  path around it, the pages it reaches are listed by name before it is taken,
+  it needs the right to edit other people's content, a page that made its own
+  call about the finding keeps it, and it can be withdrawn in one step from the
+  decision log. A judgement that cannot be undone is not one worth offering.
+
 - **Every figure on the report is now a door.** "What comes up most" and "Pages
   with the most to do" were counts and nothing else: the report said forty-five
   pieces of text had too little contrast and offered no way to see one of them.
@@ -41,6 +61,21 @@ Findings that keep their identity, and figures you can open.
 
 - `GET /wsak/v1/issues`, filterable by check, page, severity, detection and
   status, returning the findings, the total, and the rule's own description.
+  `GET /wsak/v1/issues/grouped` returns the same findings collapsed to distinct
+  markup, and `wsak_can_dismiss_site_wide` narrows who may decide that widely.
+
+### Fixed
+
+- **Findings stored before this version are given their identity in the
+  background**, in batches through Action Scheduler rather than by holding an
+  admin request open while a large site's table is rewritten. Without it a
+  rescan of every page would be the only way to make decisions carry, and the
+  grouped view would be empty until somebody did it.
+
+  Rows still waiting are excluded from grouping and counted out loud, never
+  guessed at: grouping them on their empty identity would have collected
+  forty-five unrelated contrast failures into one group whose "set aside
+  everywhere" retired all of them at once.
 
 ### Fixed
 

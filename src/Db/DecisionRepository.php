@@ -144,6 +144,64 @@ class DecisionRepository {
 	}
 
 	/**
+	 * Returns the decisions taken for the whole site, most recent first.
+	 *
+	 * These do not appear in the findings list once taken — the findings they
+	 * cover are set aside, and a list of open findings is exactly where they are
+	 * not. So the decision log is the only place they can be seen or undone, and
+	 * a decision that cannot be undone is not one worth offering.
+	 *
+	 * @since 0.29.0
+	 *
+	 * @param int $limit  How many to return, capped at 200.
+	 * @param int $offset Where to start.
+	 * @return Decision[]
+	 */
+	public function site_wide( int $limit = 50, int $offset = 0 ): array {
+		global $wpdb;
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Custom table; no core API covers it.
+		$rows = $wpdb->get_results(
+			$wpdb->prepare(
+				'SELECT * FROM %i WHERE post_id = %d AND status = %s
+				ORDER BY updated_at DESC, id DESC
+				LIMIT %d OFFSET %d',
+				Schema::decisions_table(),
+				0,
+				IssueStatus::Ignored->value,
+				max( 1, min( 200, $limit ) ),
+				max( 0, $offset )
+			)
+		);
+
+		return array_map(
+			static fn( object $row ): Decision => Decision::from_row( $row ),
+			is_array( $rows ) ? $rows : array()
+		);
+	}
+
+	/**
+	 * Counts the decisions taken for the whole site.
+	 *
+	 * @since 0.29.0
+	 *
+	 * @return int
+	 */
+	public function site_wide_count(): int {
+		global $wpdb;
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Custom table; no core API covers it.
+		return (int) $wpdb->get_var(
+			$wpdb->prepare(
+				'SELECT COUNT(*) FROM %i WHERE post_id = %d AND status = %s',
+				Schema::decisions_table(),
+				0,
+				IssueStatus::Ignored->value
+			)
+		);
+	}
+
+	/**
 	 * Returns the decisions that apply to a batch of findings on one page.
 	 *
 	 * A page-specific decision beats a site-wide one, so that somebody can put a

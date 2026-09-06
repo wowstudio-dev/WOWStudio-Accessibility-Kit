@@ -12,6 +12,7 @@ use WOWStudio\AccessibilityKit\Admin\Menu;
 use WOWStudio\AccessibilityKit\Conformance\StatementBlock;
 use WOWStudio\AccessibilityKit\Remediation\OverrideStore;
 use WOWStudio\AccessibilityKit\Scanner\Preview;
+use WOWStudio\AccessibilityKit\Jobs\Backfill;
 use WOWStudio\AccessibilityKit\Jobs\Worker;
 use WOWStudio\AccessibilityKit\Rest\CssFixController;
 use WOWStudio\AccessibilityKit\Readability\SimplifiedSummary;
@@ -159,6 +160,7 @@ final class Plugin {
 			'rest.overview'  => new OverviewController(),
 			'rest.issues'    => new IssueController(),
 			'jobs.worker'    => new Worker(),
+			'jobs.backfill'  => new Backfill(),
 			'summary'        => new SimplifiedSummary(),
 			'fixes.site'     => new SiteFixManager(),
 			'overrides'      => new OverrideStore(),

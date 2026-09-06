@@ -13,6 +13,8 @@ use Mockery;
 use WOWStudio\AccessibilityKit\Db\IssueRepository;
 use WOWStudio\AccessibilityKit\Tests\Doubles\FakeDecisionStore;
 use WOWStudio\AccessibilityKit\Scanner\Detection;
+use WOWStudio\AccessibilityKit\Scanner\Fingerprint;
+use WOWStudio\AccessibilityKit\Scanner\IssueStatus;
 use WOWStudio\AccessibilityKit\Scanner\ScanPass;
 use WOWStudio\AccessibilityKit\Scanner\Severity;
 use WOWStudio\AccessibilityKit\Tests\TestCase;
@@ -226,6 +228,107 @@ final class IssueRepositoryTest extends TestCase {
 
 		// The list carries two extra values, its limit and its offset.
 		$this->assertSame( $count_values, array_slice( $list_values, 0, count( $count_values ) ) );
+	}
+
+	/**
+	 * Findings with no identity are never collected into a group.
+	 *
+	 * The regression test for a fault found on real data. Rows stored before
+	 * 0.29.0 have an empty fingerprint, and grouping on the empty string put
+	 * forty-five unrelated contrast failures into one group — whose "set aside
+	 * everywhere" would have retired all forty-five in a click. A group has to
+	 * mean "the same markup", and rows without an identity cannot claim that.
+	 *
+	 * @return void
+	 */
+	public function test_findings_without_an_identity_are_not_a_group(): void {
+		$this->wpdb->shouldReceive( 'get_results' )->once()->andReturn( array() );
+
+		( new IssueRepository( new FakeDecisionStore() ) )->group_current();
+
+		$this->assertStringContainsString( 'i.fingerprint <> %s', $this->sql );
+		$this->assertStringContainsString( 'GROUP BY i.fingerprint', $this->sql );
+	}
+
+	/**
+	 * The group count leaves them out too.
+	 *
+	 * @return void
+	 */
+	public function test_the_group_count_excludes_them_as_well(): void {
+		$this->wpdb->shouldReceive( 'get_var' )->once()->andReturn( 0 );
+
+		( new IssueRepository( new FakeDecisionStore() ) )->count_groups();
+
+		$this->assertStringContainsString( 'i.fingerprint <> %s', $this->sql );
+	}
+
+	/**
+	 * A site-wide decision leaves pages that made their own call alone.
+	 *
+	 * Somebody who opened one page and decided the opposite has said something
+	 * more specific than the sweep knows. Overwriting it would undo a judgement
+	 * made with the page in front of them — the same precedence the read path
+	 * applies, enforced on the write path.
+	 *
+	 * @return void
+	 */
+	public function test_a_site_wide_decision_spares_pages_that_decided_for_themselves(): void {
+		$this->wpdb->shouldReceive( 'query' )->once()->andReturn( 8 );
+
+		$changed = ( new IssueRepository( new FakeDecisionStore() ) )->apply_everywhere(
+			'97dbc2f4ced320ec9628af59265430fb0793f5fc',
+			IssueStatus::Ignored,
+			'A perfectly good reason here.',
+			7
+		);
+
+		$this->assertSame( 8, $changed );
+		$this->assertStringContainsString( 'NOT EXISTS', $this->sql );
+		$this->assertStringContainsString( 'd.post_id = i.post_id', $this->sql );
+		$this->assertContains( '97dbc2f4ced320ec9628af59265430fb0793f5fc', $this->values );
+	}
+
+	/**
+	 * The backfill hashes exactly the way the scanner does.
+	 *
+	 * A fingerprint that disagreed with Fingerprint::of() would be worse than
+	 * none: it would look like an identity and never match one, so decisions
+	 * would go on failing to carry with nothing to show for it.
+	 *
+	 * @return void
+	 */
+	public function test_the_backfill_computes_the_same_identity(): void {
+		$this->wpdb->shouldReceive( 'get_results' )->once()->andReturn(
+			array(
+				(object) array(
+					'id'      => 5,
+					'rule_id' => 'link-name-vague',
+					'context' => '<a href="#">read   more</a>',
+				),
+			)
+		);
+
+		$written = null;
+
+		$this->wpdb->shouldReceive( 'update' )
+			->once()
+			->andReturnUsing(
+				function ( $table, $data ) use ( &$written ) {
+					unset( $table );
+					$written = $data['fingerprint'];
+
+					return 1;
+				}
+			);
+
+		$done = ( new IssueRepository( new FakeDecisionStore() ) )->backfill_fingerprints( 10 );
+
+		$this->assertSame( 1, $done );
+		$this->assertSame(
+			Fingerprint::of( 'link-name-vague', '<a href="#">read   more</a>' ),
+			$written
+		);
 	}
 
 	/**

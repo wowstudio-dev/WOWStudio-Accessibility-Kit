@@ -423,3 +423,57 @@ export function fetchIssues( {
 
 	return apiFetch( { path: `/${ namespace }/issues?${ query }` } );
 }
+
+/**
+ * Fetches current findings grouped by the markup that produced them.
+ *
+ * @param {Object} options          Query options.
+ * @param {string} [options.rule]   Limit to one check.
+ * @param {number} [options.limit]  How many groups to return.
+ * @param {number} [options.offset] Where to start.
+ * @return {Promise<Object>} Groups, totals, and what the check means.
+ */
+export function fetchIssueGroups( { rule = '', limit = 50, offset = 0 } = {} ) {
+	const query = new URLSearchParams( {
+		limit: String( limit ),
+		offset: String( offset ),
+	} );
+
+	if ( rule ) {
+		query.set( 'rule', rule );
+	}
+
+	return apiFetch( { path: `/${ namespace }/issues/grouped?${ query }` } );
+}
+
+/**
+ * Sets a finding aside wherever the same markup appears.
+ *
+ * Keyed on the fingerprint rather than a row id: the decision outlives every
+ * row it currently applies to, because the next scan replaces them all.
+ *
+ * @param {string} fingerprint Which finding.
+ * @param {string} ruleId      The check that produced it.
+ * @param {string} note        Why it is not a problem anywhere.
+ * @return {Promise<Object>} The decision, and how many rows it reached.
+ */
+export function ignoreMarkup( fingerprint, ruleId, note ) {
+	return apiFetch( {
+		path: `/${ namespace }/markup/${ fingerprint }/ignore`,
+		method: 'POST',
+		data: { rule: ruleId, note },
+	} );
+}
+
+/**
+ * Withdraws a site-wide judgement.
+ *
+ * @param {string} fingerprint Which finding.
+ * @return {Promise<Object>} The decision, and how many rows it reached.
+ */
+export function reopenMarkup( fingerprint ) {
+	return apiFetch( {
+		path: `/${ namespace }/markup/${ fingerprint }/reopen`,
+		method: 'POST',
+	} );
+}

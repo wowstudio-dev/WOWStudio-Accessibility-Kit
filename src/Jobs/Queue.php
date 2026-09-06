@@ -38,6 +38,25 @@ class Queue {
 	public const HOOK = 'wsak_scan_page';
 
 	/**
+	 * The action fired to give older findings their identity.
+	 *
+	 * @since 0.29.0
+	 * @var string
+	 */
+	public const HOOK_BACKFILL = 'wsak_backfill_fingerprints';
+
+	/**
+	 * The group the backfill runs in.
+	 *
+	 * Its own group, not a run's, so cancelling a scan cannot cancel a
+	 * migration that happens to be in flight beside it.
+	 *
+	 * @since 0.29.0
+	 * @var string
+	 */
+	public const GROUP_BACKFILL = 'wsak-backfill';
+
+	/**
 	 * Returns the Action Scheduler group for one run.
 	 *
 	 * A group per run rather than one group for the plugin, so cancelling a run
@@ -86,6 +105,39 @@ class Queue {
 		);
 
 		return $action_id > 0;
+	}
+
+	/**
+	 * Drops everything still scheduled for a run.
+	 *
+	 * @since 0.12.0
+	 *
+	 * @param int $run_id Run to stop.
+	 * @return void
+	 */
+	/**
+	 * Queues the fingerprint backfill.
+	 *
+	 * No check for one already queued, deliberately. The obvious guard —
+	 * as_has_scheduled_action() — counts the action currently running, so a
+	 * batch asking for its own successor would be told one already exists and
+	 * the backfill would stop after two hundred rows. That failure is invisible
+	 * on a small site, which finishes in one batch, and silent on a large one.
+	 *
+	 * It needs no guard anyway: a batch only ever rewrites rows that still have
+	 * no fingerprint, so two workers racing do the same work twice at worst and
+	 * never the wrong work.
+	 *
+	 * @since 0.29.0
+	 *
+	 * @return bool Whether the work is scheduled.
+	 */
+	public function enqueue_backfill(): bool {
+		if ( ! $this->is_available() ) {
+			return false;
+		}
+
+		return as_enqueue_async_action( self::HOOK_BACKFILL, array(), self::GROUP_BACKFILL ) > 0;
 	}
 
 	/**

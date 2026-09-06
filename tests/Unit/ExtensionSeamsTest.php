@@ -110,6 +110,33 @@ final class ExtensionSeamsTest extends TestCase {
 	}
 
 	/**
+	 * The site-wide dismissal filter narrows too, and cannot widen.
+	 *
+	 * The same rule as `wsak_can_dismiss`, and it matters more here: this
+	 * decision reaches every page carrying one piece of markup, including pages
+	 * belonging to people who are not asking for it. A filter that could return
+	 * true and be believed would hand a third party the right to close findings
+	 * across content its user may not edit.
+	 *
+	 * @return void
+	 */
+	public function test_site_wide_dismissal_can_be_restricted_but_not_widened(): void {
+		$review = $this->source( 'src/Remediation/SiteWideReview.php' );
+
+		$this->assertStringContainsString( "apply_filters( 'wsak_can_dismiss_site_wide'", $review );
+		$this->assertStringContainsString(
+			"return \$allowed && (bool) apply_filters( 'wsak_can_dismiss_site_wide'",
+			$review,
+			'The filter must be combined with the capability check, never replace it.'
+		);
+		$this->assertStringContainsString(
+			"current_user_can( 'edit_others_posts' )",
+			$review,
+			'Deciding for the whole site is the right to edit other people\'s content.'
+		);
+	}
+
+	/**
 	 * The free plugin registers no export format of its own.
 	 *
 	 * The rule from CLAUDE.md: no locked controls. A format advertised here and

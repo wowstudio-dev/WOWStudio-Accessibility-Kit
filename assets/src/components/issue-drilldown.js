@@ -6,8 +6,9 @@ import { Button, Notice } from '@wordpress/components';
 import { useEffect, useRef, useState } from '@wordpress/element';
 import { __, _n, sprintf } from '@wordpress/i18n';
 
-import { fetchIssues, readableError } from '../api';
+import { fetchIssueGroups, fetchIssues, readableError } from '../api';
 import IssueList from './issue-list';
+import MarkupGroups from './markup-groups';
 import { DetectionTag, SeverityTag } from './tags';
 import { EmptyState, ErrorState, Skeleton } from './states';
 
@@ -117,6 +118,11 @@ export default function IssueDrilldown( { filter, onBack, onGo } ) {
 	const [ loading, setLoading ] = useState( true );
 	const [ error, setError ] = useState( '' );
 
+	// Grouping only means anything when every finding is the same check, so a
+	// page-scoped list has one view rather than a toggle that does nothing.
+	const [ grouped, setGrouped ] = useState( false );
+	const [ reload, setReload ] = useState( 0 );
+
 	const heading = useRef( null );
 
 	const rule = filter?.rule ?? '';
@@ -128,7 +134,11 @@ export default function IssueDrilldown( { filter, onBack, onGo } ) {
 		setLoading( true );
 		setError( '' );
 
-		fetchIssues( { rule, post } )
+		const request = grouped
+			? fetchIssueGroups( { rule } )
+			: fetchIssues( { rule, post } );
+
+		request
 			.then( ( result ) => {
 				if ( live ) {
 					setData( result );
@@ -145,7 +155,7 @@ export default function IssueDrilldown( { filter, onBack, onGo } ) {
 		return () => {
 			live = false;
 		};
-	}, [ rule, post ] );
+	}, [ rule, post, grouped, reload ] );
 
 	// Somebody who just activated a bar is sitting on a control that has been
 	// replaced by a different screen. Without moving focus, a keyboard or
@@ -188,8 +198,37 @@ export default function IssueDrilldown( { filter, onBack, onGo } ) {
 	}
 
 	const issues = data?.issues ?? [];
+	const groups = data?.groups ?? [];
 	const total = data?.total ?? 0;
 	const title = data?.rule?.title || data?.page?.title || '';
+
+	// Offered only on a rule-scoped list. Grouping a page's mixed findings by
+	// markup would collapse nothing and answer a question nobody asked.
+	const views = Boolean( rule ) && (
+		<div
+			className="wsak-drilldown__views"
+			role="group"
+			aria-label={ __(
+				'How to list these',
+				'wowstudio-accessibility-kit'
+			) }
+		>
+			<Button
+				variant={ grouped ? 'tertiary' : 'primary' }
+				aria-pressed={ ! grouped }
+				onClick={ () => setGrouped( false ) }
+			>
+				{ __( 'Every instance', 'wowstudio-accessibility-kit' ) }
+			</Button>
+			<Button
+				variant={ grouped ? 'primary' : 'tertiary' }
+				aria-pressed={ grouped }
+				onClick={ () => setGrouped( true ) }
+			>
+				{ __( 'By markup', 'wowstudio-accessibility-kit' ) }
+			</Button>
+		</div>
+	);
 
 	return (
 		<div className="wsak-drilldown">
@@ -204,17 +243,47 @@ export default function IssueDrilldown( { filter, onBack, onGo } ) {
 			</h2>
 
 			<p className="wsak-drilldown__count">
-				{ sprintf(
-					/* translators: %d: how many findings are open. */
-					_n(
-						'%d open finding',
-						'%d open findings',
-						total,
-						'wowstudio-accessibility-kit'
-					),
-					total
-				) }
+				{ grouped
+					? sprintf(
+							/* translators: 1: distinct pieces of markup, already pluralised. 2: the findings they account for, already pluralised. */
+							__(
+								'%1$s, accounting for %2$s',
+								'wowstudio-accessibility-kit'
+							),
+							sprintf(
+								/* translators: %d: how many distinct pieces of markup. */
+								_n(
+									'%d distinct piece of markup',
+									'%d distinct pieces of markup',
+									total,
+									'wowstudio-accessibility-kit'
+								),
+								total
+							),
+							sprintf(
+								/* translators: %d: how many findings are open. */
+								_n(
+									'%d open finding',
+									'%d open findings',
+									data?.instances ?? 0,
+									'wowstudio-accessibility-kit'
+								),
+								data?.instances ?? 0
+							)
+					  )
+					: sprintf(
+							/* translators: %d: how many findings are open. */
+							_n(
+								'%d open finding',
+								'%d open findings',
+								total,
+								'wowstudio-accessibility-kit'
+							),
+							total
+					  ) }
 			</p>
+
+			{ views }
 
 			{ data?.rule && <RuleBrief rule={ data.rule } /> }
 			{ data?.page && <PageBrief page={ data.page } /> }
@@ -224,7 +293,7 @@ export default function IssueDrilldown( { filter, onBack, onGo } ) {
 			 * fifty of two hundred and looks complete is worse than one that
 			 * admits what it is holding back.
 			 */ }
-			{ total > issues.length && (
+			{ ! grouped && total > issues.length && (
 				<Notice status="info" isDismissible={ false }>
 					{ sprintf(
 						/* translators: 1: how many are shown. 2: how many there are. */
@@ -238,13 +307,38 @@ export default function IssueDrilldown( { filter, onBack, onGo } ) {
 				</Notice>
 			) }
 
-			{ issues.length > 0 ? (
+			{ grouped && ( data?.ungrouped ?? 0 ) > 0 && (
+				<Notice status="info" isDismissible={ false }>
+					{ sprintf(
+						/* translators: %d: how many findings have no identity yet. */
+						_n(
+							'%d finding was recorded before this version and cannot be grouped until its page is scanned again. It is being brought up to date in the background.',
+							'%d findings were recorded before this version and cannot be grouped until their pages are scanned again. They are being brought up to date in the background.',
+							data.ungrouped,
+							'wowstudio-accessibility-kit'
+						),
+						data.ungrouped
+					) }
+				</Notice>
+			) }
+
+			{ grouped && (
+				<MarkupGroups
+					groups={ groups }
+					mayDecide={ Boolean( data?.may_decide ) }
+					onChange={ () => setReload( ( n ) => n + 1 ) }
+				/>
+			) }
+
+			{ ! grouped && issues.length > 0 ? (
 				<IssueList
 					issues={ issues }
 					onGo={ onGo }
 					ruleIsStated={ Boolean( data?.rule ) }
 				/>
-			) : (
+			) : null }
+
+			{ ! grouped && issues.length === 0 ? (
 				<EmptyState
 					title={ __(
 						'Nothing open here',
@@ -255,7 +349,7 @@ export default function IssueDrilldown( { filter, onBack, onGo } ) {
 						'wowstudio-accessibility-kit'
 					) }
 				/>
-			) }
+			) : null }
 		</div>
 	);
 }
