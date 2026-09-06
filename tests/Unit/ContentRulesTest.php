@@ -1,6 +1,6 @@
 <?php
 /**
- * The checks added in 0.17.0.
+ * The checks added in 0.17.0 and 0.18.0.
  *
  * @package WOWStudio\AccessibilityKit
  */
@@ -14,7 +14,7 @@ use WOWStudio\AccessibilityKit\Scanner\Finding;
 use WOWStudio\AccessibilityKit\Tests\TestCase;
 
 /**
- * Tests the twelve checks added in 0.17.0.
+ * Tests the twenty-three checks added in 0.17.0 and 0.18.0.
  *
  * Every rule gets a pair: markup that must trip it, and the nearest markup that
  * must not. The second half is the half that matters. A check that fires on
@@ -23,6 +23,17 @@ use WOWStudio\AccessibilityKit\Tests\TestCase;
  * the ones that are not.
  *
  * @covers \WOWStudio\AccessibilityKit\Scanner\Rules\AriaReferenceBroken
+ * @covers \WOWStudio\AccessibilityKit\Scanner\Rules\AudioNeedsTranscript
+ * @covers \WOWStudio\AccessibilityKit\Scanner\Rules\BoldTextAsHeading
+ * @covers \WOWStudio\AccessibilityKit\Scanner\Rules\DuplicateId
+ * @covers \WOWStudio\AccessibilityKit\Scanner\Rules\InputImageAltMissing
+ * @covers \WOWStudio\AccessibilityKit\Scanner\Rules\TabindexPositive
+ * @covers \WOWStudio\AccessibilityKit\Scanner\Rules\TableHeaderEmpty
+ * @covers \WOWStudio\AccessibilityKit\Scanner\Rules\TextBlinking
+ * @covers \WOWStudio\AccessibilityKit\Scanner\Rules\TextJustified
+ * @covers \WOWStudio\AccessibilityKit\Scanner\Rules\UnderlineNotALink
+ * @covers \WOWStudio\AccessibilityKit\Scanner\Rules\VideoNeedsCaptions
+ * @covers \WOWStudio\AccessibilityKit\Scanner\Rules\ViewportScalingDisabled
  * @covers \WOWStudio\AccessibilityKit\Scanner\Rules\FormLabelOrphaned
  * @covers \WOWStudio\AccessibilityKit\Scanner\Rules\HeadingEmpty
  * @covers \WOWStudio\AccessibilityKit\Scanner\Rules\ImageAltIsFilename
@@ -322,6 +333,197 @@ HTML;
 		);
 	}
 
+
+	/**
+	 * Header cells with nothing in them.
+	 *
+	 * @return void
+	 */
+	public function test_empty_table_header_cells(): void {
+		$this->assertFiresOnlyOn(
+			'table-header-empty',
+			'<table><tr><th>Day</th><th></th></tr><tr><td>Mon</td><td>9am</td></tr></table>',
+			'<table><tr><th>Day</th><th>Opens</th></tr><tr><td>Mon</td><td>9am</td></tr></table>'
+		);
+
+		// The corner of a cross-tabulated table genuinely has nothing to say,
+		// and every such table has one.
+		$this->assertSame(
+			0,
+			$this->count_of(
+				'table-header-empty',
+				'<table><tr><th></th><th>Mon</th></tr><tr><th>Opens</th><td>9am</td></tr></table>'
+			),
+			'The empty corner of a cross-tabulated table is correct markup.'
+		);
+	}
+
+	/**
+	 * Image buttons with no name.
+	 *
+	 * @return void
+	 */
+	public function test_image_buttons_without_alt(): void {
+		$this->assertFiresOnlyOn(
+			'input-image-alt-missing',
+			'<input type="image" src="/search.png">',
+			'<input type="image" src="/search.png" alt="Search">'
+		);
+
+		$this->assertSame( 0, $this->count_of( 'input-image-alt-missing', '<input type="image" src="/s.png" aria-label="Search">' ), 'aria-label names it too.' );
+	}
+
+	/**
+	 * The same id twice.
+	 *
+	 * @return void
+	 */
+	public function test_ids_used_more_than_once(): void {
+		$this->assertFiresOnlyOn(
+			'duplicate-id',
+			'<div id="signup">A</div><div id="signup">B</div>',
+			'<div id="signup">A</div><div id="signup-2">B</div>'
+		);
+
+		// One finding per duplicated id, not one per extra copy: a template
+		// rendered three times should not report twice for the same cause.
+		$this->assertSame(
+			1,
+			$this->count_of( 'duplicate-id', '<p id="x">A</p><p id="x">B</p><p id="x">C</p>' )
+		);
+	}
+
+	/**
+	 * Positive tabindex, which rebuilds the focus order.
+	 *
+	 * @return void
+	 */
+	public function test_positive_tabindex(): void {
+		$this->assertFiresOnlyOn(
+			'tabindex-positive',
+			'<button tabindex="3">Send</button>',
+			'<button tabindex="0">Send</button>'
+		);
+
+		$this->assertSame( 0, $this->count_of( 'tabindex-positive', '<div tabindex="-1">Focus target</div>' ), 'Minus one is how dialogs and skip targets are meant to work.' );
+	}
+
+	/**
+	 * A viewport that blocks zooming.
+	 *
+	 * @return void
+	 */
+	public function test_viewport_that_cannot_be_zoomed(): void {
+		$head = static fn( string $viewport ): string => '<!DOCTYPE html><html lang="en"><head><title>T</title>'
+			. $viewport . '</head><body><main><h1>A</h1></main></body></html>';
+
+		$ids = static function ( string $html ): array {
+			$result = ( new Engine() )->scan( $html );
+
+			return array_map( static fn( Finding $f ): string => $f->rule_id, $result->findings );
+		};
+
+		$this->assertContains( 'viewport-scaling-disabled', $ids( $head( '<meta name="viewport" content="width=device-width, user-scalable=no">' ) ) );
+		$this->assertContains( 'viewport-scaling-disabled', $ids( $head( '<meta name="viewport" content="width=device-width, maximum-scale=1.0">' ) ), 'A cap below 2 fails 1.4.4 just as surely.' );
+		$this->assertNotContains( 'viewport-scaling-disabled', $ids( $head( '<meta name="viewport" content="width=device-width, initial-scale=1">' ) ) );
+		$this->assertNotContains( 'viewport-scaling-disabled', $ids( $head( '<meta name="viewport" content="width=device-width, maximum-scale=5">' ) ) );
+	}
+
+	/**
+	 * Content that moves on its own.
+	 *
+	 * @return void
+	 */
+	public function test_blinking_and_scrolling_content(): void {
+		$this->assertFiresOnlyOn(
+			'text-blinking',
+			'<marquee>Latest news</marquee>',
+			'<p>Latest news</p>'
+		);
+	}
+
+	/**
+	 * Underlines that are not links.
+	 *
+	 * @return void
+	 */
+	public function test_underlined_text_that_is_not_a_link(): void {
+		$this->assertFiresOnlyOn(
+			'underline-not-a-link',
+			'<p>Please read the <u>terms</u> first.</p>',
+			'<p>Please read the <em>terms</em> first.</p>'
+		);
+
+		$this->assertSame( 0, $this->count_of( 'underline-not-a-link', '<a href="/terms"><u>Terms</u></a>' ), 'Inside a link the underline is telling the truth.' );
+	}
+
+	/**
+	 * Justified text.
+	 *
+	 * @return void
+	 */
+	public function test_justified_text(): void {
+		$this->assertFiresOnlyOn(
+			'text-justified',
+			'<p style="text-align: justify">A paragraph.</p>',
+			'<p style="text-align: left">A paragraph.</p>'
+		);
+
+		$this->assertSame(
+			0,
+			$this->count_of( 'text-justified', '<div style="display:flex;justify-content:space-between"><span>A</span></div>' ),
+			'justify-content is a flex property and has nothing to do with text.'
+		);
+	}
+
+	/**
+	 * Video with no caption track.
+	 *
+	 * @return void
+	 */
+	public function test_video_without_captions(): void {
+		$this->assertFiresOnlyOn(
+			'video-needs-captions',
+			'<video src="/talk.mp4"></video>',
+			'<video src="/talk.mp4"><track kind="captions" src="/talk.vtt"></video>'
+		);
+	}
+
+	/**
+	 * Audio, which always needs asking about.
+	 *
+	 * @return void
+	 */
+	public function test_audio_prompts_for_a_transcript(): void {
+		$this->assertSame( 1, $this->count_of( 'audio-needs-transcript', '<audio src="/episode.mp3"></audio>' ) );
+		$this->assertSame( 0, $this->count_of( 'audio-needs-transcript', '<p>No audio here.</p>' ) );
+	}
+
+	/**
+	 * Bold paragraphs standing in for headings.
+	 *
+	 * @return void
+	 */
+	public function test_bold_paragraphs_used_as_headings(): void {
+		$this->assertFiresOnlyOn(
+			'bold-text-as-heading',
+			'<p><strong>Opening hours</strong></p>',
+			'<h2>Opening hours</h2>'
+		);
+
+		$this->assertSame( 0, $this->count_of( 'bold-text-as-heading', '<p><strong>We are closed on Sunday.</strong></p>' ), 'Sentence punctuation says it is a sentence.' );
+		$this->assertSame( 0, $this->count_of( 'bold-text-as-heading', '<p>Please note the <strong>new hours</strong> below</p>' ), 'The bold run has to be the whole paragraph.' );
+
+		// The case the dogfooding test caught: a bold line inside something
+		// that already declares what it is.
+		$this->assertSame(
+			0,
+			$this->count_of( 'bold-text-as-heading', '<div role="note"><p><strong>Draft — not yet approved</strong></p></div>' ),
+			'A role attribute means somebody has already decided what this region is.'
+		);
+		$this->assertSame( 0, $this->count_of( 'bold-text-as-heading', '<li><strong>Tuesday</strong></li>' ), 'A bold line in a list item is doing a different job.' );
+	}
+
 	/**
 	 * None of the new rules fire on a page that is doing everything right.
 	 *
@@ -360,6 +562,17 @@ HTML;
 			'page-has-no-headings',
 			'form-label-orphaned',
 			'aria-reference-broken',
+			'input-image-alt-missing',
+			'table-header-empty',
+			'duplicate-id',
+			'tabindex-positive',
+			'viewport-scaling-disabled',
+			'text-blinking',
+			'text-justified',
+			'underline-not-a-link',
+			'bold-text-as-heading',
+			'video-needs-captions',
+			'audio-needs-transcript',
 		);
 
 		$fired = array_values(

@@ -4,7 +4,7 @@ Tags: accessibility, wcag, a11y, alt text, accessibility scanner
 Requires at least: 6.8
 Tested up to: 7.1
 Requires PHP: 8.1
-Stable tag: 0.17.0
+Stable tag: 0.18.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -93,6 +93,13 @@ No. Everything in this plugin is free, including checking your whole site at onc
 In WordPress's own alt text field on the media item. It therefore applies everywhere that image is used, works with every theme and plugin, and stays behind if you remove this plugin.
 
 == Changelog ==
+
+= 0.18.0 =
+* Eleven new checks, taking the scanner from 29 to 40.
+* Tables and forms: header cells with no text; image buttons with no name; the same id used twice, which quietly stops labels and ARIA references reaching the right element.
+* Keyboard and zoom: a positive tabindex, which moves an element ahead of everything else when tabbing; a viewport tag that stops the page being pinch-zoomed on a phone.
+* Presentation: blinking and scrolling text; text justified to both margins; underlined text that is not a link; a bold paragraph standing in for a heading, which is how a page ends up looking structured while having no outline.
+* Media: video with no caption track, and audio with no transcript.
 
 = 0.17.0 =
 * Twelve new checks, taking the scanner from 17 to 29.
@@ -183,6 +190,9 @@ In WordPress's own alt text field on the media item. It therefore applies everyw
 * Initial scaffold: plugin bootstrap, capabilities, activation and uninstall handling.
 
 == Upgrade Notice ==
+
+= 0.18.0 =
+Eleven new checks, covering tables, image buttons, duplicate ids, tab order, pinch-zoom, blinking and justified text, and captions for video and audio.
 
 = 0.17.0 =
 Twelve new checks, covering alt-text quality, links that surprise you, broken skip links, empty headings and mislabelled form fields.

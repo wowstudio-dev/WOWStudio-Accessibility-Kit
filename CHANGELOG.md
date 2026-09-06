@@ -24,6 +24,60 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   testing with disabled users. The contrast guard checks 91 colour pairings on
   every push, which is not the same thing as somebody using the interface.
 
+## [0.18.0] - 2026-09-06
+
+Eleven more checks. The scanner goes from 29 to 40 — 35 on the server, 5 in the
+browser. That closes most of the detection gap against the established free
+competitor, which ships 44.
+
+### Added
+
+- `input-image-alt-missing` — `<input type="image">` is a submit button with
+  nowhere to put visible text, so `alt` is the only name it can have. Worse than
+  an undescribed decorative image, because this one does something.
+- `table-header-empty` — a header cell is what a screen reader announces before
+  each value, so an empty one leaves a whole row or column unlabelled. The empty
+  corner cell of a cross-tabulated table is skipped: every such table has one and
+  it genuinely has nothing to say.
+- `duplicate-id` — labels, ARIA references, in-page links and scripts all resolve
+  an id to the first match, so a second field with the same id cannot be labelled
+  at all. Reports once per duplicated id rather than once per copy: a template
+  rendered twice can repeat forty ids, and forty findings about one cause is a
+  wall rather than a report.
+- `tabindex-positive` — a positive tabindex does not nudge an element earlier, it
+  moves it into a queue the browser visits before the whole page. One of them
+  makes the first Tab press jump past the navigation.
+- `viewport-scaling-disabled` — `user-scalable=no`, or a `maximum-scale` under 2,
+  which fails 1.4.4's 200% requirement. Nearly always cargo-culted from an era of
+  mobile browser bugs that no longer exist.
+- `text-blinking` — `<blink>` and `<marquee>`. Survives mainly in imported
+  content, where nobody notices because no current browser renders `<blink>`.
+- `text-justified` — declared inline or via the old `align` attribute. Only what
+  the markup says is visible from the server, so an empty result is not a
+  statement about the site's stylesheets.
+- `underline-not-a-link` — underlining means "link" to every reader, so people
+  try to click it. Needs review rather than settled: HTML names real uses for
+  `<u>`, and a check cannot tell those from emphasis applied by habit.
+- `bold-text-as-heading` — a short, entirely bold paragraph with no closing
+  punctuation, which is how most pages end up looking structured while having no
+  outline at all.
+- `video-needs-captions` — no caption or subtitle track declared. Needs review:
+  burned-in captions and player-supplied captions leave no trace in the markup,
+  and video embedded from YouTube or Vimeo sits inside an iframe where nothing
+  here can look.
+- `audio-needs-transcript` — reports every `<audio>` element, because nothing
+  distinguishes a transcript from any other paragraph. A prompt, not a verdict,
+  and the wording says so.
+
+### Fixed
+
+- `bold-text-as-heading` reported this plugin's own draft-statement banner — a
+  bold line correctly marked up inside `role="note"`. `DogfoodTest` caught it
+  before it shipped, which is what that test exists for. The rule now skips
+  paragraphs in callouts, list items, table cells, captions, and anything within
+  four levels of an explicit `role`: a `role` attribute means somebody has
+  already decided what that region is.
+
 ## [0.17.0] - 2026-09-06
 
 Twelve new checks. The scanner goes from 17 to 29 — 24 on the server, 5 in the

@@ -14,6 +14,17 @@ use WOWStudio\AccessibilityKit\Scanner\Rules\HeadingLevelSkipped;
 use WOWStudio\AccessibilityKit\Scanner\Rules\HtmlLangMissing;
 use WOWStudio\AccessibilityKit\Scanner\Rules\IframeTitleMissing;
 use WOWStudio\AccessibilityKit\Scanner\Rules\AriaReferenceBroken;
+use WOWStudio\AccessibilityKit\Scanner\Rules\AudioNeedsTranscript;
+use WOWStudio\AccessibilityKit\Scanner\Rules\BoldTextAsHeading;
+use WOWStudio\AccessibilityKit\Scanner\Rules\DuplicateId;
+use WOWStudio\AccessibilityKit\Scanner\Rules\InputImageAltMissing;
+use WOWStudio\AccessibilityKit\Scanner\Rules\TabindexPositive;
+use WOWStudio\AccessibilityKit\Scanner\Rules\TableHeaderEmpty;
+use WOWStudio\AccessibilityKit\Scanner\Rules\TextBlinking;
+use WOWStudio\AccessibilityKit\Scanner\Rules\TextJustified;
+use WOWStudio\AccessibilityKit\Scanner\Rules\UnderlineNotALink;
+use WOWStudio\AccessibilityKit\Scanner\Rules\VideoNeedsCaptions;
+use WOWStudio\AccessibilityKit\Scanner\Rules\ViewportScalingDisabled;
 use WOWStudio\AccessibilityKit\Scanner\Rules\FormLabelOrphaned;
 use WOWStudio\AccessibilityKit\Scanner\Rules\HeadingEmpty;
 use WOWStudio\AccessibilityKit\Scanner\Rules\ImageAltIsFilename;
@@ -91,6 +102,19 @@ final class RuleRegistry {
 			new PageHasNoHeadings(),
 			new FormLabelOrphaned(),
 			new AriaReferenceBroken(),
+
+			// 0.18.0.
+			new InputImageAltMissing(),
+			new TableHeaderEmpty(),
+			new DuplicateId(),
+			new TabindexPositive(),
+			new ViewportScalingDisabled(),
+			new TextBlinking(),
+			new TextJustified(),
+			new UnderlineNotALink(),
+			new BoldTextAsHeading(),
+			new VideoNeedsCaptions(),
+			new AudioNeedsTranscript(),
 		);
 
 		/**

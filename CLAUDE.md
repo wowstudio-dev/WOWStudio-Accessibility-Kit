@@ -79,21 +79,25 @@ See `SPEC.md` → "Explicitly NOT included (anti-features)" for the full stop-li
 
 ## Where the work is
 Roughly in order. The competitor ships 44 checks and 11 free site-wide fixes;
-we ship 29 checks and 4 one-click fixes, so the gap is the plan.
+we ship 40 checks and 4 one-click fixes, so the gap is largely closed on
+detection and wide open on fixes.
 
-1. **Checks, 29 → ~48.** Twelve landed in 0.17.0: alt text that is a file name,
+1. **Checks, 40 → ~48.** Twelve landed in 0.17.0: alt text that is a file name,
    a placeholder or a repeated caption; alt long enough to be a paragraph;
    image-map regions with no name; links that open a new tab or download a file
    without saying so; in-page links and ARIA references pointing at ids that do
    not exist; anchors that click but cannot be tabbed to; empty headings; pages
    with no headings at all; labels attached to nothing or doubled up.
 
-   Still to come: structure (bold-as-heading, empty paragraph), tables (empty
-   header cell), media (video captions, audio transcript), visual (justified
-   text, blinking, `<u>` misuse, tiny text, locked viewport), behaviour
-   (positive tabindex, carousel present), and animated GIFs — which needs
-   reading frame counts out of the file rather than guessing from the
-   extension.
+   Eleven more in 0.18.0: empty table headers, unnamed image buttons,
+   duplicate ids, positive tabindex, viewports that block zooming, blinking and
+   marquee, justified text, underlines that are not links, bold paragraphs
+   standing in for headings, video with no caption track, and audio with no
+   transcript.
+
+   Still to come: tiny text (needs the browser pass — it is a computed size,
+   not a declared one), carousels, and animated GIFs, which means reading frame
+   counts out of the file rather than guessing from the extension.
 
    **Every new rule needs a pair of tests**, one that trips it and one on the
    nearest correct markup that must not. `tests/Unit/ContentRulesTest.php` is

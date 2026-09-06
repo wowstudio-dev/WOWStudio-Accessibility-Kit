@@ -12,7 +12,7 @@ It is not an overlay, and it never tells a user their site is compliant. See
 One plugin, free, nothing gated. 0.16.0 removed the Freemius SDK and the whole
 AI layer; see [`CHANGELOG.md`](CHANGELOG.md) for what went and why.
 
-What works: the two-pass scanner (29 checks — 24 on the server, 5 in the
+What works: the two-pass scanner (40 checks — 35 on the server, 5 in the
 browser), the inspector with a live page
 preview, the block-editor panel, deterministic CSS fixes with preview and undo,
 site-wide scanning, the bulk alt-text editor, theme triage, the overview

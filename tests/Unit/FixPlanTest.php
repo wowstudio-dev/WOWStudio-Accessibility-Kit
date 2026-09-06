@@ -105,6 +105,22 @@ final class FixPlanTest extends TestCase {
 			'link-anchor-broken'             => array( FixKind::Manual, FixTarget::Theme ),
 			'aria-reference-broken'          => array( FixKind::Manual, FixTarget::Theme ),
 
+			// Added in 0.18.0.
+			'input-image-alt-missing'        => array( FixKind::Manual, FixTarget::Content ),
+			'table-header-empty'             => array( FixKind::Manual, FixTarget::Content ),
+			'tabindex-positive'              => array( FixKind::Manual, FixTarget::Content ),
+			'text-blinking'                  => array( FixKind::Manual, FixTarget::Content ),
+			'text-justified'                 => array( FixKind::Manual, FixTarget::Content ),
+			'underline-not-a-link'           => array( FixKind::Manual, FixTarget::Content ),
+			'bold-text-as-heading'           => array( FixKind::Manual, FixTarget::Content ),
+			'audio-needs-transcript'         => array( FixKind::Manual, FixTarget::Content ),
+			'video-needs-captions'           => array( FixKind::Manual, FixTarget::Media ),
+			// Emitted by the theme rather than typed into a post: the viewport
+			// tag lives in the head, and a duplicated id almost always means a
+			// template rendered twice.
+			'duplicate-id'                   => array( FixKind::Manual, FixTarget::Theme ),
+			'viewport-scaling-disabled'      => array( FixKind::Manual, FixTarget::Theme ),
+
 			// Judgements about meaning. No button, ever.
 			'heading-level-skipped'          => array( FixKind::Manual, FixTarget::Content ),
 			'heading-multiple-h1'            => array( FixKind::Manual, FixTarget::Content ),
@@ -136,8 +152,8 @@ final class FixPlanTest extends TestCase {
 	/**
 	 * The counts, so a quiet drift upward is loud.
 	 *
-	 * Four one-click fixes out of twenty-nine checks, three of which already
-	 * shipped as CSS. If this number grows, it should be because somebody meant
+	 * Four one-click fixes out of forty checks, three of which already shipped
+	 * as CSS. If this number grows, it should be because somebody meant
 	 * it — not because a rule was reclassified while its own tests still passed.
 	 *
 	 * Nothing is reviewable any more. That count is asserted at zero rather
@@ -168,9 +184,9 @@ final class FixPlanTest extends TestCase {
 
 		$this->assertSame( 4, $one_click, 'One-click fixes.' );
 		$this->assertSame( 0, $review, 'Nothing drafts a fix, so nothing is a draft to review.' );
-		$this->assertSame( 6, $handoff, 'Findings that belong to whoever maintains the theme.' );
-		$this->assertSame( 19, $nothing, 'Findings only the content owner can settle.' );
-		$this->assertCount( 29, $this->plans() );
+		$this->assertSame( 8, $handoff, 'Findings that belong to whoever maintains the theme.' );
+		$this->assertSame( 28, $nothing, 'Findings only the content owner can settle.' );
+		$this->assertCount( 40, $this->plans() );
 	}
 
 	/**
