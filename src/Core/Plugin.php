@@ -14,6 +14,7 @@ use WOWStudio\AccessibilityKit\Remediation\OverrideStore;
 use WOWStudio\AccessibilityKit\Scanner\Preview;
 use WOWStudio\AccessibilityKit\Jobs\Worker;
 use WOWStudio\AccessibilityKit\Rest\CssFixController;
+use WOWStudio\AccessibilityKit\Readability\SimplifiedSummary;
 use WOWStudio\AccessibilityKit\SiteFixes\SiteFixManager;
 use WOWStudio\AccessibilityKit\Rest\AltTextController;
 use WOWStudio\AccessibilityKit\Rest\SiteFixController;
@@ -156,6 +157,7 @@ final class Plugin {
 			'rest.blocks'    => new BlockCheckController(),
 			'rest.overview'  => new OverviewController(),
 			'jobs.worker'    => new Worker(),
+			'summary'        => new SimplifiedSummary(),
 			'fixes.site'     => new SiteFixManager(),
 			'overrides'      => new OverrideStore(),
 			'preview'        => new Preview(),

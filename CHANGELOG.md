@@ -19,6 +19,61 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   testing with disabled users. The contrast guard checks 91 colour pairings on
   every push, which is not the same thing as somebody using the interface.
 
+## [0.25.0] - 2026-09-06
+
+Reading level and the plain-language summary — WCAG 3.1.5, and the last thing
+the established free competitor had that this did not. Forty-one checks.
+
+### Added
+
+- `reading-level-high`, estimating Flesch–Kincaid grade level and reporting when
+  a page reads above lower secondary school.
+- A **plain-language summary** field in the editor's Accessibility sidebar,
+  stored as registered post meta so it appears in the REST API and travels with
+  an export. Optionally rendered above the content; off by default.
+
+### What this measures, and what it does not
+
+The rule reports as *needs review* and could not honestly be anything else.
+Flesch–Kincaid counts words per sentence and syllables per word and understands
+nothing: it can be improved by chopping one clear sentence into three fragments,
+which makes the writing worse. It has no idea who the audience is — a page for
+cardiologists is allowed to read like one. So the finding says what was measured
+and what it might mean, never that the page fails.
+
+Three refusals, because a number in a box gets believed:
+
+- **Under a hundred words, it says nothing.** A formula fed two sentences
+  reports a grade as confidently as it reports one for an essay.
+- **Not in English, it says nothing.** Both the syllable heuristic and the
+  coefficients are English. Run over German it still returns a number, which is
+  the danger: a number that means nothing looks exactly like one that does.
+- **Over sixty words a sentence, it says nothing.** See below.
+
+### Fixed before it shipped
+
+The rule reported this plugin's own accessibility statement at **grade 23**.
+The prose was not the problem: text was arriving with sentence punctuation
+stripped, because the extraction took a whole element's text and ran headings,
+navigation and list items together into one unpunctuated four-hundred-word run.
+Flesch–Kincaid divides by whatever it is given and cannot notice.
+
+Two changes came out of it. The rule now reads paragraphs only — a readability
+formula is for prose, and averaging in menu labels measures the theme rather
+than the writing — and terminates each one before appending the next. And the
+formula refuses outright above sixty words per sentence, because no natural
+English writing averages that and the input is punctuation-free rather than
+difficult. The statement now measures grade 9.8.
+
+### On our own statement
+
+9.8 is above the 3.1.5 threshold of 9. `DogfoodTest` now excludes AAA criteria
+from its pass/fail — the dogfooding rule is WCAG 2.2 **AA**, per CLAUDE.md rule
+6 — but the exclusion is a named constant rather than a silent filter, and a
+separate test asserts the statement stays under grade 12 so that an edit pushing
+it towards fifteen is noticed. An accessibility statement only a lawyer can read
+is a poor advertisement, and it is worth simplifying.
+
 ## [0.24.0] - 2026-09-06
 
 A command line, with bulk in it.

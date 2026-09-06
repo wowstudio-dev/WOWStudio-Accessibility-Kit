@@ -121,6 +121,9 @@ final class FixPlanTest extends TestCase {
 			'duplicate-id'                   => array( FixKind::Manual, FixTarget::Theme ),
 			'viewport-scaling-disabled'      => array( FixKind::Manual, FixTarget::Theme ),
 
+			// Added in 0.25.0.
+			'reading-level-high'             => array( FixKind::Manual, FixTarget::Content ),
+
 			// Judgements about meaning. No button, ever.
 			'heading-level-skipped'          => array( FixKind::Manual, FixTarget::Content ),
 			'heading-multiple-h1'            => array( FixKind::Manual, FixTarget::Content ),
@@ -152,8 +155,8 @@ final class FixPlanTest extends TestCase {
 	/**
 	 * The counts, so a quiet drift upward is loud.
 	 *
-	 * Four one-click fixes out of forty checks, three of which already shipped
-	 * as CSS. If this number grows, it should be because somebody meant
+	 * Four one-click fixes out of forty-one checks, three of which already
+	 * shipped as CSS. If this number grows, it should be because somebody meant
 	 * it — not because a rule was reclassified while its own tests still passed.
 	 *
 	 * Nothing is reviewable any more. That count is asserted at zero rather
@@ -185,8 +188,8 @@ final class FixPlanTest extends TestCase {
 		$this->assertSame( 4, $one_click, 'One-click fixes.' );
 		$this->assertSame( 0, $review, 'Nothing drafts a fix, so nothing is a draft to review.' );
 		$this->assertSame( 8, $handoff, 'Findings that belong to whoever maintains the theme.' );
-		$this->assertSame( 28, $nothing, 'Findings only the content owner can settle.' );
-		$this->assertCount( 40, $this->plans() );
+		$this->assertSame( 29, $nothing, 'Findings only the content owner can settle.' );
+		$this->assertCount( 41, $this->plans() );
 	}
 
 	/**

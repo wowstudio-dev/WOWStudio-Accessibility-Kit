@@ -1,6 +1,6 @@
 {
 	"name": "wowstudio-accessibility-kit",
-	"version": "0.24.0",
+	"version": "0.25.0",
 	"description": "Helps you find, fix, document, and monitor WCAG accessibility issues in WordPress at the code level.",
 	"author": "WOWStudio",
 	"license": "GPL-2.0-or-later",
@@ -41,5 +41,8 @@
 		"@wordpress/plugins": "^7.54.0",
 		"@wordpress/scripts": "^34.1.0",
 		"@wordpress/server-side-render": "^6.29.0"
+	},
+	"dependencies": {
+		"@wordpress/core-data": "^7.54.0"
 	}
 }

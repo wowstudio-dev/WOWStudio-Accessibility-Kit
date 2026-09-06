@@ -145,9 +145,10 @@ both.
    — is still here and still free, so the add-on has something to attach to.
 
    Do not rebuild any of it here, and do not reintroduce the word "monitor".
-5. **Readability + simplified summary** (WCAG 3.1.5) and per-issue
-   documentation. WP-CLI shipped in 0.24.0 — `src/Cli/`, with `--all` on the
-   scan command, and a test that keeps it there.
+5. **Per-issue documentation** is what remains of this item. WP-CLI shipped in
+   0.24.0 (`src/Cli/`, with `--all` on the scan command and a test that keeps it
+   there); readability and the plain-language summary shipped in 0.25.0
+   (`src/Readability/`).
 6. **Page-builder compatibility**: Gutenberg, Classic, ACF, Avada, Beaver
    Builder, Divi, Elementor, Oxygen, WP Bakery, WooCommerce.
 7. **1.0.0 and WordPress.org submission.**

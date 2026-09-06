@@ -42,6 +42,23 @@ abstract class TestCase extends PHPUnitTestCase {
 		 * the only thing that noticed was EngineTest asserting how many rules
 		 * ran. Keep that assertion.
 		 */
+		Monkey\Functions\when( 'get_locale' )->justReturn( 'en_GB' );
+		Monkey\Functions\when( 'wp_strip_all_tags' )->alias(
+			static fn( string $text ): string => (string) preg_replace( '#<[^>]*>#', ' ', $text )
+		);
+		Monkey\Functions\when( 'number_format_i18n' )->alias(
+			/**
+			 * Stands in for WordPress's number_format_i18n().
+			 *
+			 * @param float|int $number   The number.
+			 * @param int       $decimals How many decimal places.
+			 * @return string
+			 */
+			static function ( $number, $decimals = 0 ): string {
+				return number_format( (float) $number, (int) $decimals );
+			}
+		);
+
 		Monkey\Functions\when( 'wp_parse_url' )->alias(
 			/**
 			 * Stands in for WordPress's wp_parse_url().

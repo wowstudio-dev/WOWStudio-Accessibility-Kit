@@ -4,7 +4,7 @@ Tags: accessibility, wcag, a11y, alt text, accessibility scanner
 Requires at least: 6.8
 Tested up to: 7.1
 Requires PHP: 8.1
-Stable tag: 0.24.0
+Stable tag: 0.25.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -23,6 +23,7 @@ It is not an accessibility overlay. Nothing is injected into your front end, and
 * **Understand.** Every issue is tagged with its WCAG success criterion and severity, and labelled either *auto-detected* or *needs manual review*.
 * **Fix.** Suggested markup fixes are shown as a preview and a diff, and applied fixes are stored in a reversible override layer that never overwrites your content. Findings caused by styling instead get a style rule, written into your own Additional CSS — where you can read, edit or delete it without this plugin.
 * **Check the fix worked.** After a style rule is applied, the page is loaded again and measured again. If something in your theme overrode the rule, you are told that, rather than being told it is fixed.
+* **Check how hard it is to read.** Pages are measured against the Flesch–Kincaid grade level, and you can add a plain-language summary where the text is heavy going.
 * **Describe your images.** One screen lists every image in your media library that has never been described, with a field beside each. Type, save, move on — instead of opening forty media screens.
 * **Do it site-wide.** Check every page and post in one run, in the background. There is no page limit and no paid tier.
 * **Document.** Generate an accessibility statement you edit and publish, including the feedback contact mechanism European rules expect.
@@ -93,6 +94,12 @@ No. Everything in this plugin is free, including checking your whole site at onc
 In WordPress's own alt text field on the media item. It therefore applies everywhere that image is used, works with every theme and plugin, and stays behind if you remove this plugin.
 
 == Changelog ==
+
+= 0.25.0 =
+* New: reading level. Pages are checked against the Flesch–Kincaid grade level, and flagged when they read above lower secondary school level — the point at which WCAG 3.1.5 asks for a simpler version.
+* New: a plain-language summary field in the editor's Accessibility sidebar, which you can optionally show above your content.
+* The reading level is reported as something to look at, never as a failure. The formula counts sentence length and syllables and understands nothing about meaning, so a page written for a specialist audience may be right as it is. It stays quiet on short pages and on sites that are not in English, where it would produce a number that means nothing.
+* Nothing writes the summary for you. A summary a machine guessed at reads convincingly and means whatever it guessed, which is worse than none.
 
 = 0.24.0 =
 * New: WP-CLI support. `wp wsak scan --all` checks your whole site from the command line, `wp wsak issues` lists what it found, `wp wsak checks` lists every check, and `wp wsak fixes` switches the site-wide fixes on and off.
@@ -228,6 +235,9 @@ In WordPress's own alt text field on the media item. It therefore applies everyw
 * Initial scaffold: plugin bootstrap, capabilities, activation and uninstall handling.
 
 == Upgrade Notice ==
+
+= 0.25.0 =
+Adds reading-level checking and a plain-language summary field, for WCAG 3.1.5.
 
 = 0.24.0 =
 Adds WP-CLI commands, including whole-site scanning for use in a pipeline.

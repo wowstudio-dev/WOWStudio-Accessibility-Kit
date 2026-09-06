@@ -11,6 +11,7 @@ import { __, _n, sprintf } from '@wordpress/i18n';
 
 import { checkBlocks, readableError } from './api';
 import BlockFinding from './block-finding';
+import SummaryPanel from './summary-panel';
 
 /**
  * How long the writing has to stop before anything is checked.
@@ -150,6 +151,8 @@ export default function Panel() {
 						/>
 					) ) }
 				</PanelBody>
+
+				<SummaryPanel />
 			</PluginSidebar>
 		</>
 	);

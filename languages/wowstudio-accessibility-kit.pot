@@ -2,7 +2,7 @@
 # This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: WOWStudio Accessibility Kit 0.24.0\n"
+"Project-Id-Version: WOWStudio Accessibility Kit 0.25.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wowstudio-accessibility-kit\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -41,8 +41,8 @@ msgid "https://wowstudio.dev/"
 msgstr ""
 
 #: src/Admin/ContentColumns.php:153
-#: assets/src/editor/panel.js:101
-#: assets/src/editor/panel.js:107
+#: assets/src/editor/panel.js:102
+#: assets/src/editor/panel.js:108
 msgid "Accessibility"
 msgstr ""
 
@@ -276,6 +276,10 @@ msgstr ""
 #: src/Jobs/BulkScan.php:285
 #: src/Rest/RunController.php:323
 msgid "That run could not be found."
+msgstr ""
+
+#: src/Readability/SimplifiedSummary.php:167
+msgid "In short"
 msgstr ""
 
 #: src/Remediation/ActionBand.php:118
@@ -1444,6 +1448,28 @@ msgstr ""
 
 #: src/Scanner/Rules/PageHasNoHeadings.php:162
 msgid "This page contains no heading elements at all."
+msgstr ""
+
+#: src/Scanner/Rules/ReadingLevelHigh.php:123
+msgid "Text may be hard to read"
+msgstr ""
+
+#: src/Scanner/Rules/ReadingLevelHigh.php:134
+msgid "By the Flesch–Kincaid formula this page reads above lower secondary school level, which WCAG 3.1.5 treats as the point where a simpler version or a plain-language summary should be available. Treat this as a prompt rather than a verdict: the formula counts sentence length and syllables and understands nothing, so a page written for a specialist audience may be exactly right as it is."
+msgstr ""
+
+#: src/Scanner/Rules/ReadingLevelHigh.php:145
+msgid "Readers with a cognitive disability, or reading in a second language, may not get through this page."
+msgstr ""
+
+#: src/Scanner/Rules/ReadingLevelHigh.php:160
+msgid "Two ways to answer this and both are writing: simplify the page, or add a plain-language summary in the Accessibility panel of the editor. Do not chase the number — shortening sentences until the score drops usually makes the writing worse, and the formula cannot tell."
+msgstr ""
+
+#. translators: 1: the estimated reading grade level. 2: the level at which this starts being reported.
+#: src/Scanner/Rules/ReadingLevelHigh.php:191
+#, php-format
+msgid "This page reads at about grade %1$s. Above grade %2$s, WCAG 3.1.5 asks for a simpler version or a summary."
 msgstr ""
 
 #: src/Scanner/Rules/TabindexPositive.php:101
@@ -3186,17 +3212,29 @@ msgstr ""
 msgid "This writes into the block itself, so it is part of your content and undo works on it like any other edit."
 msgstr ""
 
-#: assets/src/editor/panel.js:119
+#: assets/src/editor/panel.js:120
 msgid "Checking what you have written…"
 msgstr ""
 
 #. translators: %d: number of findings.
-#: assets/src/editor/panel.js:125
+#: assets/src/editor/panel.js:126
 #, js-format
 msgid "%d thing to look at."
 msgid_plural "%d things to look at."
 msgstr[0] ""
 msgstr[1] ""
+
+#: assets/src/editor/summary-panel.js:36
+msgid "Plain-language summary"
+msgstr ""
+
+#: assets/src/editor/summary-panel.js:43
+msgid "Summary of this page"
+msgstr ""
+
+#: assets/src/editor/summary-panel.js:47
+msgid "For readers who would struggle with the full text: what this page says, in the simplest words that still say it. Leave it empty if the page is already plain. Nothing writes this for you — a summary a machine guessed at reads convincingly and means whatever it guessed, which is worse than none."
+msgstr ""
 
 #: assets/src/scanner/repair.js:60
 msgid "This one needs tabindex=\"0\" and a label on the scrolling container. Those are attributes in the markup, and no stylesheet can add them — it has to be changed in your theme or the block that produced it."

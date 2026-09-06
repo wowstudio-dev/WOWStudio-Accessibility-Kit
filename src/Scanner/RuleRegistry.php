@@ -36,6 +36,7 @@ use WOWStudio\AccessibilityKit\Scanner\Rules\LinkNotKeyboardReachable;
 use WOWStudio\AccessibilityKit\Scanner\Rules\LinkOpensNewWindow;
 use WOWStudio\AccessibilityKit\Scanner\Rules\LinkToFile;
 use WOWStudio\AccessibilityKit\Scanner\Rules\PageHasNoHeadings;
+use WOWStudio\AccessibilityKit\Scanner\Rules\ReadingLevelHigh;
 use WOWStudio\AccessibilityKit\Scanner\Rules\ImageAltMissing;
 use WOWStudio\AccessibilityKit\Scanner\Rules\LinkNameMissing;
 use WOWStudio\AccessibilityKit\Scanner\Rules\LinkTextNotDescriptive;
@@ -115,6 +116,9 @@ final class RuleRegistry {
 			new BoldTextAsHeading(),
 			new VideoNeedsCaptions(),
 			new AudioNeedsTranscript(),
+
+			// 0.25.0.
+			new ReadingLevelHigh(),
 		);
 
 		/**
