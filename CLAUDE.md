@@ -182,6 +182,16 @@ filter is a silent break for every add-on at once, with no error anywhere:
 - Performance: heavy work through Action Scheduler.
 - `bin/gate.sh` must pass — 10 steps, all of them.
 
+## Branches
+Work lands on **`Dev`**, then **`main`**, and reaches **`Release`** only once the
+gate is green and anything worth checking live has been checked. `Website` is
+separate and nothing here touches it. `main` is the default branch.
+
+Three tags carry everything from the abandoned paid direction, because no branch
+holds it any more: `pro-seed-0.15.1` (the last tree with Freemius and AI intact),
+`pro-plan-0.15.1` (`PRO-NOTES.md` and the renamed Pro bootstrap), and
+`monitoring-for-pro-0.21.0` (monitoring, working and verified before removal).
+
 ## Commands
 ```bash
 composer install        # PHP autoload + PHPCS
