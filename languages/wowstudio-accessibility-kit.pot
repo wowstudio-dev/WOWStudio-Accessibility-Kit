@@ -2,7 +2,7 @@
 # This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: WOWStudio Accessibility Kit 0.20.0\n"
+"Project-Id-Version: WOWStudio Accessibility Kit 0.21.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wowstudio-accessibility-kit\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -41,11 +41,12 @@ msgid "https://wowstudio.dev/"
 msgstr ""
 
 #: src/Admin/Menu.php:69
-#: assets/src/app.js:118
+#: assets/src/app.js:119
 msgid "Accessibility Kit"
 msgstr ""
 
 #: src/Admin/Menu.php:91
+#: src/Rest/MonitoringController.php:89
 #: src/Rest/RunController.php:222
 #: src/Rest/ScanController.php:206
 #: src/Rest/StatementController.php:116
@@ -251,6 +252,18 @@ msgstr ""
 #: src/Jobs/BulkScan.php:285
 #: src/Rest/RunController.php:323
 msgid "That run could not be found."
+msgstr ""
+
+#: src/Monitoring/Schedule.php:97
+msgid "Off"
+msgstr ""
+
+#: src/Monitoring/Schedule.php:98
+msgid "Every week"
+msgstr ""
+
+#: src/Monitoring/Schedule.php:99
+msgid "Every month"
 msgstr ""
 
 #: src/Remediation/ActionBand.php:118
@@ -472,7 +485,16 @@ msgstr ""
 msgid "Applying this kind of fix edits your site's Additional CSS, which your account is not allowed to change. An administrator can apply it, or make the change in Appearance → Customise."
 msgstr ""
 
+#: src/Rest/MonitoringController.php:108
+msgid "Scheduling a repeating scan runs work on your server, so it needs the accessibility settings capability."
+msgstr ""
+
+#: src/Rest/MonitoringController.php:138
+msgid "That is not a frequency this plugin offers."
+msgstr ""
+
 #: src/Rest/OverviewController.php:360
+#: assets/src/components/monitoring.js:38
 #: assets/src/components/scan-picker.js:164
 msgid "(no title)"
 msgstr ""
@@ -1647,7 +1669,7 @@ msgid "Whole site"
 msgstr ""
 
 #: src/Scanner/ScanScope.php:53
-#: assets/src/app.js:183
+#: assets/src/app.js:193
 msgid "Theme"
 msgstr ""
 
@@ -1935,87 +1957,91 @@ msgstr ""
 msgid "Something went wrong and we could not say what. Please try again."
 msgstr ""
 
-#: assets/src/app.js:60
+#: assets/src/app.js:61
 msgid "Scanning the page…"
 msgstr ""
 
 #. translators: %d: number of findings.
-#: assets/src/app.js:69
+#: assets/src/app.js:70
 #, js-format
 msgid "Scan finished. %d findings."
 msgstr ""
 
-#: assets/src/app.js:80
+#: assets/src/app.js:81
 msgid "The scan failed."
 msgstr ""
 
-#: assets/src/app.js:124
+#: assets/src/app.js:125
 msgid "Find, fix, document, and monitor accessibility problems at the code level."
 msgstr ""
 
-#: assets/src/app.js:134
+#: assets/src/app.js:135
 msgid "Sections"
 msgstr ""
 
-#: assets/src/app.js:141
+#: assets/src/app.js:142
 msgid "Overview"
 msgstr ""
 
-#: assets/src/app.js:148
+#: assets/src/app.js:149
 msgid "One page"
 msgstr ""
 
-#: assets/src/app.js:156
+#: assets/src/app.js:157
 msgid "Your content"
 msgstr ""
 
-#: assets/src/app.js:165
+#: assets/src/app.js:166
 msgid "Images"
 msgstr ""
 
-#: assets/src/app.js:174
+#: assets/src/app.js:175
+msgid "Monitoring"
+msgstr ""
+
+#: assets/src/app.js:184
 msgid "Site fixes"
 msgstr ""
 
-#: assets/src/app.js:196
+#: assets/src/app.js:206
 msgid "Statement"
 msgstr ""
 
-#: assets/src/app.js:214
+#: assets/src/app.js:224
 msgid "You can read results here but not start a scan. An administrator can grant that."
 msgstr ""
 
-#: assets/src/app.js:248
+#: assets/src/app.js:260
 msgid "Loading the scan…"
 msgstr ""
 
 #. translators: %s: content title.
-#: assets/src/app.js:270
+#: assets/src/app.js:282
 #, js-format
 msgid "Results for “%s”"
 msgstr ""
 
-#: assets/src/app.js:276
+#: assets/src/app.js:288
 msgid "Scan results"
 msgstr ""
 
-#: assets/src/app.js:299
+#: assets/src/app.js:311
 msgid "Show as a list"
 msgstr ""
 
-#: assets/src/app.js:303
+#: assets/src/app.js:315
 msgid "Show on the page"
 msgstr ""
 
-#: assets/src/app.js:312
+#: assets/src/app.js:324
 msgid "Back to your content"
 msgstr ""
 
-#: assets/src/app.js:323
+#: assets/src/app.js:335
 msgid "This scan covered less than usual."
 msgstr ""
 
-#: assets/src/app.js:381
+#: assets/src/app.js:393
 msgid "This plugin helps you find, fix, document, and monitor accessibility problems. It does not determine whether your site meets the ADA, the European Accessibility Act, Section 508, or any other legal requirement, and nothing here is legal advice."
 msgstr ""
 
@@ -2618,6 +2644,80 @@ msgstr ""
 
 #: assets/src/components/issue-list.js:308
 msgid "None of the checks we can run automatically flagged anything on this page. That is a good sign, and it is not the same as the page being accessible — most of WCAG needs a person. The manual checklists are the next step."
+msgstr ""
+
+#. translators: %s: the score movement, already signed.
+#: assets/src/components/monitoring.js:45
+#, js-format
+msgid "%s points"
+msgstr ""
+
+#: assets/src/components/monitoring.js:55
+msgid "Started failing:"
+msgstr ""
+
+#: assets/src/components/monitoring.js:69
+msgid "No longer failing:"
+msgstr ""
+
+#. translators: %s: when the next scan is due.
+#: assets/src/components/monitoring.js:125
+#, js-format
+msgid "Saved. The next check is due %s."
+msgstr ""
+
+#: assets/src/components/monitoring.js:131
+msgid "Saved. Scheduled checking is off."
+msgstr ""
+
+#: assets/src/components/monitoring.js:146
+msgid "Loading the schedule…"
+msgstr ""
+
+#: assets/src/components/monitoring.js:164
+msgid "Checking on a schedule"
+msgstr ""
+
+#: assets/src/components/monitoring.js:171
+msgid "Every score elsewhere in this plugin is the result of somebody pressing a button. Switch this on and the site re-checks itself, so a problem introduced by an edit, a plugin update or a theme change is noticed without anybody having to remember to look."
+msgstr ""
+
+#: assets/src/components/monitoring.js:189
+msgid "Background jobs are not running on this site, so a scheduled check cannot start. That is usually WordPress cron being switched off, or blocked by the host."
+msgstr ""
+
+#: assets/src/components/monitoring.js:200
+msgid "Re-check this site"
+msgstr ""
+
+#. translators: %d: how many pages a scheduled run covers.
+#: assets/src/components/monitoring.js:214
+#, js-format
+msgid "Each run covers the %d most recently updated page, in the background. It does not scan the whole site: a full scan of a large site is a lot of work to start on a schedule nobody is watching."
+msgid_plural "Each run covers the %d most recently updated pages, in the background. It does not scan the whole site: a full scan of a large site is a lot of work to start on a schedule nobody is watching."
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %s: when the next check is due.
+#: assets/src/components/monitoring.js:228
+#, js-format
+msgid "Next check: %s."
+msgstr ""
+
+#: assets/src/components/monitoring.js:238
+msgid "Nothing is emailed and nothing is sent anywhere — this plugin contacts no outside service. What a check finds appears here, and on the pages themselves."
+msgstr ""
+
+#: assets/src/components/monitoring.js:246
+msgid "What has changed"
+msgstr ""
+
+#: assets/src/components/monitoring.js:254
+msgid "Nothing to compare yet"
+msgstr ""
+
+#: assets/src/components/monitoring.js:258
+msgid "A page has to be checked twice before anything can be said about what changed. This fills in after the second check of a page — whether that comes from a schedule or from you pressing the button."
 msgstr ""
 
 #: assets/src/components/overview.js:31

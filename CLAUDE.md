@@ -127,20 +127,28 @@ both.
    closes the finding and leaves the reader no better off.
 3. **Free-tier features the competitor charges for**: full-site report screen,
    admin columns, dismissal log, extra post types, CSV export.
-4. **Monitoring** — scheduled re-scans and regression alerts. `SPEC.md` §F is
-   still entirely unbuilt while "monitor" ships in the plugin header, which is
-   the largest gap between what we say and what we do.
+4. **Monitoring** — built in 0.21.0, and free. Weekly or monthly re-checks, a
+   comparison of a page's last two scans, and a "what has changed" screen. Live
+   in `src/Monitoring/`.
+
+   The line was decided deliberately and should not drift: **detecting a
+   regression is finding, so it is free.** What a paid add-on may sell is being
+   told without looking — email digests, Slack, webhooks, custom frequencies,
+   crawling beyond WordPress content. `wsak_accessibility_changed` is the seam
+   that exists for exactly that, and the free plugin still sends nothing
+   anywhere.
 5. **Readability + simplified summary** (WCAG 3.1.5), **WP-CLI including bulk**,
    per-issue documentation.
 6. **Page-builder compatibility**: Gutenberg, Classic, ACF, Avada, Beaver
    Builder, Divi, Elementor, Oxygen, WP Bakery, WooCommerce.
 7. **1.0.0 and WordPress.org submission.**
 
-Build the four extension seams as you go, because retrofitting them is
-expensive: the scan runner (so a scheduler can drive it), the report screen (so
-exporters can register formats), the fix pipeline (so a fix provider can
-register), and the dismissal flow (so role restrictions can hook the capability
-check).
+Three of the four extension seams now exist: the scan runner (`BulkScan::start`,
+driven by `Monitoring\Monitor`), the fix pipeline (`wsak_site_fixes`), and
+change notification (`wsak_accessibility_changed`). The fourth is still owed —
+the report screen, so an exporter can register a format — along with a hook on
+the dismissal flow so role restrictions can reach the capability check. Build it
+before the report screen grows, because retrofitting a seam is expensive.
 
 ## Quality floor (every PR)
 - Security: verify nonce + `current_user_can()` on every write/REST route;

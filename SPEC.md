@@ -166,10 +166,14 @@ a bracket would bury the decisions the lines actually record.
 - `[Pro]` **Evidence log / audit trail** — every scan, fix, and date, exportable, to support "disproportionate burden" or due-diligence records.
 - `[Pro]` Statement & report versioning.
 
-## F. Monitoring & Alerts *(STILL UNBUILT — and "monitor" is in the plugin header)*
+## F. Monitoring & Alerts *(built free in 0.21.0; alerting is the paid axis)*
 
-> The largest gap between what this product says and what it does. No longer a
-> paid tier; it is simply missing.
+> Scheduled re-checks, per-page comparison and a change report all shipped free
+> in `src/Monitoring/`, because detecting a regression is *finding* and finding
+> is never gated. What a paid add-on may sell is delivery — email digests,
+> Slack, webhooks, custom frequencies, crawling beyond WordPress content —
+> which attaches to `wsak_accessibility_changed`. The recurring-revenue logic in
+> this section still holds; only which half is paid has changed.
 
 - Scheduled re-scans with drift detection.
 - Change-detection: new/edited content and updated plugins/themes re-checked automatically.

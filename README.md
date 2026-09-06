@@ -15,13 +15,14 @@ AI layer; see [`CHANGELOG.md`](CHANGELOG.md) for what went and why.
 What works: the two-pass scanner (40 checks — 35 on the server, 5 in the
 browser), the inspector with a live page
 preview, the block-editor panel, deterministic CSS fixes with preview and undo,
-fourteen site-wide fixes, site-wide scanning, the bulk alt-text editor, theme
-triage, the overview dashboard, and the accessibility-statement generator.
+fourteen site-wide fixes, site-wide scanning, scheduled monitoring with a
+change report, the bulk alt-text editor, theme triage, the overview dashboard,
+and the accessibility-statement generator.
 
-What is next, in order: getting the check count from 17 to ~48, building the
-site-wide fix layer, then scheduled monitoring — which is the one thing the
-plugin header promises and does not yet do. [`CLAUDE.md`](CLAUDE.md) has the
-list.
+What is next: readability and the simplified summary (WCAG 3.1.5), WP-CLI,
+per-issue documentation, admin columns and CSV export, and page-builder
+compatibility testing — then 1.0.0 and WordPress.org.
+[`CLAUDE.md`](CLAUDE.md) has the list.
 
 ## Requirements
 
@@ -125,6 +126,7 @@ src/Scanner/                      Engine, rules, registry, page fetching
 src/AltText/                      Finding images that have never been described
 src/Jobs/                         Action Scheduler queue and the bulk-scan worker
 src/Remediation/                  The override layer, diffing, and fix review
+src/Monitoring/                   The schedule, and what changed since last time
 src/SiteFixes/                    Site-wide fixes and the registry they hang off
 assets/front/                     The one front-end script, shipped unbundled
 src/Conformance/                  The accessibility statement and its sign-off
@@ -149,6 +151,8 @@ GET  /wp-json/wsak/v1/coverage                      requires wsak_view_reports
 GET  /wp-json/wsak/v1/overview                      requires wsak_view_reports
 GET  /wp-json/wsak/v1/media                         requires wsak_apply_fix
 POST /wp-json/wsak/v1/media/alt                     requires wsak_apply_fix
+GET  /wp-json/wsak/v1/monitoring                    requires wsak_view_reports
+POST /wp-json/wsak/v1/monitoring                    requires wsak_manage_settings
 GET  /wp-json/wsak/v1/site-fixes                    requires wsak_view_reports
 POST /wp-json/wsak/v1/site-fixes/<id>               requires wsak_manage_settings
 GET  /wp-json/wsak/v1/fixes/css                     requires wsak_apply_fix

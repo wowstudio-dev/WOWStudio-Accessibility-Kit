@@ -13,16 +13,64 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   and links, duplicate labels, `aria-labelledby` pointing at nothing, links to
   PDFs and Office files, justified text, tiny text. That list is the next block
   of work.
-- Scheduled re-scans. The word "monitor" is in the plugin header and the
-  description, and nothing re-scans on its own yet — every score in the
-  interface is the result of somebody pressing a button. Until that exists, the
-  charts say "by scan" rather than "over time", which is honest but is not the
-  feature.
 - WP-CLI. There is no command-line entry point at all, which rules the plugin
   out of CI and staging audits.
 - Driving the redesigned admin in a real browser with a screen reader, and
   testing with disabled users. The contrast guard checks 91 colour pairings on
   every push, which is not the same thing as somebody using the interface.
+
+## [0.21.0] - 2026-09-06
+
+Monitoring. The plugin has advertised the word since 0.1.0 and has not, until
+now, done it.
+
+### Added
+
+- **A schedule.** Weekly or monthly, off by default. Nothing more frequent is
+  offered: a check that runs more often than the content changes produces a
+  stream of "nothing happened" that people stop reading, which is how a
+  monitoring feature fails in practice. Each run covers the fifty most recently
+  updated pages, and the screen says so rather than implying whole-site coverage
+  it does not have.
+- **Comparison.** What appeared and what was resolved between a page's last two
+  scans, computed from the scans themselves rather than written into a log of
+  its own — a separate change table would eventually disagree with the data it
+  claims to describe, and a history that contradicts its own scans is worse than
+  no history.
+- **A "What has changed" screen**, and `GET`/`POST /wsak/v1/monitoring`.
+- **`wsak_accessibility_changed`**, the fourth extension seam: a run's
+  regressions and every movement, for anything that wants to send them
+  somewhere.
+
+### The line, since this one needed deciding
+
+All of it is free. Detecting that a page started failing something it used to
+pass **is finding**, and finding is the thing this product does not gate —
+telling somebody a barrier appeared on their site only after they pay puts the
+cost on their disabled visitors, who did not choose the plan.
+
+What a paid add-on may sell is being told *without looking*: email digests,
+Slack, webhooks, custom frequencies, crawling beyond WordPress content. That is
+delivery rather than detection, it carries real marginal cost, and it is what
+people actually renew for — a scheduled scan you must log in to read is worth
+much less than a message saying the pricing page dropped twelve points. The
+free plugin sends nothing anywhere and still contacts no outside service.
+
+### Notes
+
+- Comparison counts per rule, not per finding. Findings have no stable identity
+  across scans — the same missing alt on the same image is a new row each time,
+  because a finding records where something was in one parse of one document.
+  Per rule asks the question that can be answered: did this page start failing
+  something it used to pass.
+- `regressed` is a narrow, factual claim: findings that were not there before
+  and are now. A score can move because a page got longer, so the score movement
+  is never shown on its own — it sits beside what actually changed.
+- The schedule is re-synced on every admin request, not only when saved. A
+  scheduled action can vanish — a database restored from backup, Action
+  Scheduler's tables rebuilt — and monitoring that quietly stopped monitoring is
+  the worst way for this to fail.
+- Contrast guard: 98 → 105 pairings.
 
 ## [0.20.0] - 2026-09-06
 

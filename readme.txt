@@ -4,7 +4,7 @@ Tags: accessibility, wcag, a11y, alt text, accessibility scanner
 Requires at least: 6.8
 Tested up to: 7.1
 Requires PHP: 8.1
-Stable tag: 0.20.0
+Stable tag: 0.21.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -25,6 +25,7 @@ It is not an accessibility overlay. Nothing is injected into your front end, and
 * **Check the fix worked.** After a style rule is applied, the page is loaded again and measured again. If something in your theme overrode the rule, you are told that, rather than being told it is fixed.
 * **Describe your images.** One screen lists every image in your media library that has never been described, with a field beside each. Type, save, move on — instead of opening forty media screens.
 * **Do it site-wide.** Check every page and post in one run, in the background. There is no page limit and no paid tier.
+* **Keep it fixed.** Re-check on a schedule and see what changed since last time — which pages started failing something they used to pass, and which stopped.
 * **Document.** Generate an accessibility statement you edit and publish, including the feedback contact mechanism European rules expect.
 
 = Honesty about what automated testing can do =
@@ -93,6 +94,12 @@ No. Everything in this plugin is free, including checking your whole site at onc
 In WordPress's own alt text field on the media item. It therefore applies everywhere that image is used, works with every theme and plugin, and stays behind if you remove this plugin.
 
 == Changelog ==
+
+= 0.21.0 =
+* New: scheduled checking. Your site can now re-check itself every week or every month, so a problem introduced by an edit, a plugin update or a theme change is noticed without anybody having to remember to look.
+* New: a "What has changed" screen showing which pages started failing something they used to pass, and which stopped.
+* Off by default. Each run covers the fifty most recently updated pages in the background.
+* Nothing is emailed and nothing is sent anywhere — this plugin still contacts no outside service at all.
 
 = 0.20.0 =
 * Five more site-wide fixes, completing the set at fourteen.
@@ -210,6 +217,9 @@ In WordPress's own alt text field on the media item. It therefore applies everyw
 * Initial scaffold: plugin bootstrap, capabilities, activation and uninstall handling.
 
 == Upgrade Notice ==
+
+= 0.21.0 =
+Your site can now re-check itself on a schedule and tell you what changed since last time.
 
 = 0.20.0 =
 Five more site-wide fixes: pinch-zoom, tab order, repeated tooltips, placeholder-only form fields, and empty searches.
