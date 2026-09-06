@@ -4,7 +4,7 @@ Tags: accessibility, wcag, a11y, alt text, accessibility scanner
 Requires at least: 6.8
 Tested up to: 7.1
 Requires PHP: 8.1
-Stable tag: 0.23.0
+Stable tag: 0.24.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -93,6 +93,10 @@ No. Everything in this plugin is free, including checking your whole site at onc
 In WordPress's own alt text field on the media item. It therefore applies everywhere that image is used, works with every theme and plugin, and stays behind if you remove this plugin.
 
 == Changelog ==
+
+= 0.24.0 =
+* New: WP-CLI support. `wp wsak scan --all` checks your whole site from the command line, `wp wsak issues` lists what it found, `wp wsak checks` lists every check, and `wp wsak fixes` switches the site-wide fixes on and off.
+* Bulk scanning is included, so this works in a deployment pipeline or on staging.
 
 = 0.23.0 =
 * New: an Accessibility column on your Posts and Pages screens, showing each page's score and how many findings are open. Pages nobody has checked say "Not checked" rather than showing a zero.
@@ -224,6 +228,9 @@ In WordPress's own alt text field on the media item. It therefore applies everyw
 * Initial scaffold: plugin bootstrap, capabilities, activation and uninstall handling.
 
 == Upgrade Notice ==
+
+= 0.24.0 =
+Adds WP-CLI commands, including whole-site scanning for use in a pipeline.
 
 = 0.23.0 =
 Adds an accessibility column to your Posts and Pages lists, and a screen recording what has been set aside and why.

@@ -19,6 +19,40 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   testing with disabled users. The contrast guard checks 91 colour pairings on
   every push, which is not the same thing as somebody using the interface.
 
+## [0.24.0] - 2026-09-06
+
+A command line, with bulk in it.
+
+### Added
+
+- `wp wsak scan [<post-id>...] [--all] [--post-type=]` — checks pages and prints
+  a table, or JSON, or CSV.
+- `wp wsak issues [--post=] [--severity=] [--status=]` — the findings from each
+  page's most recent check.
+- `wp wsak checks` — all forty checks, with severity, success criterion and
+  which pass runs them.
+- `wp wsak fixes [<id>] [--on|--off]` — list the site-wide fixes, or switch one.
+
+### Notes
+
+- **Bulk is not held back from the command line.** The reason to have a CLI at
+  all is continuous integration and staging audits, and a command that can only
+  do one page at a time is useless for both — somebody reaching for WP-CLI is
+  going to put it in a pipeline, and a tool that cannot go in a pipeline is a
+  demonstration rather than a tool. A test asserts `--all` stays.
+- Runs synchronously rather than through Action Scheduler. The queue exists so a
+  browser request does not time out; a terminal has no such problem, and a
+  command that returned immediately and told you to wait for a background job
+  would be worse at the one thing it is for.
+- Every scan row states its coverage — "full page" or "content only" — because a
+  content-only scan covers less, and a score that does not say so invites being
+  compared against one that means something different.
+- An empty result says that automated checks cover part of WCAG rather than
+  reporting a pass. The terminal gets the same honesty as the interface.
+- `stubs/wp-cli.php` exists for static analysis only. WP-CLI is the environment
+  the plugin may run inside, never a dependency, and the stub is excluded from
+  the shipped build.
+
 ## [0.23.0] - 2026-09-06
 
 Two things the obvious competitor charges for.

@@ -17,4 +17,6 @@ parameters:
 	scanFiles:
 		# WordPress 7.0's AI Client; the bundled WP stubs still describe 6.9.
 		- stubs/wp-ai-client.php
+		# WP-CLI is the environment src/Cli/ may run inside, never a dependency.
+		- stubs/wp-cli.php
 	treatPhpDocTypesAsCertain: false
