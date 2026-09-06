@@ -150,7 +150,7 @@ final class StatementGenerator {
 		$html .= '<p>' . esc_html(
 			sprintf(
 				/* translators: %s: organisation name. */
-				__( '%s wants as many people as possible to be able to use this website. We are working to make it easier to use for everyone, including people with disabilities.', 'wowstudio-accessibility-kit' ),
+				__( '%s wants as many people as possible to use this website. We are working to make it easier for everyone, including disabled people.', 'wowstudio-accessibility-kit' ),
 				$organisation
 			)
 		) . '</p>';
@@ -198,7 +198,7 @@ final class StatementGenerator {
 	private function draft_banner(): string {
 		return '<div class="wsak-statement__draft" role="note">'
 			. '<p><strong>' . esc_html__( 'Draft — not yet reviewed or approved', 'wowstudio-accessibility-kit' ) . '</strong></p>'
-			. '<p>' . esc_html__( 'This statement was generated from settings and nobody has confirmed that it is accurate. It should not be treated as a statement from this organisation until somebody has read it and signed it off in the Accessibility settings.', 'wowstudio-accessibility-kit' ) . '</p>'
+			. '<p>' . esc_html__( 'This statement was made from settings, and nobody has confirmed that it is accurate. Do not treat it as a statement from this organisation yet. Somebody has to read it and sign it off in the Accessibility settings first.', 'wowstudio-accessibility-kit' ) . '</p>'
 			. '</div>';
 	}
 
@@ -216,7 +216,7 @@ final class StatementGenerator {
 	private function feedback_section( array $settings ): string {
 		$html = $this->heading( 3, __( 'Tell us about a problem', 'wowstudio-accessibility-kit' ) );
 
-		$html .= '<p>' . esc_html__( 'If you find something on this site you cannot use, or you need information in a different format, please get in touch and tell us what happened.', 'wowstudio-accessibility-kit' ) . '</p>';
+		$html .= '<p>' . esc_html__( 'Tell us if you find something on this site you cannot use. Tell us too if you need information in another format. We want to know what happened.', 'wowstudio-accessibility-kit' ) . '</p>';
 
 		$routes = array();
 
@@ -337,7 +337,7 @@ final class StatementGenerator {
 				: __( 'The website was assessed by us, using automated testing alongside our own checks.', 'wowstudio-accessibility-kit' )
 		) . '</p>';
 
-		$html .= '<p>' . esc_html__( 'Automated testing finds only some accessibility problems. Judgements such as whether alternative text is accurate, whether the focus order makes sense, or whether a page reads sensibly aloud need a person, and any part of this site that has not been checked by a person has not been fully assessed.', 'wowstudio-accessibility-kit' ) . '</p>';
+		$html .= '<p>' . esc_html__( 'Automated testing finds only some accessibility problems. Some things need a person to judge. Is the alternative text accurate? Does the focus order make sense? Does the page read sensibly aloud? Where a person has not checked, this site has not been fully assessed.', 'wowstudio-accessibility-kit' ) . '</p>';
 
 		if ( ! empty( $settings['attested'] ) ) {
 			$by   = (string) $settings['attested_by'];

@@ -11,7 +11,6 @@ namespace WOWStudio\AccessibilityKit\Tests\Unit;
 
 use Brain\Monkey\Functions;
 use WOWStudio\AccessibilityKit\Conformance\StatementGenerator;
-use WOWStudio\AccessibilityKit\Readability\FleschKincaid;
 use WOWStudio\AccessibilityKit\Conformance\StatementSettings;
 use WOWStudio\AccessibilityKit\Scanner\Engine;
 use WOWStudio\AccessibilityKit\Scanner\Finding;
@@ -32,21 +31,6 @@ use WOWStudio\AccessibilityKit\Tests\TestCase;
  * @covers \WOWStudio\AccessibilityKit\Conformance\StatementGenerator
  */
 final class DogfoodTest extends TestCase {
-
-	/**
-	 * Success criteria above the level this plugin holds itself to.
-	 *
-	 * The dogfooding rule is WCAG 2.2 **AA** — CLAUDE.md rule 6 — and 3.1.5
-	 * Reading Level is AAA. Excluded here rather than quietly passing, because
-	 * an exclusion nobody can see is the way a dogfooding test starts lying.
-	 *
-	 * This is not a licence to ignore it. The statement's actual reading level
-	 * is asserted separately below, so a rewrite that made our own conformance
-	 * statement harder to read would still fail.
-	 *
-	 * @var string[]
-	 */
-	private const TRIPLE_A = array( '3.1.5' );
 
 	/**
 	 * Stand-in for the options table.
@@ -148,23 +132,8 @@ final class DogfoodTest extends TestCase {
 
 		return array_map(
 			static fn( Finding $f ): string => sprintf( '%s (%s): %s', $f->rule_id, $f->wcag_sc, $f->message ),
-			array_filter(
-				$result->findings,
-				static fn( Finding $f ): bool => ! in_array( $f->wcag_sc, self::TRIPLE_A, true )
-			)
+			$result->findings
 		);
-	}
-
-	/**
-	 * Returns the reading level of our own statement.
-	 *
-	 * @param string $statement The rendered statement.
-	 * @return float|null
-	 */
-	private function reading_level( string $statement ): ?float {
-		$text = trim( (string) preg_replace( '/\s+/u', ' ', wp_strip_all_tags( $statement ) ) );
-
-		return ( new FleschKincaid() )->grade( $text );
 	}
 
 	/**
@@ -215,26 +184,30 @@ final class DogfoodTest extends TestCase {
 	}
 
 	/**
-	 * Our own statement does not drift towards being unreadable.
+	 * Our own statement passes the reading-level check as well.
 	 *
-	 * Reading level is AAA and therefore not part of the pass/fail above, but
-	 * an accessibility statement that only a lawyer can read is a poor
-	 * advertisement for a plugin about accessibility. This is a ceiling rather
-	 * than the AAA threshold: it measures around grade ten, and the assertion
-	 * is here so that a future edit which pushes it towards fifteen is noticed
-	 * by somebody.
+	 * Reading level is a AAA criterion and the dogfooding rule is AA, so this
+	 * could legitimately have been excluded. It briefly was — the statement
+	 * measured grade 9.8 and the test carried a named exemption for 3.1.5.
+	 * Shortening four sentences was cheaper than the exemption, and an
+	 * accessibility statement only a lawyer can read is a poor advertisement
+	 * for a plugin about accessibility.
+	 *
+	 * Asserted through the rule rather than by measuring separately, so what is
+	 * checked here is exactly the number a user would be shown.
 	 *
 	 * @return void
 	 */
-	public function test_our_own_statement_stays_readable(): void {
-		$html  = ( new StatementGenerator( $this->settings( array( 'organisation' => 'Example Ltd' ) ) ) )->render();
-		$grade = $this->reading_level( $html );
+	public function test_our_own_statement_reads_plainly(): void {
+		$html = ( new StatementGenerator( $this->settings( array( 'organisation' => 'Example Ltd' ) ) ) )->render();
 
-		$this->assertNotNull( $grade, 'The statement should be long enough to measure.' );
-		$this->assertLessThan(
-			12.0,
-			$grade,
-			sprintf( 'Our own accessibility statement now reads at grade %s.', number_format( (float) $grade, 1 ) )
+		$this->assertNotContains(
+			'reading-level-high',
+			array_map(
+				static fn( string $finding ): string => strtok( $finding, ' ' ),
+				$this->findings( $html )
+			),
+			'Our own accessibility statement now reads above lower secondary level.'
 		);
 	}
 

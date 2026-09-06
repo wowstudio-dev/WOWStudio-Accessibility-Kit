@@ -19,6 +19,52 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   testing with disabled users. The contrast guard checks 91 colour pairings on
   every push, which is not the same thing as somebody using the interface.
 
+## [0.27.0] - 2026-09-06
+
+Page-builder content, and a statement anybody can read.
+
+### Fixed
+
+- **Elementor pages scanned as though they were empty.** Found by building a
+  real Elementor page and looking, not by reading documentation. Elementor keeps
+  nothing in `post_content` — a JSON tree in postmeta, rendered through hooks
+  that only fire inside the loop on a real request — so applying `the_content`
+  to the empty string it leaves behind returned the empty string. On any site
+  where loopback is blocked, every Elementor page reached the parser with zero
+  bytes. The rendered page was eighty kilobytes.
+
+  The scan failed safe rather than reporting a false clean bill of health, which
+  is the one thing that saves this from being much worse. But it failed with
+  "the page could not be parsed as HTML", which is true in a narrow sense and
+  useless: it named the symptom and neither of the two things the reader could
+  act on.
+
+  The content fallback now asks the builder when `post_content` renders to
+  nothing. Elementor is handled directly, guarded on every hop — a class that
+  may not exist, a property that may not be set, a method that may be renamed —
+  because reaching into another plugin's internals unguarded is a fatal error on
+  somebody's dashboard. Everything else goes through `wsak_builder_content`,
+  which is the extension point rather than a list of builders this file has to
+  keep up with.
+
+  Divi and WP Bakery need none of this: both keep shortcodes in `post_content`,
+  so `the_content` renders them correctly and always did.
+- The "nothing to scan" error names both possible causes and asserts neither.
+  From the server, a genuinely empty page and one rendered by something
+  unreachable look identical, and claiming the second would be inventing a
+  diagnosis.
+
+### Changed
+
+- **The accessibility statement is written more plainly.** Four long sentences
+  became shorter ones; the guarded disclosure phrases are untouched. It now
+  passes `reading-level-high`, so `DogfoodTest` has dropped the AAA exemption it
+  briefly carried and is unconditional again — shortening four sentences was
+  cheaper than the exemption, and a statement only a lawyer can read is a poor
+  advertisement for a plugin about accessibility.
+- That test now asserts through the rule rather than measuring separately, so
+  what it checks is exactly the number a user would be shown.
+
 ## [0.26.0] - 2026-09-06
 
 The last two extension seams, before the screens around them grow.

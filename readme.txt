@@ -4,7 +4,7 @@ Tags: accessibility, wcag, a11y, alt text, accessibility scanner
 Requires at least: 6.8
 Tested up to: 7.1
 Requires PHP: 8.1
-Stable tag: 0.26.0
+Stable tag: 0.27.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -94,6 +94,11 @@ No. Everything in this plugin is free, including checking your whole site at onc
 In WordPress's own alt text field on the media item. It therefore applies everywhere that image is used, works with every theme and plugin, and stays behind if you remove this plugin.
 
 == Changelog ==
+
+= 0.27.0 =
+* Fixed: pages built with Elementor were scanned as though they had no content on them, on sites where the plugin cannot fetch the whole page. Elementor stores its content outside WordPress's own content field; the scan now asks it directly. Divi and WP Bakery were never affected.
+* Fixed: when there is genuinely nothing to scan, the message now says so and names what to check, instead of reporting that the page could not be parsed.
+* Changed: the generated accessibility statement is written in plainer language, and now passes this plugin's own reading-level check.
 
 = 0.26.0 =
 * For developers: hooks so a separate add-on can register a report export format, and restrict who may set a finding aside. Nothing changes for you — the dismissal hook can only ever narrow permission, never widen it, and no export control appears unless something has registered a format, so there are no locked buttons.
@@ -238,6 +243,9 @@ In WordPress's own alt text field on the media item. It therefore applies everyw
 * Initial scaffold: plugin bootstrap, capabilities, activation and uninstall handling.
 
 == Upgrade Notice ==
+
+= 0.27.0 =
+Fixes Elementor pages being scanned as empty, and makes the generated accessibility statement easier to read.
 
 = 0.26.0 =
 Developer hooks only; nothing changes in how the plugin behaves.

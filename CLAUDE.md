@@ -149,8 +149,16 @@ both.
    0.24.0 (`src/Cli/`, with `--all` on the scan command and a test that keeps it
    there); readability and the plain-language summary shipped in 0.25.0
    (`src/Readability/`).
-6. **Page-builder compatibility**: Gutenberg, Classic, ACF, Avada, Beaver
-   Builder, Divi, Elementor, Oxygen, WP Bakery, WooCommerce.
+6. **Page-builder compatibility.** Elementor was tested against a real page in
+   0.27.0 and was broken: it keeps nothing in `post_content`, so the content
+   fallback saw zero bytes and scanned every page as empty. `PageSource` now
+   asks the builder, with `wsak_builder_content` as the seam for the rest.
+
+   Divi and WP Bakery keep shortcodes in `post_content` and need nothing. Still
+   untested against a real install: Oxygen and Beaver Builder (both store
+   outside `post_content`, so both are suspect), Avada, ACF and WooCommerce.
+   **Test by building a page and scanning it** — reading the plugin's
+   documentation would not have found the Elementor fault.
 7. **1.0.0 and WordPress.org submission.**
 
 All four extension seams exist, and `ExtensionSeamsTest` guards them — a renamed

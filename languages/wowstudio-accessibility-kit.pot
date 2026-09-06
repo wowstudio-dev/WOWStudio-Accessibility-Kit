@@ -2,7 +2,7 @@
 # This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: WOWStudio Accessibility Kit 0.26.0\n"
+"Project-Id-Version: WOWStudio Accessibility Kit 0.27.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wowstudio-accessibility-kit\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -143,7 +143,7 @@ msgstr ""
 #. translators: %s: organisation name.
 #: src/Conformance/StatementGenerator.php:153
 #, php-format
-msgid "%s wants as many people as possible to be able to use this website. We are working to make it easier to use for everyone, including people with disabilities."
+msgid "%s wants as many people as possible to use this website. We are working to make it easier for everyone, including disabled people."
 msgstr ""
 
 #: src/Conformance/StatementGenerator.php:158
@@ -159,7 +159,7 @@ msgid "Draft — not yet reviewed or approved"
 msgstr ""
 
 #: src/Conformance/StatementGenerator.php:201
-msgid "This statement was generated from settings and nobody has confirmed that it is accurate. It should not be treated as a statement from this organisation until somebody has read it and signed it off in the Accessibility settings."
+msgid "This statement was made from settings, and nobody has confirmed that it is accurate. Do not treat it as a statement from this organisation yet. Somebody has to read it and sign it off in the Accessibility settings first."
 msgstr ""
 
 #: src/Conformance/StatementGenerator.php:217
@@ -167,7 +167,7 @@ msgid "Tell us about a problem"
 msgstr ""
 
 #: src/Conformance/StatementGenerator.php:219
-msgid "If you find something on this site you cannot use, or you need information in a different format, please get in touch and tell us what happened."
+msgid "Tell us if you find something on this site you cannot use. Tell us too if you need information in another format. We want to know what happened."
 msgstr ""
 
 #: src/Conformance/StatementGenerator.php:227
@@ -224,7 +224,7 @@ msgid "The website was assessed by us, using automated testing alongside our own
 msgstr ""
 
 #: src/Conformance/StatementGenerator.php:340
-msgid "Automated testing finds only some accessibility problems. Judgements such as whether alternative text is accurate, whether the focus order makes sense, or whether a page reads sensibly aloud need a person, and any part of this site that has not been checked by a person has not been fully assessed."
+msgid "Automated testing finds only some accessibility problems. Some things need a person to judge. Is the alternative text accurate? Does the focus order make sense? Does the page read sensibly aloud? Where a person has not checked, this site has not been fully assessed."
 msgstr ""
 
 #. translators: 1: name, 2: role, 3: date.
@@ -588,7 +588,7 @@ msgstr ""
 
 #: src/Rest/ScanController.php:237
 #: src/Scanner/PageSource.php:169
-#: src/Scanner/PageSource.php:224
+#: src/Scanner/PageSource.php:227
 msgid "That content could not be found."
 msgstr ""
 
@@ -788,20 +788,24 @@ msgstr ""
 msgid "the page returned no content"
 msgstr ""
 
-#: src/Scanner/PageSource.php:180
+#: src/Scanner/PageSource.php:183
 msgid "This checked the content of the page, not the theme around it. Faults in your header, navigation and footer are reported separately, against the theme, rather than repeated against every page that uses it."
 msgstr ""
 
 #. translators: %s: the underlying reason.
-#: src/Scanner/PageSource.php:212
+#: src/Scanner/PageSource.php:215
 #, php-format
 msgid "The page could not be fetched for scanning because %s. This usually means the site cannot make requests to itself; ask your host about loopback requests."
 msgstr ""
 
 #. translators: %s: the underlying reason the whole page could not be fetched.
-#: src/Scanner/PageSource.php:239
+#: src/Scanner/PageSource.php:243
 #, php-format
 msgid "Only this content was scanned, not the whole page, because %s. Checks that depend on the surrounding page — its language, its title, its landmarks — were skipped, so this scan covers less than usual. Ask your host about loopback requests to enable full-page scanning."
+msgstr ""
+
+#: src/Scanner/PageSource.php:305
+msgid "There was nothing to check: this page's content field is empty, and no page builder supplied anything either. If visitors do see content here, something is producing it that this scan cannot reach — reaching it means fetching the whole page, so ask your host about loopback requests or whether a security plugin is blocking them."
 msgstr ""
 
 #: src/Scanner/Rules/AriaReferenceBroken.php:116

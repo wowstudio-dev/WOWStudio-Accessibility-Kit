@@ -171,11 +171,14 @@ final class PageSource {
 			);
 		}
 
-		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Applying core's content filter is the intent here, not declaring a new hook.
-		$content = apply_filters( 'the_content', $post->post_content );
+		$content = $this->rendered_content( $post );
+
+		if ( is_wp_error( $content ) ) {
+			return $content;
+		}
 
 		return new PageMarkup(
-			is_string( $content ) ? $content : '',
+			$content,
 			false,
 			__( 'This checked the content of the page, not the theme around it. Faults in your header, navigation and footer are reported separately, against the theme, rather than repeated against every page that uses it.', 'wowstudio-accessibility-kit' )
 		);
@@ -226,13 +229,14 @@ final class PageSource {
 			);
 		}
 
-		// Core's own filter, applied deliberately: the point of the fallback is to
-		// see the content as a visitor would, with shortcodes and blocks rendered.
-		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Applying core's content filter is the intent here, not declaring a new hook.
-		$content = apply_filters( 'the_content', $post->post_content );
+		$content = $this->rendered_content( $post );
+
+		if ( is_wp_error( $content ) ) {
+			return $content;
+		}
 
 		return new PageMarkup(
-			is_string( $content ) ? $content : '',
+			$content,
 			false,
 			sprintf(
 				/* translators: %s: the underlying reason the whole page could not be fetched. */
@@ -240,5 +244,113 @@ final class PageSource {
 				$reason
 			)
 		);
+	}
+
+	/**
+	 * Renders a post's content the way a visitor would see it.
+	 *
+	 * Core's `the_content` first, which handles blocks, shortcodes and every
+	 * builder that keeps its output in `post_content` — Divi and WP Bakery
+	 * store shortcodes there, so they come out correctly with no special
+	 * handling at all.
+	 *
+	 * Then the case that made this method necessary. Elementor keeps nothing in
+	 * `post_content`: it stores a JSON tree in postmeta and renders it through
+	 * hooks that only fire inside the loop on a real request. Applying
+	 * `the_content` to the empty string it leaves behind returns the empty
+	 * string, so a site where loopback is blocked would scan every Elementor
+	 * page as though it had no content in it. Verified rather than assumed: an
+	 * Elementor page with four faults in it produced zero bytes here while the
+	 * rendered page was eighty kilobytes.
+	 *
+	 * Failing that, an explicit error. This used to fall through to the parser,
+	 * which reported "the page could not be parsed as HTML" — true in a narrow
+	 * sense and useless, because it named the symptom and not one of the two
+	 * things the reader could actually do something about.
+	 *
+	 * @since 0.27.0
+	 *
+	 * Typed as `object` rather than `WP_Post` on purpose: it needs `post_content`
+	 * and `ID` and nothing else, and the unit suite hands it a stdClass because
+	 * WP_Post is not loaded there. A hint tighter than the method's actual
+	 * requirement buys nothing and costs the tests.
+	 *
+	 * @param object $post The post.
+	 * @return string|WP_Error
+	 */
+	private function rendered_content( object $post ) {
+		// phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- Applying core's content filter is the intent here, not declaring a new hook.
+		$content = apply_filters( 'the_content', $post->post_content );
+		$content = is_string( $content ) ? $content : '';
+
+		if ( '' !== trim( $content ) ) {
+			return $content;
+		}
+
+		$content = $this->builder_content( $post->ID );
+
+		if ( '' !== trim( $content ) ) {
+			return $content;
+		}
+
+		/*
+		 * Both causes named, neither asserted. An empty content field means
+		 * either that the page really is empty or that something else is
+		 * producing what visitors see, and from here those look identical —
+		 * claiming the second would be inventing a diagnosis, which is the
+		 * fault this plugin reports on other people's markup.
+		 */
+		return new WP_Error(
+			'wsak_no_scannable_content',
+			__( 'There was nothing to check: this page\'s content field is empty, and no page builder supplied anything either. If visitors do see content here, something is producing it that this scan cannot reach — reaching it means fetching the whole page, so ask your host about loopback requests or whether a security plugin is blocking them.', 'wowstudio-accessibility-kit' ),
+			array( 'status' => 422 )
+		);
+	}
+
+	/**
+	 * Asks a page builder for its rendered content.
+	 *
+	 * Elementor is handled directly because it is the most widely installed
+	 * builder that keeps nothing in `post_content`, and because it exposes a
+	 * public method for exactly this. Everything else goes through the filter,
+	 * which is deliberately the whole extension point rather than a list of
+	 * builders this file has to keep up with.
+	 *
+	 * @since 0.27.0
+	 *
+	 * @param int $post_id The post.
+	 * @return string
+	 */
+	private function builder_content( int $post_id ): string {
+		$content = '';
+
+		if (
+			class_exists( '\Elementor\Plugin' )
+			&& isset( \Elementor\Plugin::$instance->frontend )
+			&& method_exists( \Elementor\Plugin::$instance->frontend, 'get_builder_content_for_display' )
+		) {
+			// Second argument asks Elementor to render rather than return the
+			// editor's own markup.
+			$content = (string) \Elementor\Plugin::$instance->frontend->get_builder_content_for_display( $post_id, true );
+		}
+
+		/**
+		 * Filters content fetched from a page builder for scanning.
+		 *
+		 * The seam for any builder that keeps its content outside
+		 * `post_content` — Oxygen, or anything else that renders from its own
+		 * store. Return the rendered HTML for the post.
+		 *
+		 * Whatever is returned is scanned as the page's content, so it should
+		 * be what a visitor sees rather than an editor representation of it.
+		 *
+		 * @since 0.27.0
+		 *
+		 * @param string $content Content found so far, empty when none.
+		 * @param int    $post_id The post.
+		 */
+		$content = (string) apply_filters( 'wsak_builder_content', $content, $post_id );
+
+		return $content;
 	}
 }
