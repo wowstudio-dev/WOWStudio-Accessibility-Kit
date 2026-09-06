@@ -73,7 +73,7 @@ const WSAK_REVIEWED = 'wsak:claim-reviewed';
  *
  * @var string[]
  */
-const WSAK_SKIP = array( 'node_modules', '.git', 'vendor', 'freemius', 'dist', 'build', 'tests', 'bin', '.github', 'languages' );
+const WSAK_SKIP = array( 'node_modules', '.git', 'vendor', 'dist', 'build', 'tests', 'bin', '.github', 'languages' );
 
 /**
  * File extensions whose contents reach a user.

@@ -23,7 +23,7 @@ module.exports = [
 	...defaultConfig,
 
 	{
-		ignores: [ '**/build/**', '**/dist/**', '**/node_modules/**', '**/vendor/**', '**/freemius/**' ],
+		ignores: [ '**/build/**', '**/dist/**', '**/node_modules/**', '**/vendor/**' ],
 	},
 
 	// Translator-function correctness: text domain, translator comments,

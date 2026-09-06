@@ -6,7 +6,6 @@
 	<file>.</file>
 	<exclude-pattern>*/vendor/*</exclude-pattern>
 	<exclude-pattern>*/node_modules/*</exclude-pattern>
-	<exclude-pattern>*/freemius/*</exclude-pattern>
 	<exclude-pattern>*/build/*</exclude-pattern>
 	<!-- The release build is a copy of src/; scanning it double-reports every class. -->
 	<exclude-pattern>*/dist/*</exclude-pattern>

@@ -23,6 +23,18 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 Findings that keep their identity, and figures you can open.
 
+### Removed
+
+- Every remaining reference to the licensing SDK: dead exclusion entries in
+  `phpcs.xml.dist`, `eslint.config.cjs` and `bin/check-claims.php` that named a
+  directory which no longer existed, a PHPStan comment describing a scan path it
+  did not describe, a CI comment claiming an exclusion that had already been
+  dropped, and the two `SPEC.md` sections specifying how to wire and gate it.
+
+  The record of the removal stays where it belongs — this changelog, the dated
+  security review, and the original kickoff prompt are accounts of what happened
+  and are not rewritten to say otherwise. `pro-seed-0.15.1` still holds the code.
+
 ### Added
 
 - **The same markup, decided once.** A theme prints its social icons into every
@@ -65,6 +77,21 @@ Findings that keep their identity, and figures you can open.
   markup, and `wsak_can_dismiss_site_wide` narrows who may decide that widely.
 
 ### Fixed
+
+- **The licensing SDK's directory stopped shipping.** Freemius went in 0.16.0,
+  but `freemius/` did not: one leftover dashboard icon stayed behind,
+  `.distignore` never listed it, and `bin/build.sh` copies everything that file
+  does not exclude. Every zip built since — including the one produced today —
+  has carried a folder called `freemius` inside a plugin whose own readme
+  promises no licensing SDK and no outbound requests.
+
+  Nothing executed and nothing phoned home; it was one PNG. It was still a
+  claim contradicted by the package it shipped in, which is the kind of thing
+  a WordPress.org reviewer is right to ask about.
+
+  The directory is gone, and `bin/build.sh` now fails the build if anything
+  reappears under that name — checked there rather than trusted to
+  `.distignore`, because the exclusion list is exactly what missed it.
 
 - **Findings stored before this version are given their identity in the
   background**, in batches through Action Scheduler rather than by holding an

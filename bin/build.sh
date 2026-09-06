@@ -88,6 +88,18 @@ if [ -d "${OUT}/tests" ] || [ -d "${OUT}/node_modules" ] || [ -f "${OUT}/phpcs.x
 fi
 echo "    no development files in the build"
 
+# The licensing SDK went in 0.16.0, but its directory did not: one leftover
+# image stayed behind, .distignore never listed it, and every zip built since
+# has shipped a folder called freemius inside a plugin that advertises no
+# licensing SDK at all. Checked here rather than trusted to .distignore, so
+# that anything reappearing under that name fails the build instead of being
+# quietly published.
+if [ -e "${OUT}/freemius" ]; then
+	echo "    ERROR: a freemius/ directory reached the build" >&2
+	exit 1
+fi
+echo "    no licensing SDK in the build"
+
 echo "==> Built ${OUT} ($(du -sh "${OUT}" | cut -f1))"
 
 if [ "${ZIP}" -eq 1 ]; then

@@ -1,10 +1,11 @@
 # CLAUDE.md — WOWStudio Accessibility Kit
 
 Operating brief for Claude Code. **Read `SPEC.md` for the detail** — but read the
-"Superseded" block at the top of it first, because the tiering, AI and Freemius
-sections of that document describe a product that no longer exists. This file is
-the short list of rules and context that always apply, and where the two
-disagree, this file wins.
+"Superseded" block at the top of it first, because the tiering and AI sections of
+that document describe a product that no longer exists. The licensing sections
+are not merely superseded but deleted, in 0.29.0, along with the last traces of
+the SDK itself. This file is the short list of rules and context that always
+apply, and where the two disagree, this file wins.
 
 ## What we're building
 A **real-remediation** WordPress accessibility plugin that finds, fixes and

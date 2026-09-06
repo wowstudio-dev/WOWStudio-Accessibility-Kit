@@ -9,7 +9,6 @@ parameters:
 		- wowstudio-accessibility-kit.php
 	bootstrapFiles:
 		- tests/constants.php
-	# Loads Freemius SDK symbols without analysing the vendored SDK itself.
 	scanDirectories:
 		# Action Scheduler's API is global functions, declared in a bundled
 		# library we do not analyse. Scanned so calls to it resolve.

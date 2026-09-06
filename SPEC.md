@@ -21,12 +21,10 @@ on its free tier. So the free tier is the whole product for now.
 
 | Section | Status |
 |---|---|
-| Monetization & licensing — Freemius | Gone. No SDK, no plans, no gating, no telemetry. |
 | C. AI Remediation Engine | Gone. `src/AI/` and the generative fix path were deleted. |
 | D. AI Alt-Text & Media SEO | Replaced by a manual bulk alt-text editor. Nothing is generated. |
 | H. Agency / Multisite | Not started, and not a tier. |
-| Tier boundary (mapped to Freemius plans) | Gone. Nothing is tiered. |
-| Freemius integration details | Gone. |
+| Tier boundary | Gone. Nothing is tiered. |
 | AI integration | Gone. |
 | Every `[Free]` / `[Pro]` / `[Agency]` tag below | Ignore. Everything is free. |
 
@@ -78,23 +76,6 @@ a bracket would bury the decisions the lines actually record.
 - **Not an overlay.** No front-end accessibility widget/toolbar is injected. Fixes are real code/markup changes.
 - **Draft, attested documents.** Conformance reports are generated as *drafts the site owner reviews and attests to* — the plugin never asserts conformance on the user's behalf.
 - **The plugin dogfoods.** Its own admin UI must pass WCAG 2.2 AA.
-
----
-
-## Monetization & licensing — Freemius *(SUPERSEDED — none of this exists)*
-
-> Removed in 0.16.0. Kept only as the record of what was built and then taken
-> out; do not implement any of it. See the superseded block at the top.
-
-- **Free version** ships to WordPress.org (the funnel). **Pro** is delivered and licensed through Freemius (checkout, subscriptions, trials, auto-updates, license management, analytics). Freemius deploy produces both the free (.org) zip and the premium zip from one codebase.
-- **Feature gating** uses the Freemius SDK, not homegrown license checks. Pattern:
-  - `wsak_fs()->can_use_premium_code()` — wrap all Pro code paths.
-  - `wsak_fs()->is_plan( 'pro', true )` / `is_paying()` / `is_free_plan()` — plan-specific checks.
-  - Pro-only methods use the `__premium_only` suffix and Pro-only files use the `-premium.php` suffix so Freemius strips them from the free zip. Partial premium blocks use the `@fs_premium_only` doc tag.
-- **Plans in Freemius dashboard:** `free`, `pro` (add `agency` in Phase 3). Map each `[Pro]`/`[Agency]` feature below to the matching plan.
-- **Trials:** offer a Pro free trial (no card) via Freemius to drive conversion from the alt-text funnel.
-- **Telemetry:** Freemius opt-in is **opt-in only** and clearly disclosed — consistent with our privacy stance. Never enable silent tracking.
-- **AI stays BYOK** (see AI integration) — Freemius handles *plugin* monetization, not AI cost. Managed AI credits, if ever added, would be sold later as a Freemius credit pack/add-on.
 
 ---
 
@@ -196,7 +177,7 @@ a bracket would bury the decisions the lines actually record.
 ## H. Agency / Multisite *(not started, and no longer a tier)*
 
 - WordPress Multisite network support.
-- Per-site licensing / central management (via Freemius multisite licensing).
+- Per-site licensing / central management.
 - White-label branding (plugin name, logo, report headers).
 - Roles & permissions: who can scan, who can apply fixes, who can only view.
 - Bulk operations across sites; consolidated cross-site dashboard.
@@ -227,7 +208,7 @@ a bracket would bury the decisions the lines actually record.
 - Ships with `security.txt`, a vulnerability-disclosure policy, and an SBOM — your own CRA hygiene (reuse the CRA-kit outputs).
 - In-product "assist not guarantee" disclaimers on every conformance/report screen.
 - Accessible admin UI (the plugin itself must pass WCAG 2.2 AA — table stakes for credibility).
-- Freemius telemetry opt-in only, clearly disclosed.
+- No telemetry of any kind. The plugin makes no outbound request at all.
 
 ---
 
@@ -246,18 +227,18 @@ placement, both scanning passes, every check; deterministic auto-fixes on one
 page; AI fixes and alt text one at a time under the daily cap; CSS fixes one page
 at a time; the accessibility-statement generator; the coverage panel.
 
-**Pro plan (Freemius):** bulk scanning by post type, the bulk review queue,
+**Pro plan:** bulk scanning by post type, the bulk review queue,
 deterministic fixes applied across a site, uncapped and bulk alt text, scheduled
 re-scans, monitoring/alerts/trends, history and export, conformance report +
 evidence log, WooCommerce at scale, WP-CLI + Abilities API, priority support.
 
-**Agency plan (Freemius, Phase 3):** multisite, white-label client reports, roles/permissions, cross-site management, unlimited sites.
+**Agency plan (Phase 3):** multisite, white-label client reports, roles/permissions, cross-site management, unlimited sites.
 
 ---
 
 ## Build phasing (don't build it all at once)
 
-**Phase 1 — MVP / launch (the wedge):** AI alt-text (Free) + single-page WCAG 2.2 scanner + issue list with auto/manual honesty tags + one-at-a-time AI fix + basic dashboard + accessibility-statement generator + Freemius Free/Pro scaffold. Ships the funnel and proves the AI-remediation angle.
+**Phase 1 — MVP / launch (the wedge):** AI alt-text (Free) + single-page WCAG 2.2 scanner + issue list with auto/manual honesty tags + one-at-a-time AI fix + basic dashboard + accessibility-statement generator. Ships the funnel and proves the AI-remediation angle.
 
 **Phase 2 — see the page, not just the markup** *(built):* a browser pass of our
 own for the render-dependent checks, the inspector that shows a finding on the
@@ -293,7 +274,6 @@ integrations.
 - **PHP** ≥ 8.1 (declare 8.0 minimum). PSR-4 autoloading via Composer.
 - **Admin UI:** React through `@wordpress/scripts` (wp-scripts / webpack), `@wordpress/components`, `@wordpress/data`, `@wordpress/api-fetch`. Gutenberg block for the accessibility statement.
 - **Background jobs:** Action Scheduler (bundled) for queued bulk scans, remediation, and alt-text.
-- **Licensing/payments:** Freemius WordPress SDK (`/freemius`).
 - **AI:** WP 7.0 AI Client abstraction when present; BYOK provider adapters (OpenAI, Anthropic, Gemini, OpenRouter) otherwise. Vision model for alt text.
 - **Storage:** custom tables via `dbDelta`; settings in options; per-post scan cache in postmeta.
 - **Tooling:** Composer (autoload + PHPCS), npm (wp-scripts). Testing: PHPUnit + `wp-env`; Playwright optional for e2e.
@@ -318,10 +298,9 @@ The plan below keeps the server pass as the spine and adds the browser pass as a
 ## Proposed repository structure
 ```
 wowstudio-accessibility-kit/
-├── wowstudio-accessibility-kit.php     # main file: headers, constants, Freemius init, bootstrap
+├── wowstudio-accessibility-kit.php     # main file: headers, constants, bootstrap
 ├── uninstall.php
 ├── composer.json  package.json  .wp-env.json  phpcs.xml.dist
-├── freemius/                           # Freemius SDK (added via SDK)
 ├── src/
 │   ├── Core/            (Plugin.php, Activator.php, Deactivator.php, Assets.php)
 │   ├── Scanner/         (Engine.php, RuleRegistry.php, Rules/*.php, Result.php)
@@ -337,40 +316,6 @@ wowstudio-accessibility-kit/
 ├── build/               (compiled JS/CSS — wp-scripts output)
 └── languages/
 ```
-
-## Freemius integration details *(SUPERSEDED — the SDK is gone)*
-
-Init in the main plugin file **before** loading the rest of the plugin. **Copy the current integration snippet from the Freemius Developer Dashboard** rather than hand-typing this — since Aug 2025 the snippet embeds a wp.org gatekeeper marker that blocks accidental premium-code submissions (and is stripped from the generated free build on deploy). The block below is illustrative of the shape only:
-```php
-if ( ! function_exists( 'wsak_fs' ) ) {
-    function wsak_fs() {
-        global $wsak_fs;
-        if ( ! isset( $wsak_fs ) ) {
-            require_once __DIR__ . '/freemius/start.php';
-            $wsak_fs = fs_dynamic_init( array(
-                'id'                  => 'REPLACE_WITH_FS_ID',
-                'slug'                => 'wowstudio-accessibility-kit',
-                'type'                => 'plugin',
-                'public_key'          => 'REPLACE_WITH_FS_PUBLIC_KEY',
-                'is_premium'          => true,
-                'premium_suffix'      => 'Pro',
-                'has_premium_version' => true,
-                'has_paid_plans'      => true,
-                'trial'               => array( 'days' => 14, 'is_require_payment' => false ),
-                'menu'                => array( 'slug' => 'wowstudio-accessibility-kit' ),
-            ) );
-        }
-        return $wsak_fs;
-    }
-    wsak_fs();
-    do_action( 'wsak_fs_loaded' );
-}
-```
-Gating conventions:
-- Wrap Pro logic: `if ( wsak_fs()->can_use_premium_code() ) { /* Pro */ }`.
-- Plan checks: `wsak_fs()->is_plan( 'pro', true )`, `->is_paying()`, `->is_free_plan()`.
-- Pro-only methods → `bulk_remediate__premium_only()`; Pro-only files → `class-bulk-remediation-premium.php`; partial premium blocks → `@fs_premium_only` doc tag. Freemius strips these from the free zip on deploy.
-- Configure `free`, `pro` (and later `agency`) plans in the Freemius dashboard; map every `[Pro]`/`[Agency]` feature accordingly.
 
 ## AI integration *(SUPERSEDED — there is no AI)*
 
@@ -394,7 +339,6 @@ npm run start               # watch/build admin app  (npm run build for release)
 npx wp-env start            # local WordPress at http://localhost:8888
 composer run phpcs          # WordPress Coding Standards
 ```
-Use Freemius **sandbox/dev mode** for licensing during development. Add the Freemius SDK via their dashboard (don't hand-vendor it).
 
 ## Coding standards & quality floor
 - WordPress Coding Standards (PHPCS `WordPress` ruleset), PHP 8.1 typing.
@@ -402,10 +346,10 @@ Use Freemius **sandbox/dev mode** for licensing during development. Add the Free
 - i18n: wrap all strings with the text domain; load translations on init.
 - **Accessible admin UI** (dogfood): WCAG 2.2 AA, full keyboard operability, visible focus, `prefers-reduced-motion` respected, semantic markup, ARIA only where needed.
 - Performance: batch heavy work through Action Scheduler; never block admin requests on AI calls.
-- Guarantee no premium code ships in the free zip (rely on Freemius stripping + a build check).
+- Guarantee nothing but the plugin's own code ships in the zip; `bin/build.sh` fails the build otherwise.
 
 ## Getting started for Claude Code (Phase 1 build order)
-1. **Scaffold** the plugin: headers, constants, PSR-4 autoload, activation/deactivation, `uninstall.php`, text domain; wire the **Freemius SDK** with `free`/`pro` plans and a 14-day no-card trial.
+1. **Scaffold** the plugin: headers, constants, PSR-4 autoload, activation/deactivation, `uninstall.php`, text domain.
 2. **DB schema** (`wp_wsak_scans`, `wp_wsak_issues`) via `dbDelta`; repositories.
 3. **PHP DOM scanner** with the MVP rule registry; REST `POST /wsak/v1/scan` for a single page; store issues with `auto|manual` tags.
 4. **Admin dashboard** (React): trigger a scan, list issues with honesty tags, per-page drill-down, score, coverage-transparency panel.
@@ -1145,7 +1089,7 @@ considered at all.
 ## Open decisions (updated)
 1. **Scanning engine** — ✅ *Resolved, specified and built.* PHP DOM static analysis is the spine; a browser pass we wrote ourselves adds the render-dependent checks. axe-core was considered and **rejected** — see Phase 2 step 1, decision D1 — so the licence sign-off that used to hang off this decision no longer exists.
 2. **Fix storage model** — ✅ *Resolved.* Three layers, each chosen by what the problem is rather than by preference: the reversible **override layer** for markup in post content; the site's own **Additional CSS** for anything caused by styling (E1); and **write-to-source** in the two places it is safe and honest — block attributes edited in the editor, where the user is present and the editor's own undo applies (F5), and `_wp_attachment_image_alt` in the media library, which is a real repair rather than an interception (F7). Whole-page output rewriting is refused outright (F6).
-3. **Monetization / licensing** — ✅ *Resolved:* **Freemius** now (Free on WordPress.org, Pro via Freemius). AI stays **BYOK** (cost ≈ 0, and it keeps you out of AI-data-processor liability). Managed AI credits deferred — could be sold later as a Freemius credit pack/add-on if BYOK friction hurts conversion.
+3. **Monetization / licensing** — ✅ *Resolved, then reversed in 0.16.0:* there is no licensing SDK and no paid tier. One plugin, free, nothing gated. A paid add-on is planned as a separate plugin that attaches to this one; see `PRO-NOTES.md` on the frozen `Pro` branch.
 4. **Free alt-text cap** — ✅ *Resolved and built:* **20 images per day** on Free, enforced in the generation path through one filterable constant rather than in the interface. Pro is uncapped, with the bulk queue and review screen in Phase 3.
-5. **Agency tier** — ✅ *Deferred* to Phase 4 as a third Freemius plan.
+5. **Agency tier** — ✅ *Deferred* to Phase 4. Not a tier of this plugin; nothing here is tiered.
 6. **Tier boundary** — ✅ *Resolved 2026-08-31:* the free tier fixes a page, the paid tier fixes a site and keeps it fixed. Full reasoning in Phase 3, decision F1, including why the in-editor inspector stays free.

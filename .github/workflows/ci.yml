@@ -134,9 +134,8 @@ jobs:
         run: npx wp-env start
 
       # Checks the built plugin, not the dev tree, so tooling config and dev
-      # dependencies are not mistaken for shipped files. freemius/ is excluded:
-      # it is the vendored Freemius SDK, which we cannot modify. See
-      # docs/RELEASE-CHECKLIST.md.
+      # dependencies are not mistaken for shipped files. Nothing is excluded:
+      # every file that ships is our own. See docs/RELEASE-CHECKLIST.md.
       - name: Run Plugin Check
         run: npm run plugin-check
 

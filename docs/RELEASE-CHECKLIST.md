@@ -17,9 +17,9 @@ by a human before any public release. Items marked **TODO(human)** are open.
 - [ ] Plugin Check passes with no errors (`npm run plugin-check`).
 
       This runs against the **built** plugin in `dist/`, not the working tree.
-      There is nothing excluded from it any more: the vendored Freemius SDK was
-      the one exclusion, it produced 525 errors and 1,239 warnings of its own,
-      and it is gone. Every file that ships is now our own and is checked.
+      Nothing is excluded from it: every file that ships is our own and is
+      checked. The build fails if that stops being true — see the licensing-SDK
+      guard in `bin/build.sh`.
 - [x] **External services disclosure** — rewritten in 0.16.0. There are no
       external services. The section now states plainly that the plugin
       contacts nothing, has no API, no account and no telemetry, and works the

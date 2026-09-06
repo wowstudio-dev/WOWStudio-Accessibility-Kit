@@ -197,8 +197,7 @@ above.
 4. **No testing with disabled users.** The thing that actually settles whether
    this UI works.
 5. **Third-party surfaces are out of scope.** `@wordpress/components` renders
-   much of this UI and Freemius renders its own opt-in, account and upgrade
-   screens. Neither was audited here.
+   much of this UI and was not audited here.
 6. **Zoom and reflow (1.4.10), text spacing (1.4.12), and target size (2.5.8)**
    need a rendered viewport and have not been measured.
 7. **The Gutenberg block editor experience** for the statement block was not
