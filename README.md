@@ -15,7 +15,7 @@ AI layer; see [`CHANGELOG.md`](CHANGELOG.md) for what went and why.
 What works: the two-pass scanner (40 checks — 35 on the server, 5 in the
 browser), the inspector with a live page
 preview, the block-editor panel, deterministic CSS fixes with preview and undo,
-nine site-wide fixes, site-wide scanning, the bulk alt-text editor, theme
+fourteen site-wide fixes, site-wide scanning, the bulk alt-text editor, theme
 triage, the overview dashboard, and the accessibility-statement generator.
 
 What is next, in order: getting the check count from 17 to ~48, building the
@@ -126,6 +126,7 @@ src/AltText/                      Finding images that have never been described
 src/Jobs/                         Action Scheduler queue and the bulk-scan worker
 src/Remediation/                  The override layer, diffing, and fix review
 src/SiteFixes/                    Site-wide fixes and the registry they hang off
+assets/front/                     The one front-end script, shipped unbundled
 src/Conformance/                  The accessibility statement and its sign-off
 src/Rest/                         REST controllers
 assets/src/                       React admin app (source)

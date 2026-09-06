@@ -67,6 +67,54 @@ final class SiteFixManager implements Registrable {
 	public function register(): void {
 		add_action( 'after_setup_theme', array( $this, 'apply_enabled' ), 5 );
 		add_action( 'wp_head', array( $this, 'print_css' ), 8 );
+		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_script' ) );
+	}
+
+	/**
+	 * Loads the front-end script, when any fix that needs it is switched on.
+	 *
+	 * In the head rather than the footer, and not deferred. One of these five
+	 * corrections is the viewport, which has to happen before the first paint
+	 * or the reader who needs to zoom gets the blocked setting at exactly the
+	 * moment they try. The file is a few kilobytes of plain JavaScript with no
+	 * dependencies, which is a cheaper thing to block on than a web font.
+	 *
+	 * Nothing is enqueued at all when none of these fixes is on, which is the
+	 * default. A site that switches none of them on serves no extra script.
+	 *
+	 * @since 0.20.0
+	 *
+	 * @return void
+	 */
+	public function enqueue_script(): void {
+		$ids = array();
+
+		foreach ( $this->enabled() as $fix ) {
+			if ( $fix instanceof RunsInBrowser ) {
+				$ids[] = $fix->id();
+			}
+		}
+
+		if ( array() === $ids ) {
+			return;
+		}
+
+		wp_enqueue_script(
+			'wsak-site-fixes',
+			WSAK_URL . 'assets/front/site-fixes.js',
+			array(),
+			WSAK_VERSION,
+			false
+		);
+
+		wp_add_inline_script(
+			'wsak-site-fixes',
+			'window.wsakSiteFixes = ' . wp_json_encode( $ids ) . ';'
+			. ' window.wsakSearchMessage = ' . wp_json_encode(
+				__( 'Type something to search for.', 'wowstudio-accessibility-kit' )
+			) . ';',
+			'before'
+		);
 	}
 
 	/**
@@ -266,6 +314,10 @@ final class SiteFixManager implements Registrable {
 				'rules'       => $fix->rule_ids(),
 				'enabled'     => $this->is_enabled( $fix->id() ),
 				'is_css'      => $fix instanceof ProvidesCss,
+				// Surfaced so the settings screen can say plainly which fixes
+				// need JavaScript, rather than leaving somebody to find out
+				// that one of them does nothing for part of their audience.
+				'in_browser'  => $fix instanceof RunsInBrowser,
 			);
 		}
 

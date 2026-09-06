@@ -8,6 +8,11 @@
 namespace WOWStudio\AccessibilityKit\SiteFixes;
 
 use WOWStudio\AccessibilityKit\SiteFixes\Fixes\BlockPdfUploads;
+use WOWStudio\AccessibilityKit\SiteFixes\Fixes\EmptySearchMessage;
+use WOWStudio\AccessibilityKit\SiteFixes\Fixes\LabelFormFields;
+use WOWStudio\AccessibilityKit\SiteFixes\Fixes\StripPositiveTabindex;
+use WOWStudio\AccessibilityKit\SiteFixes\Fixes\StripRedundantTitle;
+use WOWStudio\AccessibilityKit\SiteFixes\Fixes\ViewportScalable;
 use WOWStudio\AccessibilityKit\SiteFixes\Fixes\CommentAndSearchLabels;
 use WOWStudio\AccessibilityKit\SiteFixes\Fixes\DownloadFileInfo;
 use WOWStudio\AccessibilityKit\SiteFixes\Fixes\FocusOutline;
@@ -58,6 +63,14 @@ final class SiteFixes {
 			new NewWindowWarning(),
 			new DownloadFileInfo(),
 			new BlockPdfUploads(),
+
+			// 0.20.0. These five need the rendered page; see RunsInBrowser for
+			// why, and for what they are not.
+			new ViewportScalable(),
+			new StripPositiveTabindex(),
+			new StripRedundantTitle(),
+			new LabelFormFields(),
+			new EmptySearchMessage(),
 		);
 
 		/**

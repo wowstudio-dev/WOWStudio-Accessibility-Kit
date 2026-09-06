@@ -14,6 +14,7 @@ use WOWStudio\AccessibilityKit\SiteFixes\Fixes\CommentAndSearchLabels;
 use WOWStudio\AccessibilityKit\SiteFixes\Fixes\DownloadFileInfo;
 use WOWStudio\AccessibilityKit\SiteFixes\Fixes\NewWindowWarning;
 use WOWStudio\AccessibilityKit\SiteFixes\ProvidesCss;
+use WOWStudio\AccessibilityKit\SiteFixes\RunsInBrowser;
 use WOWStudio\AccessibilityKit\SiteFixes\SiteFix;
 use WOWStudio\AccessibilityKit\SiteFixes\SiteFixManager;
 use WOWStudio\AccessibilityKit\SiteFixes\SiteFixes;
@@ -33,6 +34,11 @@ use WOWStudio\AccessibilityKit\Tests\TestCase;
  * @covers \WOWStudio\AccessibilityKit\SiteFixes\Fixes\NewWindowWarning
  * @covers \WOWStudio\AccessibilityKit\SiteFixes\Fixes\DownloadFileInfo
  * @covers \WOWStudio\AccessibilityKit\SiteFixes\Fixes\CommentAndSearchLabels
+ * @covers \WOWStudio\AccessibilityKit\SiteFixes\Fixes\ViewportScalable
+ * @covers \WOWStudio\AccessibilityKit\SiteFixes\Fixes\StripPositiveTabindex
+ * @covers \WOWStudio\AccessibilityKit\SiteFixes\Fixes\StripRedundantTitle
+ * @covers \WOWStudio\AccessibilityKit\SiteFixes\Fixes\LabelFormFields
+ * @covers \WOWStudio\AccessibilityKit\SiteFixes\Fixes\EmptySearchMessage
  */
 final class SiteFixesTest extends TestCase {
 
@@ -63,7 +69,7 @@ final class SiteFixesTest extends TestCase {
 		$fixes = SiteFixes::with_defaults();
 		$all   = $fixes->all();
 
-		$this->assertCount( 9, $all );
+		$this->assertCount( 14, $all );
 		$this->assertSame( array_keys( $all ), array_unique( array_keys( $all ) ) );
 
 		foreach ( $all as $id => $fix ) {
@@ -268,6 +274,92 @@ final class SiteFixesTest extends TestCase {
 
 		// And the one sequence that could end the element early is still gone.
 		$this->assertStringNotContainsString( '</style', $method->invoke( $manager, 'a {} </style><script>x</script>' ) );
+	}
+
+	/**
+	 * Exactly the fixes that need the browser are marked as needing it.
+	 *
+	 * The marker decides whether a script is served to every visitor, so a fix
+	 * gaining or losing it should be a deliberate act rather than something
+	 * that happens because a class was copied.
+	 *
+	 * @return void
+	 */
+	public function test_only_the_dom_fixes_run_in_the_browser(): void {
+		$in_browser = array();
+
+		foreach ( SiteFixes::with_defaults()->all() as $fix ) {
+			if ( $fix instanceof RunsInBrowser ) {
+				$in_browser[] = $fix->id();
+			}
+		}
+
+		sort( $in_browser );
+
+		$this->assertSame(
+			array(
+				'empty-search-message',
+				'label-form-fields',
+				'strip-positive-tabindex',
+				'strip-redundant-title',
+				'viewport-scalable',
+			),
+			$in_browser
+		);
+	}
+
+	/**
+	 * Every browser fix says it needs JavaScript.
+	 *
+	 * These do nothing at all for a reader with script off, which is a
+	 * different kind of limitation from the rest of the layer and one somebody
+	 * has to be told about before switching one on.
+	 *
+	 * @return void
+	 */
+	public function test_browser_fixes_admit_they_need_javascript(): void {
+		foreach ( SiteFixes::with_defaults()->all() as $fix ) {
+			if ( ! $fix instanceof RunsInBrowser ) {
+				continue;
+			}
+
+			$this->assertStringContainsStringIgnoringCase(
+				'javascript',
+				$fix->caveat(),
+				$fix->id() . ' runs in the browser and does not say so.'
+			);
+		}
+	}
+
+	/**
+	 * The front-end script exists, and answers to the ids the fixes use.
+	 *
+	 * Source-reading, like the JavaScript tests elsewhere in this project: the
+	 * failure it guards is a fix id changing on one side of the boundary only,
+	 * which leaves a switch that turns on and does nothing — and there is no
+	 * error anywhere to notice.
+	 *
+	 * @return void
+	 */
+	public function test_the_front_end_script_knows_every_browser_fix(): void {
+		$path = __DIR__ . '/../../assets/front/site-fixes.js';
+
+		$this->assertFileExists( $path );
+
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Reading a local source file in a unit test; WordPress is not loaded.
+		$script = (string) file_get_contents( $path );
+
+		foreach ( SiteFixes::with_defaults()->all() as $fix ) {
+			if ( ! $fix instanceof RunsInBrowser ) {
+				continue;
+			}
+
+			$this->assertStringContainsString(
+				"'" . $fix->id() . "'",
+				$script,
+				$fix->id() . ' is switched on in PHP and never mentioned in the script.'
+			);
+		}
 	}
 
 	/**

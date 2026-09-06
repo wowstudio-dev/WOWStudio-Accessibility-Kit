@@ -4,7 +4,7 @@ Tags: accessibility, wcag, a11y, alt text, accessibility scanner
 Requires at least: 6.8
 Tested up to: 7.1
 Requires PHP: 8.1
-Stable tag: 0.19.0
+Stable tag: 0.20.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -93,6 +93,15 @@ No. Everything in this plugin is free, including checking your whole site at onc
 In WordPress's own alt text field on the media item. It therefore applies everywhere that image is used, works with every theme and plugin, and stays behind if you remove this plugin.
 
 == Changelog ==
+
+= 0.20.0 =
+* Five more site-wide fixes, completing the set at fourteen.
+* Lets people pinch-zoom on a phone where the theme blocked it.
+* Puts the tab order back in reading order where something claimed a place ahead of the page.
+* Removes tooltips that only repeat the link text, which some screen readers announce twice.
+* Gives a form field the name its own placeholder already carries — and never invents one where there is no placeholder, because a made-up label is worse than a missing one.
+* Explains an empty search beside the search box instead of loading a results page that cannot say what went wrong.
+* These five are carried out in the reader's browser, because they correct markup your theme has already printed. They add no widget, no toolbar and no controls — nothing appears on your site — and the settings screen says plainly which fixes need JavaScript.
 
 = 0.19.0 =
 * New: fixes for the whole site. Nine switches that supply what your theme leaves out, on every page at once.
@@ -201,6 +210,9 @@ In WordPress's own alt text field on the media item. It therefore applies everyw
 * Initial scaffold: plugin bootstrap, capabilities, activation and uninstall handling.
 
 == Upgrade Notice ==
+
+= 0.20.0 =
+Five more site-wide fixes: pinch-zoom, tab order, repeated tooltips, placeholder-only form fields, and empty searches.
 
 = 0.19.0 =
 Adds nine site-wide fixes — skip link, focus outline, link underlines, page language and title, form labels, and warnings on links that open a new tab or download a file.

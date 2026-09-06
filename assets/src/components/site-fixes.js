@@ -35,6 +35,15 @@ function FixRow( { fix, busy, onToggle } ) {
 				__nextHasNoMarginBottom
 			/>
 
+			{ fix.in_browser && (
+				<p className="wsak-fix-row__browser">
+					{ __(
+						'Needs JavaScript: this one is carried out in the reader\u2019s browser, because the markup it corrects has already been printed by the time the page leaves your server. It does nothing for anyone browsing with JavaScript off.',
+						'wowstudio-accessibility-kit'
+					) }
+				</p>
+			) }
+
 			{ fix.caveat && (
 				<p className="wsak-fix-row__caveat">
 					<span className="wsak-fix-row__caveat-label">

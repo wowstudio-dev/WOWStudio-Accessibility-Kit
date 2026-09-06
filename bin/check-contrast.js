@@ -152,6 +152,15 @@ const PAIRINGS = [
 	[ '.wsak-settings__lede', 'muted', 'surface', 13.5, false ],
 	[ '.wsak-result__unplaceable', 'muted', 'surface', 13, false ],
 
+	// 0.19.0 site fixes, 0.20.0 the JavaScript note on the browser-run ones.
+	[ '.wsak-fixes__lede', 'muted', 'surface', 13.5, false ],
+	[ '.wsak-fix-row__caveat', 'muted', 'raised', 12.5, false ],
+	[ '.wsak-fix-row__caveat-label', 'text', 'raised', 12.5, true ],
+	[ '.wsak-fix-row__browser', 'moderate', 'surface', 12.5, true ],
+	[ '.wsak-alt-row__origin', 'muted', 'surface', 12.5, false ],
+	[ '.wsak-alt-row__error', 'critical', 'surface', 12.5, false ],
+	[ '.wsak-alt-row__saved', 'good', 'surface', 12.5, true ],
+
 	// Score.
 	[ '.wsak-score__value', 'ink', 'raised', 34, true ],
 	[ '.wsak-score__band', 'ink', 'raised', 15, true ],

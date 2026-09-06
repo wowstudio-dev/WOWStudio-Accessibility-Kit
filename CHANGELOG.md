@@ -24,6 +24,66 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   testing with disabled users. The contrast guard checks 91 colour pairings on
   every push, which is not the same thing as somebody using the interface.
 
+## [0.20.0] - 2026-09-06
+
+The five fixes a server pass cannot reach. The fix layer is complete at
+fourteen.
+
+### Added
+
+- **`RunsInBrowser`**, a marker interface with no methods. It exists so the
+  decision is visible: `implements RunsInBrowser` is the answer to "which of
+  these run script on my visitors' pages?", and the docblock carries the whole
+  reasoning rather than leaving it in a commit message.
+- **Five fixes**: make the page zoomable, reset a positive tabindex to zero,
+  remove a `title` that only repeats the visible text, promote a placeholder to
+  a field's accessible name, and refuse an empty search with a message instead
+  of a blank results page.
+- `assets/front/site-fixes.js` — plain, unbundled, unminified, no dependencies.
+  It runs on every visitor's page, so somebody who wants to know exactly what
+  this plugin does to their front end should be able to read it without a source
+  map. Nothing is enqueued at all unless one of these five is switched on.
+- The settings screen now says which fixes need JavaScript, rather than leaving
+  somebody to discover that one of them does nothing for part of their audience.
+
+### Why these run in the browser
+
+Everything else in this layer supplies something *missing* through a filter.
+These five correct markup the theme has already printed, which no filter
+reaches — the only server-side route would be to buffer the response and rewrite
+it, and SPEC F6 rules that out because rewriting whatever HTML comes past is how
+an overlay works.
+
+It is not the overlay product rule 2 forbids, and the difference is not one of
+degree. An overlay adds a widget — buttons, panels, font-size and contrast
+controls — on top of a site that is still broken underneath. This adds no
+interface of any kind: it renders nothing, has no controls, and a visitor cannot
+tell it is there. It makes five named corrections to five named faults and
+stops.
+
+The rules it keeps: nothing is invented, no interface, narrow selectors, and it
+degrades to nothing with JavaScript off — which every one of the five says in
+its own caveat, because that is a real limitation and a different one from the
+rest of the layer.
+
+- **`label-form-fields` is the one that had to be held back.** It promotes
+  wording the author already wrote in the placeholder, and refuses to
+  manufacture a name from a field's `name` or `id`. That is where a fix of this
+  kind usually goes wrong: it can always produce *something*, so a field ends up
+  announced as "user_email_2", the finding disappears from the report, and the
+  reader is no better off. A plausible label is worse than a missing one,
+  because it stops anybody looking again. Fields with no placeholder keep their
+  findings.
+
+### Notes
+
+- The viewport correction runs immediately rather than on `DOMContentLoaded`,
+  and the script loads in the head for that reason: waiting would mean the first
+  paint used the setting that blocks zooming, which is the one moment a reader
+  who needs to zoom is most likely to try.
+- `contrast guard` now covers 98 pairings, up from 91. Its list is maintained by
+  hand and does not notice new colours on its own.
+
 ## [0.19.0] - 2026-09-06
 
 The site-wide fix layer. Nine switches that supply what a theme leaves out, on
