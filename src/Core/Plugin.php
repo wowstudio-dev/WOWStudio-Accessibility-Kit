@@ -13,8 +13,6 @@ use WOWStudio\AccessibilityKit\Remediation\OverrideStore;
 use WOWStudio\AccessibilityKit\Scanner\Preview;
 use WOWStudio\AccessibilityKit\Jobs\Worker;
 use WOWStudio\AccessibilityKit\Rest\CssFixController;
-use WOWStudio\AccessibilityKit\Monitoring\Monitor;
-use WOWStudio\AccessibilityKit\Rest\MonitoringController;
 use WOWStudio\AccessibilityKit\SiteFixes\SiteFixManager;
 use WOWStudio\AccessibilityKit\Rest\AltTextController;
 use WOWStudio\AccessibilityKit\Rest\SiteFixController;
@@ -144,25 +142,23 @@ final class Plugin {
 		 * Scanner and REST services are added in later steps.
 		 */
 		$services = array(
-			'installer'       => new Installer(),
-			'assets'          => new Assets(),
-			'admin.menu'      => new Menu(),
-			'rest.scan'       => new ScanController(),
-			'rest.fix.css'    => new CssFixController(),
-			'rest.media'      => new AltTextController(),
-			'rest.sitefixes'  => new SiteFixController(),
-			'rest.monitoring' => new MonitoringController(),
-			'rest.runs'       => new RunController(),
-			'rest.review'     => new ReviewController(),
-			'rest.blocks'     => new BlockCheckController(),
-			'rest.overview'   => new OverviewController(),
-			'jobs.worker'     => new Worker(),
-			'fixes.site'      => new SiteFixManager(),
-			'monitor'         => new Monitor(),
-			'overrides'       => new OverrideStore(),
-			'preview'         => new Preview(),
-			'statement'       => new StatementBlock(),
-			'rest.statement'  => new StatementController(),
+			'installer'      => new Installer(),
+			'assets'         => new Assets(),
+			'admin.menu'     => new Menu(),
+			'rest.scan'      => new ScanController(),
+			'rest.fix.css'   => new CssFixController(),
+			'rest.media'     => new AltTextController(),
+			'rest.sitefixes' => new SiteFixController(),
+			'rest.runs'      => new RunController(),
+			'rest.review'    => new ReviewController(),
+			'rest.blocks'    => new BlockCheckController(),
+			'rest.overview'  => new OverviewController(),
+			'jobs.worker'    => new Worker(),
+			'fixes.site'     => new SiteFixManager(),
+			'overrides'      => new OverrideStore(),
+			'preview'        => new Preview(),
+			'statement'      => new StatementBlock(),
+			'rest.statement' => new StatementController(),
 		);
 
 		/**

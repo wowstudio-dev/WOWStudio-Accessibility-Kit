@@ -7,13 +7,19 @@ the short list of rules and context that always apply, and where the two
 disagree, this file wins.
 
 ## What we're building
-A **real-remediation** WordPress accessibility plugin that finds, fixes,
-documents, and monitors WCAG issues at the **code level**. Publisher:
+A **real-remediation** WordPress accessibility plugin that finds, fixes and
+documents WCAG issues at the **code level**. Publisher:
 **WOWStudio**. Current phase: rebuilding the free plugin to beat Equalize
 Digital's Accessibility Checker.
 
-Positioning: *"helps you find, fix, document, and monitor"* — never *"makes you
+Positioning: *"helps you find, fix and document"* — never *"makes you
 compliant."*
+
+**Do not say "monitor" in the free plugin.** Monitoring was built free in
+0.21.0 and moved to the paid add-on in 0.22.0; the word came out with it,
+because a header advertising something the plugin does not do is the same
+species of claim the guard in `bin/check-claims.php` exists to stop. If
+monitoring ever returns to free, the word comes back with it and not before.
 
 ## There is one plugin, and it is free
 As of 0.16.0 there is **no paid tier, no licensing SDK, and no AI**. Everything
@@ -35,7 +41,7 @@ Every check, every severity, every post type, and the site-wide scan stay free.
 ## Non-negotiable product rules (never violate)
 1. **Assist, never guarantee.** No string, label, doc, or marketing output may
    say "compliant," "ADA/EAA compliant," "lawsuit-proof," "certified," or
-   "100%." Use "helps you find / fix / document / monitor." (Legal-risk
+   "100%." Use "helps you find / fix / document." (Legal-risk
    critical — the accessiBe/FTC precedent.) Enforced by `bin/check-claims.php`.
 2. **Not an overlay.** Never inject a front-end accessibility widget or
    toolbar. No font-size control, contrast switcher, greyscale mode, or
@@ -127,28 +133,30 @@ both.
    closes the finding and leaves the reader no better off.
 3. **Free-tier features the competitor charges for**: full-site report screen,
    admin columns, dismissal log, extra post types, CSV export.
-4. **Monitoring** — built in 0.21.0, and free. Weekly or monthly re-checks, a
-   comparison of a page's last two scans, and a "what has changed" screen. Live
-   in `src/Monitoring/`.
+4. **Monitoring is not part of the free plugin.** It was built free in 0.21.0
+   and removed in 0.22.0 — the whole feature belongs to the paid add-on: the
+   schedule, the per-page comparison, the change report, and the alerting that
+   was always going to be paid.
 
-   The line was decided deliberately and should not drift: **detecting a
-   regression is finding, so it is free.** What a paid add-on may sell is being
-   told without looking — email digests, Slack, webhooks, custom frequencies,
-   crawling beyond WordPress content. `wsak_accessibility_changed` is the seam
-   that exists for exactly that, and the free plugin still sends nothing
-   anywhere.
+   The tag `monitoring-for-pro-0.21.0` holds the working implementation, which
+   was verified end to end before removal. `src/Monitoring/` was self-contained
+   apart from `ScanRepository::history_for_post()`, which went with it. The
+   scan-runner seam it drove — `BulkScan::start()` and `wsak_bulk_scan_finished`
+   — is still here and still free, so the add-on has something to attach to.
+
+   Do not rebuild any of it here, and do not reintroduce the word "monitor".
 5. **Readability + simplified summary** (WCAG 3.1.5), **WP-CLI including bulk**,
    per-issue documentation.
 6. **Page-builder compatibility**: Gutenberg, Classic, ACF, Avada, Beaver
    Builder, Divi, Elementor, Oxygen, WP Bakery, WooCommerce.
 7. **1.0.0 and WordPress.org submission.**
 
-Three of the four extension seams now exist: the scan runner (`BulkScan::start`,
-driven by `Monitoring\Monitor`), the fix pipeline (`wsak_site_fixes`), and
-change notification (`wsak_accessibility_changed`). The fourth is still owed —
-the report screen, so an exporter can register a format — along with a hook on
-the dismissal flow so role restrictions can reach the capability check. Build it
-before the report screen grows, because retrofitting a seam is expensive.
+Two of the four extension seams exist: the scan runner (`BulkScan::start` and
+`wsak_bulk_scan_finished`, which the paid monitor drives) and the fix pipeline
+(`wsak_site_fixes`). Two are still owed — the report screen, so an exporter can
+register a format, and a hook on the dismissal flow so role restrictions can
+reach the capability check. Build both before those screens grow, because
+retrofitting a seam is expensive.
 
 ## Quality floor (every PR)
 - Security: verify nonce + `current_user_can()` on every write/REST route;

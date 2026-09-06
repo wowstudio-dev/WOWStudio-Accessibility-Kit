@@ -14,7 +14,6 @@ import IssueList from './components/issue-list';
 import Overview from './components/overview';
 import AltTextEditor from './components/alt-text-editor';
 import SiteFixes from './components/site-fixes';
-import Monitoring from './components/monitoring';
 import BulkScan from './components/bulk-scan';
 import ThemePanel from './components/theme-panel';
 import ScanPicker from './components/scan-picker';
@@ -123,7 +122,7 @@ export default function App() {
 					</h1>
 					<p className="wsak__lede">
 						{ __(
-							'Find, fix, document, and monitor accessibility problems at the code level.',
+							'Find, fix and document accessibility problems at the code level.',
 							'wowstudio-accessibility-kit'
 						) }
 					</p>
@@ -164,15 +163,6 @@ export default function App() {
 						onClick={ () => setView( 'images' ) }
 					>
 						{ __( 'Images', 'wowstudio-accessibility-kit' ) }
-					</Button>
-				) }
-				{ capabilities.viewReports && (
-					<Button
-						variant={ view === 'monitor' ? 'primary' : 'tertiary' }
-						aria-current={ view === 'monitor' ? 'page' : undefined }
-						onClick={ () => setView( 'monitor' ) }
-					>
-						{ __( 'Monitoring', 'wowstudio-accessibility-kit' ) }
 					</Button>
 				) }
 				{ capabilities.viewReports && (
@@ -246,8 +236,6 @@ export default function App() {
 			) }
 
 			{ view === 'images' && <AltTextEditor /> }
-
-			{ view === 'monitor' && <Monitoring /> }
 
 			{ view === 'fixes' && <SiteFixes /> }
 
@@ -391,7 +379,7 @@ export default function App() {
 			<footer className="wsak__footer">
 				<p>
 					{ __(
-						'This plugin helps you find, fix, document, and monitor accessibility problems. It does not determine whether your site meets the ADA, the European Accessibility Act, Section 508, or any other legal requirement, and nothing here is legal advice.',
+						'This plugin helps you find, fix and document accessibility problems. It does not determine whether your site meets the ADA, the European Accessibility Act, Section 508, or any other legal requirement, and nothing here is legal advice.',
 						'wowstudio-accessibility-kit'
 					) }
 				</p>

@@ -19,6 +19,42 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   testing with disabled users. The contrast guard checks 91 colour pairings on
   every push, which is not the same thing as somebody using the interface.
 
+## [0.22.0] - 2026-09-06
+
+Monitoring moves to the paid add-on, one release after it arrived.
+
+### Removed
+
+- **The whole monitoring feature**: `src/Monitoring/`, the REST routes, the
+  screen, `ScanRepository::history_for_post()`, and the
+  `wsak_accessibility_changed` seam. `monitoring-for-pro-0.21.0` tags the
+  working implementation, verified end to end, for the add-on to be built from.
+- **The word "monitor"**, from the plugin header, the readme, the README, the
+  dashboard subtitle and the legal-scope note. Positioning is now *"helps you
+  find, fix and document"*.
+
+  That second removal is the point rather than tidying. A header advertising a
+  feature the plugin does not have is the same species of claim
+  `bin/check-claims.php` exists to stop — it simply is not on the word list.
+  Whichever side of the line monitoring sits, the description has to match the
+  code.
+
+### Kept
+
+- `BulkScan::start()` and `wsak_bulk_scan_finished`, the seam the monitor drove.
+  Still free, so the add-on has something to attach to and so nothing else that
+  wants to know when a run finished has to be rewritten later.
+
+### Note on the decision
+
+This reverses 0.21.0, and the reasoning on both sides is worth keeping because
+the question will come back. The argument for free was that detecting a
+regression is *finding*, and finding is never gated. The argument for paid, which
+won, is that monitoring is the one feature whose value accrues monthly, which is
+what a subscription is for — and that a free tier which already gives away
+site-wide scanning, every check, admin columns and the full-site report does not
+also need to give away the thing the paid version is meant to be.
+
 ## [0.21.0] - 2026-09-06
 
 Monitoring. The plugin has advertised the word since 0.1.0 and has not, until

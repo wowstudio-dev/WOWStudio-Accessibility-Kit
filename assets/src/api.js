@@ -79,29 +79,6 @@ export function fetchCoverage() {
 }
 
 /**
- * Reads the monitoring schedule and what has changed since last time.
- *
- * @return {Promise<Object>} The schedule, and recent changes.
- */
-export function fetchMonitoring() {
-	return apiFetch( { path: `/${ namespace }/monitoring` } );
-}
-
-/**
- * Sets how often the site re-checks itself.
- *
- * @param {string} frequency One of the offered frequencies.
- * @return {Promise<Object>} The schedule as it now stands.
- */
-export function saveMonitoringFrequency( frequency ) {
-	return apiFetch( {
-		path: `/${ namespace }/monitoring`,
-		method: 'POST',
-		data: { frequency },
-	} );
-}
-
-/**
  * Reads the site-wide fixes and which are switched on.
  *
  * @return {Promise<Object>} Every fix, with its state.

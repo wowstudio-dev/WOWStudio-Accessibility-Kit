@@ -4,15 +4,15 @@ Tags: accessibility, wcag, a11y, alt text, accessibility scanner
 Requires at least: 6.8
 Tested up to: 7.1
 Requires PHP: 8.1
-Stable tag: 0.21.0
+Stable tag: 0.22.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Find, fix, document, and monitor WCAG accessibility issues at the code level. Real fixes you review before they apply — not an overlay.
+Find, fix and document WCAG accessibility issues at the code level. Real fixes you review before they apply — not an overlay.
 
 == Description ==
 
-WOWStudio Accessibility Kit helps you **find, fix, document, and monitor** accessibility issues in your WordPress site. It scans your pages against WCAG 2.2 A and AA success criteria, explains what it found in plain language, and proposes real changes to your markup that you review before anything is applied.
+WOWStudio Accessibility Kit helps you **find, fix and document** accessibility issues in your WordPress site. It scans your pages against WCAG 2.2 A and AA success criteria, explains what it found in plain language, and proposes real changes to your markup that you review before anything is applied.
 
 It is not an accessibility overlay. Nothing is injected into your front end, and no widget or toolbar is added for your visitors. Fixes are changes to the code itself.
 
@@ -25,7 +25,6 @@ It is not an accessibility overlay. Nothing is injected into your front end, and
 * **Check the fix worked.** After a style rule is applied, the page is loaded again and measured again. If something in your theme overrode the rule, you are told that, rather than being told it is fixed.
 * **Describe your images.** One screen lists every image in your media library that has never been described, with a field beside each. Type, save, move on — instead of opening forty media screens.
 * **Do it site-wide.** Check every page and post in one run, in the background. There is no page limit and no paid tier.
-* **Keep it fixed.** Re-check on a schedule and see what changed since last time — which pages started failing something they used to pass, and which stopped.
 * **Document.** Generate an accessibility statement you edit and publish, including the feedback contact mechanism European rules expect.
 
 = Honesty about what automated testing can do =
@@ -94,6 +93,10 @@ No. Everything in this plugin is free, including checking your whole site at onc
 In WordPress's own alt text field on the media item. It therefore applies everywhere that image is used, works with every theme and plugin, and stays behind if you remove this plugin.
 
 == Changelog ==
+
+= 0.22.0 =
+* Scheduled checking has been moved out of this plugin. It was added in 0.21.0 and is now part of a separate paid add-on, along with the change report that went with it.
+* "Monitor" has been removed from how this plugin describes itself, because it no longer does it. Everything else is unchanged: every check, every fix, site-wide scanning and the full report all stay here and stay free.
 
 = 0.21.0 =
 * New: scheduled checking. Your site can now re-check itself every week or every month, so a problem introduced by an edit, a plugin update or a theme change is noticed without anybody having to remember to look.
@@ -217,6 +220,9 @@ In WordPress's own alt text field on the media item. It therefore applies everyw
 * Initial scaffold: plugin bootstrap, capabilities, activation and uninstall handling.
 
 == Upgrade Notice ==
+
+= 0.22.0 =
+Scheduled checking has moved to a separate paid add-on. Everything else is unchanged and still free.
 
 = 0.21.0 =
 Your site can now re-check itself on a schedule and tell you what changed since last time.

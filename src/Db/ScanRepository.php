@@ -446,47 +446,6 @@ class ScanRepository {
 	}
 
 	/**
-	 * Returns a post's most recent completed scans, newest first.
-	 *
-	 * Monitoring is comparison, and comparison needs two of something. This is
-	 * the "something": the last few scans of one page, so a change can be
-	 * worked out from what is already stored rather than from a separate log
-	 * that could disagree with it.
-	 *
-	 * Only completed scans. A run that failed or was cancelled recorded nothing
-	 * to compare against, and treating it as the previous state would report
-	 * every finding on the page as newly appeared.
-	 *
-	 * @since 0.21.0
-	 *
-	 * @param int $post_id Post ID.
-	 * @param int $limit   How many to return, capped at 50.
-	 * @return Scan[]
-	 */
-	public function history_for_post( int $post_id, int $limit = 2 ): array {
-		global $wpdb;
-
-		$limit = max( 1, min( 50, $limit ) );
-
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Custom table; no core API covers it.
-		$rows = $wpdb->get_results(
-			$wpdb->prepare(
-				'SELECT * FROM %i WHERE scope = %s AND target_id = %d AND status = %s ORDER BY started_at DESC, id DESC LIMIT %d',
-				Schema::scans_table(),
-				ScanScope::Page->value,
-				$post_id,
-				ScanStatus::Complete->value,
-				$limit
-			)
-		);
-
-		return array_map(
-			static fn( $row ): Scan => Scan::from_row( $row ),
-			is_array( $rows ) ? $rows : array()
-		);
-	}
-
-	/**
 	 * Returns the most recent scans, newest first.
 	 *
 	 * @since 0.2.0
