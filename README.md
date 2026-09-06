@@ -15,8 +15,8 @@ AI layer; see [`CHANGELOG.md`](CHANGELOG.md) for what went and why.
 What works: the two-pass scanner (40 checks — 35 on the server, 5 in the
 browser), the inspector with a live page
 preview, the block-editor panel, deterministic CSS fixes with preview and undo,
-site-wide scanning, the bulk alt-text editor, theme triage, the overview
-dashboard, and the accessibility-statement generator.
+nine site-wide fixes, site-wide scanning, the bulk alt-text editor, theme
+triage, the overview dashboard, and the accessibility-statement generator.
 
 What is next, in order: getting the check count from 17 to ~48, building the
 site-wide fix layer, then scheduled monitoring — which is the one thing the
@@ -125,6 +125,7 @@ src/Scanner/                      Engine, rules, registry, page fetching
 src/AltText/                      Finding images that have never been described
 src/Jobs/                         Action Scheduler queue and the bulk-scan worker
 src/Remediation/                  The override layer, diffing, and fix review
+src/SiteFixes/                    Site-wide fixes and the registry they hang off
 src/Conformance/                  The accessibility statement and its sign-off
 src/Rest/                         REST controllers
 assets/src/                       React admin app (source)
@@ -147,6 +148,8 @@ GET  /wp-json/wsak/v1/coverage                      requires wsak_view_reports
 GET  /wp-json/wsak/v1/overview                      requires wsak_view_reports
 GET  /wp-json/wsak/v1/media                         requires wsak_apply_fix
 POST /wp-json/wsak/v1/media/alt                     requires wsak_apply_fix
+GET  /wp-json/wsak/v1/site-fixes                    requires wsak_view_reports
+POST /wp-json/wsak/v1/site-fixes/<id>               requires wsak_manage_settings
 GET  /wp-json/wsak/v1/fixes/css                     requires wsak_apply_fix
 POST /wp-json/wsak/v1/fixes/css                     requires wsak_apply_fix
 DEL  /wp-json/wsak/v1/fixes/css/<issue_id>          requires wsak_apply_fix

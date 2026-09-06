@@ -24,6 +24,61 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   testing with disabled users. The contrast guard checks 91 colour pairings on
   every push, which is not the same thing as somebody using the interface.
 
+## [0.19.0] - 2026-09-06
+
+The site-wide fix layer. Nine switches that supply what a theme leaves out, on
+every page at once.
+
+### Added
+
+- **A fix registry and the `wsak_site_fixes` filter** — the third of the four
+  extension seams the plugin is being built with, so a separate add-on can
+  register a fix without this codebase knowing it exists.
+- **Nine fixes**: a skip link and the target it jumps to; a visible focus
+  outline; underlines on links in body text; the page language; the document
+  title; names for the search and comment fields; "(opens in a new tab)" on
+  content links that do; "(PDF, 1.2 MB)" on content links that download; and a
+  policy switch that refuses PDF uploads from anyone but an administrator.
+- `GET` and `POST /wsak/v1/site-fixes`, and a Site fixes screen. Changing a fix
+  needs the settings capability rather than the fix capability: these change
+  every page for every visitor, which is a different decision from correcting
+  one finding on one post.
+
+### Changed
+
+- `Remediation\TitleTagFix` is retired and becomes the `page-title` site fix.
+  Its option is carried across on upgrade, because a page that had a title
+  yesterday and does not today would be a regression this plugin caused. Its
+  two REST routes are gone; nothing ever called them.
+
+### Notes on how these are built
+
+Three constraints, all of them load-bearing:
+
+- **Nothing is written to anybody's content.** Every fix is a filter or an
+  action, so switching one off leaves the site exactly as it was. No stored
+  markup, and nothing added to the site's own Additional CSS.
+- **Nothing buffers the page.** SPEC decision F6 rules that out, and not for
+  performance: rewriting whatever HTML comes past is how an overlay works, and
+  it changes far more than it was asked to. The two content fixes filter
+  `the_content` — a filter for post content, not for the page — and they insert
+  without re-serialising, so every byte nobody asked us to touch comes back
+  identical.
+- **Every fix states what it might disturb.** A test asserts that none of them
+  ships without a caveat.
+
+### Fixed
+
+- The inline stylesheet was escaped with `esc_html()`, which looks like the
+  careful thing to do and is wrong: a `<style>` element is raw text, entities
+  inside it are never decoded, so `p > a` was printed as `p &gt; a` and every
+  rule using a child combinator silently stopped matching. The underline fix was
+  a switch that turned on and did nothing. Caught by reading the printed output
+  on a real page rather than trusting the unit test, which had asserted the CSS
+  was *generated* and never that it survived being printed. Now guarded against
+  the one sequence that can end a raw text element early, with a regression test
+  that asserts the combinator survives.
+
 ## [0.18.0] - 2026-09-06
 
 Eleven more checks. The scanner goes from 29 to 40 — 35 on the server, 5 in the

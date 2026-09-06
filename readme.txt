@@ -4,7 +4,7 @@ Tags: accessibility, wcag, a11y, alt text, accessibility scanner
 Requires at least: 6.8
 Tested up to: 7.1
 Requires PHP: 8.1
-Stable tag: 0.18.0
+Stable tag: 0.19.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -93,6 +93,17 @@ No. Everything in this plugin is free, including checking your whole site at onc
 In WordPress's own alt text field on the media item. It therefore applies everywhere that image is used, works with every theme and plugin, and stays behind if you remove this plugin.
 
 == Changelog ==
+
+= 0.19.0 =
+* New: fixes for the whole site. Nine switches that supply what your theme leaves out, on every page at once.
+* A skip link, so keyboard users can jump past your menu instead of tabbing through it on every page.
+* A visible outline on whatever has keyboard focus, for themes that switched the browser's own one off.
+* Underlines on links inside body text, where colour alone does not mark them.
+* The page language, and a title on every page.
+* Names for your search box and comment fields where the theme left them without one.
+* "(opens in a new tab)" and "(PDF, 1.2 MB)" added to links in your content that need them.
+* An option to refuse PDF uploads from anyone but an administrator.
+* Nothing is written into your content: every one of these is reversible by switching it back off.
 
 = 0.18.0 =
 * Eleven new checks, taking the scanner from 29 to 40.
@@ -190,6 +201,9 @@ In WordPress's own alt text field on the media item. It therefore applies everyw
 * Initial scaffold: plugin bootstrap, capabilities, activation and uninstall handling.
 
 == Upgrade Notice ==
+
+= 0.19.0 =
+Adds nine site-wide fixes — skip link, focus outline, link underlines, page language and title, form labels, and warnings on links that open a new tab or download a file.
 
 = 0.18.0 =
 Eleven new checks, covering tables, image buttons, duplicate ids, tab order, pinch-zoom, blinking and justified text, and captions for video and audio.

@@ -79,8 +79,8 @@ See `SPEC.md` → "Explicitly NOT included (anti-features)" for the full stop-li
 
 ## Where the work is
 Roughly in order. The competitor ships 44 checks and 11 free site-wide fixes;
-we ship 40 checks and 4 one-click fixes, so the gap is largely closed on
-detection and wide open on fixes.
+we ship 40 checks, 9 site-wide fixes and 4 one-click fixes, so detection is
+ahead of them and the fix layer is now roughly level.
 
 1. **Checks, 40 → ~48.** Twelve landed in 0.17.0: alt text that is a file name,
    a placeholder or a repeated caption; alt long enough to be a paragraph;
@@ -103,11 +103,22 @@ detection and wide open on fixes.
    nearest correct markup that must not. `tests/Unit/ContentRulesTest.php` is
    the pattern. A check that fires on everything is worse than no check: it
    trains people to skim past the findings that matter.
-2. **Site-wide fixes, through the override layer** with preview and undo: skip
-   link, focus outline, link underline, `lang`/`dir`, scalable viewport, strip
-   positive tabindex, strip redundant `title`, new-window warning, comment and
-   search field labels, empty-search message, file size and type on downloads,
-   missing page title, block PDF uploads, label unlabelled form fields.
+2. **Site-wide fixes.** Nine shipped in 0.19.0: skip link with its target,
+   focus outline, link underline, `lang`/`dir`, page title, comment and search
+   labels, new-window warning, download file info, block PDF uploads. They live
+   in `src/SiteFixes/` behind the `wsak_site_fixes` filter.
+
+   Five remain, and they are the ones a server pass cannot reach because they
+   mean changing markup the theme already printed: scalable viewport, stripping
+   positive tabindex, stripping redundant `title`, the empty-search message, and
+   labelling form fields a plugin built. Each would need a small front-end
+   script, which is a decision to take deliberately rather than drift into —
+   it is not an overlay, but it is the first front-end JavaScript this plugin
+   would ship, and rule 2 deserves a conscious answer before that happens.
+
+   Constraints for anything added here: no writing to user content, no output
+   buffering (SPEC F6), and every fix states what it might disturb — a test
+   enforces the last one.
 3. **Free-tier features the competitor charges for**: full-site report screen,
    admin columns, dismissal log, extra post types, CSV export.
 4. **Monitoring** — scheduled re-scans and regression alerts. `SPEC.md` §F is

@@ -29,7 +29,6 @@ use WOWStudio\AccessibilityKit\Tests\TestCase;
  * ways somebody might get around writing one.
  *
  * @covers \WOWStudio\AccessibilityKit\Remediation\IssueReview
- * @covers \WOWStudio\AccessibilityKit\Remediation\TitleTagFix
  */
 final class IssueReviewTest extends TestCase {
 

@@ -79,6 +79,34 @@ export function fetchCoverage() {
 }
 
 /**
+ * Reads the site-wide fixes and which are switched on.
+ *
+ * @return {Promise<Object>} Every fix, with its state.
+ */
+export function fetchSiteFixes() {
+	return apiFetch( { path: `/${ namespace }/site-fixes` } );
+}
+
+/**
+ * Switches one site-wide fix on or off.
+ *
+ * Returns the whole set rather than the one row, so the screen never has to
+ * merge a partial response into what it already had — a fix that a filter
+ * forces on or off reports what is actually true, not what was asked for.
+ *
+ * @param {string}  id      The fix.
+ * @param {boolean} enabled Whether it should be on.
+ * @return {Promise<Object>} Every fix, with its state.
+ */
+export function toggleSiteFix( id, enabled ) {
+	return apiFetch( {
+		path: `/${ namespace }/site-fixes/${ id }`,
+		method: 'POST',
+		data: { enabled },
+	} );
+}
+
+/**
  * Reads the accessibility statement and its settings.
  *
  * @return {Promise<Object>} Settings, preview, and what is still missing.

@@ -8,6 +8,8 @@
 namespace WOWStudio\AccessibilityKit\Core;
 
 use WOWStudio\AccessibilityKit\Db\Schema;
+use WOWStudio\AccessibilityKit\SiteFixes\Fixes\PageTitle;
+use WOWStudio\AccessibilityKit\SiteFixes\SiteFixManager;
 use WOWStudio\AccessibilityKit\Support\Capabilities;
 use WP_Site;
 
@@ -119,6 +121,8 @@ final class Installer implements Registrable {
 			$settings['delete_data_on_uninstall'] = false;
 		}
 
+		self::migrate_title_tag_fix();
+
 		update_option( self::SETTINGS_OPTION, $settings, false );
 		update_option( self::VERSION_OPTION, WSAK_VERSION, true );
 
@@ -128,5 +132,37 @@ final class Installer implements Registrable {
 		 * @since 0.2.0
 		 */
 		do_action( 'wsak_installed' );
+	}
+
+	/**
+	 * Carries the standalone title fix into the site-fixes set.
+	 *
+	 * Before 0.19.0 the document-title fix was its own class with its own
+	 * option. It is now one of the site-wide fixes, and a site that switched it
+	 * on must not silently lose it on upgrade — a page that had a title
+	 * yesterday and does not today is a regression this plugin caused.
+	 *
+	 * The old option is deleted once carried across, so this cannot run twice
+	 * and cannot resurrect a fix somebody has since switched off.
+	 *
+	 * @since 0.19.0
+	 *
+	 * @return void
+	 */
+	private static function migrate_title_tag_fix(): void {
+		if ( ! get_option( PageTitle::LEGACY_OPTION, false ) ) {
+			return;
+		}
+
+		$enabled = get_option( SiteFixManager::OPTION, array() );
+		$enabled = is_array( $enabled ) ? $enabled : array();
+
+		if ( ! in_array( 'page-title', $enabled, true ) ) {
+			$enabled[] = 'page-title';
+			sort( $enabled );
+			update_option( SiteFixManager::OPTION, $enabled, true );
+		}
+
+		delete_option( PageTitle::LEGACY_OPTION );
 	}
 }
