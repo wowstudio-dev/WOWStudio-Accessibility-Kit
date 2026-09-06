@@ -10,6 +10,7 @@ import { fetchScan, readableError, runScan } from './api';
 import StatementSettings from './components/statement-settings';
 import CoveragePanel from './components/coverage-panel';
 import Inspector from './components/inspector';
+import IssueDrilldown from './components/issue-drilldown';
 import IssueList from './components/issue-list';
 import Overview from './components/overview';
 import AltTextEditor from './components/alt-text-editor';
@@ -36,6 +37,11 @@ export default function App() {
 	const [ error, setError ] = useState( '' );
 	const [ announcement, setAnnouncement ] = useState( '' );
 	const [ view, setView ] = useState( 'overview' );
+
+	// What a figure on the overview was narrowed to when somebody opened it:
+	// { rule } or { post }. Held beside the view rather than encoded into it so
+	// the drill-down screen stays one screen rather than one per filter.
+	const [ filter, setFilter ] = useState( null );
 
 	// How a finished scan is presented. The inspector puts each finding beside
 	// the page it came from, which is the more useful of the two whenever the
@@ -234,7 +240,23 @@ export default function App() {
 			 * screen with a mode. Opening a page from a bulk result drops into
 			 * the single-page view, which is where the browser pass runs.
 			 */ }
-			{ view === 'overview' && <Overview onGo={ setView } /> }
+			{ view === 'overview' && (
+				<Overview
+					onGo={ setView }
+					onDrill={ ( next ) => {
+						setFilter( next );
+						setView( 'findings' );
+					} }
+				/>
+			) }
+
+			{ view === 'findings' && (
+				<IssueDrilldown
+					filter={ filter }
+					onBack={ () => setView( 'overview' ) }
+					onGo={ setView }
+				/>
+			) }
 
 			{ view === 'bulk' && (
 				<BulkScan

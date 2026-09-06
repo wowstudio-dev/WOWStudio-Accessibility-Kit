@@ -21,8 +21,26 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [0.29.0] - 2026-09-06
 
-Findings that keep their identity, so a decision about one survives the scan
-that found it.
+Findings that keep their identity, and figures you can open.
+
+### Added
+
+- **Every figure on the report is now a door.** "What comes up most" and "Pages
+  with the most to do" were counts and nothing else: the report said forty-five
+  pieces of text had too little contrast and offered no way to see one of them.
+  Both lists now open onto the findings behind them.
+
+  The check's own explanation leads the filtered list — what the fault is, who
+  it shuts out, and what to do about it, stated once at the top rather than
+  repeated against all forty-five rows. When a list is already one check, the
+  rows drop everything the brief has just said and keep only what differs: which
+  markup this one is about, and where.
+
+  All of it is free. Being told a barrier exists and not being shown where it is
+  helps nobody, least of all the person who meets the barrier.
+
+- `GET /wsak/v1/issues`, filterable by check, page, severity, detection and
+  status, returning the findings, the total, and the rule's own description.
 
 ### Fixed
 

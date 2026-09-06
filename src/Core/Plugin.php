@@ -19,6 +19,7 @@ use WOWStudio\AccessibilityKit\SiteFixes\SiteFixManager;
 use WOWStudio\AccessibilityKit\Rest\AltTextController;
 use WOWStudio\AccessibilityKit\Rest\SiteFixController;
 use WOWStudio\AccessibilityKit\Rest\BlockCheckController;
+use WOWStudio\AccessibilityKit\Rest\IssueController;
 use WOWStudio\AccessibilityKit\Rest\OverviewController;
 use WOWStudio\AccessibilityKit\Rest\ReviewController;
 use WOWStudio\AccessibilityKit\Rest\RunController;
@@ -156,6 +157,7 @@ final class Plugin {
 			'rest.review'    => new ReviewController(),
 			'rest.blocks'    => new BlockCheckController(),
 			'rest.overview'  => new OverviewController(),
+			'rest.issues'    => new IssueController(),
 			'jobs.worker'    => new Worker(),
 			'summary'        => new SimplifiedSummary(),
 			'fixes.site'     => new SiteFixManager(),

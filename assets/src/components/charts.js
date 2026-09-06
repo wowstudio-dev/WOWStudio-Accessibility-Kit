@@ -143,18 +143,57 @@ export function Donut( { value, label, caption } ) {
 }
 
 /**
+ * The bar itself. Decoration in both modes, so never announced.
+ *
+ * @param {Object} props         Component props.
+ * @param {number} props.count   This row's figure.
+ * @param {number} props.largest The biggest figure in the set.
+ * @param {string} [props.tone]  Severity colouring, if any.
+ * @return {Element} The track and its fill.
+ */
+function Bar( { count, largest, tone } ) {
+	return (
+		<span className="wsak-bars__track" aria-hidden="true">
+			<span
+				className={ `wsak-bars__fill${
+					tone ? ` wsak-bars__fill--${ tone }` : ''
+				}` }
+				style={ {
+					'--wsak-bar-width': `${
+						( ( count || 0 ) / largest ) * 100
+					}%`,
+				} }
+			/>
+		</span>
+	);
+}
+
+/**
  * Horizontal bars, one per row, each with its own count.
  *
  * Bars are sized against the largest row rather than the total, so a row worth
  * two percent is still wide enough to see and to click.
  *
- * @param {Object} props        Component props.
- * @param {Array}  props.items  Rows of { key, label, count, tone }.
- * @param {string} props.label  What the set of bars shows.
- * @param {string} [props.unit] What the counts are, for the announced summary.
+ * Two modes, and the difference is structural rather than cosmetic. Without
+ * `onSelect` the figures are decoration: the list is hidden from assistive
+ * technology and one sentence carries the whole set, which reads far better
+ * than nine list items each holding a number.
+ *
+ * With `onSelect` every row becomes a control, and that summary has to go. A
+ * focusable button inside an `aria-hidden` subtree is reachable by keyboard and
+ * invisible to a screen reader at the same time — the exact fault this plugin
+ * exists to find, and one it would be shipping in its own interface. So the
+ * interactive list is announced normally, each row naming itself, and the
+ * sentence is dropped rather than duplicating what the rows now say.
+ *
+ * @param {Object}   props            Component props.
+ * @param {Array}    props.items      Rows of { key, label, count, tone }.
+ * @param {string}   props.label      What the set of bars shows.
+ * @param {string}   [props.unit]     What the counts are, for the announcement.
+ * @param {Function} [props.onSelect] Opens a row. Given the row's key.
  * @return {Element} The bars.
  */
-export function BarList( { items, label, unit } ) {
+export function BarList( { items, label, unit, onSelect } ) {
 	const rows = Array.isArray( items ) ? items : [];
 
 	if ( ! rows.length ) {
@@ -167,6 +206,53 @@ export function BarList( { items, label, unit } ) {
 
 	const largest = Math.max( ...rows.map( ( row ) => row.count || 0 ), 1 );
 	const noun = unit || __( 'findings', 'wowstudio-accessibility-kit' );
+
+	if ( onSelect ) {
+		return (
+			<div className="wsak-bars wsak-bars--interactive">
+				<ul className="wsak-bars__list" aria-label={ label }>
+					{ rows.map( ( row ) => (
+						<li className="wsak-bars__row" key={ row.key }>
+							<button
+								type="button"
+								className="wsak-bars__button"
+								onClick={ () => onSelect( row.key ) }
+							>
+								<span className="wsak-bars__label">
+									{ row.label }
+								</span>
+
+								<Bar
+									count={ row.count }
+									largest={ largest }
+									tone={ row.tone }
+								/>
+
+								<span className="wsak-bars__count">
+									{ row.count }
+								</span>
+
+								{ /*
+								 * The unit sits inside the button as text rather
+								 * than as an aria-label, so the accessible name
+								 * still contains the visible words. Replacing
+								 * the name wholesale would break voice control,
+								 * which needs the name to match what somebody
+								 * can see well enough to say it out loud.
+								 *
+								 * Nothing is added about what activating it
+								 * does. The role already says "button", and
+								 * spelling it out again on every row is eight
+								 * repetitions of something the first one taught.
+								 */ }
+								<ScreenReaderText>{ noun }</ScreenReaderText>
+							</button>
+						</li>
+					) ) }
+				</ul>
+			</div>
+		);
+	}
 
 	return (
 		<div className="wsak-bars">
@@ -196,20 +282,11 @@ export function BarList( { items, label, unit } ) {
 				{ rows.map( ( row ) => (
 					<li className="wsak-bars__row" key={ row.key }>
 						<span className="wsak-bars__label">{ row.label }</span>
-						<span className="wsak-bars__track">
-							<span
-								className={ `wsak-bars__fill${
-									row.tone
-										? ` wsak-bars__fill--${ row.tone }`
-										: ''
-								}` }
-								style={ {
-									'--wsak-bar-width': `${
-										( ( row.count || 0 ) / largest ) * 100
-									}%`,
-								} }
-							/>
-						</span>
+						<Bar
+							count={ row.count }
+							largest={ largest }
+							tone={ row.tone }
+						/>
 						<span className="wsak-bars__count">{ row.count }</span>
 					</li>
 				) ) }

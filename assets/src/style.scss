@@ -1907,6 +1907,100 @@
 	font-weight: 640;
 }
 
+/* Interactive bars ---------------------------------------------------------
+ *
+ * The row's grid moves onto the button so the whole row is the target rather
+ * than the label alone. A figure worth clicking is worth clicking anywhere
+ * along its width, and a 6rem hit area at the far left is the kind of target
+ * this plugin flags on other people's sites. */
+.wsak-bars--interactive .wsak-bars__row {
+	display: block;
+	padding: 0;
+}
+
+.wsak-bars__button {
+	display: grid;
+	grid-template-columns: minmax(6rem, 11rem) 1fr auto;
+	gap: var(--wsak-space-3);
+	align-items: center;
+	width: 100%;
+	margin: 0;
+	padding: 5px var(--wsak-space-2);
+	border: 0;
+	border-radius: 4px;
+	background: none;
+	cursor: pointer;
+	text-align: left;
+}
+
+.wsak-bars__button:hover {
+	background: var(--wsak-raised);
+}
+
+.wsak-drilldown__back {
+	margin: 0 0 var(--wsak-space-3);
+}
+
+.wsak-drilldown__title {
+	margin: 0 0 var(--wsak-space-1);
+	color: var(--wsak-ink);
+}
+
+.wsak-drilldown__count {
+	margin: 0 0 var(--wsak-space-5);
+	color: var(--wsak-muted);
+	font-size: 13px;
+}
+
+.wsak-drilldown__brief {
+	margin: 0 0 var(--wsak-space-5);
+	padding: var(--wsak-space-4);
+	border: 1px solid var(--wsak-line);
+	border-radius: var(--wsak-radius);
+	background: var(--wsak-raised);
+}
+
+.wsak-drilldown__brief-title {
+	margin: 0 0 var(--wsak-space-2);
+	color: var(--wsak-ink);
+	font-size: 14px;
+}
+
+/* The consequence leads, and is the only line here set at reading weight.
+   It says who is shut out; everything under it says what to type. */
+.wsak-drilldown__consequence {
+	margin: 0 0 var(--wsak-space-2);
+	color: var(--wsak-text);
+	font-size: 14px;
+}
+
+.wsak-drilldown__how {
+	margin: 0 0 var(--wsak-space-3);
+	color: var(--wsak-muted);
+	font-size: 13px;
+}
+
+.wsak-drilldown__tags {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--wsak-space-2);
+	align-items: center;
+	margin: 0;
+}
+
+.wsak-drilldown__sc {
+	color: var(--wsak-muted);
+	font-size: 12.5px;
+}
+
+.wsak-drilldown__page {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--wsak-space-2);
+	align-items: center;
+	margin: 0 0 var(--wsak-space-5);
+}
+
 .wsak-spark__svg {
 	display: block;
 	width: 100%;

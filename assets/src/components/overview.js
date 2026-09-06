@@ -14,11 +14,12 @@ import { EmptyState } from './states';
 /**
  * The overview.
  *
- * @param {Object}   props      Component props.
- * @param {Function} props.onGo Opens another screen.
+ * @param {Object}   props           Component props.
+ * @param {Function} props.onGo      Opens another screen.
+ * @param {Function} [props.onDrill] Opens the findings behind a figure.
  * @return {Element} The screen.
  */
-export default function Overview( { onGo } ) {
+export default function Overview( { onGo, onDrill } ) {
 	const [ data, setData ] = useState( null );
 	const [ error, setError ] = useState( '' );
 
@@ -215,6 +216,11 @@ export default function Overview( { onGo } ) {
 							'Open findings by check',
 							'wowstudio-accessibility-kit'
 						) }
+						onSelect={
+							onDrill
+								? ( rule ) => onDrill( { rule } )
+								: undefined
+						}
 					/>
 				</section>
 
@@ -231,6 +237,12 @@ export default function Overview( { onGo } ) {
 							'Open findings by page',
 							'wowstudio-accessibility-kit'
 						) }
+						onSelect={
+							onDrill
+								? ( postId ) =>
+										onDrill( { post: Number( postId ) } )
+								: undefined
+						}
 					/>
 				</section>
 

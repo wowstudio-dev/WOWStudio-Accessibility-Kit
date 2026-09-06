@@ -382,3 +382,44 @@ export function saveAltText( items ) {
 export function fetchOverview() {
 	return apiFetch( { path: `/${ namespace }/overview` } );
 }
+
+/**
+ * Fetches current findings from across the site, narrowed by a filter.
+ *
+ * Sends only the filters that are set, so an unfiltered request asks for
+ * everything rather than for everything matching an empty string.
+ *
+ * @param {Object} options          Query options.
+ * @param {string} [options.rule]   Limit to one check.
+ * @param {number} [options.post]   Limit to one page.
+ * @param {string} [options.status] Workflow status, open by default.
+ * @param {number} [options.limit]  How many to return.
+ * @param {number} [options.offset] Where to start.
+ * @return {Promise<Object>} Findings, the total, and what the filter means.
+ */
+export function fetchIssues( {
+	rule = '',
+	post = 0,
+	status = '',
+	limit = 50,
+	offset = 0,
+} = {} ) {
+	const query = new URLSearchParams( {
+		limit: String( limit ),
+		offset: String( offset ),
+	} );
+
+	if ( rule ) {
+		query.set( 'rule', rule );
+	}
+
+	if ( post ) {
+		query.set( 'post', String( post ) );
+	}
+
+	if ( status ) {
+		query.set( 'status', status );
+	}
+
+	return apiFetch( { path: `/${ namespace }/issues?${ query }` } );
+}

@@ -65,14 +65,14 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: src/Admin/Menu.php:69
-#: assets/src/app.js:119
+#: assets/src/app.js:125
 msgid "Accessibility Kit"
 msgstr ""
 
 #: src/Admin/Menu.php:91
 #: src/Rest/ReviewController.php:134
 #: src/Rest/RunController.php:222
-#: src/Rest/ScanController.php:206
+#: src/Rest/ScanController.php:205
 #: src/Rest/StatementController.php:116
 msgid "You do not have permission to view accessibility reports."
 msgstr ""
@@ -343,27 +343,27 @@ msgid "In short"
 msgstr ""
 
 #: src/Remediation/ActionBand.php:118
-#: assets/src/components/issue-list.js:203
+#: assets/src/components/issue-list.js:222
 msgid "Fix these now"
 msgstr ""
 
 #: src/Remediation/ActionBand.php:119
-#: assets/src/components/issue-list.js:211
+#: assets/src/components/issue-list.js:230
 msgid "Read, then apply"
 msgstr ""
 
 #: src/Remediation/ActionBand.php:120
-#: assets/src/components/issue-list.js:219
+#: assets/src/components/issue-list.js:238
 msgid "Needs a decision from you"
 msgstr ""
 
 #: src/Remediation/ActionBand.php:121
-#: assets/src/components/issue-list.js:227
+#: assets/src/components/issue-list.js:246
 msgid "For whoever looks after your theme"
 msgstr ""
 
 #: src/Remediation/ActionBand.php:134
-#: assets/src/components/issue-list.js:204
+#: assets/src/components/issue-list.js:223
 msgid "There is one correct answer and we already know it. Nothing here is a guess, so nothing here needs checking first."
 msgstr ""
 
@@ -372,12 +372,12 @@ msgid "We can draft these, but a draft is not an answer. Read what it says befor
 msgstr ""
 
 #: src/Remediation/ActionBand.php:136
-#: assets/src/components/issue-list.js:220
+#: assets/src/components/issue-list.js:239
 msgid "These depend on what your content means, which is not something any tool can work out for you. Each one explains what to weigh up."
 msgstr ""
 
 #: src/Remediation/ActionBand.php:137
-#: assets/src/components/issue-list.js:231
+#: assets/src/components/issue-list.js:250
 msgid "These are in your theme rather than your content, so nothing here can reach them. Each one comes with what to change and where."
 msgstr ""
 
@@ -561,6 +561,15 @@ msgstr ""
 msgid "Applying this kind of fix edits your site's Additional CSS, which your account is not allowed to change. An administrator can apply it, or make the change in Appearance → Customise."
 msgstr ""
 
+#: src/Rest/IssueController.php:80
+msgid "Limit to one check."
+msgstr ""
+
+#: src/Rest/IssueController.php:85
+msgid "Limit to one page."
+msgstr ""
+
+#: src/Rest/IssueController.php:237
 #: src/Rest/OverviewController.php:396
 #: assets/src/components/dismissed.js:124
 #: assets/src/components/scan-picker.js:164
@@ -584,7 +593,7 @@ msgid "This fix changes how your theme renders every page, and your account is n
 msgstr ""
 
 #: src/Rest/RunController.php:203
-#: src/Rest/ScanController.php:187
+#: src/Rest/ScanController.php:186
 msgid "You do not have permission to run accessibility scans."
 msgstr ""
 
@@ -626,44 +635,44 @@ msgstr ""
 msgid "WCAG:"
 msgstr ""
 
-#: src/Rest/ScanController.php:77
+#: src/Rest/ScanController.php:76
 msgid "The post or page to scan."
 msgstr ""
 
-#: src/Rest/ScanController.php:97
+#: src/Rest/ScanController.php:96
 msgid "The scan to read."
 msgstr ""
 
-#: src/Rest/ScanController.php:116
+#: src/Rest/ScanController.php:115
 msgid "Filter the list by title."
 msgstr ""
 
-#: src/Rest/ScanController.php:148
+#: src/Rest/ScanController.php:147
 msgid "Whether the browser pass completed."
 msgstr ""
 
-#: src/Rest/ScanController.php:153
+#: src/Rest/ScanController.php:152
 msgid "Findings the browser pass produced."
 msgstr ""
 
-#: src/Rest/ScanController.php:237
+#: src/Rest/ScanController.php:236
 #: src/Scanner/PageSource.php:169
 #: src/Scanner/PageSource.php:227
 msgid "That content could not be found."
 msgstr ""
 
-#: src/Rest/ScanController.php:245
-#: src/Rest/ScanController.php:354
-#: src/Rest/ScanController.php:507
+#: src/Rest/ScanController.php:244
+#: src/Rest/ScanController.php:353
+#: src/Rest/ScanController.php:474
 msgid "You do not have permission to read that content."
 msgstr ""
 
-#: src/Rest/ScanController.php:278
+#: src/Rest/ScanController.php:277
 msgid "The scan could not be recorded. Check that the plugin tables exist."
 msgstr ""
 
-#: src/Rest/ScanController.php:346
-#: src/Rest/ScanController.php:499
+#: src/Rest/ScanController.php:345
+#: src/Rest/ScanController.php:466
 msgid "That scan could not be found."
 msgstr ""
 
@@ -818,7 +827,7 @@ msgid "Open"
 msgstr ""
 
 #: src/Scanner/IssueStatus.php:44
-#: assets/src/components/overview.js:154
+#: assets/src/components/overview.js:155
 msgid "Fixed"
 msgstr ""
 
@@ -1763,7 +1772,7 @@ msgid "Whole site"
 msgstr ""
 
 #: src/Scanner/ScanScope.php:53
-#: assets/src/app.js:193
+#: assets/src/app.js:199
 msgid "Theme"
 msgstr ""
 
@@ -2051,97 +2060,97 @@ msgstr ""
 msgid "Something went wrong and we could not say what. Please try again."
 msgstr ""
 
-#: assets/src/app.js:61
+#: assets/src/app.js:67
 msgid "Scanning the page…"
 msgstr ""
 
 #. translators: %d: number of findings.
-#: assets/src/app.js:70
+#: assets/src/app.js:76
 #, js-format
 msgid "Scan finished. %d findings."
 msgstr ""
 
-#: assets/src/app.js:81
+#: assets/src/app.js:87
 msgid "The scan failed."
 msgstr ""
 
-#: assets/src/app.js:125
+#: assets/src/app.js:131
 msgid "Find, fix and document accessibility problems at the code level."
 msgstr ""
 
-#: assets/src/app.js:135
+#: assets/src/app.js:141
 msgid "Sections"
 msgstr ""
 
-#: assets/src/app.js:142
+#: assets/src/app.js:148
 msgid "Overview"
 msgstr ""
 
-#: assets/src/app.js:149
+#: assets/src/app.js:155
 msgid "One page"
 msgstr ""
 
-#: assets/src/app.js:157
+#: assets/src/app.js:163
 msgid "Your content"
 msgstr ""
 
-#: assets/src/app.js:166
+#: assets/src/app.js:172
 msgid "Images"
 msgstr ""
 
-#: assets/src/app.js:175
+#: assets/src/app.js:181
 #: assets/src/components/dismissed.js:61
-#: assets/src/components/overview.js:159
+#: assets/src/components/overview.js:160
 msgid "Set aside"
 msgstr ""
 
-#: assets/src/app.js:184
+#: assets/src/app.js:190
 msgid "Site fixes"
 msgstr ""
 
-#: assets/src/app.js:206
+#: assets/src/app.js:212
 msgid "Statement"
 msgstr ""
 
-#: assets/src/app.js:224
+#: assets/src/app.js:230
 msgid "You can read results here but not start a scan. An administrator can grant that."
 msgstr ""
 
-#: assets/src/app.js:260
+#: assets/src/app.js:282
 msgid "Loading the scan…"
 msgstr ""
 
 #. translators: %s: content title.
-#: assets/src/app.js:282
+#: assets/src/app.js:304
 #, js-format
 msgid "Results for “%s”"
 msgstr ""
 
-#: assets/src/app.js:288
+#: assets/src/app.js:310
 msgid "Scan results"
 msgstr ""
 
-#: assets/src/app.js:311
+#: assets/src/app.js:333
 msgid "Show as a list"
 msgstr ""
 
-#: assets/src/app.js:315
+#: assets/src/app.js:337
 msgid "Show on the page"
 msgstr ""
 
-#: assets/src/app.js:324
+#: assets/src/app.js:346
 msgid "Back to your content"
 msgstr ""
 
-#: assets/src/app.js:335
+#: assets/src/app.js:357
 msgid "This scan covered less than usual."
 msgstr ""
 
-#: assets/src/app.js:405
+#: assets/src/app.js:427
 msgid "← Back to the overview"
 msgstr ""
 
-#: assets/src/app.js:417
+#: assets/src/app.js:439
 msgid "This plugin helps you find, fix and document accessibility problems. It does not determine whether your site meets the ADA, the European Accessibility Act, Section 508, or any other legal requirement, and nothing here is legal advice."
 msgstr ""
 
@@ -2386,32 +2395,32 @@ msgstr ""
 msgid "/ 100"
 msgstr ""
 
-#: assets/src/components/charts.js:163
+#: assets/src/components/charts.js:202
 msgid "Nothing to show yet."
 msgstr ""
 
-#: assets/src/components/charts.js:169
+#: assets/src/components/charts.js:208
 msgid "findings"
 msgstr ""
 
 #. translators: 1: what the chart shows. 2: the figures, already joined into a sentence.
-#: assets/src/components/charts.js:176
+#: assets/src/components/charts.js:262
 #, js-format
 msgid "%1$s. %2$s"
 msgstr ""
 
 #. translators: 1: row name. 2: how many. 3: what is being counted.
-#: assets/src/components/charts.js:182
+#: assets/src/components/charts.js:268
 #, js-format
 msgid "%1$s: %2$d %3$s."
 msgstr ""
 
-#: assets/src/components/charts.js:239
+#: assets/src/components/charts.js:316
 msgid "A line appears here once a page has been scanned more than once."
 msgstr ""
 
 #. translators: 1: how many scans. 2: the first score. 3: the most recent score.
-#: assets/src/components/charts.js:280
+#: assets/src/components/charts.js:357
 #, js-format
 msgid "Scores across the last %1$d scans, from %2$d to %3$d out of 100."
 msgstr ""
@@ -2462,14 +2471,14 @@ msgstr ""
 
 #. translators: %d: number of items in this group.
 #: assets/src/components/coverage-panel.js:174
-#: assets/src/components/issue-list.js:261
+#: assets/src/components/issue-list.js:281
 #, js-format
 msgid "(%d)"
 msgstr ""
 
 #. translators: %s: WCAG success criterion number.
 #: assets/src/components/coverage-panel.js:188
-#: assets/src/components/issue-list.js:103
+#: assets/src/components/issue-list.js:112
 #: assets/src/components/theme-panel.js:253
 #, js-format
 msgid "WCAG %s"
@@ -2730,6 +2739,56 @@ msgstr ""
 msgid "Preview of the page being inspected"
 msgstr ""
 
+#. translators: %s: the check's name.
+#: assets/src/components/issue-drilldown.js:41
+#, js-format
+msgid "About %s"
+msgstr ""
+
+#. translators: %s: a WCAG success criterion number, e.g. 1.1.1.
+#: assets/src/components/issue-drilldown.js:69
+#, js-format
+msgid "WCAG success criterion %s"
+msgstr ""
+
+#: assets/src/components/issue-drilldown.js:94
+msgid "Edit this page"
+msgstr ""
+
+#: assets/src/components/issue-drilldown.js:99
+msgid "View this page"
+msgstr ""
+
+#: assets/src/components/issue-drilldown.js:162
+msgid "← Back to the report"
+msgstr ""
+
+#: assets/src/components/issue-drilldown.js:172
+msgid "Loading these findings…"
+msgstr ""
+
+#. translators: %d: how many findings are open.
+#: assets/src/components/issue-drilldown.js:209
+#, js-format
+msgid "%d open finding"
+msgid_plural "%d open findings"
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: 1: how many are shown. 2: how many there are.
+#: assets/src/components/issue-drilldown.js:231
+#, js-format
+msgid "Showing the first %1$d of %2$d. Work through these and the rest will follow."
+msgstr ""
+
+#: assets/src/components/issue-drilldown.js:249
+msgid "Nothing open here"
+msgstr ""
+
+#: assets/src/components/issue-drilldown.js:253
+msgid "Everything this filter covers has been fixed or set aside. If that is a surprise, the pages behind it may not have been scanned since they changed."
+msgstr ""
+
 #: assets/src/components/issue-list.js:31
 msgid "This one is answered by a style rule measured off the element itself, so it is fixed in the page view — which needs a preview of this page, and this scan has none."
 msgstr ""
@@ -2743,108 +2802,109 @@ msgid "Answered by a style rule measured off the element itself, so it is fixed 
 msgstr ""
 
 #. translators: %s: name of the accessibility check.
-#: assets/src/components/issue-list.js:143
+#: assets/src/components/issue-list.js:153
 #, js-format
 msgid "Markup for: %s"
 msgstr ""
 
-#: assets/src/components/issue-list.js:156
+#: assets/src/components/issue-list.js:166
 msgid "How to fix this"
 msgstr ""
 
-#: assets/src/components/issue-list.js:165
+#: assets/src/components/issue-list.js:175
+#: assets/src/components/issue-list.js:189
 msgid "Element:"
 msgstr ""
 
-#: assets/src/components/issue-list.js:212
+#: assets/src/components/issue-list.js:231
 msgid "We can draft these, but a draft is not an answer. Read what it says before you apply it — it was written by a model that cannot see why your page exists."
 msgstr ""
 
-#: assets/src/components/issue-list.js:305
+#: assets/src/components/issue-list.js:328
 msgid "Nothing found by the automated checks"
 msgstr ""
 
-#: assets/src/components/issue-list.js:309
+#: assets/src/components/issue-list.js:332
 msgid "None of the checks we can run automatically flagged anything on this page. That is a good sign, and it is not the same as the page being accessible — most of WCAG needs a person. The manual checklists are the next step."
 msgstr ""
 
-#: assets/src/components/issue-list.js:339
-#: assets/src/components/overview.js:80
-#: assets/src/components/overview.js:259
+#: assets/src/components/issue-list.js:363
+#: assets/src/components/overview.js:81
+#: assets/src/components/overview.js:271
 msgid "What these checks cover, and what they cannot"
 msgstr ""
 
-#: assets/src/components/overview.js:35
+#: assets/src/components/overview.js:36
 msgid "The summary could not be loaded."
 msgstr ""
 
-#: assets/src/components/overview.js:54
+#: assets/src/components/overview.js:55
 msgid "Adding it up…"
 msgstr ""
 
-#: assets/src/components/overview.js:66
+#: assets/src/components/overview.js:67
 msgid "Nothing has been scanned yet"
 msgstr ""
 
-#: assets/src/components/overview.js:70
+#: assets/src/components/overview.js:71
 msgid "This fills in once a page has been checked. It counts only what has actually been scanned, so it starts empty rather than starting at a hundred."
 msgstr ""
 
-#: assets/src/components/overview.js:113
+#: assets/src/components/overview.js:114
 msgid "Across what has been scanned"
 msgstr ""
 
-#: assets/src/components/overview.js:121
+#: assets/src/components/overview.js:122
 msgid "Mean score across scanned pages"
 msgstr ""
 
 #. translators: 1: pages scanned. 2: pages published.
-#: assets/src/components/overview.js:135
+#: assets/src/components/overview.js:136
 #, js-format
 msgid "The average of the latest score for each of %1$d scanned pages, out of %2$d published. It counts only what automated checks can settle, which is part of WCAG rather than all of it, and it does not tell you whether your site meets any legal requirement."
 msgstr ""
 
-#: assets/src/components/overview.js:147
+#: assets/src/components/overview.js:148
 msgid "Open findings"
 msgstr ""
 
-#: assets/src/components/overview.js:166
+#: assets/src/components/overview.js:167
 msgid "Checks available"
 msgstr ""
 
 #. translators: 1: server-pass checks. 2: browser-pass checks. 3: pages that have had a browser pass.
-#: assets/src/components/overview.js:173
+#: assets/src/components/overview.js:174
 #, js-format
 msgid "%1$d run on the server, %2$d need the page view — which %3$d scanned pages have had."
 msgstr ""
 
-#: assets/src/components/overview.js:191
-#: assets/src/components/overview.js:198
+#: assets/src/components/overview.js:192
+#: assets/src/components/overview.js:199
 msgid "Open findings by severity"
 msgstr ""
 
-#: assets/src/components/overview.js:207
+#: assets/src/components/overview.js:208
 msgid "What comes up most"
 msgstr ""
 
-#: assets/src/components/overview.js:214
+#: assets/src/components/overview.js:215
 msgid "Open findings by check"
 msgstr ""
 
-#: assets/src/components/overview.js:223
+#: assets/src/components/overview.js:229
 msgid "Pages with the most to do"
 msgstr ""
 
-#: assets/src/components/overview.js:230
+#: assets/src/components/overview.js:236
 msgid "Open findings by page"
 msgstr ""
 
-#: assets/src/components/overview.js:239
+#: assets/src/components/overview.js:251
 msgid "Score by scan"
 msgstr ""
 
 #. translators: %d: how many scans are plotted.
-#: assets/src/components/overview.js:245
+#: assets/src/components/overview.js:257
 #, js-format
 msgid "The last %d scan, in the order it ran. This plugin does not re-scan on its own, so the spacing is however often somebody pressed the button — it is a sequence, not a timeline."
 msgid_plural "The last %d scans, in the order they ran. This plugin does not re-scan on its own, so the spacing is however often somebody pressed the button — it is a sequence, not a timeline."

@@ -58,13 +58,21 @@ function CssHandoff( { onInspect } ) {
  * How to fix it is behind a disclosure rather than always open: a page with
  * thirty findings would otherwise be a wall of text nobody reads.
  *
- * @param {Object}   props             Component props.
- * @param {Object}   props.issue       The finding.
- * @param {Function} [props.onInspect] Switches to the inspector, when there is
- *                                     a preview to switch to.
+ * When the whole list is already one check, everything the card would say about
+ * that check has just been said once above it. Repeating the name, the tags,
+ * the consequence and the fix on all forty-one rows buries the one line that
+ * differs — which markup this one is about — and turns the list into the wall
+ * of text the disclosure below exists to avoid.
+ *
+ * @param {Object}   props                Component props.
+ * @param {Object}   props.issue          The finding.
+ * @param {Function} [props.onInspect]    Switches to the inspector, when there is
+ *                                        a preview to switch to.
+ * @param {boolean}  [props.ruleIsStated] The rule has already been explained
+ *                                        above this list.
  * @return {Element} The card.
  */
-function IssueCard( { issue, onInspect } ) {
+function IssueCard( { issue, onInspect, ruleIsStated } ) {
 	// Worked out before the markup rather than as a chain of conditions inside
 	// it, because which action a finding gets is the decision this component
 	// exists to make and it should be readable in one place.
@@ -78,36 +86,38 @@ function IssueCard( { issue, onInspect } ) {
 
 	return (
 		<li className="wsak-issue">
-			<div className="wsak-issue__head">
-				<h4 className="wsak-issue__title">{ issue.rule_title }</h4>
-				<div className="wsak-issue__tags">
-					<SeverityTag
-						severity={ issue.severity }
-						label={ issue.severity_label }
-					/>
-					{ /*
-					 * This used to sit on the group heading, when the groups
-					 * were "settled" and "needs a person". The groups now say
-					 * what a finding asks of you instead — but whether the
-					 * scanner decided a thing or merely noticed it is not a
-					 * detail we get to drop when the layout changes, so it
-					 * moves onto the card.
-					 */ }
-					<DetectionTag
-						detection={ issue.detection }
-						label={ issue.detection_label }
-					/>
-					<span className="wsak-tag wsak-tag--sc">
-						{ sprintf(
-							/* translators: %s: WCAG success criterion number. */
-							__( 'WCAG %s', 'wowstudio-accessibility-kit' ),
-							issue.wcag_sc
-						) }
-					</span>
+			{ ! ruleIsStated && (
+				<div className="wsak-issue__head">
+					<h4 className="wsak-issue__title">{ issue.rule_title }</h4>
+					<div className="wsak-issue__tags">
+						<SeverityTag
+							severity={ issue.severity }
+							label={ issue.severity_label }
+						/>
+						{ /*
+						 * This used to sit on the group heading, when the groups
+						 * were "settled" and "needs a person". The groups now say
+						 * what a finding asks of you instead — but whether the
+						 * scanner decided a thing or merely noticed it is not a
+						 * detail we get to drop when the layout changes, so it
+						 * moves onto the card.
+						 */ }
+						<DetectionTag
+							detection={ issue.detection }
+							label={ issue.detection_label }
+						/>
+						<span className="wsak-tag wsak-tag--sc">
+							{ sprintf(
+								/* translators: %s: WCAG success criterion number. */
+								__( 'WCAG %s', 'wowstudio-accessibility-kit' ),
+								issue.wcag_sc
+							) }
+						</span>
+					</div>
 				</div>
-			</div>
+			) }
 
-			{ issue.consequence && (
+			{ ! ruleIsStated && issue.consequence && (
 				<p className="wsak-issue__consequence">{ issue.consequence }</p>
 			) }
 
@@ -150,7 +160,7 @@ function IssueCard( { issue, onInspect } ) {
 
 			{ action }
 
-			{ issue.how_to_fix && (
+			{ ! ruleIsStated && issue.how_to_fix && (
 				<details className="wsak-issue__fix">
 					<summary>
 						{ __(
@@ -171,6 +181,15 @@ function IssueCard( { issue, onInspect } ) {
 						</p>
 					) }
 				</details>
+			) }
+
+			{ ruleIsStated && issue.selector && (
+				<p className="wsak-issue__selector">
+					<span className="wsak-issue__selector-label">
+						{ __( 'Element:', 'wowstudio-accessibility-kit' ) }
+					</span>{ ' ' }
+					<code>{ issue.selector }</code>
+				</p>
 			) }
 
 			{ /*
@@ -238,15 +257,16 @@ const BANDS = [
 /**
  * One group of findings, with a heading that says what the group means.
  *
- * @param {Object}   props             Component props.
- * @param {string}   props.id          Heading id, for aria-labelledby.
- * @param {string}   props.title       Group heading.
- * @param {string}   props.blurb       What this group means.
- * @param {Array}    props.issues      Findings in the group.
- * @param {Function} [props.onInspect] Switches to the inspector.
+ * @param {Object}   props                Component props.
+ * @param {string}   props.id             Heading id, for aria-labelledby.
+ * @param {string}   props.title          Group heading.
+ * @param {string}   props.blurb          What this group means.
+ * @param {Array}    props.issues         Findings in the group.
+ * @param {Function} [props.onInspect]    Switches to the inspector.
+ * @param {boolean}  [props.ruleIsStated] The rule is already explained above.
  * @return {?Element} The group, or nothing when empty.
  */
-function IssueGroup( { id, title, blurb, issues, onInspect } ) {
+function IssueGroup( { id, title, blurb, issues, onInspect, ruleIsStated } ) {
 	if ( ! issues.length ) {
 		return null;
 	}
@@ -269,6 +289,7 @@ function IssueGroup( { id, title, blurb, issues, onInspect } ) {
 					<IssueCard
 						issue={ issue }
 						onInspect={ onInspect }
+						ruleIsStated={ ruleIsStated }
 						key={ issue.id }
 					/>
 				) ) }
@@ -284,13 +305,15 @@ function IssueGroup( { id, title, blurb, issues, onInspect } ) {
  * difference between "this is wrong" and "somebody needs to look at this" is
  * the difference between a tool that helps and a tool that misleads.
  *
- * @param {Object}   props             Component props.
- * @param {Array}    props.issues      Findings.
- * @param {Function} [props.onInspect] Switches to the inspector.
- * @param {Function} [props.onGo]      Opens another screen.
+ * @param {Object}   props                Component props.
+ * @param {Array}    props.issues         Findings.
+ * @param {Function} [props.onInspect]    Switches to the inspector.
+ * @param {Function} [props.onGo]         Opens another screen.
+ * @param {boolean}  [props.ruleIsStated] Every finding here is the same check,
+ *                                        and it has been explained above.
  * @return {Element} The list.
  */
-export default function IssueList( { issues, onInspect, onGo } ) {
+export default function IssueList( { issues, onInspect, onGo, ruleIsStated } ) {
 	// The server has already ordered these and told each one which band it is
 	// in. Re-deriving that here would mean two answers to the same question,
 	// and the one on this side would be the one that drifts.
@@ -324,6 +347,7 @@ export default function IssueList( { issues, onInspect, onGo } ) {
 					blurb={ band.blurb }
 					issues={ band.issues }
 					onInspect={ onInspect }
+					ruleIsStated={ ruleIsStated }
 				/>
 			) ) }
 

@@ -340,6 +340,122 @@ class IssueRepository {
 	}
 
 	/**
+	 * Finds current findings from anywhere on the site.
+	 *
+	 * The site-wide counterpart of find_by_scan(). It needs no join to work out
+	 * which scan is current, because since 0.29.0 nothing else is left: a scan
+	 * retires the findings of the previous scan of the same thing, so every row
+	 * in this table belongs to the newest scan of whatever produced it.
+	 *
+	 * Findings against deleted content are excluded. Their rows survive until
+	 * something prunes them, and listing a finding whose page no longer exists
+	 * would send somebody to an edit screen that 404s.
+	 *
+	 * @since 0.29.0
+	 *
+	 * @param array<string, mixed> $args Optional rule_id, post_id, severity,
+	 *                                   detection, status, limit, offset.
+	 * @return Issue[]
+	 */
+	public function find_current( array $args = array() ): array {
+		global $wpdb;
+
+		list( $where, $values ) = $this->current_conditions( $args );
+
+		$values[] = max( 1, min( 500, (int) ( $args['limit'] ?? 100 ) ) );
+		$values[] = max( 0, (int) ( $args['offset'] ?? 0 ) );
+
+		$sql = 'SELECT i.* FROM %i AS i
+			LEFT JOIN %i AS p ON p.ID = i.post_id
+			WHERE ' . implode( ' AND ', $where )
+			. ' ORDER BY ' . self::severity_order() . ', i.post_id ASC, i.id ASC LIMIT %d OFFSET %d';
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared -- Conditions are fixed placeholder fragments; every value goes through prepare().
+		$rows = $wpdb->get_results( $wpdb->prepare( $sql, $values ) );
+
+		return array_map(
+			static fn( object $row ): Issue => Issue::from_row( $row ),
+			is_array( $rows ) ? $rows : array()
+		);
+	}
+
+	/**
+	 * Counts current findings matching the same filters.
+	 *
+	 * Separate from find_current() so a list can say how many there are in
+	 * total rather than how many fitted on this page of it. A drill-down that
+	 * says "39" and then shows a hundred rows without saying so is a list
+	 * somebody stops trusting.
+	 *
+	 * @since 0.29.0
+	 *
+	 * @param array<string, mixed> $args Same filters as find_current().
+	 * @return int
+	 */
+	public function count_current( array $args = array() ): int {
+		global $wpdb;
+
+		list( $where, $values ) = $this->current_conditions( $args );
+
+		$sql = 'SELECT COUNT(*) FROM %i AS i
+			LEFT JOIN %i AS p ON p.ID = i.post_id
+			WHERE ' . implode( ' AND ', $where );
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared -- As above.
+		return (int) $wpdb->get_var( $wpdb->prepare( $sql, $values ) );
+	}
+
+	/**
+	 * Builds the shared WHERE for the two site-wide queries.
+	 *
+	 * One place, so a filter cannot apply to the list and not to the count that
+	 * sits above it — which would show a heading and a body disagreeing about
+	 * the same question.
+	 *
+	 * @since 0.29.0
+	 *
+	 * @param array<string, mixed> $args Filters.
+	 * @return array{0: string[], 1: array<int, mixed>}
+	 */
+	private function current_conditions( array $args ): array {
+		global $wpdb;
+
+		// A finding not bound to a post is a template finding and has no page to
+		// have been deleted, so it is kept regardless.
+		$where  = array( '( i.post_id = 0 OR p.ID IS NOT NULL )' );
+		$values = array( Schema::issues_table(), $wpdb->posts );
+
+		$status = $args['status'] ?? IssueStatus::Open;
+
+		if ( $status instanceof IssueStatus ) {
+			$where[]  = 'i.status = %s';
+			$values[] = $status->value;
+		}
+
+		if ( ! empty( $args['rule_id'] ) ) {
+			$where[]  = 'i.rule_id = %s';
+			$values[] = (string) $args['rule_id'];
+		}
+
+		if ( isset( $args['post_id'] ) ) {
+			$where[]  = 'i.post_id = %d';
+			$values[] = (int) $args['post_id'];
+		}
+
+		if ( ( $args['severity'] ?? null ) instanceof Severity ) {
+			$where[]  = 'i.severity = %s';
+			$values[] = $args['severity']->value;
+		}
+
+		if ( ( $args['detection'] ?? null ) instanceof Detection ) {
+			$where[]  = 'i.detection = %s';
+			$values[] = $args['detection']->value;
+		}
+
+		return array( $where, $values );
+	}
+
+	/**
 	 * Returns findings somebody has set aside, most recent first.
 	 *
 	 * The record of what was dismissed, who dismissed it and why. Everything it

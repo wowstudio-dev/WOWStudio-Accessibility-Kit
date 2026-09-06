@@ -96,6 +96,7 @@ In WordPress's own alt text field on the media item. It therefore applies everyw
 == Changelog ==
 
 = 0.29.0 =
+* New: the figures on the report screen now open. "What comes up most" and "Pages with the most to do" were counts you could read and not act on; each row is now a control that lists the findings behind it, with an explanation of the check at the top rather than repeated against every row.
 * Fixed: dismissals are no longer lost when a page is scanned again. A finding you set aside, and the reason you gave for it, now stay with that finding across every future scan. Previously the decision was kept only on the record the scan happened to be holding, so the next scan quietly put the finding back with no sign that anything had been discarded.
 * Fixed: site-wide counts no longer include findings from earlier scans. A page scanned repeatedly was contributing a separate copy of each of its findings every time, so the totals grew the more the plugin was used. Only the most recent scan of each page is counted now, which is what the score on the same screen was already doing.
 * Upgrading tidies this up in one pass: existing dismissals are preserved first, then superseded findings are cleared out. Expect the open counts to drop — the earlier numbers were counting the same findings several times over, and nothing has been hidden.
@@ -254,7 +255,7 @@ In WordPress's own alt text field on the media item. It therefore applies everyw
 == Upgrade Notice ==
 
 = 0.29.0 =
-Dismissed findings now survive a rescan, and the site-wide counts no longer count the same finding once per scan. Your open totals will drop after upgrading.
+The report's figures now open onto the findings behind them. Dismissed findings survive a rescan, and the site-wide counts no longer count the same finding once per scan, so your open totals will drop after upgrading.
 
 = 0.28.0 =
 The dashboard now tells you what to do next, and the list of what the checks cover is easier to find.

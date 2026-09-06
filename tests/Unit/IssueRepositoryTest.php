@@ -55,6 +55,7 @@ final class IssueRepositoryTest extends TestCase {
 
 		$this->wpdb         = Mockery::mock( 'wpdb' );
 		$this->wpdb->prefix = 'wp_';
+		$this->wpdb->posts  = 'wp_posts';
 
 		$this->wpdb->shouldReceive( 'prepare' )
 			->andReturnUsing(
@@ -145,6 +146,99 @@ final class IssueRepositoryTest extends TestCase {
 		$this->assertStringContainsString( 'old.id <> keep.id', $this->sql, 'The scan being kept must survive its own pruning.' );
 		$this->assertContains( 88, $this->values, 'The scan to keep goes through prepare(), not into the SQL.' );
 		$this->assertStringNotContainsString( 'wp_wsak_issues', $this->sql );
+	}
+
+	/**
+	 * A site-wide list defaults to what is still open.
+	 *
+	 * @return void
+	 */
+	public function test_current_findings_default_to_open(): void {
+		$this->wpdb->shouldReceive( 'get_results' )->once()->andReturn( array() );
+
+		( new IssueRepository( new FakeDecisionStore() ) )->find_current();
+
+		$this->assertStringContainsString( 'i.status = %s', $this->sql );
+		$this->assertContains( 'open', $this->values );
+	}
+
+	/**
+	 * Findings against deleted content are left out.
+	 *
+	 * Their rows outlive the post, and sending somebody to an edit screen that
+	 * 404s is a worse answer than not listing the finding.
+	 *
+	 * @return void
+	 */
+	public function test_findings_on_deleted_content_are_excluded(): void {
+		$this->wpdb->shouldReceive( 'get_results' )->once()->andReturn( array() );
+
+		( new IssueRepository( new FakeDecisionStore() ) )->find_current();
+
+		$this->assertStringContainsString( 'p.ID IS NOT NULL', $this->sql );
+		// A template finding is bound to no post and must survive the same test.
+		$this->assertStringContainsString( 'i.post_id = 0 OR', $this->sql );
+	}
+
+	/**
+	 * A rule filter narrows the list.
+	 *
+	 * @return void
+	 */
+	public function test_a_rule_filter_is_a_prepared_value(): void {
+		$this->wpdb->shouldReceive( 'get_results' )->once()->andReturn( array() );
+
+		( new IssueRepository( new FakeDecisionStore() ) )
+			->find_current( array( 'rule_id' => 'link-name-vague' ) );
+
+		$this->assertStringContainsString( 'i.rule_id = %s', $this->sql );
+		$this->assertContains( 'link-name-vague', $this->values );
+		$this->assertStringNotContainsString( 'link-name-vague', $this->sql );
+	}
+
+	/**
+	 * The count and the list ask the same question.
+	 *
+	 * They sit on the same screen, one as the heading and one as the body. A
+	 * filter that reached only one of them would put a page in front of
+	 * somebody that disagreed with itself about how much work there was.
+	 *
+	 * @return void
+	 */
+	public function test_the_count_and_the_list_share_their_conditions(): void {
+		$repository = new IssueRepository( new FakeDecisionStore() );
+		$filters    = array(
+			'rule_id' => 'link-name-vague',
+			'post_id' => 42,
+		);
+
+		$this->wpdb->shouldReceive( 'get_results' )->once()->andReturn( array() );
+		$repository->find_current( $filters );
+		$list_where  = $this->where_of( $this->sql );
+		$list_values = $this->values;
+
+		$this->wpdb->shouldReceive( 'get_var' )->once()->andReturn( 0 );
+		$repository->count_current( $filters );
+		$count_where  = $this->where_of( $this->sql );
+		$count_values = $this->values;
+
+		$this->assertSame( $list_where, $count_where );
+
+		// The list carries two extra values, its limit and its offset.
+		$this->assertSame( $count_values, array_slice( $list_values, 0, count( $count_values ) ) );
+	}
+
+	/**
+	 * Returns everything from WHERE onwards, without the paging tail.
+	 *
+	 * @param string $sql The query.
+	 * @return string
+	 */
+	private function where_of( string $sql ): string {
+		$where = substr( $sql, (int) strpos( $sql, 'WHERE' ) );
+		$order = strpos( $where, ' ORDER BY ' );
+
+		return false === $order ? $where : substr( $where, 0, $order );
 	}
 
 	/**

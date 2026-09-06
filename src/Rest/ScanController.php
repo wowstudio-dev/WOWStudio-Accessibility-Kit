@@ -10,7 +10,6 @@ namespace WOWStudio\AccessibilityKit\Rest;
 use WOWStudio\AccessibilityKit\Core\Registrable;
 use WOWStudio\AccessibilityKit\Db\IssueRepository;
 use WOWStudio\AccessibilityKit\Db\ScanRepository;
-use WOWStudio\AccessibilityKit\Remediation\WorkList;
 use WOWStudio\AccessibilityKit\Scanner\BrowserPassStatus;
 use WOWStudio\AccessibilityKit\Scanner\BrowserRules;
 use WOWStudio\AccessibilityKit\Scanner\Detection;
@@ -435,38 +434,6 @@ final class ScanController implements Registrable {
 		return new WP_REST_Response( array( 'items' => $items ) );
 	}
 
-	/**
-	 * Resolves the media item an image finding refers to.
-	 *
-	 * Returns 0 for anything that is not an image finding, and for images that
-	 * are not in the media library — a hotlinked or theme-bundled image has no
-	 * attachment to write alt text onto.
-	 *
-	 * @since 0.5.0
-	 *
-	 * @param string $rule_id Rule that produced the finding.
-	 * @param string $context The offending markup.
-	 * @return int
-	 */
-	private function attachment_for( string $rule_id, string $context ): int {
-		if ( 'img-alt-missing' !== $rule_id || '' === $context ) {
-			return 0;
-		}
-
-		if ( 1 !== preg_match( '/\ssrc=["\']([^"\']+)["\']/i', $context, $matches ) ) {
-			return 0;
-		}
-
-		$url = $matches[1];
-
-		// Relative sources are common in rendered markup; make them absolute so
-		// the lookup can match what WordPress stored.
-		if ( 0 === strpos( $url, '/' ) && 0 !== strpos( $url, '//' ) ) {
-			$url = home_url( $url );
-		}
-
-		return (int) attachment_url_to_postid( $url );
-	}
 
 	/**
 	 * Records what the browser pass found.
@@ -623,44 +590,6 @@ final class ScanController implements Registrable {
 	 * @return array<int, array<string, mixed>>
 	 */
 	private function present_issues( int $scan_id, IssueRepository $issues ): array {
-		$presented = array();
-		$registry  = ( new Engine() )->registry();
-		$work      = new WorkList( $registry->descriptors() );
-
-		foreach ( $issues->find_by_scan( $scan_id ) as $issue ) {
-			$rule = $registry->descriptor( $issue->rule_id );
-
-			$presented[] = array(
-				'rule_title'      => null === $rule ? $issue->rule_id : $rule->title(),
-				// What this costs a person, in one line. Sent alongside the
-				// technical description rather than instead of it: the reader
-				// who wants the success criterion still gets it, one level down.
-				'consequence'     => null === $rule ? '' : $rule->consequence(),
-				'band'            => $work->band_for( $issue->rule_id )->value,
-				'fix'             => null === $rule ? array() : $rule->fix_plan()->to_array(),
-				'how_to_fix'      => null === $rule ? '' : $rule->description(),
-				// Only findings about a specific image can be handed to the
-				// alt-text generator, so resolve the media item here rather than
-				// making the interface guess.
-				'attachment_id'   => $this->attachment_for( $issue->rule_id, $issue->context ),
-				'id'              => $issue->id,
-				'rule_id'         => $issue->rule_id,
-				'wcag_sc'         => $issue->wcag_sc,
-				'severity'        => $issue->severity->value,
-				'severity_label'  => $issue->severity->label(),
-				'detection'       => $issue->detection->value,
-				'detection_label' => $issue->detection->label(),
-				'found_by'        => $issue->found_by->value,
-				'status'          => $issue->status->value,
-				'note'            => $issue->note,
-				'message'         => $issue->message,
-				'selector'        => $issue->selector,
-				'context'         => $issue->context,
-			);
-		}
-
-		// Ordered here rather than in the interface, so every surface that
-		// renders findings gets the same order without having to agree on one.
-		return $work->order( $presented );
+		return ( new IssuePresenter() )->present( $issues->find_by_scan( $scan_id ) );
 	}
 }
