@@ -261,6 +261,7 @@ final class TemplateScan {
 		}
 
 		$this->issues->add_many( $scan_id, $rows );
+		$this->issues->prune_superseded( $scan_id );
 		$this->scans->complete(
 			$scan_id,
 			null,

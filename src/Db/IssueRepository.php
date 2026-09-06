@@ -8,6 +8,7 @@
 namespace WOWStudio\AccessibilityKit\Db;
 
 use WOWStudio\AccessibilityKit\Scanner\Detection;
+use WOWStudio\AccessibilityKit\Scanner\Fingerprint;
 use WOWStudio\AccessibilityKit\Scanner\IssueStatus;
 use WOWStudio\AccessibilityKit\Scanner\ScanPass;
 use WOWStudio\AccessibilityKit\Scanner\Severity;
@@ -44,10 +45,52 @@ class IssueRepository {
 	private const GROUPABLE = array( 'severity', 'detection', 'status', 'rule_id', 'wcag_sc' );
 
 	/**
+	 * Durable record of what people have already decided.
+	 *
+	 * @since 0.29.0
+	 * @var DecisionRepository|null
+	 */
+	private ?DecisionRepository $decisions;
+
+	/**
+	 * Constructor.
+	 *
+	 * @since 0.29.0
+	 *
+	 * @param DecisionRepository|null $decisions Decision storage.
+	 */
+	public function __construct( ?DecisionRepository $decisions = null ) {
+		$this->decisions = $decisions;
+	}
+
+	/**
+	 * Returns decision storage, built on first use.
+	 *
+	 * @since 0.29.0
+	 *
+	 * @return DecisionRepository
+	 */
+	private function decisions(): DecisionRepository {
+		if ( ! $this->decisions instanceof DecisionRepository ) {
+			$this->decisions = new DecisionRepository();
+		}
+
+		return $this->decisions;
+	}
+
+	/**
 	 * Stores a batch of findings for a scan.
 	 *
 	 * Written as one multi-row INSERT: a scan can produce hundreds of findings,
 	 * and a query per row is the difference between a fast scan and a timeout.
+	 *
+	 * Each row is stamped with its fingerprint and with whatever has already
+	 * been decided about it. Carrying the decision onto the row here, rather
+	 * than joining to it on the way out, is what lets every existing query keep
+	 * working unchanged — the counts, the severity breakdown, the dismissal log
+	 * and the per-scan lists all read `status` off the row and all stay correct
+	 * without knowing decisions exist. The decisions table is the record; this
+	 * column is a copy of it that the last scan happens to be holding.
 	 *
 	 * @since 0.2.0
 	 *
@@ -65,28 +108,38 @@ class IssueRepository {
 		$now          = gmdate( 'Y-m-d H:i:s' );
 		$placeholders = array();
 		$values       = array();
+		$decided      = $this->decisions_for( $issues );
 
 		foreach ( $issues as $issue ) {
 			$severity  = $issue['severity'] ?? Severity::Moderate;
 			$detection = $issue['detection'] ?? Detection::Manual;
 			$found_by  = $issue['found_by'] ?? ScanPass::Server;
 
-			$placeholders[] = '(%d, %d, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)';
+			$post_id     = (int) ( $issue['post_id'] ?? 0 );
+			$rule_id     = (string) ( $issue['rule_id'] ?? '' );
+			$context     = (string) ( $issue['context'] ?? '' );
+			$fingerprint = Fingerprint::of( $rule_id, $context );
+
+			$decision = $decided[ $post_id ][ $fingerprint ] ?? null;
+
+			$placeholders[] = '(%d, %d, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %d, %s, %s)';
 
 			array_push(
 				$values,
 				$scan_id,
-				(int) ( $issue['post_id'] ?? 0 ),
-				(string) ( $issue['rule_id'] ?? '' ),
+				$post_id,
+				$rule_id,
 				(string) ( $issue['wcag_sc'] ?? '' ),
 				$severity instanceof Severity ? $severity->value : (string) $severity,
 				$detection instanceof Detection ? $detection->value : (string) $detection,
 				$found_by instanceof ScanPass ? $found_by->value : (string) $found_by,
-				IssueStatus::Open->value,
+				$decision instanceof Decision ? $decision->status->value : IssueStatus::Open->value,
+				$fingerprint,
 				(string) ( $issue['selector'] ?? '' ),
-				(string) ( $issue['context'] ?? '' ),
+				$context,
 				(string) ( $issue['message'] ?? '' ),
-				(string) ( $issue['note'] ?? '' ),
+				$decision instanceof Decision ? $decision->note : (string) ( $issue['note'] ?? '' ),
+				$decision instanceof Decision ? $decision->decided_by : 0,
 				$now,
 				$now
 			);
@@ -95,13 +148,128 @@ class IssueRepository {
 		array_unshift( $values, Schema::issues_table() );
 
 		$sql = 'INSERT INTO %i'
-			. ' (scan_id, post_id, rule_id, wcag_sc, severity, detection, found_by, status, selector, context, message, note, created_at, updated_at)'
+			. ' (scan_id, post_id, rule_id, wcag_sc, severity, detection, found_by, status, fingerprint, selector, context, message, note, resolved_by, created_at, updated_at)'
 			. ' VALUES ' . implode( ', ', $placeholders );
 
 		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared -- Assembled from placeholders only; the table and every value go through prepare().
 		$written = $wpdb->query( $wpdb->prepare( $sql, $values ) );
 
 		return false === $written ? 0 : (int) $written;
+	}
+
+	/**
+	 * Looks up what has already been decided about a batch of findings.
+	 *
+	 * Grouped by post because a decision is scoped to a page, and a batch can
+	 * span more than one — a theme scan reports against post 0 while a page
+	 * scan reports against its own. One query per distinct page, which in
+	 * practice is one.
+	 *
+	 * @since 0.29.0
+	 *
+	 * @param array<int, array<string,mixed>> $issues Findings about to be stored.
+	 * @return array<int, array<string, Decision>> Decisions keyed by post, then fingerprint.
+	 */
+	private function decisions_for( array $issues ): array {
+		$wanted = array();
+
+		foreach ( $issues as $issue ) {
+			$post_id = (int) ( $issue['post_id'] ?? 0 );
+
+			$wanted[ $post_id ][] = Fingerprint::of(
+				(string) ( $issue['rule_id'] ?? '' ),
+				(string) ( $issue['context'] ?? '' )
+			);
+		}
+
+		$found = array();
+
+		foreach ( $wanted as $post_id => $fingerprints ) {
+			$found[ $post_id ] = $this->decisions()->for_fingerprints( $fingerprints, $post_id );
+		}
+
+		return $found;
+	}
+
+	/**
+	 * Removes the findings of every earlier scan of the same thing.
+	 *
+	 * Without this the issues table is an append-only log that every count then
+	 * reads as though it were the present: a page scanned sixteen times
+	 * contributes sixteen copies of each of its faults, and the site-wide
+	 * numbers drift further from the truth the more diligently somebody uses
+	 * the plugin. The score never had this problem because it joins to the
+	 * newest scan per page; the counts beside it did, and disagreed with it.
+	 *
+	 * Scoped by the scan's own scope and target, read from the scans table
+	 * rather than passed in, so a caller cannot prune the wrong thing by
+	 * getting an argument wrong. Idempotent: running it twice for the same scan
+	 * removes nothing the second time.
+	 *
+	 * @since 0.29.0
+	 *
+	 * @param int $scan_id The scan whose findings are the current ones.
+	 * @return int Rows removed.
+	 */
+	public function prune_superseded( int $scan_id ): int {
+		global $wpdb;
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Custom tables; no core API covers them.
+		$deleted = $wpdb->query(
+			$wpdb->prepare(
+				'DELETE i FROM %i AS i
+				INNER JOIN %i AS keep ON keep.id = %d
+				INNER JOIN %i AS old ON old.id = i.scan_id
+				WHERE old.id <> keep.id
+				  AND old.scope = keep.scope
+				  AND old.target_id = keep.target_id',
+				Schema::issues_table(),
+				Schema::scans_table(),
+				$scan_id,
+				Schema::scans_table()
+			)
+		);
+
+		return false === $deleted ? 0 : (int) $deleted;
+	}
+
+	/**
+	 * Clears out every superseded finding on the site at once.
+	 *
+	 * The upgrade counterpart of prune_superseded(). Sites that ran earlier
+	 * versions have an issues table holding the findings of every scan they
+	 * ever ran, so this sweeps the backlog in a single statement rather than
+	 * waiting for each page to be scanned again.
+	 *
+	 * Dismissals are copied into the decisions table before this runs. See
+	 * Installer::migrate_decisions(), which owns that ordering.
+	 *
+	 * @since 0.29.0
+	 *
+	 * @return int Rows removed.
+	 */
+	public function prune_all_superseded(): int {
+		global $wpdb;
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- One-time upgrade over the plugin's own tables.
+		$deleted = $wpdb->query(
+			$wpdb->prepare(
+				'DELETE i FROM %i AS i
+				INNER JOIN %i AS s ON s.id = i.scan_id
+				INNER JOIN (
+					SELECT scope, target_id, MAX(id) AS newest
+					FROM %i
+					GROUP BY scope, target_id
+				) AS newest
+					ON newest.scope = s.scope AND newest.target_id = s.target_id
+				WHERE i.scan_id <> newest.newest',
+				Schema::issues_table(),
+				Schema::scans_table(),
+				Schema::scans_table()
+			)
+		);
+
+		return false === $deleted ? 0 : (int) $deleted;
 	}
 
 	/**

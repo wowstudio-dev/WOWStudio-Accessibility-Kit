@@ -27,7 +27,7 @@ final class Schema {
 	 * @since 0.2.0
 	 * @var string
 	 */
-	public const VERSION = '1.4.0';
+	public const VERSION = '1.5.0';
 
 	/**
 	 * Option holding the installed schema version.
@@ -77,6 +77,19 @@ final class Schema {
 	}
 
 	/**
+	 * Returns the decisions table name, including the site prefix.
+	 *
+	 * @since 0.29.0
+	 *
+	 * @return string
+	 */
+	public static function decisions_table(): string {
+		global $wpdb;
+
+		return $wpdb->prefix . 'wsak_decisions';
+	}
+
+	/**
 	 * Returns every table this plugin owns on the current site.
 	 *
 	 * @since 0.2.0
@@ -88,6 +101,7 @@ final class Schema {
 			self::scans_table(),
 			self::issues_table(),
 			self::fixes_table(),
+			self::decisions_table(),
 		);
 	}
 
@@ -106,6 +120,7 @@ final class Schema {
 		dbDelta( self::scans_sql() );
 		dbDelta( self::issues_sql() );
 		dbDelta( self::fixes_sql() );
+		dbDelta( self::decisions_sql() );
 
 		update_option( self::VERSION_OPTION, self::VERSION, true );
 	}
@@ -233,6 +248,7 @@ final class Schema {
 			detection varchar(10) NOT NULL DEFAULT 'auto',
 			found_by varchar(10) NOT NULL DEFAULT 'server',
 			status varchar(20) NOT NULL DEFAULT 'open',
+			fingerprint char(40) NOT NULL DEFAULT '',
 			selector text NULL,
 			context longtext NULL,
 			message text NOT NULL,
@@ -246,7 +262,49 @@ final class Schema {
 			KEY rule_id (rule_id),
 			KEY severity_status (severity,status),
 			KEY detection (detection),
-			KEY found_by (found_by)
+			KEY found_by (found_by),
+			KEY fingerprint (fingerprint),
+			KEY post_fingerprint (post_id,fingerprint)
+		) {$wpdb->get_charset_collate()};";
+	}
+
+	/**
+	 * Returns the decisions table definition.
+	 *
+	 * Decisions live outside the issues table because they outlive it. An issue
+	 * row is what one scan saw and is replaced by the next one; a decision is a
+	 * judgement a person made and wrote a reason for, and it has to survive
+	 * every rescan, every reindex and the pruning of the scan that happened to
+	 * be running when it was taken. Keeping the two in one table is what made
+	 * dismissals disappear on rescan.
+	 *
+	 * `post_id` of 0 means site-wide: the same markup, wherever it appears.
+	 * The unique key is what stops one page accumulating two contradictory
+	 * decisions about the same finding.
+	 *
+	 * @since 0.29.0
+	 *
+	 * @return string
+	 */
+	private static function decisions_sql(): string {
+		global $wpdb;
+
+		$table = self::decisions_table();
+
+		return "CREATE TABLE {$table} (
+			id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+			fingerprint char(40) NOT NULL DEFAULT '',
+			post_id bigint(20) unsigned NOT NULL DEFAULT 0,
+			rule_id varchar(100) NOT NULL DEFAULT '',
+			status varchar(20) NOT NULL DEFAULT 'ignored',
+			note text NULL,
+			decided_by bigint(20) unsigned NOT NULL DEFAULT 0,
+			created_at datetime NOT NULL,
+			updated_at datetime NOT NULL,
+			PRIMARY KEY  (id),
+			UNIQUE KEY scope (fingerprint,post_id),
+			KEY post_id (post_id),
+			KEY rule_id (rule_id)
 		) {$wpdb->get_charset_collate()};";
 	}
 }

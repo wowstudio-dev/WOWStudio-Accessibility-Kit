@@ -65,7 +65,7 @@ final class SchemaTest extends TestCase {
 	 */
 	public function test_tables_lists_every_table(): void {
 		$this->assertSame(
-			array( 'wp_wsak_scans', 'wp_wsak_issues', 'wp_wsak_fixes' ),
+			array( 'wp_wsak_scans', 'wp_wsak_issues', 'wp_wsak_fixes', 'wp_wsak_decisions' ),
 			Schema::tables()
 		);
 	}

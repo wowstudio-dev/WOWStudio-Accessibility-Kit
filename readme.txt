@@ -4,7 +4,7 @@ Tags: accessibility, wcag, a11y, alt text, accessibility scanner
 Requires at least: 6.8
 Tested up to: 7.1
 Requires PHP: 8.1
-Stable tag: 0.28.0
+Stable tag: 0.29.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -94,6 +94,11 @@ No. Everything in this plugin is free, including checking your whole site at onc
 In WordPress's own alt text field on the media item. It therefore applies everywhere that image is used, works with every theme and plugin, and stays behind if you remove this plugin.
 
 == Changelog ==
+
+= 0.29.0 =
+* Fixed: dismissals are no longer lost when a page is scanned again. A finding you set aside, and the reason you gave for it, now stay with that finding across every future scan. Previously the decision was kept only on the record the scan happened to be holding, so the next scan quietly put the finding back with no sign that anything had been discarded.
+* Fixed: site-wide counts no longer include findings from earlier scans. A page scanned repeatedly was contributing a separate copy of each of its findings every time, so the totals grew the more the plugin was used. Only the most recent scan of each page is counted now, which is what the score on the same screen was already doing.
+* Upgrading tidies this up in one pass: existing dismissals are preserved first, then superseded findings are cleared out. Expect the open counts to drop — the earlier numbers were counting the same findings several times over, and nothing has been hidden.
 
 = 0.28.0 =
 * New: the dashboard now suggests one thing to do next, worked out from your own site — check a page, switch on the site-wide fixes, describe your images, or work through what is open. One suggestion at a time, never a checklist, and it disappears entirely when there is nothing worth suggesting.
@@ -247,6 +252,9 @@ In WordPress's own alt text field on the media item. It therefore applies everyw
 * Initial scaffold: plugin bootstrap, capabilities, activation and uninstall handling.
 
 == Upgrade Notice ==
+
+= 0.29.0 =
+Dismissed findings now survive a rescan, and the site-wide counts no longer count the same finding once per scan. Your open totals will drop after upgrading.
 
 = 0.28.0 =
 The dashboard now tells you what to do next, and the list of what the checks cover is easier to find.

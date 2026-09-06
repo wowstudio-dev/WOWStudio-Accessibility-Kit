@@ -13,6 +13,7 @@ use Brain\Monkey\Functions;
 use WOWStudio\AccessibilityKit\Db\Issue;
 use WOWStudio\AccessibilityKit\Remediation\ThemeTriage;
 use WOWStudio\AccessibilityKit\Scanner\Detection;
+use WOWStudio\AccessibilityKit\Scanner\Fingerprint;
 use WOWStudio\AccessibilityKit\Scanner\IssueStatus;
 use WOWStudio\AccessibilityKit\Scanner\ScanPass;
 use WOWStudio\AccessibilityKit\Scanner\Severity;
@@ -66,6 +67,7 @@ final class ThemeTriageTest extends TestCase {
 			Detection::Auto,
 			ScanPass::Server,
 			IssueStatus::Open,
+			Fingerprint::of( $rule_id, $context ),
 			'/html/body/img',
 			$context,
 			'message',

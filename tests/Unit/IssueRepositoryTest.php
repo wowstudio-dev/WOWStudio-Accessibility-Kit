@@ -11,6 +11,7 @@ namespace WOWStudio\AccessibilityKit\Tests\Unit;
 
 use Mockery;
 use WOWStudio\AccessibilityKit\Db\IssueRepository;
+use WOWStudio\AccessibilityKit\Tests\Doubles\FakeDecisionStore;
 use WOWStudio\AccessibilityKit\Scanner\Detection;
 use WOWStudio\AccessibilityKit\Scanner\ScanPass;
 use WOWStudio\AccessibilityKit\Scanner\Severity;
@@ -87,7 +88,7 @@ final class IssueRepositoryTest extends TestCase {
 	public function test_batch_is_written_as_one_insert(): void {
 		$this->wpdb->shouldReceive( 'query' )->once()->andReturn( 2 );
 
-		$written = ( new IssueRepository() )->add_many(
+		$written = ( new IssueRepository( new FakeDecisionStore() ) )->add_many(
 			7,
 			array(
 				array(
@@ -112,7 +113,7 @@ final class IssueRepositoryTest extends TestCase {
 		$this->assertSame( 2, $written );
 		$this->assertSame( 1, substr_count( $this->sql, 'INSERT INTO' ), 'Should be a single INSERT.' );
 		$this->assertSame( 2, substr_count( $this->sql, '(%d, %d, %s' ), 'Should carry one value group per issue.' );
-		$this->assertCount( 29, $this->values, 'Fourteen columns times two rows, plus the table identifier.' );
+		$this->assertCount( 33, $this->values, 'Sixteen columns times two rows, plus the table identifier.' );
 		$this->assertSame( 'wp_wsak_issues', $this->values[0], 'The table goes through prepare(), not into the SQL.' );
 
 		// A finding that does not say which pass produced it is recorded as a
@@ -120,6 +121,30 @@ final class IssueRepositoryTest extends TestCase {
 		// surfaces claim was checked, and an empty value there would quietly
 		// misreport what the scan actually looked at.
 		$this->assertContains( ScanPass::Server->value, $this->values, 'An unattributed finding defaults to the server pass.' );
+	}
+
+	/**
+	 * A new scan retires the findings of the last one.
+	 *
+	 * Without this the issues table is an append-only log that every count then
+	 * reads as the present: a page scanned sixteen times contributes sixteen
+	 * copies of each fault, and the site-wide numbers drift further from the
+	 * truth the more somebody uses the plugin.
+	 *
+	 * @return void
+	 */
+	public function test_superseded_findings_are_removed(): void {
+		$this->wpdb->shouldReceive( 'query' )->once()->andReturn( 4 );
+
+		$removed = ( new IssueRepository( new FakeDecisionStore() ) )->prune_superseded( 88 );
+
+		$this->assertSame( 4, $removed );
+		$this->assertStringContainsString( 'DELETE i FROM %i', $this->sql );
+		$this->assertStringContainsString( 'old.scope = keep.scope', $this->sql );
+		$this->assertStringContainsString( 'old.target_id = keep.target_id', $this->sql );
+		$this->assertStringContainsString( 'old.id <> keep.id', $this->sql, 'The scan being kept must survive its own pruning.' );
+		$this->assertContains( 88, $this->values, 'The scan to keep goes through prepare(), not into the SQL.' );
+		$this->assertStringNotContainsString( 'wp_wsak_issues', $this->sql );
 	}
 
 	/**
@@ -145,7 +170,7 @@ final class IssueRepositoryTest extends TestCase {
 	public function test_batch_values_are_never_interpolated(): void {
 		$this->wpdb->shouldReceive( 'query' )->once()->andReturn( 1 );
 
-		( new IssueRepository() )->add_many(
+		( new IssueRepository( new FakeDecisionStore() ) )->add_many(
 			7,
 			array(
 				array(

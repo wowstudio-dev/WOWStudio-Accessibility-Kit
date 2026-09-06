@@ -35,6 +35,8 @@ final class Issue {
 	 * @param Detection   $detection  Whether a machine or a person decides this.
 	 * @param ScanPass    $found_by   Which engine produced this finding.
 	 * @param IssueStatus $status     Where it sits in the workflow.
+	 * @param string      $fingerprint Stable identity, so a decision about this
+	 *                                finding survives the scan that found it.
 	 * @param string      $selector   XPath or CSS selector for the element.
 	 * @param string      $context    The offending markup, for preview and diff.
 	 * @param string      $message    Plain-language description.
@@ -53,6 +55,7 @@ final class Issue {
 		public readonly Detection $detection,
 		public readonly ScanPass $found_by,
 		public readonly IssueStatus $status,
+		public readonly string $fingerprint,
 		public readonly string $selector,
 		public readonly string $context,
 		public readonly string $message,
@@ -81,6 +84,7 @@ final class Issue {
 			Detection::tryFrom( (string) $row->detection ) ?? Detection::Manual,
 			ScanPass::tryFrom( (string) ( $row->found_by ?? '' ) ) ?? ScanPass::Server,
 			IssueStatus::tryFrom( (string) $row->status ) ?? IssueStatus::Open,
+			(string) ( $row->fingerprint ?? '' ),
 			(string) ( $row->selector ?? '' ),
 			(string) ( $row->context ?? '' ),
 			(string) $row->message,

@@ -70,6 +70,7 @@ final class FakeIssueStore extends IssueRepository {
 			Detection::Manual,
 			ScanPass::Server,
 			$this->status,
+			'fingerprint-for-tests',
 			'/html/body/table',
 			'<table></table>',
 			'This table has no th elements.',

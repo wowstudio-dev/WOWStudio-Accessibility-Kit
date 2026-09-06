@@ -12,6 +12,7 @@ namespace WOWStudio\AccessibilityKit\Tests\Unit;
 use Brain\Monkey\Functions;
 use WOWStudio\AccessibilityKit\Remediation\IssueReview;
 use WOWStudio\AccessibilityKit\Scanner\IssueStatus;
+use WOWStudio\AccessibilityKit\Tests\Doubles\FakeDecisionStore;
 use WOWStudio\AccessibilityKit\Tests\Doubles\FakeIssueStore;
 use WOWStudio\AccessibilityKit\Tests\TestCase;
 
@@ -97,7 +98,7 @@ final class IssueReviewTest extends TestCase {
 	 */
 	public function test_a_dismissal_with_a_reason_is_recorded_against_its_author(): void {
 		$store  = new FakeIssueStore();
-		$review = new IssueReview( $store );
+		$review = new IssueReview( $store, new FakeDecisionStore() );
 
 		$result = $review->ignore( 1, 'This table lays out a form, it is not tabular data.', 7 );
 
@@ -118,7 +119,7 @@ final class IssueReviewTest extends TestCase {
 	 */
 	public function test_reopening_keeps_the_original_reason(): void {
 		$store  = new FakeIssueStore();
-		$review = new IssueReview( $store );
+		$review = new IssueReview( $store, new FakeDecisionStore() );
 
 		$review->ignore( 1, 'Decorative image, the caption already says what it shows.', 7 );
 		$result = $review->reopen( 1, 9 );

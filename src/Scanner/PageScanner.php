@@ -154,6 +154,7 @@ class PageScanner {
 		$summary['strategy']        = $markup->from_loopback ? FetchStrategy::Loopback->value : FetchStrategy::Content->value;
 
 		$this->issues->add_many( $scan_id, $rows );
+		$this->issues->prune_superseded( $scan_id );
 		$this->scans->complete( $scan_id, $result->score(), $summary );
 
 		return array(

@@ -99,6 +99,7 @@ final class Uninstaller {
 
 		delete_option( Installer::SETTINGS_OPTION );
 		delete_option( Installer::VERSION_OPTION );
+		delete_option( Installer::DECISIONS_MIGRATED_OPTION );
 
 		self::delete_transients();
 		self::delete_post_meta();

@@ -7,7 +7,11 @@
 
 namespace WOWStudio\AccessibilityKit\Remediation;
 
+use WOWStudio\AccessibilityKit\Db\Decision;
+use WOWStudio\AccessibilityKit\Db\DecisionRepository;
+use WOWStudio\AccessibilityKit\Db\Issue;
 use WOWStudio\AccessibilityKit\Db\IssueRepository;
+use WOWStudio\AccessibilityKit\Scanner\Fingerprint;
 use WOWStudio\AccessibilityKit\Scanner\IssueStatus;
 use WP_Error;
 
@@ -53,14 +57,24 @@ final class IssueReview {
 	private IssueRepository $issues;
 
 	/**
+	 * Durable storage for the judgement itself.
+	 *
+	 * @since 0.29.0
+	 * @var DecisionRepository
+	 */
+	private DecisionRepository $decisions;
+
+	/**
 	 * Constructor.
 	 *
 	 * @since 0.13.0
 	 *
-	 * @param IssueRepository|null $issues Issue storage.
+	 * @param IssueRepository|null    $issues    Issue storage.
+	 * @param DecisionRepository|null $decisions Decision storage.
 	 */
-	public function __construct( ?IssueRepository $issues = null ) {
-		$this->issues = $issues ?? new IssueRepository();
+	public function __construct( ?IssueRepository $issues = null, ?DecisionRepository $decisions = null ) {
+		$this->issues    = $issues ?? new IssueRepository();
+		$this->decisions = $decisions ?? new DecisionRepository();
 	}
 
 	/**
@@ -133,6 +147,21 @@ final class IssueReview {
 			);
 		}
 
+		/*
+		 * The row above is this scan's copy; this is the record. Without it the
+		 * next scan of the page inserts a fresh row, status open, and the
+		 * reasoning somebody just wrote down is gone — which is what used to
+		 * happen, silently, to every dismissal on the site.
+		 */
+		$this->decisions->record(
+			$this->identity_of( $issue ),
+			$issue->post_id,
+			$issue->rule_id,
+			IssueStatus::Ignored,
+			$note,
+			$user_id
+		);
+
 		/**
 		 * Fires when a finding is set aside.
 		 *
@@ -181,6 +210,29 @@ final class IssueReview {
 
 		$this->issues->set_status( $issue_id, IssueStatus::Open, $issue->note, $user_id );
 
+		/*
+		 * A judgement covering the whole site is not undone by one page
+		 * disagreeing with it: that would let reopening a single instance
+		 * quietly unpick a decision somebody took about two hundred others. So
+		 * this page gets its own record saying open, which outranks the
+		 * site-wide one for this page and leaves it standing everywhere else.
+		 * With nothing site-wide in the way, the record is simply withdrawn.
+		 */
+		$covering = $this->decisions->find( $this->identity_of( $issue ), 0 );
+
+		if ( $covering instanceof Decision && $issue->post_id > 0 ) {
+			$this->decisions->record(
+				$this->identity_of( $issue ),
+				$issue->post_id,
+				$issue->rule_id,
+				IssueStatus::Open,
+				$issue->note,
+				$user_id
+			);
+		} else {
+			$this->decisions->withdraw( $this->identity_of( $issue ), $issue->post_id );
+		}
+
 		/**
 		 * Fires when a dismissed finding is put back.
 		 *
@@ -192,6 +244,26 @@ final class IssueReview {
 		do_action( 'wsak_issue_reopened', $issue_id, $user_id );
 
 		return $this->describe( $issue_id );
+	}
+
+	/**
+	 * Returns the identity a decision about this finding is recorded against.
+	 *
+	 * Rows written before 0.29.0 carry no fingerprint, and will not until their
+	 * page is scanned again. Computing it here rather than refusing means a
+	 * dismissal made on one of those rows is still durable — without this, the
+	 * first decision somebody took after upgrading would be the one silently
+	 * lost, which is precisely the fault being fixed.
+	 *
+	 * @since 0.29.0
+	 *
+	 * @param Issue $issue The finding.
+	 * @return string
+	 */
+	private function identity_of( Issue $issue ): string {
+		return '' !== $issue->fingerprint
+			? $issue->fingerprint
+			: Fingerprint::of( $issue->rule_id, $issue->context );
 	}
 
 	/**
