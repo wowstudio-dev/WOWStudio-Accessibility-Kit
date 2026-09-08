@@ -335,6 +335,8 @@ export default function IssueDrilldown( { filter, onBack, onGo } ) {
 					issues={ issues }
 					onGo={ onGo }
 					ruleIsStated={ Boolean( data?.rule ) }
+					// A page-scoped list already names its page at the top.
+					showPage={ ! post }
 				/>
 			) : null }
 

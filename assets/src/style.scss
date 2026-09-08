@@ -561,6 +561,12 @@
 }
 
 .wsak-issue__fix p,
+.wsak-issue__page {
+	margin: var(--wsak-space-2) 0 0;
+	color: var(--wsak-muted);
+	font-size: 12.5px;
+}
+
 .wsak-issue__selector {
 	max-width: 78ch;
 	font-size: 13px;

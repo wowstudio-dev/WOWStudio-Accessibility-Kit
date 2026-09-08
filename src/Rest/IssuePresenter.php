@@ -44,6 +44,17 @@ final class IssuePresenter {
 	private WorkList $work;
 
 	/**
+	 * Pages already described, keyed by post ID.
+	 *
+	 * Fifty findings of one check often come from a handful of pages, so this
+	 * resolves each page once rather than once per row.
+	 *
+	 * @since 0.29.0
+	 * @var array<int, array<string, mixed>>
+	 */
+	private array $pages = array();
+
+	/**
 	 * Constructor.
 	 *
 	 * @since 0.29.0
@@ -113,7 +124,47 @@ final class IssuePresenter {
 			'message'         => $issue->message,
 			'selector'        => $issue->selector,
 			'context'         => $issue->context,
+			// Which page this one is on. A list narrowed to a single check
+			// gathers findings from everywhere, and without this a row says
+			// what is wrong and gives no way to go and fix it — the reader is
+			// holding an XPath and no page to apply it to.
+			'page'            => $this->page_for( $issue->post_id ),
 		);
+	}
+
+	/**
+	 * Describes the page a finding was found on.
+	 *
+	 * @since 0.29.0
+	 *
+	 * @param int $post_id Page the finding belongs to, 0 when it is not on one.
+	 * @return array<string, mixed>|null
+	 */
+	private function page_for( int $post_id ): ?array {
+		if ( $post_id <= 0 ) {
+			return null;
+		}
+
+		if ( isset( $this->pages[ $post_id ] ) ) {
+			return $this->pages[ $post_id ];
+		}
+
+		$post = get_post( $post_id );
+
+		if ( null === $post ) {
+			return null;
+		}
+
+		$title = get_the_title( $post );
+
+		$this->pages[ $post_id ] = array(
+			'id'        => $post_id,
+			'title'     => '' !== $title ? $title : __( '(no title)', 'wowstudio-accessibility-kit' ),
+			'edit_link' => (string) get_edit_post_link( $post_id, 'raw' ),
+			'view_link' => (string) get_permalink( $post_id ),
+		);
+
+		return $this->pages[ $post_id ];
 	}
 
 	/**

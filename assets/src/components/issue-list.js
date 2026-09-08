@@ -70,9 +70,11 @@ function CssHandoff( { onInspect } ) {
  *                                        a preview to switch to.
  * @param {boolean}  [props.ruleIsStated] The rule has already been explained
  *                                        above this list.
+ * @param {boolean}  [props.showPage]     The list spans more than one page, so
+ *                                        each finding has to say which.
  * @return {Element} The card.
  */
-function IssueCard( { issue, onInspect, ruleIsStated } ) {
+function IssueCard( { issue, onInspect, ruleIsStated, showPage } ) {
 	// Worked out before the markup rather than as a chain of conditions inside
 	// it, because which action a finding gets is the decision this component
 	// exists to make and it should be readable in one place.
@@ -183,6 +185,39 @@ function IssueCard( { issue, onInspect, ruleIsStated } ) {
 				</details>
 			) }
 
+			{ /*
+			 * Where this one is, above the path to it inside the page. A list
+			 * narrowed to a single check gathers findings from the whole site,
+			 * and a row that says what is wrong without saying where leaves the
+			 * reader holding an XPath and nothing to apply it to.
+			 *
+			 * Only when the list spans pages. On a single page's own scan every
+			 * row would carry the same line, which is forty copies of something
+			 * the heading already said.
+			 */ }
+			{ showPage && issue.page && (
+				<p className="wsak-issue__page">
+					<span className="wsak-issue__selector-label">
+						{ __( 'Page:', 'wowstudio-accessibility-kit' ) }
+					</span>{ ' ' }
+					{ issue.page.edit_link ? (
+						<a href={ issue.page.edit_link }>
+							{ issue.page.title }
+						</a>
+					) : (
+						issue.page.title
+					) }
+					{ issue.page.view_link && (
+						<>
+							{ ' · ' }
+							<a href={ issue.page.view_link }>
+								{ __( 'View', 'wowstudio-accessibility-kit' ) }
+							</a>
+						</>
+					) }
+				</p>
+			) }
+
 			{ ruleIsStated && issue.selector && (
 				<p className="wsak-issue__selector">
 					<span className="wsak-issue__selector-label">
@@ -264,9 +299,18 @@ const BANDS = [
  * @param {Array}    props.issues         Findings in the group.
  * @param {Function} [props.onInspect]    Switches to the inspector.
  * @param {boolean}  [props.ruleIsStated] The rule is already explained above.
+ * @param {boolean}  [props.showPage]     Each finding says which page it is on.
  * @return {?Element} The group, or nothing when empty.
  */
-function IssueGroup( { id, title, blurb, issues, onInspect, ruleIsStated } ) {
+function IssueGroup( {
+	id,
+	title,
+	blurb,
+	issues,
+	onInspect,
+	ruleIsStated,
+	showPage,
+} ) {
 	if ( ! issues.length ) {
 		return null;
 	}
@@ -290,6 +334,7 @@ function IssueGroup( { id, title, blurb, issues, onInspect, ruleIsStated } ) {
 						issue={ issue }
 						onInspect={ onInspect }
 						ruleIsStated={ ruleIsStated }
+						showPage={ showPage }
 						key={ issue.id }
 					/>
 				) ) }
@@ -309,11 +354,18 @@ function IssueGroup( { id, title, blurb, issues, onInspect, ruleIsStated } ) {
  * @param {Array}    props.issues         Findings.
  * @param {Function} [props.onInspect]    Switches to the inspector.
  * @param {Function} [props.onGo]         Opens another screen.
+ * @param {boolean}  [props.showPage]     The list spans more than one page.
  * @param {boolean}  [props.ruleIsStated] Every finding here is the same check,
  *                                        and it has been explained above.
  * @return {Element} The list.
  */
-export default function IssueList( { issues, onInspect, onGo, ruleIsStated } ) {
+export default function IssueList( {
+	issues,
+	onInspect,
+	onGo,
+	ruleIsStated,
+	showPage,
+} ) {
 	// The server has already ordered these and told each one which band it is
 	// in. Re-deriving that here would mean two answers to the same question,
 	// and the one on this side would be the one that drifts.
@@ -348,6 +400,7 @@ export default function IssueList( { issues, onInspect, onGo, ruleIsStated } ) {
 					issues={ band.issues }
 					onInspect={ onInspect }
 					ruleIsStated={ ruleIsStated }
+					showPage={ showPage }
 				/>
 			) ) }
 

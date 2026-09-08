@@ -87,6 +87,12 @@ Findings that keep their identity, and figures you can open.
 
 ### Fixed
 
+- **Every finding in a rule-scoped list says which page it is on**, and links
+  to it. A list narrowed to one check gathers findings from the whole site, so a
+  row that gave the message, the markup and an XPath was handing somebody a path
+  and no page to apply it to. Not shown on a single page's own scan, where the
+  heading has already said it once and fifty repeats would say it fifty times.
+
 - **The headline no longer counts "I could not check this" as a finding.**
   Every finding is tagged auto-detected or needs-manual-review, and the number
   people actually read added the two together — quietly undoing the tagging on

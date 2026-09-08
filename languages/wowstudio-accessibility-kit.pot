@@ -344,27 +344,27 @@ msgid "In short"
 msgstr ""
 
 #: src/Remediation/ActionBand.php:118
-#: assets/src/components/issue-list.js:222
+#: assets/src/components/issue-list.js:257
 msgid "Fix these now"
 msgstr ""
 
 #: src/Remediation/ActionBand.php:119
-#: assets/src/components/issue-list.js:230
+#: assets/src/components/issue-list.js:265
 msgid "Read, then apply"
 msgstr ""
 
 #: src/Remediation/ActionBand.php:120
-#: assets/src/components/issue-list.js:238
+#: assets/src/components/issue-list.js:273
 msgid "Needs a decision from you"
 msgstr ""
 
 #: src/Remediation/ActionBand.php:121
-#: assets/src/components/issue-list.js:246
+#: assets/src/components/issue-list.js:281
 msgid "For whoever looks after your theme"
 msgstr ""
 
 #: src/Remediation/ActionBand.php:134
-#: assets/src/components/issue-list.js:223
+#: assets/src/components/issue-list.js:258
 msgid "There is one correct answer and we already know it. Nothing here is a guess, so nothing here needs checking first."
 msgstr ""
 
@@ -373,12 +373,12 @@ msgid "We can draft these, but a draft is not an answer. Read what it says befor
 msgstr ""
 
 #: src/Remediation/ActionBand.php:136
-#: assets/src/components/issue-list.js:239
+#: assets/src/components/issue-list.js:274
 msgid "These depend on what your content means, which is not something any tool can work out for you. Each one explains what to weigh up."
 msgstr ""
 
 #: src/Remediation/ActionBand.php:137
-#: assets/src/components/issue-list.js:250
+#: assets/src/components/issue-list.js:285
 msgid "These are in your theme rather than your content, so nothing here can reach them. Each one comes with what to change and where."
 msgstr ""
 
@@ -582,6 +582,7 @@ msgstr ""
 
 #: src/Rest/IssueController.php:289
 #: src/Rest/IssueController.php:358
+#: src/Rest/IssuePresenter.php:162
 #: src/Rest/OverviewController.php:442
 #: assets/src/components/dismissed.js:239
 #: assets/src/components/scan-picker.js:164
@@ -2487,14 +2488,14 @@ msgstr ""
 
 #. translators: %d: number of items in this group.
 #: assets/src/components/coverage-panel.js:174
-#: assets/src/components/issue-list.js:281
+#: assets/src/components/issue-list.js:325
 #, js-format
 msgid "(%d)"
 msgstr ""
 
 #. translators: %s: WCAG success criterion number.
 #: assets/src/components/coverage-panel.js:188
-#: assets/src/components/issue-list.js:112
+#: assets/src/components/issue-list.js:114
 #: assets/src/components/theme-panel.js:253
 #, js-format
 msgid "WCAG %s"
@@ -2851,12 +2852,12 @@ msgid_plural "%d findings were recorded before this version and cannot be groupe
 msgstr[0] ""
 msgstr[1] ""
 
-#: assets/src/components/issue-drilldown.js:343
+#: assets/src/components/issue-drilldown.js:345
 #: assets/src/components/markup-groups.js:267
 msgid "Nothing open here"
 msgstr ""
 
-#: assets/src/components/issue-drilldown.js:347
+#: assets/src/components/issue-drilldown.js:349
 msgid "Everything this filter covers has been fixed or set aside. If that is a surprise, the pages behind it may not have been scanned since they changed."
 msgstr ""
 
@@ -2873,34 +2874,42 @@ msgid "Answered by a style rule measured off the element itself, so it is fixed 
 msgstr ""
 
 #. translators: %s: name of the accessibility check.
-#: assets/src/components/issue-list.js:153
+#: assets/src/components/issue-list.js:155
 #: assets/src/components/markup-groups.js:228
 #, js-format
 msgid "Markup for: %s"
 msgstr ""
 
-#: assets/src/components/issue-list.js:166
+#: assets/src/components/issue-list.js:168
 msgid "How to fix this"
 msgstr ""
 
-#: assets/src/components/issue-list.js:175
-#: assets/src/components/issue-list.js:189
+#: assets/src/components/issue-list.js:177
+#: assets/src/components/issue-list.js:224
 msgid "Element:"
 msgstr ""
 
-#: assets/src/components/issue-list.js:231
+#: assets/src/components/issue-list.js:201
+msgid "Page:"
+msgstr ""
+
+#: assets/src/components/issue-list.js:214
+msgid "View"
+msgstr ""
+
+#: assets/src/components/issue-list.js:266
 msgid "We can draft these, but a draft is not an answer. Read what it says before you apply it — it was written by a model that cannot see why your page exists."
 msgstr ""
 
-#: assets/src/components/issue-list.js:328
+#: assets/src/components/issue-list.js:380
 msgid "Nothing found by the automated checks"
 msgstr ""
 
-#: assets/src/components/issue-list.js:332
+#: assets/src/components/issue-list.js:384
 msgid "None of the checks we can run automatically flagged anything on this page. That is a good sign, and it is not the same as the page being accessible — most of WCAG needs a person. The manual checklists are the next step."
 msgstr ""
 
-#: assets/src/components/issue-list.js:363
+#: assets/src/components/issue-list.js:416
 #: assets/src/components/overview.js:81
 #: assets/src/components/overview.js:306
 msgid "What these checks cover, and what they cannot"
