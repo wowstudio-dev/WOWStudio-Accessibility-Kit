@@ -1814,7 +1814,7 @@ msgid "Whole site"
 msgstr ""
 
 #: src/Scanner/ScanScope.php:53
-#: assets/src/app.js:66
+#: assets/src/app.js:61
 msgid "Theme"
 msgstr ""
 
@@ -2106,21 +2106,21 @@ msgstr ""
 msgid "Report"
 msgstr ""
 
-#: assets/src/app.js:48
-#: assets/src/components/dismissed.js:169
-msgid "False positives"
-msgstr ""
-
-#: assets/src/app.js:57
+#: assets/src/app.js:52
 msgid "One page"
 msgstr ""
 
-#: assets/src/app.js:61
+#: assets/src/app.js:56
 msgid "Your content"
 msgstr ""
 
-#: assets/src/app.js:71
+#: assets/src/app.js:66
 msgid "Images"
+msgstr ""
+
+#: assets/src/app.js:71
+#: assets/src/components/dismissed.js:169
+msgid "False positives"
 msgstr ""
 
 #: assets/src/app.js:80

@@ -110,10 +110,11 @@ Findings that keep their identity, and figures you can open.
 
 - **The plugin is four admin pages instead of one page wearing eight tabs.**
   Dashboard, Scan & Fix, Settings and Statement now appear under Accessibility
-  Kit in the WordPress menu. The report and the record of false positives sit on
-  the Dashboard; the four ways of checking and describing content — one page,
-  your content, the theme, the images — sit together under Scan & Fix; the
-  site-wide fixes are Settings; the statement is its own page.
+  Kit in the WordPress menu. The Dashboard is the report. Scan & Fix holds the
+  ways of checking and answering content — one page, your content, the theme,
+  the images — and the record of what was marked a false positive, which belongs
+  beside the findings it came from. The site-wide fixes are Settings; the
+  statement is its own page.
 
   The previous attempt grouped the eight tabs under Find, Fix and Record
   headings. That put a taxonomy on screen and asked people to read it before

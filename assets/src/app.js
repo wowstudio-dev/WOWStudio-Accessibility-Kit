@@ -43,11 +43,6 @@ const SCREENS = {
 				id: 'overview',
 				label: __( 'Report', 'wowstudio-accessibility-kit' ),
 			},
-			{
-				id: 'aside',
-				label: __( 'False positives', 'wowstudio-accessibility-kit' ),
-				needs: 'viewReports',
-			},
 		],
 	},
 	scan: {
@@ -70,6 +65,11 @@ const SCREENS = {
 				id: 'images',
 				label: __( 'Images', 'wowstudio-accessibility-kit' ),
 				needs: 'applyFix',
+			},
+			{
+				id: 'aside',
+				label: __( 'False positives', 'wowstudio-accessibility-kit' ),
+				needs: 'viewReports',
 			},
 		],
 	},
