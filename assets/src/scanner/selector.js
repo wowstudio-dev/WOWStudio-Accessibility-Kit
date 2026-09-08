@@ -187,6 +187,185 @@ function positionalSelector( element, view ) {
 }
 
 /**
+ * Counts a selector's specificity, as the cascade does.
+ *
+ * Ids, then classes and attributes and pseudo-classes, then elements. Good
+ * enough for the comparison this makes and deliberately not a full CSS parser:
+ * it is asking "will the rule we are about to write actually win", and being
+ * approximately right about a selector we generated ourselves is enough.
+ *
+ * @param {string} selector A selector.
+ * @return {number[]} Three counts, most significant first.
+ */
+export function specificityOf( selector ) {
+	const clean = String( selector )
+		.replace( /\[[^\]]*\]/g, ' [] ' )
+		.replace( /::[\w-]+/g, ' ' );
+
+	const ids = ( clean.match( /#[\w-]+/g ) || [] ).length;
+	const classes =
+		( clean.match( /\.[\w-]+/g ) || [] ).length +
+		( clean.match( /\[\]/g ) || [] ).length +
+		( clean.match( /:[\w-]+/g ) || [] ).length;
+	const elements = (
+		clean
+			.replace( /[#.][\w-]+/g, ' ' )
+			.replace( /:[\w-]+(\([^)]*\))?/g, ' ' )
+			.match( /\b[a-z][\w-]*/gi ) || []
+	).length;
+
+	return [ ids, classes, elements ];
+}
+
+/**
+ * Reports whether one specificity beats another.
+ *
+ * @param {number[]} a One specificity.
+ * @param {number[]} b Another.
+ * @return {boolean} Whether a wins.
+ */
+export function beats( a, b ) {
+	for ( let i = 0; i < 3; i++ ) {
+		if ( a[ i ] !== b[ i ] ) {
+			return a[ i ] > b[ i ];
+		}
+	}
+
+	return false;
+}
+
+/**
+ * Finds the strongest rule already setting these properties on an element.
+ *
+ * The reason this exists: a rule can be written perfectly, land in the
+ * stylesheet, and still do nothing. A page builder styles a heading with
+ * `.eb-advance-heading-wrapper.eb-advance-heading-yj6uz .eb-ah-title
+ * .first-title` — four classes — and our `span.first-title` is one class and
+ * one element. Ours is valid, matches, and loses, and the person who approved
+ * it is told a rule is in place while their page has not changed.
+ *
+ * Stylesheets from another origin cannot be read; those are skipped rather than
+ * guessed at, so the answer is "the strongest we could see".
+ *
+ * @param {Element}  element    Element the finding is about.
+ * @param {string[]} properties Properties the fix will set.
+ * @param {Document} doc        Document the element lives in.
+ * @return {{specificity: number[], selector: string, important: boolean}} The incumbent.
+ */
+export function strongestRuleFor( element, properties, doc ) {
+	let best = { specificity: [ 0, 0, 0 ], selector: '', important: false };
+
+	if ( ! element || ! doc ) {
+		return best;
+	}
+
+	const consider = ( rule ) => {
+		if ( ! rule.selectorText || ! rule.style ) {
+			return;
+		}
+
+		let matches = false;
+
+		try {
+			matches = element.matches( rule.selectorText );
+		} catch {
+			return;
+		}
+
+		if ( ! matches ) {
+			return;
+		}
+
+		properties.forEach( ( property ) => {
+			if ( ! rule.style.getPropertyValue( property ) ) {
+				return;
+			}
+
+			// A selector list is only as strong as the part that matched.
+			const parts = rule.selectorText.split( ',' ).filter( ( part ) => {
+				try {
+					return element.matches( part.trim() );
+				} catch {
+					return false;
+				}
+			} );
+
+			parts.forEach( ( part ) => {
+				const specificity = specificityOf( part );
+
+				if ( beats( specificity, best.specificity ) ) {
+					best = {
+						specificity,
+						selector: part.trim(),
+						important:
+							rule.style.getPropertyPriority( property ) ===
+							'important',
+					};
+				}
+			} );
+		} );
+	};
+
+	const walk = ( rules ) => {
+		for ( const rule of rules ) {
+			if ( rule.cssRules && ! rule.selectorText ) {
+				walk( rule.cssRules );
+
+				continue;
+			}
+
+			consider( rule );
+		}
+	};
+
+	for ( const sheet of Array.from( doc.styleSheets || [] ) ) {
+		try {
+			walk( sheet.cssRules );
+		} catch {
+			// Cross-origin. Nothing to read, and nothing to guess.
+			continue;
+		}
+	}
+
+	return best;
+}
+
+/**
+ * Raises a selector's specificity until it wins, without changing what it hits.
+ *
+ * Repeating a class is the one way to add weight that cannot change which
+ * elements are matched — an ancestor chain would be prettier and would break
+ * the moment the builder renames a wrapper, which page builders do on every
+ * save. `span.first-title.first-title` matches exactly what `span.first-title`
+ * matches, and outranks a three-class rule.
+ *
+ * @param {string}   selector The proposed selector.
+ * @param {number[]} target   The specificity to beat.
+ * @return {string} A selector that wins, or the original when it already does.
+ */
+export function outweigh( selector, target ) {
+	const anchor = ( String( selector ).match( /\.[\w-]+/ ) || [] )[ 0 ];
+
+	if ( ! anchor ) {
+		return selector;
+	}
+
+	let out = selector;
+
+	// Bounded: past this the rule is unreadable, and something is wrong with
+	// the page rather than with the selector.
+	for ( let i = 0; i < 8; i++ ) {
+		if ( beats( specificityOf( out ), target ) ) {
+			return out;
+		}
+
+		out += anchor;
+	}
+
+	return out;
+}
+
+/**
  * Proposes a selector for one element.
  *
  * Returns the whole reasoning, not just the string: which kind of selector it

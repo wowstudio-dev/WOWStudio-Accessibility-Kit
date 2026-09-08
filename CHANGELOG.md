@@ -96,6 +96,22 @@ Findings that keep their identity, and figures you can open.
   and each was about a different pass, which is not a distinction anybody should
   have to infer from a screen disagreeing with itself.
 
+- **Style fixes are now weighted to win, instead of being written and losing.**
+  A proposed rule used the element's tag and one class — `span.first-title` —
+  which is one class and one element of specificity. On a page built with
+  Essential Blocks the heading was already styled by
+  `.eb-advance-heading-wrapper.eb-advance-heading-yj6uz .eb-ah-title
+  .first-title`: four classes. Our rule was written, valid, matching, and
+  outranked, so the page did not change.
+
+  The proposal now reads what already styles the element, and repeats the
+  anchoring class until it outranks it. Repeating the class rather than reaching
+  for an ancestor chain is deliberate: it cannot change which elements are
+  matched, and a chain of builder-generated wrappers breaks on the next save.
+
+  Where the incumbent rule is `!important`, no stylesheet rule can win, and the
+  proposal says so before it is applied rather than after.
+
 - **Layout faults introduced by going full width, found by sweeping every
   screen rather than by looking at them.** The theme findings had lost their
   padding entirely and sat against their own border: they render the same card

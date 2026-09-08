@@ -15,6 +15,9 @@ import {
 	ID,
 	CLASS,
 	POSITIONAL,
+	specificityOf,
+	beats,
+	outweigh,
 } from '../selector';
 
 /**
@@ -182,5 +185,62 @@ describe( 'counting matches', () => {
 		// Distinct from null on purpose: a valid rule that reaches nothing is
 		// a different problem from a rule that will not parse.
 		expect( matchCount( page( '<p></p>' ), '.nothing-here' ) ).toBe( 0 );
+	} );
+} );
+
+describe( 'specificity', () => {
+	it( 'counts ids, classes and elements the way the cascade does', () => {
+		expect( specificityOf( 'span.first-title' ) ).toEqual( [ 0, 1, 1 ] );
+		expect( specificityOf( '#intro' ) ).toEqual( [ 1, 0, 0 ] );
+		expect(
+			specificityOf(
+				'.eb-advance-heading-wrapper.eb-advance-heading-yj6uz .eb-ah-title .first-title'
+			)
+		).toEqual( [ 0, 4, 0 ] );
+	} );
+
+	it( 'knows which of two selectors wins', () => {
+		expect( beats( [ 0, 4, 0 ], [ 0, 1, 1 ] ) ).toBe( true );
+		expect( beats( [ 0, 1, 1 ], [ 0, 4, 0 ] ) ).toBe( false );
+		expect( beats( [ 0, 1, 1 ], [ 0, 1, 1 ] ) ).toBe( false );
+		expect( beats( [ 1, 0, 0 ], [ 0, 9, 9 ] ) ).toBe( true );
+	} );
+
+	it( 'weights a selector until it outranks the rule already in place', () => {
+		// The real case: a page builder styled one heading with four chained
+		// classes, our one-class rule was written, was valid, matched, and lost.
+		const incumbent = specificityOf(
+			'.eb-advance-heading-wrapper.eb-advance-heading-yj6uz .eb-ah-title .first-title'
+		);
+
+		const weighted = outweigh( 'span.first-title', incumbent );
+
+		expect( beats( specificityOf( weighted ), incumbent ) ).toBe( true );
+		expect( weighted.startsWith( 'span.first-title' ) ).toBe( true );
+	} );
+
+	it( 'leaves a selector alone when it already wins', () => {
+		expect( outweigh( 'span.first-title', [ 0, 0, 1 ] ) ).toBe(
+			'span.first-title'
+		);
+	} );
+
+	it( 'matches exactly what it matched before being weighted', () => {
+		// The whole reason for repeating the class rather than reaching for an
+		// ancestor chain: the weighted selector must not widen or narrow the
+		// set of elements the person approved.
+		document.body.innerHTML =
+			'<div><span class="first-title">a</span><span class="other">b</span></div>';
+
+		const before = document.querySelectorAll( 'span.first-title' ).length;
+		const weighted = outweigh( 'span.first-title', [ 0, 4, 0 ] );
+
+		expect( document.querySelectorAll( weighted ) ).toHaveLength( before );
+	} );
+
+	it( 'gives up rather than growing without bound', () => {
+		const weighted = outweigh( '.a', [ 0, 99, 0 ] );
+
+		expect( weighted.length ).toBeLessThan( 40 );
 	} );
 } );

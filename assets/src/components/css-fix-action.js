@@ -18,7 +18,13 @@ import { useEffect, useState } from '@wordpress/element';
 import { __, sprintf, _n } from '@wordpress/i18n';
 
 import { applyCssFix, readableError, revertCssFix } from '../api';
-import { proposeSelector, matchCount, POSITIONAL } from '../scanner/selector';
+import {
+	proposeSelector,
+	matchCount,
+	outweigh,
+	strongestRuleFor,
+	POSITIONAL,
+} from '../scanner/selector';
 import {
 	proposeFix,
 	ruleToCss,
@@ -139,6 +145,13 @@ export default function CssFixAction( {
 	const [ selector, setSelector ] = useState( '' );
 	const [ stable, setStable ] = useState( true );
 	const [ error, setError ] = useState( '' );
+
+	/*
+	 * Set when the rule we would write cannot win however specific it is —
+	 * something already marks this !important, and specificity does not beat
+	 * that. Saying so is the whole of what we can do about it.
+	 */
+	const [ outranked, setOutranked ] = useState( '' );
 	const [ outcome, setOutcome ] = useState( null );
 	const [ announcement, setAnnouncement ] = useState( '' );
 
@@ -180,7 +193,24 @@ export default function CssFixAction( {
 			return;
 		}
 
-		setSelector( named.selector );
+		/*
+		 * Weighted to win before it is offered.
+		 *
+		 * A rule that is written, valid, matching and outranked is the worst of
+		 * the outcomes here: the page does not change and the plugin says a rule
+		 * is in place. A page builder styling one heading with four chained
+		 * classes beat `span.first-title` on a real site, and nothing said so.
+		 */
+		const incumbent = strongestRuleFor(
+			element,
+			fix.declarations.map( ( d ) => d.property ),
+			doc
+		);
+
+		const weighted = outweigh( named.selector, incumbent.specificity );
+
+		setSelector( weighted );
+		setOutranked( incumbent.important ? incumbent.selector : '' );
 		setStable( named.kind !== POSITIONAL );
 		setProposal( fix );
 		setStatus( 'review' );
@@ -292,6 +322,25 @@ export default function CssFixAction( {
 					<p className="wsak-css-fix__summary">
 						{ proposal.summary }
 					</p>
+
+					{ /*
+					 * Specificity is the one lever a stylesheet has, and it does
+					 * not reach past !important. Better to say the rule will
+					 * probably not take than to write it and let somebody
+					 * discover that on their own page.
+					 */ }
+					{ outranked && (
+						<Notice status="warning" isDismissible={ false }>
+							{ sprintf(
+								/* translators: %s: the CSS selector already styling this element. */
+								__(
+									'Something already sets this with !important, in a rule for %s. No stylesheet rule can outrank that, so this one will probably not take effect — the change has to be made where that rule lives.',
+									'wowstudio-accessibility-kit'
+								),
+								outranked
+							) }
+						</Notice>
+					) }
 
 					{ proposal.before && proposal.before.swatch && (
 						<div className="wsak-css-fix__swatches">

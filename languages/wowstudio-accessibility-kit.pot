@@ -2536,119 +2536,125 @@ msgstr ""
 msgid "WCAG %s"
 msgstr ""
 
-#: assets/src/components/css-fix-action.js:74
+#: assets/src/components/css-fix-action.js:80
 msgid "That selector will not parse, so nothing can be counted and nothing can be applied."
 msgstr ""
 
-#: assets/src/components/css-fix-action.js:86
+#: assets/src/components/css-fix-action.js:92
 msgid "This selector matches nothing on this page. Applying it would write a rule that does nothing."
 msgstr ""
 
 #. translators: %d: number of matching elements.
-#: assets/src/components/css-fix-action.js:92
+#: assets/src/components/css-fix-action.js:98
 #, js-format
 msgid "Matches %d element on this page — and every element it matches on pages that have not been scanned."
 msgid_plural "Matches %d elements on this page — and every element they match on pages that have not been scanned."
 msgstr[0] ""
 msgstr[1] ""
 
-#: assets/src/components/css-fix-action.js:103
+#: assets/src/components/css-fix-action.js:109
 msgid "This element has no id or usable class, so the selector describes where it sits in the page. It will stop matching the next time the content around it changes. A class added in your theme would make a better anchor."
 msgstr ""
 
-#: assets/src/components/css-fix-action.js:174
+#: assets/src/components/css-fix-action.js:187
 msgid "This element sits too deep in the page to name reliably, so no rule is offered for it. It needs a class in your theme before a stylesheet can reach it."
 msgstr ""
 
-#: assets/src/components/css-fix-action.js:189
+#: assets/src/components/css-fix-action.js:219
 msgid "A style rule has been proposed. Review the selector and what it will affect before applying it."
 msgstr ""
 
-#: assets/src/components/css-fix-action.js:206
+#: assets/src/components/css-fix-action.js:236
 msgid "Rule written. Reloading the page to measure whether it took effect."
 msgstr ""
 
-#: assets/src/components/css-fix-action.js:230
+#: assets/src/components/css-fix-action.js:260
 msgid "Rule written. It could not be measured again automatically."
 msgstr ""
 
-#: assets/src/components/css-fix-action.js:251
+#: assets/src/components/css-fix-action.js:281
 msgid "Rule removed from your Additional CSS."
 msgstr ""
 
-#: assets/src/components/css-fix-action.js:283
+#: assets/src/components/css-fix-action.js:313
 msgid "Suggest a style fix"
 msgstr ""
 
-#: assets/src/components/css-fix-action.js:299
+#. translators: %s: the CSS selector already styling this element.
+#: assets/src/components/css-fix-action.js:336
+#, js-format
+msgid "Something already sets this with !important, in a rule for %s. No stylesheet rule can outrank that, so this one will probably not take effect — the change has to be made where that rule lives."
+msgstr ""
+
+#: assets/src/components/css-fix-action.js:348
 msgid "Now"
 msgstr ""
 
-#: assets/src/components/css-fix-action.js:309
+#: assets/src/components/css-fix-action.js:358
 msgid "Proposed"
 msgstr ""
 
 #. translators: 1: current size, 2: size after the fix.
-#: assets/src/components/css-fix-action.js:325
+#: assets/src/components/css-fix-action.js:374
 #, js-format
 msgid "Now %1$s, at least %2$s after the fix."
 msgstr ""
 
-#: assets/src/components/css-fix-action.js:337
+#: assets/src/components/css-fix-action.js:386
 msgid "Selector this rule applies to"
 msgstr ""
 
-#: assets/src/components/css-fix-action.js:341
+#: assets/src/components/css-fix-action.js:390
 msgid "Edit this to widen or narrow what the rule reaches. Broader is often right: a colour that is wrong here is usually wrong everywhere that class is used."
 msgstr ""
 
-#: assets/src/components/css-fix-action.js:352
+#: assets/src/components/css-fix-action.js:401
 msgid "What would be added to your Additional CSS"
 msgstr ""
 
-#: assets/src/components/css-fix-action.js:361
+#: assets/src/components/css-fix-action.js:410
 msgid "Proposed style rule"
 msgstr ""
 
 #. translators: %s: the active theme's name.
-#: assets/src/components/css-fix-action.js:374
+#: assets/src/components/css-fix-action.js:423
 #, js-format
 msgid "This goes into Appearance → Customise → Additional CSS, where you can read, edit or delete it without this plugin. WordPress stores that per theme, so it belongs to %s and will stop applying if you switch themes."
 msgstr ""
 
-#: assets/src/components/css-fix-action.js:392
+#: assets/src/components/css-fix-action.js:441
 msgid "Apply this rule"
 msgstr ""
 
-#: assets/src/components/css-fix-action.js:404
+#: assets/src/components/css-fix-action.js:453
 msgid "Discard"
 msgstr ""
 
-#: assets/src/components/css-fix-action.js:412
+#: assets/src/components/css-fix-action.js:461
 msgid "Reloading the page and measuring again…"
 msgstr ""
 
-#: assets/src/components/css-fix-action.js:421
+#: assets/src/components/css-fix-action.js:470
 msgid "Removing…"
 msgstr ""
 
-#: assets/src/components/css-fix-action.js:434
+#: assets/src/components/css-fix-action.js:483
 msgid "Applied, and it took effect."
 msgstr ""
 
-#: assets/src/components/css-fix-action.js:438
+#: assets/src/components/css-fix-action.js:487
 msgid "Applied, but it did not take effect."
 msgstr ""
 
-#: assets/src/components/css-fix-action.js:446
+#: assets/src/components/css-fix-action.js:495
 msgid "Something in your theme is more specific than this rule. Narrowing the selector to the element itself usually wins."
 msgstr ""
 
-#: assets/src/components/css-fix-action.js:455
+#: assets/src/components/css-fix-action.js:504
 msgid "A rule for this finding is in your Additional CSS."
 msgstr ""
 
-#: assets/src/components/css-fix-action.js:463
+#: assets/src/components/css-fix-action.js:512
 msgid "Remove this rule"
 msgstr ""
 
