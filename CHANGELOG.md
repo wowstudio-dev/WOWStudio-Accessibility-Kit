@@ -96,6 +96,18 @@ Findings that keep their identity, and figures you can open.
   and each was about a different pass, which is not a distinction anybody should
   have to infer from a screen disagreeing with itself.
 
+- **The report is figures on a page rather than figures in boxes.** Four
+  bordered cards holding one number each spent most of their pixels drawing
+  containers, and the containers said nothing the whitespace was not already
+  saying. The charts lost their borders too; their headings are small-caps
+  labels above what they name.
+
+  The score's qualifier moved from under the number to beside it — they are one
+  thought, and what a score does not mean has to travel with it. The four
+  figures take the full width underneath. The scan-by-scan line left the
+  three-column grid: thirty points squeezed into a third of the page is a shape
+  nobody can read, which is the only thing a sequence of scores is for.
+
 - **The eight screens are grouped, and say why they exist.** A single row of
   eight peer tabs makes somebody guess what each is for. They now sit under
   **Find**, **Fix** and **Record** — what you look at, what you change, and the

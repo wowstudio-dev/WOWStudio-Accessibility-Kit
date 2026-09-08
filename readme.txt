@@ -98,6 +98,7 @@ In WordPress's own alt text field on the media item. It therefore applies everyw
 = 0.29.0 =
 * New: findings of one check can be grouped by the markup behind them, so a fault your theme repeats on every page is judged once rather than once per page. Setting one aside everywhere requires a reason, lists the pages it covers first, needs permission to edit other people's content, and can be withdrawn in one step from the "False positives" screen.
 * New: the figures on the report screen now open. "What comes up most" and "Pages with the most to do" were counts you could read and not act on; each row is now a control that lists the findings behind it, with an explanation of the check at the top rather than repeated against every row.
+* Changed: the report reads as figures on a page rather than numbers in boxes, with the score's caveat beside the score and the trend line given the full width.
 * Changed: the screens are grouped under Find, Fix and Record instead of one row of eight tabs, and the header now shows when anything was last checked with a shortcut to check more.
 * New: a proper first screen. A new install used to open on an empty report; it now says what to do and how the plugin is meant to be used.
 * Changed: the findings list shows one finding open at a time instead of every finding expanded at once. Closed findings are a single row saying what is wrong and where; arrow keys move between them.

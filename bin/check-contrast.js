@@ -150,9 +150,19 @@ const PAIRINGS = [
 	[ 'nav, resting', 'muted', 'raised', 14, false ],
 	[ 'nav, selected', 'ink', 'surface', 14, false ],
 
-	// Card headings and body.
-	[ 'card titles', 'ink', 'surface', 16, true ],
-	[ '.wsak-issue__title', 'ink', 'surface', 14, true ],
+	// Card headings and body. The cards lost their surfaces in 0.29.0 — the
+	// charts and figures sit on the page itself now — so their headings are
+	// small-caps labels on the ground rather than titles on white.
+	[ 'card titles', 'muted', 'ground', 11, false ],
+	[ 'nav group labels', 'muted', 'ground', 11, false ],
+	[ 'stat figure', 'ink', 'ground', 34, true ],
+	[ 'stat label', 'ink', 'ground', 13.5, false ],
+	[ 'stat note', 'muted', 'ground', 12, false ],
+	[ 'last checked', 'muted', 'ground', 12.5, false ],
+	[ '.wsak-start__lede', 'text', 'ground', 14.5, false ],
+	[ '.wsak-start__step-body', 'muted', 'ground', 13, false ],
+	[ '.wsak-issue__headline', 'ink', 'surface', 14, true ],
+	[ '.wsak-issue__subline', 'muted', 'surface', 13, false ],
 	[ '.wsak-issue__message', 'text', 'surface', 13.5, false ],
 	[ '.wsak-group__blurb', 'muted', 'surface', 13, false ],
 	[ '.wsak-coverage__lede', 'muted', 'surface', 13.5, false ],

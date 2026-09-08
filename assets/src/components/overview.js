@@ -209,12 +209,15 @@ export default function Overview( { onGo, onDrill } ) {
 							'wowstudio-accessibility-kit'
 						) }
 					/>
+				</section>
 
-					{ /*
-					 * The qualifier sits with the number rather than in a
-					 * footnote. This is the figure most likely to be screenshotted
-					 * and shown to somebody who did not run the scan.
-					 */ }
+				{ /*
+				 * The qualifier sits beside the number, not under it and not in
+				 * a footnote. This is the figure most likely to be screenshotted
+				 * and shown to somebody who did not run the scan, and what it
+				 * does not mean has to travel with it.
+				 */ }
+				<div className="wsak-overview__caveat">
 					<p className="wsak-overview__qualifier">
 						{ sprintf(
 							/* translators: 1: pages scanned. 2: pages published. */
@@ -226,81 +229,93 @@ export default function Overview( { onGo, onDrill } ) {
 							scanned.published
 						) }
 					</p>
-				</section>
 
-				<div className="wsak-overview__stats">
-					{ /*
-					 * Two figures rather than one. Every finding is already
-					 * tagged auto-detected or needs-manual-review; adding them
-					 * together for the headline undid that tagging, and the
-					 * headline is the number that gets screenshotted. "I could
-					 * not check this" and "this is broken" are different claims
-					 * and are counted separately.
-					 */ }
-					<Stat
-						label={ __(
-							'Barriers found',
-							'wowstudio-accessibility-kit'
-						) }
-						value={ issues.found ?? issues.open }
-						note={ __(
-							'Settled by an automated check. These are wrong.',
-							'wowstudio-accessibility-kit'
-						) }
-					/>
-					<Stat
-						label={ __(
-							'Needs a person to look',
-							'wowstudio-accessibility-kit'
-						) }
-						value={ issues.needs_a_look ?? 0 }
-						note={ __(
-							'Automation could not settle these. They may be fine.',
-							'wowstudio-accessibility-kit'
-						) }
-					/>
-					<Stat
-						label={ __( 'Fixed', 'wowstudio-accessibility-kit' ) }
-						value={ issues.fixed }
-						tone="good"
-						/*
-						 * Only when there is something to say. A note reading
-						 * "0 findings set aside" under a figure that is also
-						 * zero is two noughts explaining each other.
-						 */
-						note={
-							issues.ignored
-								? sprintf(
-										/* translators: %d: how many findings are marked false positives. */
-										_n(
-											'%d finding marked a false positive.',
-											'%d findings marked false positives.',
-											issues.ignored,
-											'wowstudio-accessibility-kit'
-										),
-										issues.ignored
-								  )
-								: undefined
-						}
-					/>
-					<Stat
-						label={ __(
-							'Checks available',
-							'wowstudio-accessibility-kit'
-						) }
-						value={ coverage.rules_total }
-						note={ sprintf(
-							/* translators: 1: server-pass checks. 2: browser-pass checks. 3: pages that have had a browser pass. */
-							__(
-								'%1$d run on the server, %2$d need the page view — which %3$d scanned pages have had.',
+					<p className="wsak-overview__door">
+						<Button
+							variant="link"
+							onClick={ () => onGo( 'coverage' ) }
+						>
+							{ __(
+								'What these checks cover, and what they cannot',
 								'wowstudio-accessibility-kit'
-							),
-							coverage.rules_server,
-							coverage.rules_browser,
-							coverage.pages_browser
-						) }
-					/>
+							) }
+						</Button>
+					</p>
 				</div>
+			</div>
+
+			<div className="wsak-overview__stats">
+				{ /*
+				 * Two figures rather than one. Every finding is already
+				 * tagged auto-detected or needs-manual-review; adding them
+				 * together for the headline undid that tagging, and the
+				 * headline is the number that gets screenshotted. "I could
+				 * not check this" and "this is broken" are different claims
+				 * and are counted separately.
+				 */ }
+				<Stat
+					label={ __(
+						'Barriers found',
+						'wowstudio-accessibility-kit'
+					) }
+					value={ issues.found ?? issues.open }
+					note={ __(
+						'Settled by an automated check. These are wrong.',
+						'wowstudio-accessibility-kit'
+					) }
+				/>
+				<Stat
+					label={ __(
+						'Needs a person to look',
+						'wowstudio-accessibility-kit'
+					) }
+					value={ issues.needs_a_look ?? 0 }
+					note={ __(
+						'Automation could not settle these. They may be fine.',
+						'wowstudio-accessibility-kit'
+					) }
+				/>
+				<Stat
+					label={ __( 'Fixed', 'wowstudio-accessibility-kit' ) }
+					value={ issues.fixed }
+					tone="good"
+					/*
+					 * Only when there is something to say. A note reading
+					 * "0 findings set aside" under a figure that is also
+					 * zero is two noughts explaining each other.
+					 */
+					note={
+						issues.ignored
+							? sprintf(
+									/* translators: %d: how many findings are marked false positives. */
+									_n(
+										'%d finding marked a false positive.',
+										'%d findings marked false positives.',
+										issues.ignored,
+										'wowstudio-accessibility-kit'
+									),
+									issues.ignored
+							  )
+							: undefined
+					}
+				/>
+				<Stat
+					label={ __(
+						'Checks available',
+						'wowstudio-accessibility-kit'
+					) }
+					value={ coverage.rules_total }
+					note={ sprintf(
+						/* translators: 1: server-pass checks. 2: browser-pass checks. 3: pages that have had a browser pass. */
+						__(
+							'%1$d run on the server, %2$d need the page view — which %3$d scanned pages have had.',
+							'wowstudio-accessibility-kit'
+						),
+						coverage.rules_server,
+						coverage.rules_browser,
+						coverage.pages_browser
+					) }
+				/>
 			</div>
 
 			<div className="wsak-overview__grid">
@@ -365,35 +380,34 @@ export default function Overview( { onGo, onDrill } ) {
 						}
 					/>
 				</section>
-
-				<section className="wsak-card" aria-labelledby="wsak-ov-trend">
-					<h3 id="wsak-ov-trend" className="wsak-card__title">
-						{ __( 'Score by scan', 'wowstudio-accessibility-kit' ) }
-					</h3>
-					<Sparkline points={ history } />
-					<p className="wsak-card__note">
-						{ sprintf(
-							/* translators: %d: how many scans are plotted. */
-							_n(
-								'The last %d scan, in the order it ran. This plugin does not re-scan on its own, so the spacing is however often somebody pressed the button — it is a sequence, not a timeline.',
-								'The last %d scans, in the order they ran. This plugin does not re-scan on its own, so the spacing is however often somebody pressed the button — it is a sequence, not a timeline.',
-								history.length,
-								'wowstudio-accessibility-kit'
-							),
-							history.length
-						) }
-					</p>
-				</section>
 			</div>
 
-			<p className="wsak-overview__door">
-				<Button variant="link" onClick={ () => onGo( 'coverage' ) }>
-					{ __(
-						'What these checks cover, and what they cannot',
-						'wowstudio-accessibility-kit'
+			{ /*
+			 * Full width, outside the three columns. Thirty points squeezed into
+			 * a third of the page is a line nobody can read the shape of, which
+			 * is the only thing a sequence of scores is for.
+			 */ }
+			<section
+				className="wsak-card wsak-overview__trend"
+				aria-labelledby="wsak-ov-trend"
+			>
+				<h3 id="wsak-ov-trend" className="wsak-card__title">
+					{ __( 'Score by scan', 'wowstudio-accessibility-kit' ) }
+				</h3>
+				<Sparkline points={ history } />
+				<p className="wsak-card__note">
+					{ sprintf(
+						/* translators: %d: how many scans are plotted. */
+						_n(
+							'The last %d scan, in the order it ran. This plugin does not re-scan on its own, so the spacing is however often somebody pressed the button — it is a sequence, not a timeline.',
+							'The last %d scans, in the order they ran. This plugin does not re-scan on its own, so the spacing is however often somebody pressed the button — it is a sequence, not a timeline.',
+							history.length,
+							'wowstudio-accessibility-kit'
+						),
+						history.length
 					) }
-				</Button>
-			</p>
+				</p>
+			</section>
 		</div>
 	);
 }

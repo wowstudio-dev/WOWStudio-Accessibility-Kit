@@ -1842,15 +1842,8 @@
 
 @media screen and (max-width: 1100px) {
 
-	/* The donut stops sitting beside the tiles here, so there is no height for
-	   them to match and two columns would only make them needlessly narrow. */
 	.wsak-overview__top {
 		grid-template-columns: minmax(0, 1fr);
-	}
-
-	.wsak-overview__stats {
-		grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
-		grid-auto-rows: auto;
 	}
 
 	.wsak-inspector__panes {
@@ -1930,10 +1923,10 @@
  */
 
 .wsak-card {
-	padding: var(--wsak-space-4);
-	border: 1px solid var(--wsak-line);
-	border-radius: var(--wsak-radius);
-	background: var(--wsak-surface);
+	padding: 0;
+	border: 0;
+	border-radius: 0;
+	background: none;
 
 	/* Matches .wsak-bulk and .wsak-theme, which set the house recipe for a
 	   panel before this component existed. Padding is one step tighter
@@ -1941,11 +1934,16 @@
 	box-shadow: var(--wsak-shadow);
 }
 
+/* Small caps above the thing it names, in the muted ink. A card title used to
+   have a card to sit in; without one it has to look like a label rather than a
+   heading floating in space. */
 .wsak-card__title {
 	margin: 0 0 var(--wsak-space-3);
-	color: var(--wsak-ink);
-	font-size: 14px;
-	font-weight: 660;
+	color: var(--wsak-muted);
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
 }
 
 .wsak-card__note {
@@ -1992,29 +1990,48 @@
 	line-height: 1.5;
 }
 
-/* Two by two rather than four across, so the four tiles fill the height the
-   donut sets instead of floating at the top of it. Below the breakpoint they
-   fall back to as many columns as fit, where there is no donut to match. */
+/* Full width, four across, under the score rather than beside it — the number
+   and the sentence qualifying it are one thought and belong on one row; the
+   figures are a different thought and get the width to themselves. */
 .wsak-overview__stats {
 	display: grid;
-	grid-template-columns: repeat(2, 1fr);
-	grid-auto-rows: 1fr;
-	gap: var(--wsak-space-3);
+	grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+	gap: var(--wsak-space-6) var(--wsak-space-5);
+	align-content: start;
+	margin-bottom: var(--wsak-space-8);
+	padding: var(--wsak-space-6) 0;
+	border-top: 1px solid var(--wsak-line);
+	border-bottom: 1px solid var(--wsak-line);
 }
 
+.wsak-overview__trend {
+	margin-top: var(--wsak-space-8);
+	padding-top: var(--wsak-space-6);
+	border-top: 1px solid var(--wsak-line);
+}
+
+.wsak-overview__caveat {
+	display: flex;
+	flex-direction: column;
+	gap: var(--wsak-space-3);
+	justify-content: center;
+}
+
+/* A figure and its label, not a box around a figure and its label.
+   Four bordered cards holding one number each spend most of their pixels
+   drawing containers, and the containers say nothing the whitespace was not
+   already saying. */
 .wsak-stat {
-	padding: var(--wsak-space-3);
-	border: 1px solid var(--wsak-line);
-	border-radius: var(--wsak-radius-sm);
-	background: var(--wsak-surface);
+	padding: 0;
 }
 
 .wsak-stat__value {
 	display: block;
 	color: var(--wsak-ink);
-	font-size: 28px;
-	font-weight: 680;
-	line-height: 1.1;
+	font-size: 34px;
+	font-weight: 650;
+	letter-spacing: -0.02em;
+	line-height: 1.05;
 }
 
 .wsak-stat--good .wsak-stat__value {
@@ -2023,9 +2040,10 @@
 
 .wsak-stat__label {
 	display: block;
-	margin-top: 2px;
-	color: var(--wsak-text);
-	font-size: 13px;
+	margin-top: var(--wsak-space-1);
+	color: var(--wsak-ink);
+	font-size: 13.5px;
+	font-weight: 600;
 }
 
 .wsak-stat__note {
