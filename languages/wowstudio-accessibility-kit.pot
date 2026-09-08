@@ -367,27 +367,27 @@ msgid "In short"
 msgstr ""
 
 #: src/Remediation/ActionBand.php:118
-#: assets/src/components/issue-list.js:341
+#: assets/src/components/issue-list.js:345
 msgid "Fix these now"
 msgstr ""
 
 #: src/Remediation/ActionBand.php:119
-#: assets/src/components/issue-list.js:349
+#: assets/src/components/issue-list.js:353
 msgid "Read, then apply"
 msgstr ""
 
 #: src/Remediation/ActionBand.php:120
-#: assets/src/components/issue-list.js:357
+#: assets/src/components/issue-list.js:361
 msgid "Needs a decision from you"
 msgstr ""
 
 #: src/Remediation/ActionBand.php:121
-#: assets/src/components/issue-list.js:365
+#: assets/src/components/issue-list.js:369
 msgid "For whoever looks after your theme"
 msgstr ""
 
 #: src/Remediation/ActionBand.php:134
-#: assets/src/components/issue-list.js:342
+#: assets/src/components/issue-list.js:346
 msgid "There is one correct answer and we already know it. Nothing here is a guess, so nothing here needs checking first."
 msgstr ""
 
@@ -396,12 +396,12 @@ msgid "We can draft these, but a draft is not an answer. Read what it says befor
 msgstr ""
 
 #: src/Remediation/ActionBand.php:136
-#: assets/src/components/issue-list.js:358
+#: assets/src/components/issue-list.js:362
 msgid "These depend on what your content means, which is not something any tool can work out for you. Each one explains what to weigh up."
 msgstr ""
 
 #: src/Remediation/ActionBand.php:137
-#: assets/src/components/issue-list.js:369
+#: assets/src/components/issue-list.js:373
 msgid "These are in your theme rather than your content, so nothing here can reach them. Each one comes with what to change and where."
 msgstr ""
 
@@ -661,7 +661,7 @@ msgid "Why it matters:"
 msgstr ""
 
 #: src/Rest/RunController.php:525
-#: assets/src/components/issue-list.js:289
+#: assets/src/components/issue-list.js:293
 msgid "Where:"
 msgstr ""
 
@@ -2523,14 +2523,14 @@ msgstr ""
 
 #. translators: %d: number of items in this group.
 #: assets/src/components/coverage-panel.js:174
-#: assets/src/components/issue-list.js:415
+#: assets/src/components/issue-list.js:419
 #, js-format
 msgid "(%d)"
 msgstr ""
 
 #. translators: %s: WCAG success criterion number.
 #: assets/src/components/coverage-panel.js:188
-#: assets/src/components/issue-list.js:157
+#: assets/src/components/issue-list.js:161
 #: assets/src/components/theme-panel.js:253
 #, js-format
 msgid "WCAG %s"
@@ -2940,45 +2940,45 @@ msgid "Answered by a style rule measured off the element itself, so it is fixed 
 msgstr ""
 
 #. translators: %s: name of the accessibility check.
-#: assets/src/components/issue-list.js:208
+#: assets/src/components/issue-list.js:212
 #: assets/src/components/markup-groups.js:228
 #, js-format
 msgid "Markup for: %s"
 msgstr ""
 
-#: assets/src/components/issue-list.js:224
+#: assets/src/components/issue-list.js:228
 msgid "How to fix this"
 msgstr ""
 
-#: assets/src/components/issue-list.js:233
+#: assets/src/components/issue-list.js:237
 msgid "Element:"
 msgstr ""
 
-#: assets/src/components/issue-list.js:257
+#: assets/src/components/issue-list.js:261
 msgid "Page:"
 msgstr ""
 
-#: assets/src/components/issue-list.js:270
+#: assets/src/components/issue-list.js:274
 msgid "View"
 msgstr ""
 
-#: assets/src/components/issue-list.js:301
+#: assets/src/components/issue-list.js:305
 msgid "Exact path in the page"
 msgstr ""
 
-#: assets/src/components/issue-list.js:350
+#: assets/src/components/issue-list.js:354
 msgid "We can draft these, but a draft is not an answer. Read what it says before you apply it — it was written by a model that cannot see why your page exists."
 msgstr ""
 
-#: assets/src/components/issue-list.js:549
+#: assets/src/components/issue-list.js:553
 msgid "Nothing found by the automated checks"
 msgstr ""
 
-#: assets/src/components/issue-list.js:553
+#: assets/src/components/issue-list.js:557
 msgid "None of the checks we can run automatically flagged anything on this page. That is a good sign, and it is not the same as the page being accessible — most of WCAG needs a person. The manual checklists are the next step."
 msgstr ""
 
-#: assets/src/components/issue-list.js:588
+#: assets/src/components/issue-list.js:592
 #: assets/src/components/overview.js:166
 #: assets/src/components/overview.js:238
 msgid "What these checks cover, and what they cannot"

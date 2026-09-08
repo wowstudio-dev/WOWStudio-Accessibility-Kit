@@ -113,7 +113,11 @@ function IssueCard( {
 	const subline = ruleIsStated ? issue.locator : issue.message;
 
 	return (
-		<li className={ `wsak-issue${ open ? ' is-open' : '' }` }>
+		<li
+			className={ `wsak-issue wsak-issue--collapsible${
+				open ? ' is-open' : ''
+			}` }
+		>
 			<h4 className="wsak-issue__head">
 				<button
 					type="button"

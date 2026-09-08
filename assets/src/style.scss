@@ -101,6 +101,17 @@
 	-webkit-font-smoothing: antialiased;
 }
 
+/* Help text under a WordPress control is prose, and prose has to stop.
+   Going full width uncapped every string @wordpress/components renders for us
+   — the fix descriptions on Settings were running to nearly two hundred
+   characters a line, which is past the point where the eye reliably finds the
+   start of the next one. One rule, because it is one class of text wherever it
+   appears. */
+.wsak .components-base-control__help,
+.wsak .components-form-token-field__help {
+	max-width: 74ch;
+}
+
 .wsak *:focus-visible {
 	outline: 2px solid var(--wsak-indigo);
 	outline-offset: 2px;
@@ -547,13 +558,21 @@
 	gap: var(--wsak-space-3);
 }
 
-/* The padding moves onto the header and the body, so a closed finding is one
-   row rather than a card with an empty lower half. */
 .wsak-issue {
+	padding: var(--wsak-space-4);
 	background: var(--wsak-surface);
 	border: 1px solid var(--wsak-line);
 	border-inline-start: 3px solid var(--wsak-line-strong);
 	border-radius: var(--wsak-radius-sm);
+}
+
+/* Only the collapsible kind gives its padding up, and only because the header
+   and the body take it on instead — the whole closed row has to be the target,
+   which it cannot be if the card is holding the padding.
+   The theme panel renders the same card without an accordion around it, and
+   moving the padding unconditionally left its text flush against the border. */
+.wsak-issue--collapsible {
+	padding: 0;
 }
 
 .wsak-issue__head {
@@ -615,6 +634,7 @@
  * its title and twenty-six above its own border — a ten-pixel lean that reads
  * as sloppiness long before anybody works out what it is.
  */
+.wsak-issue > *:last-child,
 .wsak-issue__body > *:last-child,
 .wsak-css-fix__review > *:last-child,
 .wsak-settings > *:last-child,
@@ -1009,6 +1029,15 @@
 	border-radius: var(--wsak-radius);
 }
 
+/* The preview is the document somebody is about to publish, so it is read the
+   way a document is read. Uncapped it ran to a hundred and twenty characters a
+   line — nobody would set their own statement that wide, and previewing it that
+   way misrepresents what they are signing off. */
+.wsak-statement-panel__preview p,
+.wsak-statement-panel__preview li {
+	max-width: 72ch;
+}
+
 .wsak-statement-panel__preview h4 {
 	margin-top: 0;
 	font-size: 16px;
@@ -1140,6 +1169,11 @@
 }
 
 .wsak-inspector__frame {
+
+	/* An iframe does not pick up the admin's border-box, so 100% plus a border
+	   is two pixels wider than the column it sits in. Small, and it put the
+	   preview's own edge outside the pane holding it. */
+	box-sizing: border-box;
 	width: 100%;
 	height: 72vh;
 	min-height: 440px;
@@ -1934,7 +1968,9 @@
 	text-transform: uppercase;
 }
 
+/* The trend note went full width with the chart above it. */
 .wsak-card__note {
+	max-width: 84ch;
 	margin: var(--wsak-space-3) 0 0;
 	color: var(--wsak-muted);
 	font-size: 12px;
@@ -1972,7 +2008,12 @@
 }
 
 .wsak-overview__qualifier {
-	margin: var(--wsak-space-3) 0 0;
+
+	/* Capped because it moved. Beside the score it has a whole column rather
+	   than the width of a card, and the sentence that qualifies the number
+	   nobody should misread is the last one to let run to 135 characters. */
+	max-width: 76ch;
+	margin: 0;
 	color: var(--wsak-muted);
 	font-size: 12.5px;
 	line-height: 1.5;

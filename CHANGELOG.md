@@ -96,6 +96,23 @@ Findings that keep their identity, and figures you can open.
   and each was about a different pass, which is not a distinction anybody should
   have to infer from a screen disagreeing with itself.
 
+- **Layout faults introduced by going full width, found by sweeping every
+  screen rather than by looking at them.** The theme findings had lost their
+  padding entirely and sat against their own border: they render the same card
+  as the findings list, and when that card gave its padding to the accordion
+  inside it, the one without an accordion had none left. Only the collapsible
+  kind gives it up now.
+
+  Four blocks of prose had no line-length cap and had been fine only because
+  the plugin used to be 1240px wide: the help text under every WordPress
+  control, at nearly two hundred characters a line; the sentence qualifying the
+  score; the note under the trend; and the accessibility statement preview,
+  which is the document somebody is about to publish and should be previewed
+  the way it will be read.
+
+  And the preview frame was two pixels wider than the pane holding it — an
+  iframe does not inherit the admin's border-box.
+
 - **The report is figures on a page rather than figures in boxes.** Four
   bordered cards holding one number each spent most of their pixels drawing
   containers, and the containers said nothing the whitespace was not already
