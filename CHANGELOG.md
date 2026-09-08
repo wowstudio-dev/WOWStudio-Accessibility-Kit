@@ -96,6 +96,29 @@ Findings that keep their identity, and figures you can open.
   and each was about a different pass, which is not a distinction anybody should
   have to infer from a screen disagreeing with itself.
 
+- **The eight screens are grouped, and say why they exist.** A single row of
+  eight peer tabs makes somebody guess what each is for. They now sit under
+  **Find**, **Fix** and **Record** — what you look at, what you change, and the
+  record of what you decided and published.
+
+  Theme sits under Find rather than Fix, which is where the mockup had it. It is
+  a scan of a thing — the header, navigation and footer — and belongs beside the
+  other two scans; that its findings often point at a site fix is where they
+  lead, not what the screen is.
+
+- **The header says when anything was last checked, on every screen.** Nothing
+  here scans on its own, so every figure on screen is only as old as the last
+  time somebody pressed the button, and "nothing checked yet" is a normal answer
+  the report alone never gave. Beside it is a control that opens the screen
+  where you choose what to check — deliberately not one that starts a site-wide
+  run, because that is not something to set going by accident.
+
+- **A real first screen.** A new install opened on an empty report, which reads
+  as a plugin that does not work rather than one waiting to be told what to
+  check; testers landed there first and could not tell which it was. It now says
+  what to do, offers the two ways of doing it, and sets out Find → Fix → Say so
+  before anybody has committed to anything.
+
 - **The findings list opens one finding at a time.** Every card used to render
   everything it had — the consequence, the fix plan, the markup, the page, the
   path, the dismiss control — for all fifty findings at once. Testers called it

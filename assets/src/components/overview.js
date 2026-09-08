@@ -12,6 +12,39 @@ import NextStep from './next-step';
 import { EmptyState } from './states';
 
 /**
+ * Where this goes, for somebody who has not started.
+ *
+ * Three steps rather than a feature list, because the shape of the work is the
+ * thing that is not obvious: a scanner finds, some of what it finds can be
+ * switched on rather than edited, and the last step is writing down honestly
+ * what is still wrong. People who only see step one assume the plugin claims
+ * to fix everything, which is the claim this product exists not to make.
+ */
+const STEPS = [
+	{
+		title: __( 'Find', 'wowstudio-accessibility-kit' ),
+		body: __(
+			'Check your posts, pages and theme. Every finding names the element it came from and the page it is on.',
+			'wowstudio-accessibility-kit'
+		),
+	},
+	{
+		title: __( 'Fix', 'wowstudio-accessibility-kit' ),
+		body: __(
+			'Switch on the site-wide fixes, describe your images, and repair the rest in your own content.',
+			'wowstudio-accessibility-kit'
+		),
+	},
+	{
+		title: __( 'Say so', 'wowstudio-accessibility-kit' ),
+		body: __(
+			'Publish a statement: what works, what does not yet, and how somebody reaches you when they hit a barrier.',
+			'wowstudio-accessibility-kit'
+		),
+	},
+];
+
+/**
  * The overview.
  *
  * @param {Object}   props           Component props.
@@ -60,21 +93,73 @@ export default function Overview( { onGo, onDrill } ) {
 	const { scanned, score, issues, by_band: byBand, by_rule: byRule } = data;
 	const { history, worst, coverage } = data;
 
+	/*
+	 * The first screen anybody sees, and for a while the only one.
+	 *
+	 * Nothing here scans on its own, so a new install opens on an empty report
+	 * — which reads as a plugin that does not work rather than one waiting to
+	 * be told what to check. Testers landed here first and could not tell which
+	 * it was. So it says what to do, offers the two ways of doing it, and
+	 * explains where the whole thing is going before anybody has committed to
+	 * it.
+	 */
 	if ( ! scanned.pages ) {
 		return (
-			<>
-				<EmptyState
-					title={ __(
-						'Nothing has been scanned yet',
+			<section className="wsak-start">
+				<h2 className="wsak-start__title">
+					{ __(
+						'Nothing checked yet',
 						'wowstudio-accessibility-kit'
 					) }
-					body={ __(
-						'This fills in once a page has been checked. It counts only what has actually been scanned, so it starts empty rather than starting at a hundred.',
-						'wowstudio-accessibility-kit'
-					) }
-				/>
+				</h2>
 
-				<NextStep step={ data.next_step } onGo={ onGo } />
+				<p className="wsak-start__lede">
+					{ __(
+						'Pick a page and check it. You get a list of what is wrong, where each thing sits on the page, and what to do about it. Checking reads your site and changes nothing on it.',
+						'wowstudio-accessibility-kit'
+					) }
+				</p>
+
+				<p className="wsak-start__actions">
+					<Button variant="primary" onClick={ () => onGo( 'bulk' ) }>
+						{ __(
+							'Choose pages to check',
+							'wowstudio-accessibility-kit'
+						) }
+					</Button>
+					<Button
+						variant="secondary"
+						onClick={ () => onGo( 'scan' ) }
+					>
+						{ __(
+							'Check a single page',
+							'wowstudio-accessibility-kit'
+						) }
+					</Button>
+				</p>
+
+				<ol className="wsak-start__steps">
+					{ STEPS.map( ( step, index ) => (
+						<li className="wsak-start__step" key={ step.title }>
+							<span className="wsak-start__step-n">
+								{ sprintf(
+									/* translators: %d: step number. */
+									__(
+										'Step %d',
+										'wowstudio-accessibility-kit'
+									),
+									index + 1
+								) }
+							</span>
+							<h3 className="wsak-start__step-title">
+								{ step.title }
+							</h3>
+							<p className="wsak-start__step-body">
+								{ step.body }
+							</p>
+						</li>
+					) ) }
+				</ol>
 
 				<p className="wsak-overview__door">
 					<Button variant="link" onClick={ () => onGo( 'coverage' ) }>
@@ -84,7 +169,7 @@ export default function Overview( { onGo, onDrill } ) {
 						) }
 					</Button>
 				</p>
-			</>
+			</section>
 		);
 	}
 

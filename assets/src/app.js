@@ -26,6 +26,73 @@ const settings = window.wsakSettings ?? {};
 const capabilities = settings.capabilities ?? {};
 
 /**
+ * The eight screens, in the three groups they fall into.
+ *
+ * Find is what you look at, Fix is what you change, Record is what you decided
+ * and what you publish about it. A screen appears only when the person has the
+ * capability its routes require — the routes enforce that regardless, and this
+ * is so the interface does not offer a door that will not open.
+ */
+const GROUPS = [
+	{
+		id: 'find',
+		label: __( 'Find', 'wowstudio-accessibility-kit' ),
+		items: [
+			{
+				id: 'overview',
+				label: __( 'Overview', 'wowstudio-accessibility-kit' ),
+			},
+			{
+				id: 'scan',
+				label: __( 'One page', 'wowstudio-accessibility-kit' ),
+			},
+			{
+				id: 'bulk',
+				label: __( 'Your content', 'wowstudio-accessibility-kit' ),
+				needs: 'runScan',
+			},
+			{
+				id: 'theme',
+				label: __( 'Theme', 'wowstudio-accessibility-kit' ),
+				needs: 'viewReports',
+			},
+		],
+	},
+	{
+		id: 'fix',
+		label: __( 'Fix', 'wowstudio-accessibility-kit' ),
+		items: [
+			{
+				id: 'images',
+				label: __( 'Images', 'wowstudio-accessibility-kit' ),
+				needs: 'applyFix',
+			},
+			{
+				id: 'fixes',
+				label: __( 'Site fixes', 'wowstudio-accessibility-kit' ),
+				needs: 'viewReports',
+			},
+		],
+	},
+	{
+		id: 'record',
+		label: __( 'Record', 'wowstudio-accessibility-kit' ),
+		items: [
+			{
+				id: 'aside',
+				label: __( 'False positives', 'wowstudio-accessibility-kit' ),
+				needs: 'viewReports',
+			},
+			{
+				id: 'statement',
+				label: __( 'Statement', 'wowstudio-accessibility-kit' ),
+				needs: 'viewReports',
+			},
+		],
+	},
+];
+
+/**
  * The whole screen.
  *
  * @return {Element} The app.
@@ -42,6 +109,14 @@ export default function App() {
 	// { rule } or { post }. Held beside the view rather than encoded into it so
 	// the drill-down screen stays one screen rather than one per filter.
 	const [ filter, setFilter ] = useState( null );
+
+	/*
+	 * Seeded by the server and kept current in the browser. Reading it back
+	 * from the server after every scan would be a request for one string; a
+	 * scan that just finished happened now, and now is what the header should
+	 * say.
+	 */
+	const [ lastScan, setLastScan ] = useState( settings.lastScan ?? '' );
 
 	// How a finished scan is presented. The inspector puts each finding beside
 	// the page it came from, which is the more useful of the two whenever the
@@ -70,6 +145,12 @@ export default function App() {
 		runScan( postId )
 			.then( ( data ) => {
 				setScan( data );
+				setLastScan(
+					new Date().toLocaleString( undefined, {
+						dateStyle: 'medium',
+						timeStyle: 'short',
+					} )
+				);
 				setAnnouncement(
 					sprintf(
 						/* translators: %d: number of findings. */
@@ -134,87 +215,108 @@ export default function App() {
 						) }
 					</p>
 				</div>
+
+				{ /*
+				 * When anything was last checked, on every screen rather than
+				 * only on the report. Nothing here scans on its own, so a
+				 * figure on screen is only ever as old as the last time
+				 * somebody pressed the button — and "never" is a normal answer
+				 * that the report alone would never have told them.
+				 *
+				 * The control beside it opens the screen where you choose what
+				 * to check. It does not start a site-wide run: a button that
+				 * quietly begins scanning every page is not one somebody should
+				 * be able to press by accident.
+				 */ }
+				{ capabilities.runScan && (
+					<div className="wsak__meta">
+						<p className="wsak__last-scan">
+							{ lastScan
+								? sprintf(
+										/* translators: %s: when the most recent scan finished. */
+										__(
+											'Last checked %s',
+											'wowstudio-accessibility-kit'
+										),
+										lastScan
+								  )
+								: __(
+										'Nothing checked yet',
+										'wowstudio-accessibility-kit'
+								  ) }
+						</p>
+						<Button
+							variant="primary"
+							onClick={ () => setView( 'bulk' ) }
+						>
+							{ __(
+								'Check pages',
+								'wowstudio-accessibility-kit'
+							) }
+						</Button>
+					</div>
+				) }
 			</header>
 
+			{ /*
+			 * Grouped, because eight tabs in a row make somebody guess what
+			 * each one is for. The three names say why a screen exists rather
+			 * than what it contains: things you look at, things you change, and
+			 * the record of what you decided.
+			 *
+			 * Theme sits under Find, not Fix. It is a scan of a thing — the
+			 * header, navigation and footer — and belongs beside the other two
+			 * scans; that its findings often point at a site fix is where they
+			 * lead, not what the screen is.
+			 */ }
 			<nav
 				className="wsak__nav"
 				aria-label={ __( 'Sections', 'wowstudio-accessibility-kit' ) }
 			>
-				<Button
-					variant={ view === 'overview' ? 'primary' : 'tertiary' }
-					aria-current={ view === 'overview' ? 'page' : undefined }
-					onClick={ () => setView( 'overview' ) }
-				>
-					{ __( 'Overview', 'wowstudio-accessibility-kit' ) }
-				</Button>
-				<Button
-					variant={ view === 'scan' ? 'primary' : 'tertiary' }
-					aria-current={ view === 'scan' ? 'page' : undefined }
-					onClick={ () => setView( 'scan' ) }
-				>
-					{ __( 'One page', 'wowstudio-accessibility-kit' ) }
-				</Button>
-				{ capabilities.runScan && (
-					<Button
-						variant={ view === 'bulk' ? 'primary' : 'tertiary' }
-						aria-current={ view === 'bulk' ? 'page' : undefined }
-						onClick={ () => setView( 'bulk' ) }
-					>
-						{ __( 'Your content', 'wowstudio-accessibility-kit' ) }
-					</Button>
-				) }
-				{ capabilities.applyFix && (
-					<Button
-						variant={ view === 'images' ? 'primary' : 'tertiary' }
-						aria-current={ view === 'images' ? 'page' : undefined }
-						onClick={ () => setView( 'images' ) }
-					>
-						{ __( 'Images', 'wowstudio-accessibility-kit' ) }
-					</Button>
-				) }
-				{ capabilities.viewReports && (
-					<Button
-						variant={ view === 'aside' ? 'primary' : 'tertiary' }
-						aria-current={ view === 'aside' ? 'page' : undefined }
-						onClick={ () => setView( 'aside' ) }
-					>
-						{ __(
-							'False positives',
-							'wowstudio-accessibility-kit'
-						) }
-					</Button>
-				) }
-				{ capabilities.viewReports && (
-					<Button
-						variant={ view === 'fixes' ? 'primary' : 'tertiary' }
-						aria-current={ view === 'fixes' ? 'page' : undefined }
-						onClick={ () => setView( 'fixes' ) }
-					>
-						{ __( 'Site fixes', 'wowstudio-accessibility-kit' ) }
-					</Button>
-				) }
-				{ capabilities.viewReports && (
-					<Button
-						variant={ view === 'theme' ? 'primary' : 'tertiary' }
-						aria-current={ view === 'theme' ? 'page' : undefined }
-						onClick={ () => setView( 'theme' ) }
-					>
-						{ __( 'Theme', 'wowstudio-accessibility-kit' ) }
-					</Button>
-				) }
-				{ capabilities.viewReports && (
-					<Button
-						variant={
-							view === 'statement' ? 'primary' : 'tertiary'
-						}
-						aria-current={
-							view === 'statement' ? 'page' : undefined
-						}
-						onClick={ () => setView( 'statement' ) }
-					>
-						{ __( 'Statement', 'wowstudio-accessibility-kit' ) }
-					</Button>
-				) }
+				{ GROUPS.map( ( group ) => {
+					const items = group.items.filter(
+						( item ) => ! item.needs || capabilities[ item.needs ]
+					);
+
+					if ( ! items.length ) {
+						return null;
+					}
+
+					return (
+						<div className="wsak__nav-group" key={ group.id }>
+							<h2
+								className="wsak__nav-label"
+								id={ `wsak-nav-${ group.id }` }
+							>
+								{ group.label }
+							</h2>
+							<ul
+								className="wsak__nav-items"
+								aria-labelledby={ `wsak-nav-${ group.id }` }
+							>
+								{ items.map( ( item ) => (
+									<li key={ item.id }>
+										<Button
+											variant={
+												view === item.id
+													? 'primary'
+													: 'tertiary'
+											}
+											aria-current={
+												view === item.id
+													? 'page'
+													: undefined
+											}
+											onClick={ () => setView( item.id ) }
+										>
+											{ item.label }
+										</Button>
+									</li>
+								) ) }
+							</ul>
+						</div>
+					);
+				} ) }
 			</nav>
 
 			<p className="screen-reader-text" role="status" aria-live="polite">

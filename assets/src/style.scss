@@ -157,20 +157,111 @@
 
 /* Navigation — one segmented control, not a row of loose buttons. ---------- */
 
+/* Three groups rather than one pill of eight. The rounded track worked when
+   the tabs were peers; once they are grouped, the group is the unit and a
+   single enclosing shape fights the grouping it is meant to show. */
 .wsak__nav {
-	display: inline-flex;
-
-	/* 2px is below the scale on purpose: this is the seam between two
-	   segments of one control, not a gap between two things. */
-	gap: 2px;
-	padding: var(--wsak-space-1);
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--wsak-space-8);
 
 	/* No top margin. The header's own bottom padding is the gap, and adding
 	   to it was what made the nav sit closer to the title than to the work. */
 	margin: 0 0 var(--wsak-space-6);
-	background: var(--wsak-raised);
-	border: 1px solid var(--wsak-line);
-	border-radius: 999px;
+	padding: 0 0 var(--wsak-space-4);
+	border-bottom: 1px solid var(--wsak-line);
+}
+
+.wsak__nav-label {
+	margin: 0 0 var(--wsak-space-2);
+	color: var(--wsak-muted);
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+}
+
+.wsak__nav-items {
+	display: flex;
+
+	/* 2px is below the scale on purpose: this is the seam between two
+	   segments of one control, not a gap between two things. */
+	gap: 2px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.wsak__meta {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--wsak-space-3);
+	align-items: center;
+	margin-inline-start: auto;
+}
+
+.wsak__last-scan {
+	margin: 0;
+	color: var(--wsak-muted);
+	font-size: 12.5px;
+}
+
+/* ── Nothing checked yet ─────────────────────────────────────────────────── */
+
+.wsak-start {
+	padding: var(--wsak-space-8) 0 0;
+}
+
+.wsak-start__title {
+	margin: 0 0 var(--wsak-space-2);
+	color: var(--wsak-ink);
+	font-size: 22px;
+}
+
+.wsak-start__lede {
+	max-width: 68ch;
+	margin: 0 0 var(--wsak-space-5);
+	color: var(--wsak-text);
+}
+
+.wsak-start__actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--wsak-space-2);
+	margin: 0 0 var(--wsak-space-12);
+}
+
+.wsak-start__steps {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+	gap: var(--wsak-space-6);
+	margin: 0 0 var(--wsak-space-6);
+	padding: var(--wsak-space-6) 0 0;
+	border-top: 1px solid var(--wsak-line);
+	list-style: none;
+}
+
+.wsak-start__step-n {
+	display: block;
+	margin-bottom: var(--wsak-space-1);
+	color: var(--wsak-muted);
+	font-size: 11px;
+	font-weight: 700;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+}
+
+.wsak-start__step-title {
+	margin: 0 0 var(--wsak-space-1);
+	color: var(--wsak-ink);
+	font-size: 15px;
+}
+
+.wsak-start__step-body {
+	max-width: 44ch;
+	margin: 0;
+	color: var(--wsak-muted);
+	font-size: 13px;
 }
 
 .wsak__nav .components-button {

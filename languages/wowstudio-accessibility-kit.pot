@@ -66,7 +66,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: src/Admin/Menu.php:69
-#: assets/src/app.js:125
+#: assets/src/app.js:206
 msgid "Accessibility Kit"
 msgstr ""
 
@@ -846,7 +846,7 @@ msgid "Open"
 msgstr ""
 
 #: src/Scanner/IssueStatus.php:44
-#: assets/src/components/overview.js:178
+#: assets/src/components/overview.js:263
 msgid "Fixed"
 msgstr ""
 
@@ -1791,7 +1791,7 @@ msgid "Whole site"
 msgstr ""
 
 #: src/Scanner/ScanScope.php:53
-#: assets/src/app.js:202
+#: assets/src/app.js:56
 msgid "Theme"
 msgstr ""
 
@@ -2079,96 +2079,125 @@ msgstr ""
 msgid "Something went wrong and we could not say what. Please try again."
 msgstr ""
 
-#: assets/src/app.js:67
-msgid "Scanning the page…"
+#: assets/src/app.js:39
+#: assets/src/components/overview.js:25
+msgid "Find"
 msgstr ""
 
-#. translators: %d: number of findings.
-#: assets/src/app.js:76
-#, js-format
-msgid "Scan finished. %d findings."
-msgstr ""
-
-#: assets/src/app.js:87
-msgid "The scan failed."
-msgstr ""
-
-#: assets/src/app.js:131
-msgid "Find, fix and document accessibility problems at the code level."
-msgstr ""
-
-#: assets/src/app.js:141
-msgid "Sections"
-msgstr ""
-
-#: assets/src/app.js:148
+#: assets/src/app.js:43
 msgid "Overview"
 msgstr ""
 
-#: assets/src/app.js:155
+#: assets/src/app.js:47
 msgid "One page"
 msgstr ""
 
-#: assets/src/app.js:163
+#: assets/src/app.js:51
 msgid "Your content"
 msgstr ""
 
-#: assets/src/app.js:172
+#: assets/src/app.js:63
+#: assets/src/components/overview.js:32
+msgid "Fix"
+msgstr ""
+
+#: assets/src/app.js:67
 msgid "Images"
 msgstr ""
 
-#: assets/src/app.js:181
+#: assets/src/app.js:72
+msgid "Site fixes"
+msgstr ""
+
+#: assets/src/app.js:79
+msgid "Record"
+msgstr ""
+
+#: assets/src/app.js:83
 #: assets/src/components/dismissed.js:169
 msgid "False positives"
 msgstr ""
 
-#: assets/src/app.js:193
-msgid "Site fixes"
-msgstr ""
-
-#: assets/src/app.js:215
+#: assets/src/app.js:88
 msgid "Statement"
 msgstr ""
 
-#: assets/src/app.js:233
+#: assets/src/app.js:142
+msgid "Scanning the page…"
+msgstr ""
+
+#. translators: %d: number of findings.
+#: assets/src/app.js:157
+#, js-format
+msgid "Scan finished. %d findings."
+msgstr ""
+
+#: assets/src/app.js:168
+msgid "The scan failed."
+msgstr ""
+
+#: assets/src/app.js:212
+msgid "Find, fix and document accessibility problems at the code level."
+msgstr ""
+
+#. translators: %s: when the most recent scan finished.
+#: assets/src/app.js:237
+#, js-format
+msgid "Last checked %s"
+msgstr ""
+
+#: assets/src/app.js:243
+#: assets/src/components/overview.js:110
+msgid "Nothing checked yet"
+msgstr ""
+
+#: assets/src/app.js:252
+msgid "Check pages"
+msgstr ""
+
+#: assets/src/app.js:274
+msgid "Sections"
+msgstr ""
+
+#: assets/src/app.js:335
 msgid "You can read results here but not start a scan. An administrator can grant that."
 msgstr ""
 
-#: assets/src/app.js:285
+#: assets/src/app.js:387
 msgid "Loading the scan…"
 msgstr ""
 
 #. translators: %s: content title.
-#: assets/src/app.js:307
+#: assets/src/app.js:409
 #, js-format
 msgid "Results for “%s”"
 msgstr ""
 
-#: assets/src/app.js:313
+#: assets/src/app.js:415
 msgid "Scan results"
 msgstr ""
 
-#: assets/src/app.js:336
+#: assets/src/app.js:438
 msgid "Show as a list"
 msgstr ""
 
-#: assets/src/app.js:340
+#: assets/src/app.js:442
 msgid "Show on the page"
 msgstr ""
 
-#: assets/src/app.js:349
+#: assets/src/app.js:451
 msgid "Back to your content"
 msgstr ""
 
-#: assets/src/app.js:360
+#: assets/src/app.js:462
 msgid "This scan covered less than usual."
 msgstr ""
 
-#: assets/src/app.js:437
+#: assets/src/app.js:539
 msgid "← Back to the overview"
 msgstr ""
 
-#: assets/src/app.js:449
+#: assets/src/app.js:551
 msgid "This plugin helps you find, fix and document accessibility problems. It does not determine whether your site meets the ADA, the European Accessibility Act, Section 508, or any other legal requirement, and nothing here is legal advice."
 msgstr ""
 
@@ -2945,8 +2974,8 @@ msgid "None of the checks we can run automatically flagged anything on this page
 msgstr ""
 
 #: assets/src/components/issue-list.js:588
-#: assets/src/components/overview.js:81
-#: assets/src/components/overview.js:306
+#: assets/src/components/overview.js:166
+#: assets/src/components/overview.js:391
 msgid "What these checks cover, and what they cannot"
 msgstr ""
 
@@ -2996,97 +3025,123 @@ msgstr ""
 msgid "Everything this check found has been fixed or marked a false positive."
 msgstr ""
 
-#: assets/src/components/overview.js:36
+#: assets/src/components/overview.js:26
+msgid "Check your posts, pages and theme. Every finding names the element it came from and the page it is on."
+msgstr ""
+
+#: assets/src/components/overview.js:33
+msgid "Switch on the site-wide fixes, describe your images, and repair the rest in your own content."
+msgstr ""
+
+#: assets/src/components/overview.js:39
+msgid "Say so"
+msgstr ""
+
+#: assets/src/components/overview.js:40
+msgid "Publish a statement: what works, what does not yet, and how somebody reaches you when they hit a barrier."
+msgstr ""
+
+#: assets/src/components/overview.js:69
 msgid "The summary could not be loaded."
 msgstr ""
 
-#: assets/src/components/overview.js:55
+#: assets/src/components/overview.js:88
 msgid "Adding it up…"
 msgstr ""
 
-#: assets/src/components/overview.js:67
-msgid "Nothing has been scanned yet"
+#: assets/src/components/overview.js:117
+msgid "Pick a page and check it. You get a list of what is wrong, where each thing sits on the page, and what to do about it. Checking reads your site and changes nothing on it."
 msgstr ""
 
-#: assets/src/components/overview.js:71
-msgid "This fills in once a page has been checked. It counts only what has actually been scanned, so it starts empty rather than starting at a hundred."
+#: assets/src/components/overview.js:125
+msgid "Choose pages to check"
 msgstr ""
 
-#: assets/src/components/overview.js:114
+#: assets/src/components/overview.js:134
+msgid "Check a single page"
+msgstr ""
+
+#. translators: %d: step number.
+#: assets/src/components/overview.js:147
+#, js-format
+msgid "Step %d"
+msgstr ""
+
+#: assets/src/components/overview.js:199
 msgid "Across what has been scanned"
 msgstr ""
 
-#: assets/src/components/overview.js:122
+#: assets/src/components/overview.js:207
 msgid "Mean score across scanned pages"
 msgstr ""
 
 #. translators: 1: pages scanned. 2: pages published.
-#: assets/src/components/overview.js:136
+#: assets/src/components/overview.js:221
 #, js-format
 msgid "The average of the latest score for each of %1$d scanned pages, out of %2$d published. It counts only what automated checks can settle, which is part of WCAG rather than all of it, and it does not tell you whether your site meets any legal requirement."
 msgstr ""
 
-#: assets/src/components/overview.js:156
+#: assets/src/components/overview.js:241
 msgid "Barriers found"
 msgstr ""
 
-#: assets/src/components/overview.js:161
+#: assets/src/components/overview.js:246
 msgid "Settled by an automated check. These are wrong."
 msgstr ""
 
-#: assets/src/components/overview.js:167
+#: assets/src/components/overview.js:252
 msgid "Needs a person to look"
 msgstr ""
 
-#: assets/src/components/overview.js:172
+#: assets/src/components/overview.js:257
 msgid "Automation could not settle these. They may be fine."
 msgstr ""
 
 #. translators: %d: how many findings are marked false positives.
-#: assets/src/components/overview.js:190
+#: assets/src/components/overview.js:275
 #, js-format
 msgid "%d finding marked a false positive."
 msgid_plural "%d findings marked false positives."
 msgstr[0] ""
 msgstr[1] ""
 
-#: assets/src/components/overview.js:202
+#: assets/src/components/overview.js:287
 msgid "Checks available"
 msgstr ""
 
 #. translators: 1: server-pass checks. 2: browser-pass checks. 3: pages that have had a browser pass.
-#: assets/src/components/overview.js:209
+#: assets/src/components/overview.js:294
 #, js-format
 msgid "%1$d run on the server, %2$d need the page view — which %3$d scanned pages have had."
 msgstr ""
 
-#: assets/src/components/overview.js:227
-#: assets/src/components/overview.js:234
+#: assets/src/components/overview.js:312
+#: assets/src/components/overview.js:319
 msgid "Open findings by severity"
 msgstr ""
 
-#: assets/src/components/overview.js:243
+#: assets/src/components/overview.js:328
 msgid "What comes up most"
 msgstr ""
 
-#: assets/src/components/overview.js:250
+#: assets/src/components/overview.js:335
 msgid "Open findings by check"
 msgstr ""
 
-#: assets/src/components/overview.js:264
+#: assets/src/components/overview.js:349
 msgid "Pages with the most to do"
 msgstr ""
 
-#: assets/src/components/overview.js:271
+#: assets/src/components/overview.js:356
 msgid "Open findings by page"
 msgstr ""
 
-#: assets/src/components/overview.js:286
+#: assets/src/components/overview.js:371
 msgid "Score by scan"
 msgstr ""
 
 #. translators: %d: how many scans are plotted.
-#: assets/src/components/overview.js:292
+#: assets/src/components/overview.js:377
 #, js-format
 msgid "The last %d scan, in the order it ran. This plugin does not re-scan on its own, so the spacing is however often somebody pressed the button — it is a sequence, not a timeline."
 msgid_plural "The last %d scans, in the order they ran. This plugin does not re-scan on its own, so the spacing is however often somebody pressed the button — it is a sequence, not a timeline."

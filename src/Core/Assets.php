@@ -191,12 +191,50 @@ final class Assets implements Registrable {
 			'namespace'    => ScanController::REST_NAMESPACE,
 			'adminUrl'     => admin_url(),
 			'version'      => WSAK_VERSION,
+			// Seeds the header, which says when anything was last checked on
+			// every screen rather than only on the report. Nothing here scans
+			// on its own, so "never" is a normal answer and the one that most
+			// needs saying.
+			'lastScan'     => $this->last_scan(),
 			'capabilities' => array(
 				'runScan'     => current_user_can( Capabilities::RUN_SCAN ),
 				'applyFix'    => current_user_can( Capabilities::APPLY_FIX ),
 				'viewReports' => current_user_can( Capabilities::VIEW_REPORTS ),
 				'manage'      => current_user_can( Capabilities::MANAGE_SETTINGS ),
 			),
+		);
+	}
+
+	/**
+	 * Returns when a page was last checked, in the site's own format.
+	 *
+	 * @since 0.29.0
+	 *
+	 * @return string Empty when nothing has been scanned.
+	 */
+	private function last_scan(): string {
+		global $wpdb;
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- The plugin's own table.
+		$finished = $wpdb->get_var(
+			$wpdb->prepare(
+				"SELECT finished_at FROM {$wpdb->prefix}wsak_scans
+				 WHERE status = %s AND finished_at IS NOT NULL
+				 ORDER BY finished_at DESC
+				 LIMIT 1",
+				'complete'
+			)
+		);
+
+		if ( null === $finished ) {
+			return '';
+		}
+
+		$stamp = strtotime( (string) $finished . ' UTC' );
+
+		return (string) wp_date(
+			get_option( 'date_format' ) . ', ' . get_option( 'time_format' ),
+			false === $stamp ? null : $stamp
 		);
 	}
 }
