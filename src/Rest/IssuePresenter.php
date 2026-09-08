@@ -10,6 +10,7 @@ namespace WOWStudio\AccessibilityKit\Rest;
 use WOWStudio\AccessibilityKit\Db\Issue;
 use WOWStudio\AccessibilityKit\Remediation\WorkList;
 use WOWStudio\AccessibilityKit\Scanner\Engine;
+use WOWStudio\AccessibilityKit\Scanner\Locator;
 use WOWStudio\AccessibilityKit\Scanner\RuleRegistry;
 
 defined( 'ABSPATH' ) || exit;
@@ -123,6 +124,10 @@ final class IssuePresenter {
 			'note'            => $issue->note,
 			'message'         => $issue->message,
 			'selector'        => $issue->selector,
+			// Where this is, in terms somebody can act on. The selector above
+			// stays because the inspector needs it to find the element again;
+			// it is not something to put in front of a reader.
+			'locator'         => Locator::describe( $issue->context ),
 			'context'         => $issue->context,
 			// Which page this one is on. A list narrowed to a single check
 			// gathers findings from everywhere, and without this a row says

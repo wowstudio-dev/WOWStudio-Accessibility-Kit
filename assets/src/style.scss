@@ -634,6 +634,43 @@
 	color: var(--wsak-ink);
 }
 
+.wsak-issue__where {
+	max-width: 78ch;
+	margin: var(--wsak-space-2) 0 0;
+	font-size: 13px;
+}
+
+.wsak-issue__where code {
+	padding: 2px 6px;
+	border-radius: 4px;
+	background: var(--wsak-raised);
+	color: var(--wsak-ink);
+	font-size: 12.5px;
+}
+
+/* The XPath, one disclosure down. It answers the same question as the line
+   above for a different reader, and leading with it was what made the report
+   look like it was written for a machine. */
+.wsak-issue__path {
+	margin: var(--wsak-space-2) 0 0;
+	color: var(--wsak-muted);
+	font-size: 12.5px;
+}
+
+.wsak-issue__path summary {
+	cursor: pointer;
+}
+
+.wsak-inspector__issue-where {
+	display: block;
+	margin-top: 3px;
+	overflow: hidden;
+	color: var(--wsak-muted);
+	font-size: 12px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
 .wsak-issue__page {
 	margin: var(--wsak-space-2) 0 0;
 	color: var(--wsak-muted);

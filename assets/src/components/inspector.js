@@ -461,6 +461,16 @@ export default function Inspector( {
 									<span className="wsak-inspector__issue-message">
 										{ issue.message }
 									</span>
+									{ /*
+									 * Which element this one is. Five contrast
+									 * findings on a page are five identical
+									 * cards without it.
+									 */ }
+									{ issue.locator && (
+										<span className="wsak-inspector__issue-where">
+											{ issue.locator }
+										</span>
+									) }
 								</button>
 
 								{ activeId === issue.id && locateStatus && (

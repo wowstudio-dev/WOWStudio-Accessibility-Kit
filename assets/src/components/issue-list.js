@@ -227,13 +227,33 @@ function IssueCard( { issue, onInspect, ruleIsStated, showPage } ) {
 				</p>
 			) }
 
-			{ ruleIsStated && issue.selector && (
-				<p className="wsak-issue__selector">
+			{ /*
+			 * Where, in terms somebody can act on. The XPath underneath it is
+			 * the machine's answer to the same question and stays available,
+			 * one disclosure down, for whoever wants it — it was never a
+			 * sensible thing to lead with.
+			 */ }
+			{ issue.locator && (
+				<p className="wsak-issue__where">
 					<span className="wsak-issue__selector-label">
-						{ __( 'Element:', 'wowstudio-accessibility-kit' ) }
+						{ __( 'Where:', 'wowstudio-accessibility-kit' ) }
 					</span>{ ' ' }
-					<code>{ issue.selector }</code>
+					<code>{ issue.locator }</code>
 				</p>
+			) }
+
+			{ ruleIsStated && issue.selector && (
+				<details className="wsak-issue__path">
+					<summary>
+						{ __(
+							'Exact path in the page',
+							'wowstudio-accessibility-kit'
+						) }
+					</summary>
+					<p className="wsak-issue__selector">
+						<code>{ issue.selector }</code>
+					</p>
+				</details>
 			) }
 
 			{ /*

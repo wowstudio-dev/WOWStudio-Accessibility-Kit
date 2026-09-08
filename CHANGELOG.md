@@ -96,6 +96,23 @@ Findings that keep their identity, and figures you can open.
   and each was about a different pass, which is not a distinction anybody should
   have to infer from a screen disagreeing with itself.
 
+- **A finding now says where it is in words you can act on.** The only location
+  on a card was the DOM path — things like
+  `/html/body/main/div/div[2]/div/div/div/div/div/div/div/div[1]/div/h3/span`.
+  That is precisely right for the code that has to find the element again in a
+  preview frame, and no use at all to the person reading the report: it
+  describes a tree they cannot see, in a notation most people who write for the
+  web have never met, and it cannot tell them whether the finding is about their
+  headline or their cookie banner.
+
+  Findings now lead with the element and its words —
+  `span.first-title — “About the Conference”`, `img — “team-photo.jpg”` — and
+  the path moves one disclosure down for whoever wants it.
+
+  Derived from the markup already stored with each finding rather than computed
+  during a scan, so the two passes cannot disagree about it and findings
+  recorded before this existed get one without being rescanned.
+
 - **Every finding now says what happens next.** A card gave a severity and a
   detection tag — "Serious", "Auto-detected" — and left the reader to work out
   from two pieces of jargon whether the plugin was going to do something,
