@@ -154,7 +154,6 @@ const PAIRINGS = [
 	// charts and figures sit on the page itself now — so their headings are
 	// small-caps labels on the ground rather than titles on white.
 	[ 'card titles', 'muted', 'ground', 11, false ],
-	[ 'nav group labels', 'muted', 'ground', 11, false ],
 	[ 'stat figure', 'ink', 'ground', 34, true ],
 	[ 'stat label', 'ink', 'ground', 13.5, false ],
 	[ 'stat note', 'muted', 'ground', 12, false ],

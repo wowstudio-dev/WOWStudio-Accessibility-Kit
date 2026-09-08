@@ -15,8 +15,8 @@ msgstr ""
 
 #. Plugin Name of the plugin
 #: wowstudio-accessibility-kit.php
-#: src/Admin/Menu.php:68
-#: src/Admin/Menu.php:101
+#: src/Admin/Menu.php:126
+#: src/Admin/Menu.php:188
 msgid "WOWStudio Accessibility Kit"
 msgstr ""
 
@@ -65,12 +65,35 @@ msgid_plural "%d findings"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/Admin/Menu.php:69
-#: assets/src/app.js:206
+#: src/Admin/Menu.php:127
+#: assets/src/app.js:259
 msgid "Accessibility Kit"
 msgstr ""
 
-#: src/Admin/Menu.php:91
+#: src/Admin/Menu.php:141
+msgid "Dashboard"
+msgstr ""
+
+#: src/Admin/Menu.php:142
+msgid "Scan & Fix"
+msgstr ""
+
+#: src/Admin/Menu.php:143
+msgid "Settings"
+msgstr ""
+
+#: src/Admin/Menu.php:144
+#: assets/src/app.js:88
+msgid "Statement"
+msgstr ""
+
+#. translators: %s: name of the screen, e.g. Dashboard.
+#: src/Admin/Menu.php:154
+#, php-format
+msgid "%s — Accessibility Kit"
+msgstr ""
+
+#: src/Admin/Menu.php:178
 #: src/Rest/ReviewController.php:191
 #: src/Rest/RunController.php:222
 #: src/Rest/ScanController.php:205
@@ -78,11 +101,11 @@ msgstr ""
 msgid "You do not have permission to view accessibility reports."
 msgstr ""
 
-#: src/Admin/Menu.php:97
+#: src/Admin/Menu.php:184
 msgid "Loading the accessibility dashboard…"
 msgstr ""
 
-#: src/Admin/Menu.php:103
+#: src/Admin/Menu.php:190
 msgid "This dashboard needs JavaScript to run a scan and show results. Everything it does is also available through the REST API if you would rather not enable it."
 msgstr ""
 
@@ -240,7 +263,7 @@ msgstr ""
 msgid "Reviewed and approved by %1$s on %2$s."
 msgstr ""
 
-#: src/Core/Assets.php:172
+#: src/Core/Assets.php:185
 msgid "The Accessibility Kit interface has not been built. Run \"npm install && npm run build\" in the plugin directory."
 msgstr ""
 
@@ -1791,7 +1814,7 @@ msgid "Whole site"
 msgstr ""
 
 #: src/Scanner/ScanScope.php:53
-#: assets/src/app.js:56
+#: assets/src/app.js:66
 msgid "Theme"
 msgstr ""
 
@@ -2079,125 +2102,107 @@ msgstr ""
 msgid "Something went wrong and we could not say what. Please try again."
 msgstr ""
 
-#: assets/src/app.js:39
-#: assets/src/components/overview.js:25
-msgid "Find"
+#: assets/src/app.js:44
+msgid "Report"
 msgstr ""
 
-#: assets/src/app.js:43
-msgid "Overview"
-msgstr ""
-
-#: assets/src/app.js:47
-msgid "One page"
-msgstr ""
-
-#: assets/src/app.js:51
-msgid "Your content"
-msgstr ""
-
-#: assets/src/app.js:63
-#: assets/src/components/overview.js:32
-msgid "Fix"
-msgstr ""
-
-#: assets/src/app.js:67
-msgid "Images"
-msgstr ""
-
-#: assets/src/app.js:72
-msgid "Site fixes"
-msgstr ""
-
-#: assets/src/app.js:79
-msgid "Record"
-msgstr ""
-
-#: assets/src/app.js:83
+#: assets/src/app.js:48
 #: assets/src/components/dismissed.js:169
 msgid "False positives"
 msgstr ""
 
-#: assets/src/app.js:88
-msgid "Statement"
+#: assets/src/app.js:57
+msgid "One page"
 msgstr ""
 
-#: assets/src/app.js:142
+#: assets/src/app.js:61
+msgid "Your content"
+msgstr ""
+
+#: assets/src/app.js:71
+msgid "Images"
+msgstr ""
+
+#: assets/src/app.js:80
+msgid "Site fixes"
+msgstr ""
+
+#: assets/src/app.js:195
 msgid "Scanning the page…"
 msgstr ""
 
 #. translators: %d: number of findings.
-#: assets/src/app.js:157
+#: assets/src/app.js:210
 #, js-format
 msgid "Scan finished. %d findings."
 msgstr ""
 
-#: assets/src/app.js:168
+#: assets/src/app.js:221
 msgid "The scan failed."
 msgstr ""
 
-#: assets/src/app.js:212
+#: assets/src/app.js:265
 msgid "Find, fix and document accessibility problems at the code level."
 msgstr ""
 
 #. translators: %s: when the most recent scan finished.
-#: assets/src/app.js:237
+#: assets/src/app.js:290
 #, js-format
 msgid "Last checked %s"
 msgstr ""
 
-#: assets/src/app.js:243
+#: assets/src/app.js:296
 #: assets/src/components/overview.js:110
 msgid "Nothing checked yet"
 msgstr ""
 
-#: assets/src/app.js:252
+#: assets/src/app.js:305
 msgid "Check pages"
 msgstr ""
 
-#: assets/src/app.js:274
+#: assets/src/app.js:322
 msgid "Sections"
 msgstr ""
 
-#: assets/src/app.js:335
+#: assets/src/app.js:360
 msgid "You can read results here but not start a scan. An administrator can grant that."
 msgstr ""
 
-#: assets/src/app.js:387
+#: assets/src/app.js:412
 msgid "Loading the scan…"
 msgstr ""
 
 #. translators: %s: content title.
-#: assets/src/app.js:409
+#: assets/src/app.js:434
 #, js-format
 msgid "Results for “%s”"
 msgstr ""
 
-#: assets/src/app.js:415
+#: assets/src/app.js:440
 msgid "Scan results"
 msgstr ""
 
-#: assets/src/app.js:438
+#: assets/src/app.js:463
 msgid "Show as a list"
 msgstr ""
 
-#: assets/src/app.js:442
+#: assets/src/app.js:467
 msgid "Show on the page"
 msgstr ""
 
-#: assets/src/app.js:451
+#: assets/src/app.js:476
 msgid "Back to your content"
 msgstr ""
 
-#: assets/src/app.js:462
+#: assets/src/app.js:487
 msgid "This scan covered less than usual."
 msgstr ""
 
-#: assets/src/app.js:539
+#: assets/src/app.js:564
 msgid "← Back to the overview"
 msgstr ""
 
-#: assets/src/app.js:551
+#: assets/src/app.js:576
 msgid "This plugin helps you find, fix and document accessibility problems. It does not determine whether your site meets the ADA, the European Accessibility Act, Section 508, or any other legal requirement, and nothing here is legal advice."
 msgstr ""
 
@@ -3025,8 +3030,16 @@ msgstr ""
 msgid "Everything this check found has been fixed or marked a false positive."
 msgstr ""
 
+#: assets/src/components/overview.js:25
+msgid "Find"
+msgstr ""
+
 #: assets/src/components/overview.js:26
 msgid "Check your posts, pages and theme. Every finding names the element it came from and the page it is on."
+msgstr ""
+
+#: assets/src/components/overview.js:32
+msgid "Fix"
 msgstr ""
 
 #: assets/src/components/overview.js:33

@@ -108,15 +108,20 @@ Findings that keep their identity, and figures you can open.
   three-column grid: thirty points squeezed into a third of the page is a shape
   nobody can read, which is the only thing a sequence of scores is for.
 
-- **The eight screens are grouped, and say why they exist.** A single row of
-  eight peer tabs makes somebody guess what each is for. They now sit under
-  **Find**, **Fix** and **Record** — what you look at, what you change, and the
-  record of what you decided and published.
+- **The plugin is four admin pages instead of one page wearing eight tabs.**
+  Dashboard, Scan & Fix, Settings and Statement now appear under Accessibility
+  Kit in the WordPress menu. The report and the record of false positives sit on
+  the Dashboard; the four ways of checking and describing content — one page,
+  your content, the theme, the images — sit together under Scan & Fix; the
+  site-wide fixes are Settings; the statement is its own page.
 
-  Theme sits under Find rather than Fix, which is where the mockup had it. It is
-  a scan of a thing — the header, navigation and footer — and belongs beside the
-  other two scans; that its findings often point at a site fix is where they
-  lead, not what the screen is.
+  The previous attempt grouped the eight tabs under Find, Fix and Record
+  headings. That put a taxonomy on screen and asked people to read it before
+  they could find anything, when WordPress already has a place for a plugin's
+  shape and everyone already knows where to look for it.
+
+  A screen with a single view shows no tab row at all: one tab is a label
+  dressed as a choice, and it makes people hunt for the others.
 
 - **The header says when anything was last checked, on every screen.** Nothing
   here scans on its own, so every figure on screen is only as old as the last

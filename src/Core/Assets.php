@@ -21,6 +21,17 @@ defined( 'ABSPATH' ) || exit;
 final class Assets implements Registrable {
 
 	/**
+	 * The admin screen the app is being mounted on.
+	 *
+	 * Set when the assets are enqueued and read when the boot data is built,
+	 * which happens later in the same request.
+	 *
+	 * @since 0.29.0
+	 * @var string
+	 */
+	private string $hook = '';
+
+	/**
 	 * Script and style handle.
 	 *
 	 * @since 0.4.0
@@ -113,9 +124,11 @@ final class Assets implements Registrable {
 	 * @return void
 	 */
 	public function enqueue( string $hook_suffix ): void {
-		if ( 'toplevel_page_' . Menu::SLUG !== $hook_suffix ) {
+		if ( '' === $this->view_for( $hook_suffix ) ) {
 			return;
 		}
+
+		$this->hook = $hook_suffix;
 
 		$asset_path = WSAK_PATH . 'build/index.asset.php';
 
@@ -196,6 +209,11 @@ final class Assets implements Registrable {
 			// on its own, so "never" is a normal answer and the one that most
 			// needs saying.
 			'lastScan'     => $this->last_scan(),
+			// Which of the four admin screens this is. The app is one bundle
+			// mounted on all of them, so without this it has no way of knowing
+			// which one somebody asked for.
+			'screen'       => $this->view_for( $this->hook ),
+			'screens'      => $this->screen_urls(),
 			'capabilities' => array(
 				'runScan'     => current_user_can( Capabilities::RUN_SCAN ),
 				'applyFix'    => current_user_can( Capabilities::APPLY_FIX ),
@@ -203,6 +221,49 @@ final class Assets implements Registrable {
 				'manage'      => current_user_can( Capabilities::MANAGE_SETTINGS ),
 			),
 		);
+	}
+
+	/**
+	 * Returns the view a WordPress admin hook corresponds to.
+	 *
+	 * @since 0.29.0
+	 *
+	 * @param string $hook_suffix Current admin screen.
+	 * @return string Empty when the screen is not one of ours.
+	 */
+	private function view_for( string $hook_suffix ): string {
+		foreach ( Menu::views() as $slug => $view ) {
+			$hook = Menu::SLUG === $slug
+				? 'toplevel_page_' . $slug
+				: get_plugin_page_hookname( $slug, Menu::SLUG );
+
+			if ( $hook === $hook_suffix ) {
+				return $view;
+			}
+		}
+
+		return '';
+	}
+
+	/**
+	 * Returns where each screen lives, so the app can link between them.
+	 *
+	 * Built here rather than in the browser: the admin URL and the slugs are
+	 * the server's to know, and a link assembled from guesses is a link that
+	 * breaks the first time somebody moves the admin.
+	 *
+	 * @since 0.29.0
+	 *
+	 * @return array<string, string> URLs keyed by view.
+	 */
+	private function screen_urls(): array {
+		$urls = array();
+
+		foreach ( Menu::views() as $slug => $view ) {
+			$urls[ $view ] = admin_url( 'admin.php?page=' . $slug );
+		}
+
+		return $urls;
 	}
 
 	/**

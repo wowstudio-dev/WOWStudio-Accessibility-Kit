@@ -157,28 +157,16 @@
 
 /* Navigation — one segmented control, not a row of loose buttons. ---------- */
 
-/* Three groups rather than one pill of eight. The rounded track worked when
-   the tabs were peers; once they are grouped, the group is the unit and a
-   single enclosing shape fights the grouping it is meant to show. */
+/* One screen's own tabs. The plugin's shape lives in the WordPress submenu
+   now, so this row has one job — the two or three views of the page you are
+   already on — and needs no headings of its own to explain itself. */
 .wsak__nav {
-	display: flex;
-	flex-wrap: wrap;
-	gap: var(--wsak-space-8);
 
 	/* No top margin. The header's own bottom padding is the gap, and adding
 	   to it was what made the nav sit closer to the title than to the work. */
 	margin: 0 0 var(--wsak-space-6);
 	padding: 0 0 var(--wsak-space-4);
 	border-bottom: 1px solid var(--wsak-line);
-}
-
-.wsak__nav-label {
-	margin: 0 0 var(--wsak-space-2);
-	color: var(--wsak-muted);
-	font-size: 11px;
-	font-weight: 700;
-	letter-spacing: 0.06em;
-	text-transform: uppercase;
 }
 
 .wsak__nav-items {

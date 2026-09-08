@@ -78,8 +78,71 @@ final class MenuTest extends TestCase {
 				}
 			);
 
+		Functions\when( 'add_submenu_page' )->justReturn( '' );
+
 		( new Menu() )->register_menu();
 
 		$this->addToAssertionCount( 1 );
+	}
+
+	/**
+	 * Every screen is registered, and none of them under a weaker capability.
+	 *
+	 * The submenu is the plugin's shape: four pages rather than one page
+	 * wearing eight tabs. A screen that stopped being registered would simply
+	 * vanish from the menu with nothing to say it had gone.
+	 *
+	 * @return void
+	 */
+	public function test_every_screen_is_registered_under_the_same_capability(): void {
+		Functions\when( 'add_menu_page' )->justReturn( '' );
+
+		$registered = array();
+
+		Functions\when( 'add_submenu_page' )->alias(
+			static function ( $parent_slug, $page_title, $menu_title, $capability, $slug ) use ( &$registered ) {
+				$registered[ $slug ] = array( $parent_slug, $capability );
+
+				return '';
+			}
+		);
+
+		( new Menu() )->register_menu();
+
+		$this->assertSame(
+			array( Menu::SLUG, 'wsak-scan-fix', 'wsak-settings', 'wsak-statement' ),
+			array_keys( $registered )
+		);
+
+		foreach ( $registered as $slug => $details ) {
+			$this->assertSame( Menu::SLUG, $details[0], $slug . ' hangs off the wrong parent.' );
+			$this->assertSame(
+				Capabilities::VIEW_REPORTS,
+				$details[1],
+				$slug . ' is registered under a different capability from the menu.'
+			);
+		}
+	}
+
+	/**
+	 * The views map names every screen exactly once.
+	 *
+	 * Assets reads this to decide whether to load the bundle at all, so a slug
+	 * missing here is a screen that renders an empty page.
+	 *
+	 * @return void
+	 */
+	public function test_views_cover_every_screen(): void {
+		$views = Menu::views();
+
+		$this->assertSame(
+			array( Menu::SLUG, 'wsak-scan-fix', 'wsak-settings', 'wsak-statement' ),
+			array_keys( $views )
+		);
+
+		$this->assertSame(
+			array( 'overview', 'scan', 'fixes', 'statement' ),
+			array_values( $views )
+		);
 	}
 }

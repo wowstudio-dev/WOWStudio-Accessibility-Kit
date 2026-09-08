@@ -37,6 +37,64 @@ final class Menu implements Registrable {
 	public const SLUG = 'wowstudio-accessibility-kit';
 
 	/**
+	 * The screens hanging off the top-level menu.
+	 *
+	 * Four pages rather than one, because eight tabs across a single screen
+	 * asked somebody to hold the whole plugin in their head before they could
+	 * find anything in it. WordPress already has a place for this — the
+	 * submenu — and using it puts the plugin's shape where people look for a
+	 * plugin's shape.
+	 *
+	 * The first entry deliberately reuses the parent slug. WordPress repeats a
+	 * top-level menu as its own first child otherwise, and that child would be
+	 * labelled with the plugin's name rather than with what the screen is.
+	 *
+	 * Slugs are public identifiers: the planned add-on hangs its own pages off
+	 * this menu, and renaming one orphans whatever was pointing at it.
+	 *
+	 * @since 0.29.0
+	 * @var array<int, array{slug: string, view: string}>
+	 */
+	private const SCREENS = array(
+		array(
+			'slug' => self::SLUG,
+			'view' => 'overview',
+		),
+		array(
+			'slug' => 'wsak-scan-fix',
+			'view' => 'scan',
+		),
+		array(
+			'slug' => 'wsak-settings',
+			'view' => 'fixes',
+		),
+		array(
+			'slug' => 'wsak-statement',
+			'view' => 'statement',
+		),
+	);
+
+	/**
+	 * Returns which view each screen opens on, keyed by page slug.
+	 *
+	 * Read by Assets so the app knows what it was asked for, and so the bundle
+	 * loads on these four screens and nowhere else.
+	 *
+	 * @since 0.29.0
+	 *
+	 * @return array<string, string>
+	 */
+	public static function views(): array {
+		$views = array();
+
+		foreach ( self::SCREENS as $screen ) {
+			$views[ $screen['slug'] ] = $screen['view'];
+		}
+
+		return $views;
+	}
+
+	/**
 	 * Hooks the menu registration.
 	 *
 	 * @since 0.1.0
@@ -73,6 +131,35 @@ final class Menu implements Registrable {
 			'dashicons-universal-access-alt',
 			$position
 		);
+
+		/*
+		 * Titles live here rather than in SCREENS because they have to be
+		 * translated at the moment the menu is built, and a class constant is
+		 * evaluated long before any text domain is loaded.
+		 */
+		$titles = array(
+			self::SLUG       => __( 'Dashboard', 'wowstudio-accessibility-kit' ),
+			'wsak-scan-fix'  => __( 'Scan & Fix', 'wowstudio-accessibility-kit' ),
+			'wsak-settings'  => __( 'Settings', 'wowstudio-accessibility-kit' ),
+			'wsak-statement' => __( 'Statement', 'wowstudio-accessibility-kit' ),
+		);
+
+		foreach ( self::SCREENS as $screen ) {
+			$title = $titles[ $screen['slug'] ] ?? $screen['slug'];
+
+			add_submenu_page(
+				self::SLUG,
+				sprintf(
+					/* translators: %s: name of the screen, e.g. Dashboard. */
+					__( '%s — Accessibility Kit', 'wowstudio-accessibility-kit' ),
+					$title
+				),
+				$title,
+				Capabilities::VIEW_REPORTS,
+				$screen['slug'],
+				array( $this, 'render' )
+			);
+		}
 	}
 
 	/**

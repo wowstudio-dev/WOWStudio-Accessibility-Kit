@@ -26,22 +26,32 @@ const settings = window.wsakSettings ?? {};
 const capabilities = settings.capabilities ?? {};
 
 /**
- * The eight screens, in the three groups they fall into.
+ * What each admin screen contains.
  *
- * Find is what you look at, Fix is what you change, Record is what you decided
- * and what you publish about it. A screen appears only when the person has the
- * capability its routes require — the routes enforce that regardless, and this
- * is so the interface does not offer a door that will not open.
+ * The plugin is four WordPress pages now rather than one page wearing eight
+ * tabs. Grouping the tabs and labelling the groups was an attempt to give that
+ * row a shape, and it only added three more words to read: the shape belongs in
+ * the admin menu, where people already look for a plugin's shape.
+ *
+ * A screen with one view shows no tabs at all — a single tab is a label
+ * pretending to be a choice.
  */
-const GROUPS = [
-	{
-		id: 'find',
-		label: __( 'Find', 'wowstudio-accessibility-kit' ),
-		items: [
+const SCREENS = {
+	overview: {
+		views: [
 			{
 				id: 'overview',
-				label: __( 'Overview', 'wowstudio-accessibility-kit' ),
+				label: __( 'Report', 'wowstudio-accessibility-kit' ),
 			},
+			{
+				id: 'aside',
+				label: __( 'False positives', 'wowstudio-accessibility-kit' ),
+				needs: 'viewReports',
+			},
+		],
+	},
+	scan: {
+		views: [
 			{
 				id: 'scan',
 				label: __( 'One page', 'wowstudio-accessibility-kit' ),
@@ -56,41 +66,42 @@ const GROUPS = [
 				label: __( 'Theme', 'wowstudio-accessibility-kit' ),
 				needs: 'viewReports',
 			},
-		],
-	},
-	{
-		id: 'fix',
-		label: __( 'Fix', 'wowstudio-accessibility-kit' ),
-		items: [
 			{
 				id: 'images',
 				label: __( 'Images', 'wowstudio-accessibility-kit' ),
 				needs: 'applyFix',
 			},
+		],
+	},
+	fixes: {
+		views: [
 			{
 				id: 'fixes',
 				label: __( 'Site fixes', 'wowstudio-accessibility-kit' ),
-				needs: 'viewReports',
 			},
 		],
 	},
-	{
-		id: 'record',
-		label: __( 'Record', 'wowstudio-accessibility-kit' ),
-		items: [
-			{
-				id: 'aside',
-				label: __( 'False positives', 'wowstudio-accessibility-kit' ),
-				needs: 'viewReports',
-			},
+	statement: {
+		views: [
 			{
 				id: 'statement',
 				label: __( 'Statement', 'wowstudio-accessibility-kit' ),
-				needs: 'viewReports',
 			},
 		],
 	},
-];
+};
+
+/**
+ * Which screen each view lives on, derived from the screens themselves.
+ *
+ * Written down once. Two lists that have to agree about where a view lives are
+ * two lists that will stop agreeing.
+ */
+const HOME_SCREEN = Object.fromEntries(
+	Object.entries( SCREENS ).flatMap( ( [ screen, config ] ) =>
+		config.views.map( ( item ) => [ item.id, screen ] )
+	)
+);
 
 /**
  * The whole screen.
@@ -103,7 +114,49 @@ export default function App() {
 	const [ loading, setLoading ] = useState( false );
 	const [ error, setError ] = useState( '' );
 	const [ announcement, setAnnouncement ] = useState( '' );
-	const [ view, setView ] = useState( 'overview' );
+	/*
+	 * Which WordPress screen this is. The four admin pages mount the same
+	 * bundle, so the server says which one was asked for; anything unexpected
+	 * falls back to the report rather than rendering nothing.
+	 */
+	const screen = SCREENS[ settings.screen ] ? settings.screen : 'overview';
+
+	const tabs = ( SCREENS[ screen ].views ?? [] ).filter(
+		( item ) => ! item.needs || capabilities[ item.needs ]
+	);
+
+	const [ view, setView ] = useState( tabs[ 0 ]?.id ?? 'overview' );
+
+	/*
+	 * Going to a view that may not be on this screen.
+	 *
+	 * Splitting one page into four means a link like "open the Images screen"
+	 * can no longer be a state change — half the time it is a different
+	 * WordPress page. This resolves which, so nothing that offers a route
+	 * somewhere has to know where that somewhere currently lives. Views the
+	 * server does not know about — the coverage panel, a drill-down — are
+	 * always local.
+	 */
+	const go = useCallback(
+		( target ) => {
+			if ( tabs.some( ( tab ) => tab.id === target ) ) {
+				setView( target );
+
+				return;
+			}
+
+			const url = settings.screens?.[ HOME_SCREEN[ target ] ];
+
+			if ( url ) {
+				window.location.href = url;
+
+				return;
+			}
+
+			setView( target );
+		},
+		[ tabs ]
+	);
 
 	// What a figure on the overview was narrowed to when somebody opened it:
 	// { rule } or { post }. Held beside the view rather than encoded into it so
@@ -247,7 +300,7 @@ export default function App() {
 						</p>
 						<Button
 							variant="primary"
-							onClick={ () => setView( 'bulk' ) }
+							href={ settings.screens?.scan }
 						>
 							{ __(
 								'Check pages',
@@ -259,65 +312,37 @@ export default function App() {
 			</header>
 
 			{ /*
-			 * Grouped, because eight tabs in a row make somebody guess what
-			 * each one is for. The three names say why a screen exists rather
-			 * than what it contains: things you look at, things you change, and
-			 * the record of what you decided.
-			 *
-			 * Theme sits under Find, not Fix. It is a scan of a thing — the
-			 * header, navigation and footer — and belongs beside the other two
-			 * scans; that its findings often point at a site fix is where they
-			 * lead, not what the screen is.
+			 * This screen's tabs, and nothing else. Where a screen has one
+			 * view there is no row at all: a lone tab is a label dressed as a
+			 * choice, and it makes somebody look for the others.
 			 */ }
-			<nav
-				className="wsak__nav"
-				aria-label={ __( 'Sections', 'wowstudio-accessibility-kit' ) }
-			>
-				{ GROUPS.map( ( group ) => {
-					const items = group.items.filter(
-						( item ) => ! item.needs || capabilities[ item.needs ]
-					);
-
-					if ( ! items.length ) {
-						return null;
-					}
-
-					return (
-						<div className="wsak__nav-group" key={ group.id }>
-							<h2
-								className="wsak__nav-label"
-								id={ `wsak-nav-${ group.id }` }
-							>
-								{ group.label }
-							</h2>
-							<ul
-								className="wsak__nav-items"
-								aria-labelledby={ `wsak-nav-${ group.id }` }
-							>
-								{ items.map( ( item ) => (
-									<li key={ item.id }>
-										<Button
-											variant={
-												view === item.id
-													? 'primary'
-													: 'tertiary'
-											}
-											aria-current={
-												view === item.id
-													? 'page'
-													: undefined
-											}
-											onClick={ () => setView( item.id ) }
-										>
-											{ item.label }
-										</Button>
-									</li>
-								) ) }
-							</ul>
-						</div>
-					);
-				} ) }
-			</nav>
+			{ tabs.length > 1 && (
+				<nav
+					className="wsak__nav"
+					aria-label={ __(
+						'Sections',
+						'wowstudio-accessibility-kit'
+					) }
+				>
+					<ul className="wsak__nav-items">
+						{ tabs.map( ( tab ) => (
+							<li key={ tab.id }>
+								<Button
+									variant={
+										view === tab.id ? 'primary' : 'tertiary'
+									}
+									aria-current={
+										view === tab.id ? 'page' : undefined
+									}
+									onClick={ () => setView( tab.id ) }
+								>
+									{ tab.label }
+								</Button>
+							</li>
+						) ) }
+					</ul>
+				</nav>
+			) }
 
 			<p className="screen-reader-text" role="status" aria-live="polite">
 				{ announcement }
@@ -347,7 +372,7 @@ export default function App() {
 			 */ }
 			{ view === 'overview' && (
 				<Overview
-					onGo={ setView }
+					onGo={ go }
 					onDrill={ ( next ) => {
 						setFilter( next );
 						setView( 'findings' );
@@ -359,7 +384,7 @@ export default function App() {
 				<IssueDrilldown
 					filter={ filter }
 					onBack={ () => setView( 'overview' ) }
-					onGo={ setView }
+					onGo={ go }
 				/>
 			) }
 
