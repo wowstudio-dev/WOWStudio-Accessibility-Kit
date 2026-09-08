@@ -3,6 +3,7 @@
  */
 
 import { Button } from '@wordpress/components';
+import { useCallback, useState } from '@wordpress/element';
 import { __, sprintf } from '@wordpress/i18n';
 
 import { CSS_FIXABLE } from '../scanner/repair';
@@ -73,9 +74,20 @@ function CssHandoff( { onInspect } ) {
  *                                        above this list.
  * @param {boolean}  [props.showPage]     The list spans more than one page, so
  *                                        each finding has to say which.
+ * @param {boolean}  props.open           Whether this finding is expanded.
+ * @param {Function} props.onToggle       Opens or closes it.
+ * @param {Function} props.onKeyDown      Arrow-key movement between findings.
  * @return {Element} The card.
  */
-function IssueCard( { issue, onInspect, ruleIsStated, showPage } ) {
+function IssueCard( {
+	issue,
+	onInspect,
+	ruleIsStated,
+	showPage,
+	open,
+	onToggle,
+	onKeyDown,
+} ) {
 	// Worked out before the markup rather than as a chain of conditions inside
 	// it, because which action a finding gets is the decision this component
 	// exists to make and it should be readable in one place.
@@ -87,12 +99,35 @@ function IssueCard( { issue, onInspect, ruleIsStated, showPage } ) {
 		action = <CssHandoff onInspect={ onInspect } />;
 	}
 
+	const bodyId = `wsak-issue-body-${ issue.id }`;
+
+	/*
+	 * The line that tells this finding apart from the one under it.
+	 *
+	 * On a list already narrowed to one check, the check's name is identical on
+	 * every row and the message is what differs. On a mixed list it is the other
+	 * way round. Leading with the half that repeats is what made fifty findings
+	 * look like one finding printed fifty times.
+	 */
+	const headline = ruleIsStated ? issue.message : issue.rule_title;
+	const subline = ruleIsStated ? issue.locator : issue.message;
+
 	return (
-		<li className="wsak-issue">
-			{ ! ruleIsStated && (
-				<div className="wsak-issue__head">
-					<h4 className="wsak-issue__title">{ issue.rule_title }</h4>
-					<div className="wsak-issue__tags">
+		<li className={ `wsak-issue${ open ? ' is-open' : '' }` }>
+			<h4 className="wsak-issue__head">
+				<button
+					type="button"
+					className="wsak-issue__toggle"
+					aria-expanded={ open }
+					aria-controls={ bodyId }
+					onClick={ onToggle }
+					onKeyDown={ onKeyDown }
+				>
+					<span className="wsak-issue__headline">{ headline }</span>
+					{ subline && (
+						<span className="wsak-issue__subline">{ subline }</span>
+					) }
+					<span className="wsak-issue__tags">
 						<SeverityTag
 							severity={ issue.severity }
 							label={ issue.severity_label }
@@ -109,160 +144,180 @@ function IssueCard( { issue, onInspect, ruleIsStated, showPage } ) {
 							detection={ issue.detection }
 							label={ issue.detection_label }
 						/>
-						<span className="wsak-tag wsak-tag--sc">
+					</span>
+				</button>
+			</h4>
+
+			{ ! open ? null : (
+				<div className="wsak-issue__body" id={ bodyId }>
+					{ ! ruleIsStated && (
+						<p className="wsak-issue__sc">
 							{ sprintf(
 								/* translators: %s: WCAG success criterion number. */
 								__( 'WCAG %s', 'wowstudio-accessibility-kit' ),
 								issue.wcag_sc
 							) }
-						</span>
-					</div>
-				</div>
-			) }
-
-			{ ! ruleIsStated && issue.consequence && (
-				<p className="wsak-issue__consequence">{ issue.consequence }</p>
-			) }
-
-			<p className="wsak-issue__message">{ issue.message }</p>
-
-			{ /*
-			 * What happens next, in a sentence, before anything else on the
-			 * card. Severity says how bad it is and detection says how we know;
-			 * neither says whether the reader has work to do, which is the
-			 * question they opened the list with.
-			 */ }
-			<FindingStatus issue={ issue } />
-
-			{ /*
-			 * What a rule says can be done about it, in its own words. Shown for
-			 * the findings that offer no button, because "no fix here" without a
-			 * reason reads as the tool giving up rather than as an accurate
-			 * statement about where the problem lives.
-			 */ }
-			{ issue.fix?.summary && ! issue.fix?.reviewable && (
-				<p className="wsak-issue__plan">
-					<span className="wsak-issue__plan-where">
-						{ issue.fix.kind_label }
-					</span>{ ' ' }
-					{ issue.fix.summary }
-				</p>
-			) }
-
-			{ issue.context && (
-				// Focusable so the markup can be scrolled without a mouse, and
-				// named so that landing on it announces what it is rather than
-				// reading out anonymous code. A group rather than a region:
-				// a page with thirty findings would otherwise add thirty
-				// landmarks to the list a screen reader user navigates by.
-				<pre
-					className="wsak-issue__context"
-					tabIndex="0"
-					role="group"
-					aria-label={ sprintf(
-						/* translators: %s: name of the accessibility check. */
-						__( 'Markup for: %s', 'wowstudio-accessibility-kit' ),
-						issue.rule_title
+						</p>
 					) }
-				>
-					<code>{ issue.context }</code>
-				</pre>
-			) }
 
-			{ action }
+					{ ! ruleIsStated && issue.consequence && (
+						<p className="wsak-issue__consequence">
+							{ issue.consequence }
+						</p>
+					) }
 
-			{ ! ruleIsStated && issue.how_to_fix && (
-				<details className="wsak-issue__fix">
-					<summary>
-						{ __(
-							'How to fix this',
-							'wowstudio-accessibility-kit'
-						) }
-					</summary>
-					<p>{ issue.how_to_fix }</p>
-					{ issue.selector && (
-						<p className="wsak-issue__selector">
+					{ ! ruleIsStated && (
+						<p className="wsak-issue__message">{ issue.message }</p>
+					) }
+
+					{ /*
+					 * What happens next, in a sentence, before anything else on the
+					 * card. Severity says how bad it is and detection says how we know;
+					 * neither says whether the reader has work to do, which is the
+					 * question they opened the list with.
+					 */ }
+					<FindingStatus issue={ issue } />
+
+					{ /*
+					 * What a rule says can be done about it, in its own words. Shown for
+					 * the findings that offer no button, because "no fix here" without a
+					 * reason reads as the tool giving up rather than as an accurate
+					 * statement about where the problem lives.
+					 */ }
+					{ issue.fix?.summary && ! issue.fix?.reviewable && (
+						<p className="wsak-issue__plan">
+							<span className="wsak-issue__plan-where">
+								{ issue.fix.kind_label }
+							</span>{ ' ' }
+							{ issue.fix.summary }
+						</p>
+					) }
+
+					{ issue.context && (
+						// Focusable so the markup can be scrolled without a mouse, and
+						// named so that landing on it announces what it is rather than
+						// reading out anonymous code. A group rather than a region:
+						// a page with thirty findings would otherwise add thirty
+						// landmarks to the list a screen reader user navigates by.
+						<pre
+							className="wsak-issue__context"
+							tabIndex="0"
+							role="group"
+							aria-label={ sprintf(
+								/* translators: %s: name of the accessibility check. */
+								__(
+									'Markup for: %s',
+									'wowstudio-accessibility-kit'
+								),
+								issue.rule_title
+							) }
+						>
+							<code>{ issue.context }</code>
+						</pre>
+					) }
+
+					{ action }
+
+					{ ! ruleIsStated && issue.how_to_fix && (
+						<details className="wsak-issue__fix">
+							<summary>
+								{ __(
+									'How to fix this',
+									'wowstudio-accessibility-kit'
+								) }
+							</summary>
+							<p>{ issue.how_to_fix }</p>
+							{ issue.selector && (
+								<p className="wsak-issue__selector">
+									<span className="wsak-issue__selector-label">
+										{ __(
+											'Element:',
+											'wowstudio-accessibility-kit'
+										) }
+									</span>{ ' ' }
+									<code>{ issue.selector }</code>
+								</p>
+							) }
+						</details>
+					) }
+
+					{ /*
+					 * Where this one is, above the path to it inside the page. A list
+					 * narrowed to a single check gathers findings from the whole site,
+					 * and a row that says what is wrong without saying where leaves the
+					 * reader holding an XPath and nothing to apply it to.
+					 *
+					 * Only when the list spans pages. On a single page's own scan every
+					 * row would carry the same line, which is forty copies of something
+					 * the heading already said.
+					 */ }
+					{ showPage && issue.page && (
+						<p className="wsak-issue__page">
+							<span className="wsak-issue__selector-label">
+								{ __( 'Page:', 'wowstudio-accessibility-kit' ) }
+							</span>{ ' ' }
+							{ issue.page.edit_link ? (
+								<a href={ issue.page.edit_link }>
+									{ issue.page.title }
+								</a>
+							) : (
+								issue.page.title
+							) }
+							{ issue.page.view_link && (
+								<>
+									{ ' · ' }
+									<a href={ issue.page.view_link }>
+										{ __(
+											'View',
+											'wowstudio-accessibility-kit'
+										) }
+									</a>
+								</>
+							) }
+						</p>
+					) }
+
+					{ /*
+					 * Where, in terms somebody can act on. The XPath underneath it is
+					 * the machine's answer to the same question and stays available,
+					 * one disclosure down, for whoever wants it — it was never a
+					 * sensible thing to lead with.
+					 */ }
+					{ issue.locator && (
+						<p className="wsak-issue__where">
 							<span className="wsak-issue__selector-label">
 								{ __(
-									'Element:',
+									'Where:',
 									'wowstudio-accessibility-kit'
 								) }
 							</span>{ ' ' }
-							<code>{ issue.selector }</code>
+							<code>{ issue.locator }</code>
 						</p>
 					) }
-				</details>
-			) }
 
-			{ /*
-			 * Where this one is, above the path to it inside the page. A list
-			 * narrowed to a single check gathers findings from the whole site,
-			 * and a row that says what is wrong without saying where leaves the
-			 * reader holding an XPath and nothing to apply it to.
-			 *
-			 * Only when the list spans pages. On a single page's own scan every
-			 * row would carry the same line, which is forty copies of something
-			 * the heading already said.
-			 */ }
-			{ showPage && issue.page && (
-				<p className="wsak-issue__page">
-					<span className="wsak-issue__selector-label">
-						{ __( 'Page:', 'wowstudio-accessibility-kit' ) }
-					</span>{ ' ' }
-					{ issue.page.edit_link ? (
-						<a href={ issue.page.edit_link }>
-							{ issue.page.title }
-						</a>
-					) : (
-						issue.page.title
+					{ ruleIsStated && issue.selector && (
+						<details className="wsak-issue__path">
+							<summary>
+								{ __(
+									'Exact path in the page',
+									'wowstudio-accessibility-kit'
+								) }
+							</summary>
+							<p className="wsak-issue__selector">
+								<code>{ issue.selector }</code>
+							</p>
+						</details>
 					) }
-					{ issue.page.view_link && (
-						<>
-							{ ' · ' }
-							<a href={ issue.page.view_link }>
-								{ __( 'View', 'wowstudio-accessibility-kit' ) }
-							</a>
-						</>
-					) }
-				</p>
-			) }
 
-			{ /*
-			 * Where, in terms somebody can act on. The XPath underneath it is
-			 * the machine's answer to the same question and stays available,
-			 * one disclosure down, for whoever wants it — it was never a
-			 * sensible thing to lead with.
-			 */ }
-			{ issue.locator && (
-				<p className="wsak-issue__where">
-					<span className="wsak-issue__selector-label">
-						{ __( 'Where:', 'wowstudio-accessibility-kit' ) }
-					</span>{ ' ' }
-					<code>{ issue.locator }</code>
-				</p>
+					{ /*
+					 * Offered on everything, including findings with a fix. A suggestion
+					 * that turns out to be wrong for this page is exactly the case that
+					 * needs setting aside, and hiding the option behind "we could not
+					 * help" would put it furthest from where it is most needed.
+					 */ }
+					<DismissAction issue={ issue } />
+				</div>
 			) }
-
-			{ ruleIsStated && issue.selector && (
-				<details className="wsak-issue__path">
-					<summary>
-						{ __(
-							'Exact path in the page',
-							'wowstudio-accessibility-kit'
-						) }
-					</summary>
-					<p className="wsak-issue__selector">
-						<code>{ issue.selector }</code>
-					</p>
-				</details>
-			) }
-
-			{ /*
-			 * Offered on everything, including findings with a fix. A suggestion
-			 * that turns out to be wrong for this page is exactly the case that
-			 * needs setting aside, and hiding the option behind "we could not
-			 * help" would put it furthest from where it is most needed.
-			 */ }
-			<DismissAction issue={ issue } />
 		</li>
 	);
 }
@@ -329,6 +384,9 @@ const BANDS = [
  * @param {Function} [props.onInspect]    Switches to the inspector.
  * @param {boolean}  [props.ruleIsStated] The rule is already explained above.
  * @param {boolean}  [props.showPage]     Each finding says which page it is on.
+ * @param {number}   [props.openId]       Which finding is expanded.
+ * @param {Function} props.onToggle       Expands one, collapsing the last.
+ * @param {Function} props.onKeyDown      Arrow-key movement between findings.
  * @return {?Element} The group, or nothing when empty.
  */
 function IssueGroup( {
@@ -339,6 +397,9 @@ function IssueGroup( {
 	onInspect,
 	ruleIsStated,
 	showPage,
+	openId,
+	onToggle,
+	onKeyDown,
 } ) {
 	if ( ! issues.length ) {
 		return null;
@@ -364,6 +425,9 @@ function IssueGroup( {
 						onInspect={ onInspect }
 						ruleIsStated={ ruleIsStated }
 						showPage={ showPage }
+						open={ openId === issue.id }
+						onToggle={ () => onToggle( issue.id ) }
+						onKeyDown={ onKeyDown }
 						key={ issue.id }
 					/>
 				) ) }
@@ -395,6 +459,82 @@ export default function IssueList( {
 	ruleIsStated,
 	showPage,
 } ) {
+	/*
+	 * One finding open at a time.
+	 *
+	 * Every card used to render everything it had — the consequence, the fix
+	 * plan, the markup, the page, the path, the dismiss control — for all fifty
+	 * findings at once. Testers described the result as a wall, and they were
+	 * describing something real: the differing line on each card was buried
+	 * under a screenful of identical scaffolding, so the list read as one
+	 * finding printed fifty times.
+	 *
+	 * The first is open because a list of closed rows with nothing to read is
+	 * its own kind of unhelpful.
+	 */
+	const [ openId, setOpenId ] = useState( null );
+
+	const toggle = useCallback(
+		( id ) => setOpenId( ( current ) => ( current === id ? null : id ) ),
+		[]
+	);
+
+	/*
+	 * Derived, not merely initialised. The same list is reused when the filter
+	 * changes — a different check, a different page — and a remembered id that
+	 * is no longer in it would leave every row closed with no way to tell that
+	 * anything had gone wrong. Falling back to the first means the screen always
+	 * opens on something.
+	 */
+	const active = issues.some( ( issue ) => issue.id === openId )
+		? openId
+		: issues[ 0 ]?.id ?? null;
+
+	/*
+	 * Up and down move between findings without opening them.
+	 *
+	 * Fifty accordions is a lot of tabbing, and the alternative — opening each
+	 * one to pass it — makes the list longer the further through it you get.
+	 * Home and End go to the ends, which is what the pattern leads people to
+	 * expect once the arrows work at all.
+	 */
+	const onKeyDown = useCallback( ( event ) => {
+		const keys = [ 'ArrowDown', 'ArrowUp', 'Home', 'End' ];
+
+		if ( ! keys.includes( event.key ) ) {
+			return;
+		}
+
+		const toggles = Array.from(
+			event.currentTarget
+				.closest( '.wsak-results' )
+				.querySelectorAll( '.wsak-issue__toggle' )
+		);
+
+		const here = toggles.indexOf( event.currentTarget );
+
+		if ( here === -1 ) {
+			return;
+		}
+
+		let next = here;
+
+		if ( event.key === 'ArrowDown' ) {
+			next = Math.min( here + 1, toggles.length - 1 );
+		} else if ( event.key === 'ArrowUp' ) {
+			next = Math.max( here - 1, 0 );
+		} else if ( event.key === 'Home' ) {
+			next = 0;
+		} else {
+			next = toggles.length - 1;
+		}
+
+		if ( next !== here ) {
+			event.preventDefault();
+			toggles[ next ].focus();
+		}
+	}, [] );
+
 	// The server has already ordered these and told each one which band it is
 	// in. Re-deriving that here would mean two answers to the same question,
 	// and the one on this side would be the one that drifts.
@@ -430,6 +570,9 @@ export default function IssueList( {
 					onInspect={ onInspect }
 					ruleIsStated={ ruleIsStated }
 					showPage={ showPage }
+					openId={ active }
+					onToggle={ toggle }
+					onKeyDown={ onKeyDown }
 				/>
 			) ) }
 

@@ -98,6 +98,7 @@ In WordPress's own alt text field on the media item. It therefore applies everyw
 = 0.29.0 =
 * New: findings of one check can be grouped by the markup behind them, so a fault your theme repeats on every page is judged once rather than once per page. Setting one aside everywhere requires a reason, lists the pages it covers first, needs permission to edit other people's content, and can be withdrawn in one step from the "False positives" screen.
 * New: the figures on the report screen now open. "What comes up most" and "Pages with the most to do" were counts you could read and not act on; each row is now a control that lists the findings behind it, with an explanation of the check at the top rather than repeated against every row.
+* Changed: the findings list shows one finding open at a time instead of every finding expanded at once. Closed findings are a single row saying what is wrong and where; arrow keys move between them.
 * New: findings say where they are in readable terms — the element and the words on it, like span.first-title — "About the Conference" — instead of a long DOM path. The path is still there, one click down.
 * New: every finding now says what happens next — whether the plugin can fix it, whether you need to, whether it belongs to your theme, or whether someone needs to look at it — with a sentence saying how.
 * Changed: "Set aside" is now "False positives", the term most people already use.

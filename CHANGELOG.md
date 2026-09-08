@@ -96,6 +96,18 @@ Findings that keep their identity, and figures you can open.
   and each was about a different pass, which is not a distinction anybody should
   have to infer from a screen disagreeing with itself.
 
+- **The findings list opens one finding at a time.** Every card used to render
+  everything it had — the consequence, the fix plan, the markup, the page, the
+  path, the dismiss control — for all fifty findings at once. Testers called it
+  a wall, and they were describing something real: the one line that differed
+  between two cards was buried under a screenful of identical scaffolding, so
+  fifty findings read as one finding printed fifty times.
+
+  A closed finding is now a single row — what is wrong, and where — at 60px
+  against the 417px an open one takes. Up and down move between them without
+  opening anything, Home and End go to the ends, and the row that is open stays
+  open while you work on it.
+
 - **A finding now says where it is in words you can act on.** The only location
   on a card was the DOM path — things like
   `/html/body/main/div/div[2]/div/div/div/div/div/div/div/div[1]/div/h3/span`.

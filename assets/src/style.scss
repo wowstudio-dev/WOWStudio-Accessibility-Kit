@@ -468,12 +468,66 @@
 	gap: var(--wsak-space-3);
 }
 
+/* The padding moves onto the header and the body, so a closed finding is one
+   row rather than a card with an empty lower half. */
 .wsak-issue {
-	padding: var(--wsak-space-4);
 	background: var(--wsak-surface);
 	border: 1px solid var(--wsak-line);
 	border-inline-start: 3px solid var(--wsak-line-strong);
 	border-radius: var(--wsak-radius-sm);
+}
+
+.wsak-issue__head {
+	margin: 0;
+	font-size: inherit;
+	font-weight: inherit;
+}
+
+/* The whole row opens the finding, not a chevron somebody has to aim at. */
+.wsak-issue__toggle {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) auto;
+	gap: 2px var(--wsak-space-3);
+	align-items: center;
+	width: 100%;
+	padding: var(--wsak-space-3) var(--wsak-space-4);
+	border: 0;
+	background: none;
+	cursor: pointer;
+	text-align: left;
+}
+
+.wsak-issue__toggle:hover {
+	background: var(--wsak-raised);
+}
+
+.wsak-issue__headline {
+	color: var(--wsak-ink);
+	font-size: 14px;
+	font-weight: 650;
+}
+
+/* The line that differs from the row above. Truncated to one line so a closed
+   list stays a list: fifty rows of wrapped prose is the wall again, in
+   miniature. */
+.wsak-issue__subline {
+	grid-column: 1;
+	grid-row: 2;
+	overflow: hidden;
+	color: var(--wsak-muted);
+	font-size: 13px;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.wsak-issue__body {
+	padding: 0 var(--wsak-space-4) var(--wsak-space-4);
+}
+
+.wsak-issue__sc {
+	margin: 0 0 var(--wsak-space-2);
+	color: var(--wsak-muted);
+	font-size: 12.5px;
 }
 
 /*
@@ -482,7 +536,7 @@
  * its title and twenty-six above its own border — a ten-pixel lean that reads
  * as sloppiness long before anybody works out what it is.
  */
-.wsak-issue > *:last-child,
+.wsak-issue__body > *:last-child,
 .wsak-css-fix__review > *:last-child,
 .wsak-settings > *:last-child,
 .wsak-statement-panel > *:last-child {
@@ -501,22 +555,9 @@
 	border-inline-start-color: var(--wsak-moderate);
 }
 
-.wsak-issue__head {
-	display: flex;
-	flex-wrap: wrap;
-	gap: var(--wsak-space-2);
-	align-items: baseline;
-	justify-content: space-between;
-}
-
-.wsak-issue__title {
-	margin: 0;
-	font-size: 14px;
-	font-weight: 650;
-	color: var(--wsak-ink);
-}
-
 .wsak-issue__tags {
+	grid-column: 2;
+	grid-row: 1 / span 2;
 	display: flex;
 	flex-wrap: wrap;
 	gap: var(--wsak-space-2);
