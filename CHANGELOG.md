@@ -87,6 +87,36 @@ Findings that keep their identity, and figures you can open.
 
 ### Fixed
 
+- **The score no longer contradicts the list underneath it.** The page checks
+  run in the browser after the server pass has finished, and the endpoint that
+  stored their findings returned the findings without the recomputed score or
+  counts. So a page whose content-only scan found nothing showed "100 / 100 —
+  0 issues detected automatically, 0 items still need a person to check"
+  directly above a list of contrast failures. Both halves were honestly computed
+  and each was about a different pass, which is not a distinction anybody should
+  have to infer from a screen disagreeing with itself.
+
+- **Every finding now says what happens next.** A card gave a severity and a
+  detection tag — "Serious", "Auto-detected" — and left the reader to work out
+  from two pieces of jargon whether the plugin was going to do something,
+  whether they had to, or whether it was even a real problem. Both describe the
+  finding; neither describes what the person reading is meant to do about it,
+  which is the only question they opened the list with.
+
+  Four states, one per finding, in words: **We can fix this**, **You fix this**,
+  **Your theme needs this**, **Someone needs to check this** — each with a
+  sentence saying how, shown rather than collapsed behind a disclosure. All of
+  it was already on the finding and none of it had been put into a sentence.
+
+- **"Set aside" is now "False positives".** The old wording asked people to
+  learn a phrase this plugin invented for something the industry already names.
+  "This is not a problem" becomes "Add to false positives".
+
+- **The admin screens use the full window.** They were capped at 1240px, which
+  suited prose and squeezed the tables, code and side-by-side panels these
+  screens are mostly made of. Line length is now held on the blocks of prose
+  that need it rather than by narrowing everything.
+
 - **Every finding in a rule-scoped list says which page it is on**, and links
   to it. A list narrowed to one check gathers findings from the whole site, so a
   row that gave the message, the markup and an XPath was handing somebody a path

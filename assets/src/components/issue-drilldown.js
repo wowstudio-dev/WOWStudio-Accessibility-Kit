@@ -347,7 +347,7 @@ export default function IssueDrilldown( { filter, onBack, onGo } ) {
 						'wowstudio-accessibility-kit'
 					) }
 					body={ __(
-						'Everything this filter covers has been fixed or set aside. If that is a surprise, the pages behind it may not have been scanned since they changed.',
+						'Everything this filter covers has been fixed or marked a false positive. If that is a surprise, the pages behind it may not have been scanned since they changed.',
 						'wowstudio-accessibility-kit'
 					) }
 				/>

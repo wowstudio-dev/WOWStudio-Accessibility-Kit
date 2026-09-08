@@ -531,16 +531,48 @@ final class ScanController implements Registrable {
 		}
 
 		$issues->add_many( $scan_id, $rows );
-		$scans->record_browser_pass( $scan_id, $status, $this->rescore( $scan_id, $issues ) );
 
+		$score = $this->rescore( $scan_id, $issues );
+
+		$scans->record_browser_pass( $scan_id, $status, $score );
+
+		/*
+		 * The score and the counts go back with the findings, not just the
+		 * findings.
+		 *
+		 * Without them the screen showed the server pass's verdict above the
+		 * browser pass's results: a page whose content-only scan found nothing
+		 * read "100 / 100 — 0 issues detected automatically" directly above a
+		 * list of contrast failures. Both halves were honestly computed and the
+		 * two were about different passes, which is not a distinction anybody
+		 * should have to infer from a screen contradicting itself.
+		 */
 		return new WP_REST_Response(
 			array(
 				'browser_pass' => $status->value,
 				'stored'       => count( $rows ),
 				'dropped'      => $dropped,
+				'score'        => $score,
+				'summary'      => $this->summary_of( $scan_id, $issues ),
 				'issues'       => $this->present_issues( $scan_id, $issues ),
 			),
 			200
+		);
+	}
+
+	/**
+	 * Counts a scan's findings the way the score card reads them.
+	 *
+	 * @since 0.29.0
+	 *
+	 * @param int             $scan_id Scan to count.
+	 * @param IssueRepository $issues  Repository to read from.
+	 * @return array<string, array<string, int>>
+	 */
+	private function summary_of( int $scan_id, IssueRepository $issues ): array {
+		return array(
+			'by_detection' => $issues->count_by( $scan_id, 'detection' ),
+			'by_severity'  => $issues->count_by( $scan_id, 'severity' ),
 		);
 	}
 

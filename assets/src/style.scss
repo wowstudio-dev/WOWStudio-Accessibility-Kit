@@ -87,9 +87,13 @@
 	min-height: calc(100vh - 32px);
 }
 
+/* Full width. The 1240px cap was there so prose lines stay readable, but the
+   screens that matter here are tables, code and side-by-side panels, and those
+   were being squeezed into two thirds of a wide monitor while the space beside
+   them sat empty. Line length is now held where it is actually needed — on the
+   individual blocks of prose — rather than by narrowing everything. */
 .wsak {
-	max-width: 1240px;
-	margin: 0 auto;
+	margin: 0;
 	padding: var(--wsak-space-2) var(--wsak-space-6) var(--wsak-space-16);
 	color: var(--wsak-text);
 	font-size: 14.5px;
@@ -561,6 +565,75 @@
 }
 
 .wsak-issue__fix p,
+/* ── What happens next ───────────────────────────────────────────────────────
+ *
+ * One line per finding saying whether the reader has work to do. Colour is a
+ * second signal here and never the only one: each state has its own words, so
+ * the four are distinguishable without seeing any of them apart. */
+.wsak-status {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--wsak-space-1) var(--wsak-space-2);
+	align-items: baseline;
+	max-width: 78ch;
+	margin: var(--wsak-space-2) 0 0;
+}
+
+.wsak-status__label {
+	padding: 2px var(--wsak-space-2);
+	border-radius: 999px;
+	font-size: 12.5px;
+	font-weight: 640;
+	white-space: nowrap;
+}
+
+.wsak-status__help {
+	color: var(--wsak-muted);
+	font-size: 13px;
+}
+
+.wsak-status--fixable .wsak-status__label {
+	background: var(--wsak-good-bg);
+	color: var(--wsak-good);
+}
+
+.wsak-status--check .wsak-status__label {
+	background: var(--wsak-serious-bg);
+	color: var(--wsak-serious);
+}
+
+.wsak-status--yours .wsak-status__label,
+.wsak-status--theme .wsak-status__label {
+	background: var(--wsak-raised);
+	color: var(--wsak-ink);
+}
+
+/* In the inspector's narrow list the sentence would not fit, so the chip goes
+   in beside the other tags and the sentence waits for the full card. */
+.wsak-status--chip {
+	display: inline-block;
+	padding: 2px var(--wsak-space-2);
+	border-radius: 999px;
+	font-size: 11.5px;
+	font-weight: 640;
+}
+
+.wsak-status--chip.wsak-status--fixable {
+	background: var(--wsak-good-bg);
+	color: var(--wsak-good);
+}
+
+.wsak-status--chip.wsak-status--check {
+	background: var(--wsak-serious-bg);
+	color: var(--wsak-serious);
+}
+
+.wsak-status--chip.wsak-status--yours,
+.wsak-status--chip.wsak-status--theme {
+	background: var(--wsak-raised);
+	color: var(--wsak-ink);
+}
+
 .wsak-issue__page {
 	margin: var(--wsak-space-2) 0 0;
 	color: var(--wsak-muted);
@@ -1995,12 +2068,14 @@
 /* The consequence leads, and is the only line here set at reading weight.
    It says who is shut out; everything under it says what to type. */
 .wsak-drilldown__consequence {
+	max-width: 74ch;
 	margin: 0 0 var(--wsak-space-2);
 	color: var(--wsak-text);
 	font-size: 14px;
 }
 
 .wsak-drilldown__how {
+	max-width: 78ch;
 	margin: 0 0 var(--wsak-space-3);
 	color: var(--wsak-muted);
 	font-size: 13px;
@@ -2048,6 +2123,7 @@
 }
 
 .wsak-markup__message {
+	max-width: 78ch;
 	margin: 0 0 var(--wsak-space-3);
 	color: var(--wsak-text);
 	font-size: 14px;
@@ -2073,6 +2149,7 @@
 }
 
 .wsak-markup__cannot {
+	max-width: 74ch;
 	margin: 0;
 	color: var(--wsak-muted);
 	font-size: 13px;

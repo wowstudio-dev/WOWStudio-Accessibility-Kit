@@ -18,6 +18,7 @@ import { runBrowserPass } from '../scanner/run';
 import { fetchCssFixes, recordBrowserPass, readableError } from '../api';
 import AltTextHandoff from './alt-text-handoff';
 import CssFixAction from './css-fix-action';
+import FindingStatus from './finding-status';
 import { DetectionTag, SeverityTag } from './tags';
 
 /**
@@ -444,6 +445,10 @@ export default function Inspector( {
 										{ issue.rule_title }
 									</span>
 									<span className="wsak-inspector__issue-tags">
+										<FindingStatus
+											issue={ issue }
+											compact
+										/>
 										<SeverityTag
 											severity={ issue.severity }
 											label={ issue.severity_label }

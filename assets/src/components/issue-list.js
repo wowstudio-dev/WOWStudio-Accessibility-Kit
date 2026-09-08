@@ -8,6 +8,7 @@ import { __, sprintf } from '@wordpress/i18n';
 import { CSS_FIXABLE } from '../scanner/repair';
 import AltTextHandoff from './alt-text-handoff';
 import DismissAction from './dismiss-action';
+import FindingStatus from './finding-status';
 import { DetectionTag, SeverityTag } from './tags';
 import { EmptyState } from './states';
 
@@ -124,6 +125,14 @@ function IssueCard( { issue, onInspect, ruleIsStated, showPage } ) {
 			) }
 
 			<p className="wsak-issue__message">{ issue.message }</p>
+
+			{ /*
+			 * What happens next, in a sentence, before anything else on the
+			 * card. Severity says how bad it is and detection says how we know;
+			 * neither says whether the reader has work to do, which is the
+			 * question they opened the list with.
+			 */ }
+			<FindingStatus issue={ issue } />
 
 			{ /*
 			 * What a rule says can be done about it, in its own words. Shown for

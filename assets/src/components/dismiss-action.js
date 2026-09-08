@@ -84,7 +84,7 @@ export default function DismissAction( { issue, onChange } ) {
 				<p className="wsak-dismiss__record">
 					<strong>
 						{ __(
-							'Set aside as not a problem.',
+							'Marked a false positive.',
 							'wowstudio-accessibility-kit'
 						) }
 					</strong>{ ' ' }
@@ -99,7 +99,7 @@ export default function DismissAction( { issue, onChange } ) {
 				</p>
 				<Button variant="link" disabled={ busy } onClick={ restore }>
 					{ __(
-						'Put it back on the list',
+						'Not a false positive after all',
 						'wowstudio-accessibility-kit'
 					) }
 				</Button>
@@ -114,7 +114,10 @@ export default function DismissAction( { issue, onChange } ) {
 				className="wsak-dismiss__open"
 				onClick={ () => setOpen( true ) }
 			>
-				{ __( 'This is not a problem', 'wowstudio-accessibility-kit' ) }
+				{ __(
+					'Add to false positives',
+					'wowstudio-accessibility-kit'
+				) }
 			</Button>
 		);
 	}
@@ -130,7 +133,7 @@ export default function DismissAction( { issue, onChange } ) {
 			<TextareaControl
 				__nextHasNoMarginBottom
 				label={ __(
-					'Why is this not a problem?',
+					'Why is this a false positive?',
 					'wowstudio-accessibility-kit'
 				) }
 				help={ __(
@@ -144,7 +147,10 @@ export default function DismissAction( { issue, onChange } ) {
 
 			<div className="wsak-dismiss__actions">
 				<Button variant="secondary" disabled={ busy } onClick={ save }>
-					{ __( 'Set it aside', 'wowstudio-accessibility-kit' ) }
+					{ __(
+						'Add to false positives',
+						'wowstudio-accessibility-kit'
+					) }
 				</Button>
 				<Button
 					variant="tertiary"

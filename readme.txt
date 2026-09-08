@@ -96,8 +96,12 @@ In WordPress's own alt text field on the media item. It therefore applies everyw
 == Changelog ==
 
 = 0.29.0 =
-* New: findings of one check can be grouped by the markup behind them, so a fault your theme repeats on every page is judged once rather than once per page. Setting one aside everywhere requires a reason, lists the pages it covers first, needs permission to edit other people's content, and can be withdrawn in one step from the "Set aside" screen.
+* New: findings of one check can be grouped by the markup behind them, so a fault your theme repeats on every page is judged once rather than once per page. Setting one aside everywhere requires a reason, lists the pages it covers first, needs permission to edit other people's content, and can be withdrawn in one step from the "False positives" screen.
 * New: the figures on the report screen now open. "What comes up most" and "Pages with the most to do" were counts you could read and not act on; each row is now a control that lists the findings behind it, with an explanation of the check at the top rather than repeated against every row.
+* New: every finding now says what happens next — whether the plugin can fix it, whether you need to, whether it belongs to your theme, or whether someone needs to look at it — with a sentence saying how.
+* Changed: "Set aside" is now "False positives", the term most people already use.
+* Changed: the plugin's screens use the full width of the window.
+* Fixed: on sites that cannot make requests to themselves, the score and counts could still show the first pass's result above the second pass's findings — reading "0 issues" over a list of issues.
 * New: findings listed by check now name the page each one is on, and link to it.
 * Changed: the report now separates barriers found from findings that need a person to look at them, instead of adding both into one number.
 * Fixed: text sitting on a background image is reported once per background rather than once per phrase, and text styled to be invisible is no longer reported as a contrast failure. On our test site this took 387 findings down to 128 without hiding anything.

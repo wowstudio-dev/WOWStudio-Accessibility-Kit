@@ -129,6 +129,15 @@ function ratio( a, b ) {
  * group static content that is not interactive and carries none.
  */
 const PAIRINGS = [
+	// What happens next. Four states, each on its own tinted pill. The help
+	// sentence beside them sits on whatever card is behind it, so it is checked
+	// against both surfaces the cards use.
+	[ 'status, fixable', 'good', 'good-bg', 12.5, true ],
+	[ 'status, check', 'serious', 'serious-bg', 12.5, true ],
+	[ 'status, yours/theme', 'ink', 'raised', 12.5, true ],
+	[ 'status help, on card', 'muted', 'surface', 13, false ],
+	[ 'status help, on raised', 'muted', 'raised', 13, false ],
+
 	// Shell and headings.
 	[ '.wsak body text', 'text', 'ground', 14.5, false ],
 	[ '.wsak__title', 'ink', 'ground', 23, true ],

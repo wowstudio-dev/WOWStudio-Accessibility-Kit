@@ -99,7 +99,7 @@ function DecideEverywhere( { group, onChange, mayDecide } ) {
 		return (
 			<p className="wsak-markup__cannot">
 				{ __(
-					'Setting this aside everywhere needs permission to edit other people’s content. You can still set it aside one page at a time, from the list of every instance.',
+					'Marking this a false positive everywhere needs permission to edit other people’s content. You can still do it one page at a time, from the list of every instance.',
 					'wowstudio-accessibility-kit'
 				) }
 			</p>
@@ -114,7 +114,7 @@ function DecideEverywhere( { group, onChange, mayDecide } ) {
 				onClick={ () => setOpen( true ) }
 			>
 				{ __(
-					'This is not a problem, anywhere',
+					'Add to false positives, everywhere',
 					'wowstudio-accessibility-kit'
 				) }
 			</Button>
@@ -151,7 +151,7 @@ function DecideEverywhere( { group, onChange, mayDecide } ) {
 			<TextareaControl
 				__nextHasNoMarginBottom
 				label={ __(
-					'Why is this not a problem anywhere it appears?',
+					'Why is this a false positive everywhere it appears?',
 					'wowstudio-accessibility-kit'
 				) }
 				help={ __(
@@ -184,7 +184,7 @@ function DecideEverywhere( { group, onChange, mayDecide } ) {
 					} }
 				>
 					{ __(
-						'Set it aside everywhere',
+						'Add to false positives everywhere',
 						'wowstudio-accessibility-kit'
 					) }
 				</Button>
@@ -269,7 +269,7 @@ export default function MarkupGroups( { groups, mayDecide, onChange } ) {
 					'wowstudio-accessibility-kit'
 				) }
 				body={ __(
-					'Everything this check found has been fixed or set aside.',
+					'Everything this check found has been fixed or marked a false positive.',
 					'wowstudio-accessibility-kit'
 				) }
 			/>

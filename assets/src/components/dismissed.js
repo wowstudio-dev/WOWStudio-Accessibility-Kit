@@ -38,7 +38,10 @@ function SiteWide( { rows, mayDecide, onChange } ) {
 			aria-labelledby="wsak-sitewide-title"
 		>
 			<h3 id="wsak-sitewide-title">
-				{ __( 'Set aside everywhere', 'wowstudio-accessibility-kit' ) }
+				{ __(
+					'False positives everywhere',
+					'wowstudio-accessibility-kit'
+				) }
 			</h3>
 
 			<p className="wsak-dismissed__lede">
@@ -73,7 +76,7 @@ function SiteWide( { rows, mayDecide, onChange } ) {
 							{ sprintf(
 								/* translators: 1: who set it aside. 2: when. */
 								__(
-									'Set aside everywhere by %1$s on %2$s',
+									'Marked a false positive everywhere by %1$s on %2$s',
 									'wowstudio-accessibility-kit'
 								),
 								row.by,
@@ -98,7 +101,7 @@ function SiteWide( { rows, mayDecide, onChange } ) {
 								} }
 							>
 								{ __(
-									'Put it back everywhere',
+									'Not a false positive after all',
 									'wowstudio-accessibility-kit'
 								) }
 							</Button>
@@ -150,7 +153,7 @@ export default function Dismissed() {
 		return (
 			<Skeleton
 				label={ __(
-					'Loading what has been set aside…',
+					'Loading your false positives…',
 					'wowstudio-accessibility-kit'
 				) }
 			/>
@@ -163,7 +166,7 @@ export default function Dismissed() {
 			aria-labelledby="wsak-dismissed-title"
 		>
 			<h2 id="wsak-dismissed-title" className="wsak-dismissed__title">
-				{ __( 'Set aside', 'wowstudio-accessibility-kit' ) }
+				{ __( 'False positives', 'wowstudio-accessibility-kit' ) }
 			</h2>
 
 			<p className="wsak-dismissed__lede">
@@ -192,7 +195,7 @@ export default function Dismissed() {
 			( data.site_wide ?? [] ).length === 0 ? (
 				<EmptyState
 					title={ __(
-						'Nothing has been set aside',
+						'No false positives yet',
 						'wowstudio-accessibility-kit'
 					) }
 					body={ __(
@@ -205,10 +208,10 @@ export default function Dismissed() {
 					<>
 						<p className="wsak-dismissed__count">
 							{ sprintf(
-								/* translators: %d: how many findings are set aside. */
+								/* translators: %d: how many findings are marked false positives. */
 								_n(
-									'%d finding is currently set aside.',
-									'%d findings are currently set aside.',
+									'%d finding is currently marked a false positive.',
+									'%d findings are currently marked false positives.',
 									data.total,
 									'wowstudio-accessibility-kit'
 								),
@@ -258,7 +261,7 @@ export default function Dismissed() {
 										{ sprintf(
 											/* translators: 1: who set it aside. 2: when. */
 											__(
-												'Set aside by %1$s on %2$s',
+												'Marked a false positive by %1$s on %2$s',
 												'wowstudio-accessibility-kit'
 											),
 											row.by,

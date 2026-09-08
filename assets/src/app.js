@@ -178,7 +178,10 @@ export default function App() {
 						aria-current={ view === 'aside' ? 'page' : undefined }
 						onClick={ () => setView( 'aside' ) }
 					>
-						{ __( 'Set aside', 'wowstudio-accessibility-kit' ) }
+						{ __(
+							'False positives',
+							'wowstudio-accessibility-kit'
+						) }
 					</Button>
 				) }
 				{ capabilities.viewReports && (
@@ -383,6 +386,13 @@ export default function App() {
 									...current,
 									issues: data.issues ?? current.issues,
 									browser_pass: data.browser_pass,
+									// The verdict moves with the findings. See
+									// the note on the browser-pass route: these
+									// used to be left at the server pass's
+									// numbers, so the card said "0 issues" over
+									// a list of them.
+									score: data.score ?? current.score,
+									summary: data.summary ?? current.summary,
 								} ) )
 							}
 						/>

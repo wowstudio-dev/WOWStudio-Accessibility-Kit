@@ -186,10 +186,10 @@ export default function Overview( { onGo, onDrill } ) {
 						note={
 							issues.ignored
 								? sprintf(
-										/* translators: %d: how many findings have been set aside as not a problem. */
+										/* translators: %d: how many findings are marked false positives. */
 										_n(
-											'%d finding set aside as not a problem.',
-											'%d findings set aside as not a problem.',
+											'%d finding marked a false positive.',
+											'%d findings marked false positives.',
 											issues.ignored,
 											'wowstudio-accessibility-kit'
 										),

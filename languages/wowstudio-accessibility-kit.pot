@@ -344,27 +344,27 @@ msgid "In short"
 msgstr ""
 
 #: src/Remediation/ActionBand.php:118
-#: assets/src/components/issue-list.js:257
+#: assets/src/components/issue-list.js:266
 msgid "Fix these now"
 msgstr ""
 
 #: src/Remediation/ActionBand.php:119
-#: assets/src/components/issue-list.js:265
+#: assets/src/components/issue-list.js:274
 msgid "Read, then apply"
 msgstr ""
 
 #: src/Remediation/ActionBand.php:120
-#: assets/src/components/issue-list.js:273
+#: assets/src/components/issue-list.js:282
 msgid "Needs a decision from you"
 msgstr ""
 
 #: src/Remediation/ActionBand.php:121
-#: assets/src/components/issue-list.js:281
+#: assets/src/components/issue-list.js:290
 msgid "For whoever looks after your theme"
 msgstr ""
 
 #: src/Remediation/ActionBand.php:134
-#: assets/src/components/issue-list.js:258
+#: assets/src/components/issue-list.js:267
 msgid "There is one correct answer and we already know it. Nothing here is a guess, so nothing here needs checking first."
 msgstr ""
 
@@ -373,12 +373,12 @@ msgid "We can draft these, but a draft is not an answer. Read what it says befor
 msgstr ""
 
 #: src/Remediation/ActionBand.php:136
-#: assets/src/components/issue-list.js:274
+#: assets/src/components/issue-list.js:283
 msgid "These depend on what your content means, which is not something any tool can work out for you. Each one explains what to weigh up."
 msgstr ""
 
 #: src/Remediation/ActionBand.php:137
-#: assets/src/components/issue-list.js:285
+#: assets/src/components/issue-list.js:294
 msgid "These are in your theme rather than your content, so nothing here can reach them. Each one comes with what to change and where."
 msgstr ""
 
@@ -584,7 +584,7 @@ msgstr ""
 #: src/Rest/IssueController.php:358
 #: src/Rest/IssuePresenter.php:162
 #: src/Rest/OverviewController.php:442
-#: assets/src/components/dismissed.js:239
+#: assets/src/components/dismissed.js:242
 #: assets/src/components/scan-picker.js:164
 msgid "(no title)"
 msgstr ""
@@ -1790,7 +1790,7 @@ msgid "Whole site"
 msgstr ""
 
 #: src/Scanner/ScanScope.php:53
-#: assets/src/app.js:199
+#: assets/src/app.js:202
 msgid "Theme"
 msgstr ""
 
@@ -2117,57 +2117,57 @@ msgid "Images"
 msgstr ""
 
 #: assets/src/app.js:181
-#: assets/src/components/dismissed.js:166
-msgid "Set aside"
+#: assets/src/components/dismissed.js:169
+msgid "False positives"
 msgstr ""
 
-#: assets/src/app.js:190
+#: assets/src/app.js:193
 msgid "Site fixes"
 msgstr ""
 
-#: assets/src/app.js:212
+#: assets/src/app.js:215
 msgid "Statement"
 msgstr ""
 
-#: assets/src/app.js:230
+#: assets/src/app.js:233
 msgid "You can read results here but not start a scan. An administrator can grant that."
 msgstr ""
 
-#: assets/src/app.js:282
+#: assets/src/app.js:285
 msgid "Loading the scan…"
 msgstr ""
 
 #. translators: %s: content title.
-#: assets/src/app.js:304
+#: assets/src/app.js:307
 #, js-format
 msgid "Results for “%s”"
 msgstr ""
 
-#: assets/src/app.js:310
+#: assets/src/app.js:313
 msgid "Scan results"
 msgstr ""
 
-#: assets/src/app.js:333
+#: assets/src/app.js:336
 msgid "Show as a list"
 msgstr ""
 
-#: assets/src/app.js:337
+#: assets/src/app.js:340
 msgid "Show on the page"
 msgstr ""
 
-#: assets/src/app.js:346
+#: assets/src/app.js:349
 msgid "Back to your content"
 msgstr ""
 
-#: assets/src/app.js:357
+#: assets/src/app.js:360
 msgid "This scan covered less than usual."
 msgstr ""
 
-#: assets/src/app.js:427
+#: assets/src/app.js:437
 msgid "← Back to the overview"
 msgstr ""
 
-#: assets/src/app.js:439
+#: assets/src/app.js:449
 msgid "This plugin helps you find, fix and document accessibility problems. It does not determine whether your site meets the ADA, the European Accessibility Act, Section 508, or any other legal requirement, and nothing here is legal advice."
 msgstr ""
 
@@ -2488,14 +2488,14 @@ msgstr ""
 
 #. translators: %d: number of items in this group.
 #: assets/src/components/coverage-panel.js:174
-#: assets/src/components/issue-list.js:325
+#: assets/src/components/issue-list.js:334
 #, js-format
 msgid "(%d)"
 msgstr ""
 
 #. translators: %s: WCAG success criterion number.
 #: assets/src/components/coverage-panel.js:188
-#: assets/src/components/issue-list.js:114
+#: assets/src/components/issue-list.js:115
 #: assets/src/components/theme-panel.js:253
 #, js-format
 msgid "WCAG %s"
@@ -2618,7 +2618,7 @@ msgid "Remove this rule"
 msgstr ""
 
 #: assets/src/components/dismiss-action.js:86
-msgid "Set aside as not a problem."
+msgid "Marked a false positive."
 msgstr ""
 
 #. translators: %s: name of the person who dismissed the finding.
@@ -2628,150 +2628,181 @@ msgid "— %s"
 msgstr ""
 
 #: assets/src/components/dismiss-action.js:101
-msgid "Put it back on the list"
+#: assets/src/components/dismissed.js:103
+msgid "Not a false positive after all"
 msgstr ""
 
 #: assets/src/components/dismiss-action.js:117
-msgid "This is not a problem"
+#: assets/src/components/dismiss-action.js:150
+msgid "Add to false positives"
 msgstr ""
 
-#: assets/src/components/dismiss-action.js:132
-msgid "Why is this not a problem?"
+#: assets/src/components/dismiss-action.js:135
+msgid "Why is this a false positive?"
 msgstr ""
 
-#: assets/src/components/dismiss-action.js:136
+#: assets/src/components/dismiss-action.js:139
 msgid "Kept with the finding, with your name and the date. This is the part that makes it a record somebody can rely on later rather than an unexplained dismissal — so write it for whoever reads it in a year, which may well be you."
 msgstr ""
 
-#: assets/src/components/dismiss-action.js:147
-msgid "Set it aside"
-msgstr ""
-
-#: assets/src/components/dismiss-action.js:156
+#: assets/src/components/dismiss-action.js:162
 #: assets/src/components/markup-groups.js:198
 msgid "Cancel"
 msgstr ""
 
 #: assets/src/components/dismissed.js:41
-msgid "Set aside everywhere"
+msgid "False positives everywhere"
 msgstr ""
 
-#: assets/src/components/dismissed.js:45
+#: assets/src/components/dismissed.js:48
 msgid "These cover one piece of markup wherever it appears, including on pages added since the decision was taken. Withdrawing one puts every finding it covers back on the list."
 msgstr ""
 
 #. translators: 1: who set it aside. 2: when.
-#: assets/src/components/dismissed.js:75
+#: assets/src/components/dismissed.js:78
 #, js-format
-msgid "Set aside everywhere by %1$s on %2$s"
+msgid "Marked a false positive everywhere by %1$s on %2$s"
 msgstr ""
 
-#: assets/src/components/dismissed.js:100
-msgid "Put it back everywhere"
+#: assets/src/components/dismissed.js:155
+msgid "Loading your false positives…"
 msgstr ""
 
-#: assets/src/components/dismissed.js:152
-msgid "Loading what has been set aside…"
-msgstr ""
-
-#: assets/src/components/dismissed.js:170
+#: assets/src/components/dismissed.js:173
 msgid "Findings somebody decided not to act on, with the reason they gave. Setting something aside is a judgement rather than a fix — the barrier is still there — so this screen exists to make those judgements reviewable by somebody other than whoever made them."
 msgstr ""
 
-#: assets/src/components/dismissed.js:194
-msgid "Nothing has been set aside"
+#: assets/src/components/dismissed.js:197
+msgid "No false positives yet"
 msgstr ""
 
-#: assets/src/components/dismissed.js:198
+#: assets/src/components/dismissed.js:201
 msgid "When somebody marks a finding as reviewed and not applicable, it appears here with their name, the date, and the reason they gave."
 msgstr ""
 
-#. translators: %d: how many findings are set aside.
-#: assets/src/components/dismissed.js:209
+#. translators: %d: how many findings are marked false positives.
+#: assets/src/components/dismissed.js:212
 #, js-format
-msgid "%d finding is currently set aside."
-msgid_plural "%d findings are currently set aside."
+msgid "%d finding is currently marked a false positive."
+msgid_plural "%d findings are currently marked false positives."
 msgstr[0] ""
 msgstr[1] ""
 
 #. translators: 1: who set it aside. 2: when.
-#: assets/src/components/dismissed.js:260
+#: assets/src/components/dismissed.js:263
 #, js-format
-msgid "Set aside by %1$s on %2$s"
+msgid "Marked a false positive by %1$s on %2$s"
 msgstr ""
 
-#: assets/src/components/inspector.js:56
+#: assets/src/components/finding-status.js:38
+#: assets/src/components/finding-status.js:49
+msgid "We can fix this"
+msgstr ""
+
+#: assets/src/components/finding-status.js:39
+msgid "Write the description once and it is saved to the image itself, so every page using it is fixed."
+msgstr ""
+
+#: assets/src/components/finding-status.js:50
+msgid "This is answered by a style rule. Open the page view to see the change proposed, and apply it if you agree."
+msgstr ""
+
+#: assets/src/components/finding-status.js:60
+msgid "Someone needs to check this"
+msgstr ""
+
+#: assets/src/components/finding-status.js:64
+msgid "Automation could not settle this one either way. It may well be fine — look at it, then either fix it or mark it a false positive."
+msgstr ""
+
+#: assets/src/components/finding-status.js:74
+msgid "Your theme needs this"
+msgstr ""
+
+#: assets/src/components/finding-status.js:75
+msgid "This is in your theme rather than your content, so nothing here can reach it. It needs whoever looks after your theme."
+msgstr ""
+
+#: assets/src/components/finding-status.js:84
+msgid "You fix this"
+msgstr ""
+
+#: assets/src/components/finding-status.js:87
+msgid "This one is in your content, so it is edited on the page itself."
+msgstr ""
+
+#: assets/src/components/inspector.js:57
 msgid "This one is about the page as a whole rather than one spot on it, so there is nowhere in particular to point."
 msgstr ""
 
-#: assets/src/components/inspector.js:61
+#: assets/src/components/inspector.js:62
 msgid "This element is not in the page any more. It may have been edited since the scan, or it may only appear for some visitors."
 msgstr ""
 
-#: assets/src/components/inspector.js:66
+#: assets/src/components/inspector.js:67
 msgid "The page has changed shape since the scan, so we cannot be sure which element this refers to. Rather than point at the wrong one, we are pointing at none. Re-scan to place it again."
 msgstr ""
 
-#: assets/src/components/inspector.js:71
+#: assets/src/components/inspector.js:72
 msgid "This element is in the page but is not being displayed, so there is nothing to point at."
 msgstr ""
 
-#: assets/src/components/inspector.js:192
-#: assets/src/components/inspector.js:381
+#: assets/src/components/inspector.js:193
+#: assets/src/components/inspector.js:382
 msgid "Checking colour, size and layout on the page…"
 msgstr ""
 
 #. translators: %d: number of additional findings.
-#: assets/src/components/inspector.js:211
+#: assets/src/components/inspector.js:212
 #, js-format
 msgid "Page checks finished. %d further findings."
 msgstr ""
 
 #. translators: %s: name of the accessibility check.
-#: assets/src/components/inspector.js:271
+#: assets/src/components/inspector.js:272
 #, js-format
 msgid "Showing: %s"
 msgstr ""
 
-#: assets/src/components/inspector.js:337
+#: assets/src/components/inspector.js:338
 msgid "This content has no public address, so it cannot be shown here. The findings below still apply."
 msgstr ""
 
 #. translators: %s: content title.
-#: assets/src/components/inspector.js:355
+#: assets/src/components/inspector.js:356
 #, js-format
 msgid "Inspecting “%s”"
 msgstr ""
 
-#: assets/src/components/inspector.js:361
+#: assets/src/components/inspector.js:362
 msgid "Inspecting"
 msgstr ""
 
-#: assets/src/components/inspector.js:365
+#: assets/src/components/inspector.js:366
 msgid "Back to results"
 msgstr ""
 
-#: assets/src/components/inspector.js:395
+#: assets/src/components/inspector.js:396
 msgid "Choose a finding to see it on the page. Moving through this list with the keyboard works the same way."
 msgstr ""
 
-#: assets/src/components/inspector.js:403
+#: assets/src/components/inspector.js:404
 msgid "This scan read only your content, not the whole page, so findings from the markup cannot be pointed at here. Anything found on the page itself — colour, size, layout — still can be."
 msgstr ""
 
-#: assets/src/components/inspector.js:509
+#: assets/src/components/inspector.js:514
 msgid "This one is about how the page is styled. Fixing it writes a rule into your site’s Additional CSS, which your account is not allowed to change — an administrator can apply it, or make the change in Appearance → Customise."
 msgstr ""
 
-#: assets/src/components/inspector.js:526
+#: assets/src/components/inspector.js:531
 msgid "Your page would not open here."
 msgstr ""
 
-#: assets/src/components/inspector.js:531
+#: assets/src/components/inspector.js:536
 msgid "Some sites refuse to be shown inside another page, which is a reasonable security setting and not a fault. Findings from the markup are still listed, but nothing that depends on seeing the page — colour, text size, layout — was checked on this scan."
 msgstr ""
 
-#: assets/src/components/inspector.js:542
+#: assets/src/components/inspector.js:547
 msgid "Preview of the page being inspected"
 msgstr ""
 
@@ -2858,58 +2889,58 @@ msgid "Nothing open here"
 msgstr ""
 
 #: assets/src/components/issue-drilldown.js:349
-msgid "Everything this filter covers has been fixed or set aside. If that is a surprise, the pages behind it may not have been scanned since they changed."
+msgid "Everything this filter covers has been fixed or marked a false positive. If that is a surprise, the pages behind it may not have been scanned since they changed."
 msgstr ""
 
-#: assets/src/components/issue-list.js:31
+#: assets/src/components/issue-list.js:32
 msgid "This one is answered by a style rule measured off the element itself, so it is fixed in the page view — which needs a preview of this page, and this scan has none."
 msgstr ""
 
-#: assets/src/components/issue-list.js:43
+#: assets/src/components/issue-list.js:44
 msgid "Fix this on the page"
 msgstr ""
 
-#: assets/src/components/issue-list.js:46
+#: assets/src/components/issue-list.js:47
 msgid "Answered by a style rule measured off the element itself, so it is fixed in the page view where the element can be measured."
 msgstr ""
 
 #. translators: %s: name of the accessibility check.
-#: assets/src/components/issue-list.js:155
+#: assets/src/components/issue-list.js:164
 #: assets/src/components/markup-groups.js:228
 #, js-format
 msgid "Markup for: %s"
 msgstr ""
 
-#: assets/src/components/issue-list.js:168
+#: assets/src/components/issue-list.js:177
 msgid "How to fix this"
 msgstr ""
 
-#: assets/src/components/issue-list.js:177
-#: assets/src/components/issue-list.js:224
+#: assets/src/components/issue-list.js:186
+#: assets/src/components/issue-list.js:233
 msgid "Element:"
 msgstr ""
 
-#: assets/src/components/issue-list.js:201
+#: assets/src/components/issue-list.js:210
 msgid "Page:"
 msgstr ""
 
-#: assets/src/components/issue-list.js:214
+#: assets/src/components/issue-list.js:223
 msgid "View"
 msgstr ""
 
-#: assets/src/components/issue-list.js:266
+#: assets/src/components/issue-list.js:275
 msgid "We can draft these, but a draft is not an answer. Read what it says before you apply it — it was written by a model that cannot see why your page exists."
 msgstr ""
 
-#: assets/src/components/issue-list.js:380
+#: assets/src/components/issue-list.js:389
 msgid "Nothing found by the automated checks"
 msgstr ""
 
-#: assets/src/components/issue-list.js:384
+#: assets/src/components/issue-list.js:393
 msgid "None of the checks we can run automatically flagged anything on this page. That is a good sign, and it is not the same as the page being accessible — most of WCAG needs a person. The manual checklists are the next step."
 msgstr ""
 
-#: assets/src/components/issue-list.js:416
+#: assets/src/components/issue-list.js:425
 #: assets/src/components/overview.js:81
 #: assets/src/components/overview.js:306
 msgid "What these checks cover, and what they cannot"
@@ -2930,11 +2961,11 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: assets/src/components/markup-groups.js:101
-msgid "Setting this aside everywhere needs permission to edit other people’s content. You can still set it aside one page at a time, from the list of every instance."
+msgid "Marking this a false positive everywhere needs permission to edit other people’s content. You can still do it one page at a time, from the list of every instance."
 msgstr ""
 
 #: assets/src/components/markup-groups.js:116
-msgid "This is not a problem, anywhere"
+msgid "Add to false positives, everywhere"
 msgstr ""
 
 #. translators: %d: how many pages the decision covers.
@@ -2946,7 +2977,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: assets/src/components/markup-groups.js:153
-msgid "Why is this not a problem anywhere it appears?"
+msgid "Why is this a false positive everywhere it appears?"
 msgstr ""
 
 #: assets/src/components/markup-groups.js:157
@@ -2954,11 +2985,11 @@ msgid "Required at this scope, not optional. A decision about one page is your s
 msgstr ""
 
 #: assets/src/components/markup-groups.js:186
-msgid "Set it aside everywhere"
+msgid "Add to false positives everywhere"
 msgstr ""
 
 #: assets/src/components/markup-groups.js:271
-msgid "Everything this check found has been fixed or set aside."
+msgid "Everything this check found has been fixed or marked a false positive."
 msgstr ""
 
 #: assets/src/components/overview.js:36
@@ -3007,11 +3038,11 @@ msgstr ""
 msgid "Automation could not settle these. They may be fine."
 msgstr ""
 
-#. translators: %d: how many findings have been set aside as not a problem.
+#. translators: %d: how many findings are marked false positives.
 #: assets/src/components/overview.js:190
 #, js-format
-msgid "%d finding set aside as not a problem."
-msgid_plural "%d findings set aside as not a problem."
+msgid "%d finding marked a false positive."
+msgid_plural "%d findings marked false positives."
 msgstr[0] ""
 msgstr[1] ""
 
