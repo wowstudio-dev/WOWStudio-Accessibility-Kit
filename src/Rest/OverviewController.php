@@ -246,6 +246,52 @@ final class OverviewController implements Registrable {
 
 		$out['total'] = array_sum( $out );
 
+		/*
+		 * The open count, split by whether anything was actually settled.
+		 *
+		 * Rule 4 says every finding is tagged auto-detected or needs-manual-
+		 * review, and every finding is — but the number people read was the sum
+		 * of both, which quietly undoes the tagging. On the development site
+		 * that headline said 387 where 153 were barriers we had found and 234
+		 * were questions we could not answer. Reporting "I could not check this"
+		 * in the same figure as "this is broken" overstates the second and
+		 * devalues the first, and it is the number somebody screenshots.
+		 */
+		$open = $this->open_by_detection();
+
+		$out['found']        = $open['auto'] ?? 0;
+		$out['needs_a_look'] = $open['manual'] ?? 0;
+
+		return $out;
+	}
+
+	/**
+	 * Counts open findings by whether automation settled them.
+	 *
+	 * @since 0.29.0
+	 *
+	 * @return array<string, int>
+	 */
+	private function open_by_detection(): array {
+		global $wpdb;
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- Aggregate over the plugin's own table.
+		$rows = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT detection, COUNT(*) AS n
+				 FROM {$wpdb->prefix}wsak_issues
+				 WHERE status = %s
+				 GROUP BY detection",
+				'open'
+			)
+		);
+
+		$out = array();
+
+		foreach ( (array) $rows as $row ) {
+			$out[ (string) $row->detection ] = (int) $row->n;
+		}
+
 		return $out;
 	}
 

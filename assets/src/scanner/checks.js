@@ -31,7 +31,19 @@ const MIN_TARGET = 24;
  * @return {string} The number, written the way it measured.
  */
 export function px( value ) {
-	return Number.isInteger( value ) ? String( value ) : value.toFixed( 1 );
+	if ( Number.isInteger( value ) ) {
+		return String( value );
+	}
+
+	/*
+	 * Rounded down, not to nearest. A control 23.98 tall rounds to "24.0", and
+	 * the sentence built from it read "24.0 pixels, so it is not quite 24 tall
+	 * enough" — a finding that appears to contradict itself in the same breath.
+	 * Nobody debugs that; they decide the tool is wrong and stop reading the
+	 * ones next to it. Flooring keeps a failing measurement visibly below the
+	 * threshold it failed.
+	 */
+	return ( Math.floor( value * 10 ) / 10 ).toFixed( 1 );
 }
 
 /**
@@ -115,6 +127,18 @@ function finding( ruleId, element, message, certain = true ) {
 export function checkContrast( doc, view ) {
 	const found = [];
 
+	/*
+	 * What could not be measured, grouped by the thing that stopped it.
+	 *
+	 * A hero section with a photograph behind it defeats the measurement for
+	 * every piece of text inside it, and one finding per text node turned a
+	 * single unanswerable question into two hundred and thirteen of them on one
+	 * site — enough to bury the seventy-one contrast failures we did measure.
+	 * The reader has one decision to make about that section, so they get one
+	 * finding, attributed to the section rather than to the words on it.
+	 */
+	const unmeasured = new Map();
+
 	doc.body.querySelectorAll( '*' ).forEach( ( element ) => {
 		if ( ownText( element ) === '' || ! isRendered( element, view ) ) {
 			return;
@@ -122,17 +146,20 @@ export function checkContrast( doc, view ) {
 
 		const measured = measureContrast( element, view );
 
+		// Text nobody can see is not a contrast problem. See measureContrast().
+		if ( measured.invisible ) {
+			return;
+		}
+
 		if ( measured.uncertain ) {
-			found.push(
-				finding(
-					'colour-contrast',
-					element,
-					measured.reason === 'background-image'
-						? 'This text sits on an image or gradient, so its contrast cannot be measured automatically. Someone needs to look at it.'
-						: 'The colours behind this text could not be determined, so its contrast was not measured. Someone needs to look at it.',
-					false
-				)
-			);
+			const source = measured.source ?? element;
+			const group = unmeasured.get( source );
+
+			if ( group ) {
+				group.count += 1;
+			} else {
+				unmeasured.set( source, { reason: measured.reason, count: 1 } );
+			}
 
 			return;
 		}
@@ -152,7 +179,52 @@ export function checkContrast( doc, view ) {
 		}
 	} );
 
+	unmeasured.forEach( ( group, source ) => {
+		found.push(
+			finding(
+				'colour-contrast',
+				source,
+				unmeasuredMessage( group ),
+				false
+			)
+		);
+	} );
+
 	return found;
+}
+
+/**
+ * Says what could not be measured here, and how much of it.
+ *
+ * The count is stated rather than implied. "Some text on this" leaves somebody
+ * guessing how much of the page the sentence covers, and a person deciding
+ * whether to open a design tool wants to know whether it is one caption or a
+ * whole section.
+ *
+ * @param {{reason: string, count: number}} group What stopped the measurement.
+ * @return {string} The message.
+ */
+function unmeasuredMessage( group ) {
+	// Whole sentences per plural form rather than a subject glued to a fixed
+	// verb, which is how the first version of this produced "The 13 pieces of
+	// text sits on an image".
+	const one = group.count === 1;
+
+	if ( group.reason === 'background-image' ) {
+		return one
+			? 'The text here sits on an image or gradient, so its contrast cannot be measured automatically. Someone needs to look at it.'
+			: `The ${ group.count } pieces of text here sit on an image or gradient, so their contrast cannot be measured automatically. Someone needs to look at them.`;
+	}
+
+	if ( group.reason === 'opacity' ) {
+		return one
+			? 'The text here is inside something partly transparent, so its contrast cannot be measured automatically. Someone needs to look at it.'
+			: `The ${ group.count } pieces of text here are inside something partly transparent, so their contrast cannot be measured automatically. Someone needs to look at them.`;
+	}
+
+	return one
+		? 'The background colour behind this text could not be determined, so its contrast was not measured. Someone needs to look at it.'
+		: `The background colour behind these ${ group.count } pieces of text could not be determined, so their contrast was not measured. Someone needs to look at them.`;
 }
 
 /**

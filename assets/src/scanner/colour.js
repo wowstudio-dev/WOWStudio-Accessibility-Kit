@@ -165,13 +165,23 @@ export function effectiveBackground( element, view ) {
 				colour: null,
 				uncertain: true,
 				reason: 'background-image',
+				// Which ancestor defeated the measurement. A hero section with
+				// a photograph behind it stops the walk for every one of the
+				// thirty pieces of text inside it, and reporting that thirty
+				// times says one thing thirty times. The caller groups on this.
+				source: node,
 			};
 		}
 
 		const opacity = parseFloat( style.opacity );
 
 		if ( Number.isFinite( opacity ) && opacity < 1 ) {
-			return { colour: null, uncertain: true, reason: 'opacity' };
+			return {
+				colour: null,
+				uncertain: true,
+				reason: 'opacity',
+				source: node,
+			};
 		}
 
 		const background = parseColour( style.backgroundColor );
@@ -181,6 +191,7 @@ export function effectiveBackground( element, view ) {
 				colour: null,
 				uncertain: true,
 				reason: 'unreadable-colour',
+				source: node,
 			};
 		}
 
@@ -235,6 +246,29 @@ export function measureContrast( element, view ) {
 			passes: null,
 			uncertain: true,
 			reason: 'unreadable-colour',
+			source: element,
+		};
+	}
+
+	/*
+	 * Text nobody can see is not a contrast problem. Fully transparent text was
+	 * being composited over its own backdrop, which by definition produces the
+	 * backdrop colour and a ratio of exactly 1.00:1 — so every carousel dot and
+	 * icon button styled `color: transparent` was reported as the worst
+	 * possible contrast failure. Zero-height text is the same story told by a
+	 * different property.
+	 *
+	 * This is not the same as visually-hidden text, which is painted normally
+	 * and moved off-screen; that still has a real ratio and is still measured.
+	 */
+	if ( foreground.a === 0 || parseFloat( style.fontSize ) === 0 ) {
+		return {
+			ratio: null,
+			required: AA_NORMAL,
+			passes: null,
+			uncertain: false,
+			invisible: true,
+			reason: 'invisible-text',
 		};
 	}
 
@@ -251,6 +285,7 @@ export function measureContrast( element, view ) {
 			passes: null,
 			uncertain: true,
 			reason: backdrop.reason,
+			source: backdrop.source ?? element,
 		};
 	}
 

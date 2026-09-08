@@ -144,24 +144,59 @@ export default function Overview( { onGo, onDrill } ) {
 				</section>
 
 				<div className="wsak-overview__stats">
+					{ /*
+					 * Two figures rather than one. Every finding is already
+					 * tagged auto-detected or needs-manual-review; adding them
+					 * together for the headline undid that tagging, and the
+					 * headline is the number that gets screenshotted. "I could
+					 * not check this" and "this is broken" are different claims
+					 * and are counted separately.
+					 */ }
 					<Stat
 						label={ __(
-							'Open findings',
+							'Barriers found',
 							'wowstudio-accessibility-kit'
 						) }
-						value={ issues.open }
+						value={ issues.found ?? issues.open }
+						note={ __(
+							'Settled by an automated check. These are wrong.',
+							'wowstudio-accessibility-kit'
+						) }
+					/>
+					<Stat
+						label={ __(
+							'Needs a person to look',
+							'wowstudio-accessibility-kit'
+						) }
+						value={ issues.needs_a_look ?? 0 }
+						note={ __(
+							'Automation could not settle these. They may be fine.',
+							'wowstudio-accessibility-kit'
+						) }
 					/>
 					<Stat
 						label={ __( 'Fixed', 'wowstudio-accessibility-kit' ) }
 						value={ issues.fixed }
 						tone="good"
-					/>
-					<Stat
-						label={ __(
-							'Set aside',
-							'wowstudio-accessibility-kit'
-						) }
-						value={ issues.ignored }
+						/*
+						 * Only when there is something to say. A note reading
+						 * "0 findings set aside" under a figure that is also
+						 * zero is two noughts explaining each other.
+						 */
+						note={
+							issues.ignored
+								? sprintf(
+										/* translators: %d: how many findings have been set aside as not a problem. */
+										_n(
+											'%d finding set aside as not a problem.',
+											'%d findings set aside as not a problem.',
+											issues.ignored,
+											'wowstudio-accessibility-kit'
+										),
+										issues.ignored
+								  )
+								: undefined
+						}
 					/>
 					<Stat
 						label={ __(

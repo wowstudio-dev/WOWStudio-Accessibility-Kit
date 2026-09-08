@@ -582,7 +582,7 @@ msgstr ""
 
 #: src/Rest/IssueController.php:289
 #: src/Rest/IssueController.php:358
-#: src/Rest/OverviewController.php:396
+#: src/Rest/OverviewController.php:442
 #: assets/src/components/dismissed.js:239
 #: assets/src/components/scan-picker.js:164
 msgid "(no title)"
@@ -844,7 +844,7 @@ msgid "Open"
 msgstr ""
 
 #: src/Scanner/IssueStatus.php:44
-#: assets/src/components/overview.js:155
+#: assets/src/components/overview.js:178
 msgid "Fixed"
 msgstr ""
 
@@ -2117,7 +2117,6 @@ msgstr ""
 
 #: assets/src/app.js:181
 #: assets/src/components/dismissed.js:166
-#: assets/src/components/overview.js:160
 msgid "Set aside"
 msgstr ""
 
@@ -2903,7 +2902,7 @@ msgstr ""
 
 #: assets/src/components/issue-list.js:363
 #: assets/src/components/overview.js:81
-#: assets/src/components/overview.js:271
+#: assets/src/components/overview.js:306
 msgid "What these checks cover, and what they cannot"
 msgstr ""
 
@@ -2983,47 +2982,67 @@ msgstr ""
 msgid "The average of the latest score for each of %1$d scanned pages, out of %2$d published. It counts only what automated checks can settle, which is part of WCAG rather than all of it, and it does not tell you whether your site meets any legal requirement."
 msgstr ""
 
-#: assets/src/components/overview.js:148
-msgid "Open findings"
+#: assets/src/components/overview.js:156
+msgid "Barriers found"
+msgstr ""
+
+#: assets/src/components/overview.js:161
+msgid "Settled by an automated check. These are wrong."
 msgstr ""
 
 #: assets/src/components/overview.js:167
+msgid "Needs a person to look"
+msgstr ""
+
+#: assets/src/components/overview.js:172
+msgid "Automation could not settle these. They may be fine."
+msgstr ""
+
+#. translators: %d: how many findings have been set aside as not a problem.
+#: assets/src/components/overview.js:190
+#, js-format
+msgid "%d finding set aside as not a problem."
+msgid_plural "%d findings set aside as not a problem."
+msgstr[0] ""
+msgstr[1] ""
+
+#: assets/src/components/overview.js:202
 msgid "Checks available"
 msgstr ""
 
 #. translators: 1: server-pass checks. 2: browser-pass checks. 3: pages that have had a browser pass.
-#: assets/src/components/overview.js:174
+#: assets/src/components/overview.js:209
 #, js-format
 msgid "%1$d run on the server, %2$d need the page view — which %3$d scanned pages have had."
 msgstr ""
 
-#: assets/src/components/overview.js:192
-#: assets/src/components/overview.js:199
+#: assets/src/components/overview.js:227
+#: assets/src/components/overview.js:234
 msgid "Open findings by severity"
 msgstr ""
 
-#: assets/src/components/overview.js:208
+#: assets/src/components/overview.js:243
 msgid "What comes up most"
 msgstr ""
 
-#: assets/src/components/overview.js:215
+#: assets/src/components/overview.js:250
 msgid "Open findings by check"
 msgstr ""
 
-#: assets/src/components/overview.js:229
+#: assets/src/components/overview.js:264
 msgid "Pages with the most to do"
 msgstr ""
 
-#: assets/src/components/overview.js:236
+#: assets/src/components/overview.js:271
 msgid "Open findings by page"
 msgstr ""
 
-#: assets/src/components/overview.js:251
+#: assets/src/components/overview.js:286
 msgid "Score by scan"
 msgstr ""
 
 #. translators: %d: how many scans are plotted.
-#: assets/src/components/overview.js:257
+#: assets/src/components/overview.js:292
 #, js-format
 msgid "The last %d scan, in the order it ran. This plugin does not re-scan on its own, so the spacing is however often somebody pressed the button — it is a sequence, not a timeline."
 msgid_plural "The last %d scans, in the order they ran. This plugin does not re-scan on its own, so the spacing is however often somebody pressed the button — it is a sequence, not a timeline."

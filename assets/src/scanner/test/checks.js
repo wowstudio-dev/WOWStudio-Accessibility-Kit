@@ -133,6 +133,46 @@ describe( 'contrast', () => {
 		expect( found[ 0 ].message ).toMatch( /image or gradient/ );
 	} );
 
+	it( 'reports one unmeasurable finding per background, not per word', () => {
+		/*
+		 * A hero section with a photograph behind it defeats the measurement for
+		 * every piece of text inside it. One finding per text node turned a
+		 * single unanswerable question into 213 of them on one site, burying the
+		 * 71 contrast failures that had actually been measured.
+		 */
+		const doc = page(
+			'<div style="background-image: url(hero.jpg)">' +
+				'<p style="color: rgb(200,200,200); font-size: 16px">One</p>' +
+				'<p style="color: rgb(200,200,200); font-size: 16px">Two</p>' +
+				'<p style="color: rgb(200,200,200); font-size: 16px">Three</p>' +
+				'</div>'
+		);
+
+		const found = checkContrast( doc, window );
+
+		expect( found ).toHaveLength( 1 );
+		expect( found[ 0 ].certain ).toBe( false );
+		// Attributed to the thing carrying the background, not to one paragraph.
+		expect( found[ 0 ].selector ).toBe( '/html/body/div' );
+		expect( found[ 0 ].message ).toMatch( /3 pieces of text/ );
+		// Grammar: a subject glued to a fixed verb gave "3 pieces of text sits".
+		expect( found[ 0 ].message ).toMatch( /pieces of text here sit / );
+	} );
+
+	it( 'says nothing about text nobody can see', () => {
+		/*
+		 * Transparent text was composited over its own backdrop, which by
+		 * definition gives the backdrop colour and a ratio of exactly 1.00:1 —
+		 * so every carousel dot styled `color: transparent` was reported as the
+		 * worst contrast failure possible.
+		 */
+		const doc = page(
+			'<div style="background-color: rgb(255,255,255)"><button style="color: rgba(0,0,0,0); font-size: 16px">1</button></div>'
+		);
+
+		expect( checkContrast( doc, window ) ).toHaveLength( 0 );
+	} );
+
 	it( 'attributes text to the element that paints it, not its ancestors', () => {
 		// Using textContent would report the same sentence once per ancestor.
 		const doc = page(
@@ -168,6 +208,24 @@ describe( 'target size', () => {
 		expect( found[ 0 ].message ).toMatch( /170 by 23\.6 pixels/ );
 		expect( found[ 0 ].message ).toMatch( /24 tall enough/ );
 		expect( found[ 0 ].message ).not.toMatch( /24 wide/ );
+	} );
+
+	it( 'does not round a near miss up to the threshold it missed', () => {
+		/*
+		 * The case the test above meant to cover and could not: 23.6 renders as
+		 * "23.6" whichever way it is rounded, so the fixture could never fail.
+		 * 23.98 rounds to "24.0" and produced "24.0 pixels, so it is not quite
+		 * 24 tall enough" — a finding contradicting itself in one sentence,
+		 * which is how somebody decides the whole report is unreliable.
+		 */
+		const doc = page( '<div><button>x</button></div>' );
+		size( doc.querySelector( 'button' ), 125, 23.98 );
+
+		const found = checkTargetSize( doc, window );
+
+		expect( found ).toHaveLength( 1 );
+		expect( found[ 0 ].message ).not.toMatch( /24\.0 pixels/ );
+		expect( found[ 0 ].message ).toMatch( /23\.9 pixels/ );
 	} );
 
 	it( 'accepts a control that is big enough', () => {

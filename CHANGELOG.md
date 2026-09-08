@@ -87,6 +87,37 @@ Findings that keep their identity, and figures you can open.
 
 ### Fixed
 
+- **The headline no longer counts "I could not check this" as a finding.**
+  Every finding is tagged auto-detected or needs-manual-review, and the number
+  people actually read added the two together — quietly undoing the tagging on
+  the one figure that gets screenshotted. The development site reported 387 open
+  findings, of which 153 were barriers we had settled and 234 were questions we
+  could not answer. Two figures now: **Barriers found** and **Needs a person to
+  look**.
+
+- **Contrast that cannot be measured is reported once per background, not once
+  per word.** A hero section with a photograph behind it defeats the measurement
+  for every piece of text inside it, and one finding per text node turned a
+  single unanswerable question into 213 of them — burying the 71 contrast
+  failures that had been measured. The finding is now attributed to the element
+  carrying the background and says how much text it covers.
+
+- **Text nobody can see is no longer a contrast failure.** Fully transparent
+  text was composited over its own backdrop, which by definition produces the
+  backdrop colour and a ratio of exactly 1.00:1 — so every carousel dot styled
+  `color: transparent` was reported as the worst contrast failure possible.
+
+- **A finding can no longer contradict itself in its own sentence.** A control
+  23.98px tall was reported as "24.0 pixels, so it is not quite 24 tall
+  enough". The verdict was right and the number was rounded to nearest;
+  measurements now round down, so a near miss reads as one. A test for exactly
+  this already existed and could not fail, because its fixture used 23.6 —
+  which renders as "23.6" whichever way it is rounded.
+
+  Together these took the development site from 387 open findings to 128, and
+  contrast from 293 to 50. Nothing was hidden: the unmeasurable text is still
+  reported, counted, and named.
+
 - **The overview's top row no longer has a hole in it.** The score card and the
   four figures beside it sat in a grid aligned to the start, so a 365px card
   stood next to a 139px row and left two hundred pixels of nothing underneath.
