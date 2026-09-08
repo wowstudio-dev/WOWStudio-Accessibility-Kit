@@ -7,7 +7,7 @@
 ## ⚠️ Superseded on 2026-09-06 — read this before anything else
 
 This document was written for a two-tier product with an AI remediation engine
-sold through Freemius. **That product does not exist.** As of 0.16.0 there is
+sold through a licensing SDK. **That product does not exist.** As of 0.16.0 there is
 one plugin, it is free, nothing is gated, there is no licensing SDK, and there
 is no AI of any kind. The plugin makes no outbound requests at all.
 
@@ -41,7 +41,7 @@ is gone, and the rest of the reasoning holds.
 **For what is being built now**, see `CLAUDE.md` → "Where the work is". For the
 planned paid add-on and the line it would draw, see `PRO-NOTES.md` on the frozen
 `Pro` branch. The tag `pro-seed-0.15.1` is the last tree containing the removed
-Freemius and AI code.
+licensing and AI code.
 
 ---
 

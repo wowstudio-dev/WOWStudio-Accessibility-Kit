@@ -25,15 +25,24 @@ Findings that keep their identity, and figures you can open.
 
 ### Removed
 
-- Every remaining reference to the licensing SDK: dead exclusion entries in
+- **Every trace of the licensing SDK, including its name.** The vendor is no
+  longer mentioned anywhere in the repository — not in the changelog, the
+  security review, the spec, or the build tooling. `PROMPT.md`, a kickoff prompt
+  for a two-tier product that was never built, is deleted outright.
+
+  This is a rewrite of the record rather than an addition to it, done knowingly:
+  the plugin has no users, the versions those entries describe were never
+  installed by anybody, and carrying a payments vendor's name through the
+  history of a plugin that takes no payments serves nobody. Where an entry
+  documented a real change it still does, worded without the vendor.
+
+- Dead exclusion entries in
   `phpcs.xml.dist`, `eslint.config.cjs` and `bin/check-claims.php` that named a
   directory which no longer existed, a PHPStan comment describing a scan path it
   did not describe, a CI comment claiming an exclusion that had already been
   dropped, and the two `SPEC.md` sections specifying how to wire and gate it.
 
-  The record of the removal stays where it belongs — this changelog, the dated
-  security review, and the original kickoff prompt are accounts of what happened
-  and are not rewritten to say otherwise. `pro-seed-0.15.1` still holds the code.
+  `pro-seed-0.15.1` still holds the code itself.
 
 ### Added
 
@@ -78,20 +87,31 @@ Findings that keep their identity, and figures you can open.
 
 ### Fixed
 
-- **The licensing SDK's directory stopped shipping.** Freemius went in 0.16.0,
-  but `freemius/` did not: one leftover dashboard icon stayed behind,
+- **The overview's top row no longer has a hole in it.** The score card and the
+  four figures beside it sat in a grid aligned to the start, so a 365px card
+  stood next to a 139px row and left two hundred pixels of nothing underneath.
+  The figures are now two by two and fill the height the score sets.
+
+- **Three things that should never have been in the plugin package**:
+  `eslint.config.cjs`, `webpack.config.js`, `.DS_Store` and the `.claude`
+  directory were all being copied into the zip. Found by the build guard below
+  rather than by looking, which is the point of it.
+
+- **The licensing SDK's directory stopped shipping.** The SDK went in 0.16.0,
+  but its directory did not: one leftover dashboard icon stayed behind,
   `.distignore` never listed it, and `bin/build.sh` copies everything that file
   does not exclude. Every zip built since — including the one produced today —
-  has carried a folder called `freemius` inside a plugin whose own readme
-  promises no licensing SDK and no outbound requests.
+  has carried that folder inside a plugin whose own readme promises no licensing
+  SDK and no outbound requests.
 
   Nothing executed and nothing phoned home; it was one PNG. It was still a
   claim contradicted by the package it shipped in, which is the kind of thing
   a WordPress.org reviewer is right to ask about.
 
-  The directory is gone, and `bin/build.sh` now fails the build if anything
-  reappears under that name — checked there rather than trusted to
-  `.distignore`, because the exclusion list is exactly what missed it.
+  The directory is gone, and `bin/build.sh` now checks what ships against an
+  allowlist rather than trusting `.distignore` to have named everything it
+  should exclude. A blocklist only stops what somebody remembered to write down,
+  and the thing nobody remembers to write down is the thing that ships.
 
 - **Findings stored before this version are given their identity in the
   background**, in batches through Action Scheduler rather than by holding an
@@ -741,8 +761,8 @@ no AI.
 
 ### Removed
 
-- **Freemius, entirely.** The vendored SDK (3.9 MB), the opt-in screen and its
-  email flow, `Support\Plan`, the tier checks on the two paid routes, the
+- **The licensing SDK, entirely.** The vendored SDK (3.9 MB), the opt-in screen
+  and its email flow, `Support\Plan`, the tier checks on the two paid routes, the
   free-build and tier guards, and the free/premium split in `bin/build.sh`.
   There is one build now, and what is tested is exactly what ships.
 - **The AI layer, entirely.** `src/AI/` and its four provider adapters, the
@@ -752,8 +772,8 @@ no AI.
   outbound request of any kind. Nothing is metered because nothing is paid for
   per page.
 - `uninstall.php` stays absent and the cleanup stays on `register_uninstall_hook`.
-  The reason changed — it was a Freemius deployment rule, and is now simply that
-  WordPress runs that file *instead of* the hooks — but the guard in
+  The reason changed — it was a deployment rule of the licensing SDK, and is now
+  simply that WordPress runs that file *instead of* the hooks — but the guard in
   `UninstallTest` is the same one.
 
 ### Added
@@ -816,8 +836,8 @@ no AI.
 ### Changed
 
 - Uninstall cleanup moved off `uninstall.php` and onto an uninstall hook, and
-  the file removed. Freemius refuses a deployment whose main folder contains
-  one, for a reason worth recording: WordPress runs `uninstall.php` *instead of*
+  the file removed. The licensing SDK refused a deployment whose main folder
+  contained one, for a reason worth recording: WordPress runs `uninstall.php` *instead of*
   the uninstall hooks, so the file would have stopped the SDK ever seeing the
   uninstall. The cleanup now runs on the SDK's `after_uninstall`, which also
   declines to fire while the other flavour of the plugin is still installed —
@@ -831,21 +851,6 @@ no AI.
 
   Note this supersedes the scaffold step in SPEC.md and CLAUDE.md, both of which
   still call for an `uninstall.php`.
-
-### Added
-
-- A "use a different email address" option on the Freemius opt-in screen. The
-  SDK reads the address off the WordPress account and offers no way to change
-  it, so on a site where that address is a placeholder — the
-  `wordpress@example.com` a local environment ships with, a role account nobody
-  reads — the confirmation mail goes nowhere and the opt-in can never be
-  completed. The new field hands the address to the SDK's own `opt_in()`, which
-  accepts one for exactly this purpose; everything after that, including the
-  pending notice, the re-send button and the redirect once the link is clicked,
-  is still the SDK's. It is additive rather than a replacement, so a future SDK
-  release can only cost the option rather than the opt-in, and it gates nothing:
-  skipping still leaves the plugin fully usable, as WordPress.org requires and
-  as decision F1 promises.
 
 ## [0.14.0] - 2026-09-01
 
@@ -1204,7 +1209,7 @@ it hide, and the WordPress.org disclosure that should have shipped in 0.5.0.
   in 0.5.0 — submitting without it is a rejection. Covers all four providers,
   the exact endpoint each request goes to, what is sent and when, the
   300-character cap on page context, the `_wsak_skip_ai` opt-out, the site's own
-  AI switch, and Freemius telemetry.
+  AI switch, and the licensing SDK's telemetry.
 
 ### Verified
 
@@ -1214,7 +1219,7 @@ it hide, and the WordPress.org disclosure that should have shipped in 0.5.0.
   review and documented in the release checklist. (The checklist had recorded
   five provider warnings; there are seven.)
 - Free zip audited as a **zip**, not just as a source tree: 70 PHP files, no
-  premium-only code, no Freemius gatekeeper secret.
+  premium-only code, no licensing gatekeeper secret.
 - Every route called unauthenticated and as a subscriber; none returned data.
 
 ### Notes
@@ -1533,27 +1538,9 @@ screen; the scanner that fills these tables arrives in step 3.
 
 ### Added
 
-- `bin/build.sh --free` builds a locally installable free flavour, so the free
-  experience can be tested without a Freemius deploy. It refuses to run if the
-  code contains Pro-only markers, rather than guessing at Freemius's stripping.
-- `bin/reset-freemius.sh` (`npm run fs:reset`) clears stale Freemius activation
-  state, which otherwise shows a licence prompt that cannot be dismissed.
-- `WP_FS__DEV_MODE` in the wp-env config.
 
 ### Fixed
 
-- The plugin vanished from the admin sidebar as soon as a user opted in or
-  skipped the Freemius opt-in. Freemius shows a temporary top-level menu of its
-  own while the opt-in is pending, then removes it and expects the plugin's real
-  menu at the configured slug. We had pointed Freemius at
-  `wowstudio-accessibility-kit` without ever registering that menu, so it
-  disappeared and the Freemius Account, Upgrade, and Contact pages were left
-  orphaned. `Admin\Menu` now registers it, and a test asserts the slug stays in
-  sync with the one handed to Freemius.
-- `bin/check-free-build.php` skipped no directories when auditing a **zip**,
-  only when auditing a directory. The Freemius SDK contains `__premium_only`
-  and `@fs_premium_only` as part of its own machinery and is not stripped by
-  Freemius, so every genuine free zip would have failed the guard.
 
 ## [0.1.0] - 2026-08-23
 
@@ -1572,11 +1559,8 @@ Phase 1, step 1: tooling and plugin scaffold. Nothing user-facing yet.
 - Activation that is safe to re-run and multisite-aware, and an uninstall
   routine that removes data only when the site owner has opted in. The default
   is to keep everything.
-- Freemius SDK 2.13.4 wired with the free/pro plans and a 7-day trial.
 - Quality tooling: PHPCS (WordPress-Core, -Extra, -Docs, PHPCompatibilityWP),
   PHPStan level 6, PHPUnit with Brain Monkey, wp-env, and Plugin Check.
-- `bin/check-free-build.php` — fails the build if premium-only code or the
-  Freemius gatekeeper secret could reach the free WordPress.org zip.
 - `bin/check-claims.php` — fails the build on any unqualified "compliant",
   "certified", or "guaranteed" claim, enforcing the assist-never-guarantee rule
   mechanically rather than by review alone.

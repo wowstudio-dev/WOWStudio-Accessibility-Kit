@@ -1,8 +1,11 @@
 # Everything here is development-only and must not reach the shipped zip.
 .git
 .github
+.claude
 .gitignore
 .editorconfig
+.DS_Store
+Thumbs.db
 .distignore
 .nvmrc
 .wp-env.json
@@ -18,11 +21,12 @@ composer.lock
 package.json
 package-lock.json
 phpcs.xml.dist
+eslint.config.cjs
+webpack.config.js
 phpstan.neon.dist
 phpunit.xml.dist
 CLAUDE.md
 SPEC.md
-PROMPT.md
 README.md
 PRO-NOTES.md
 CHANGELOG.md

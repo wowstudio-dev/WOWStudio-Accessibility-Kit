@@ -59,8 +59,8 @@ by a human before any public release. Items marked **TODO(human)** are open.
 ## Nothing is gated
 
 - [x] **Confirmed 0.16.0.** There is no paid tier, no licensing SDK, no
-      `@fs_premium_only`, no tier check, and no build-time stripping. One build
-      ships, so what the gate tested is what the user installs.
+      premium-only markers, no tier check, and no build-time stripping. One
+      build ships, so what the gate tested is what the user installs.
 - [ ] Before each release, confirm no locked control, upgrade prompt or usage
       cap has crept back in. The free plugin has to stay complete: a feature
       that has shipped in a free WordPress.org release cannot be taken back

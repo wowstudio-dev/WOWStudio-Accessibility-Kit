@@ -9,8 +9,8 @@ It is not an overlay, and it never tells a user their site is compliant. See
 
 ## Status
 
-One plugin, free, nothing gated. 0.16.0 removed the Freemius SDK and the whole
-AI layer; see [`CHANGELOG.md`](CHANGELOG.md) for what went and why.
+One plugin, free, nothing gated. There is no licensing SDK, no paid tier and no
+AI; see [`CHANGELOG.md`](CHANGELOG.md) for what went and why.
 
 What works: the two-pass scanner (40 checks — 35 on the server, 5 in the
 browser), the inspector with a live page

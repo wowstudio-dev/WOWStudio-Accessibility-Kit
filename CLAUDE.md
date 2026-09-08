@@ -31,7 +31,7 @@ A paid add-on is planned but not started. It will be a **separate plugin that
 attaches to this one**, never a stripped build of it — so the free plugin ships
 complete and nothing is ever taken away from anybody who already had it. The
 frozen `Pro` branch and `PRO-NOTES.md` hold that plan; the tag
-`pro-seed-0.15.1` is the last tree containing the removed Freemius and AI code.
+`pro-seed-0.15.1` is the last tree containing the removed licensing and AI code.
 
 **The line, for when it matters: never gate finding. Gate automation,
 deliverables, and marginal cost.** Withholding a check means telling somebody
@@ -189,7 +189,7 @@ gate is green and anything worth checking live has been checked. `Website` is
 separate and nothing here touches it. `main` is the default branch.
 
 Three tags carry everything from the abandoned paid direction, because no branch
-holds it any more: `pro-seed-0.15.1` (the last tree with Freemius and AI intact),
+holds it any more: `pro-seed-0.15.1` (the last tree with the licensing SDK and AI intact),
 `pro-plan-0.15.1` (`PRO-NOTES.md` and the renamed Pro bootstrap), and
 `monitoring-for-pro-0.21.0` (monitoring, working and verified before removal).
 

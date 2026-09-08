@@ -1,7 +1,7 @@
 # Security review
 
 > **Dated record — partly obsolete since 0.16.0.** Sections about provider API
-> keys, the encrypted key store, `_wsak_skip_ai` and Freemius describe code that
+> keys, the encrypted key store, `_wsak_skip_ai` and licensing describe code that
 > has since been deleted: there is no AI, no key storage and no licensing SDK,
 > and the plugin now makes no outbound request of any kind. Those findings are
 > not wrong, they are simply about a surface that no longer exists — and the
@@ -11,7 +11,8 @@
 
 *Phase 1, step 9. Reviewed: 2026-08-30, against 0.8.0 + the step 9 changes.
 Scope: the plugin's own code — `src/`, `assets/src/`, and the
-build scripts. The vendored Freemius SDK in `freemius/` is out of scope.*
+build scripts. The vendored licensing SDK was out of scope; it has since been
+removed entirely.*
 
 One real finding, fixed and regression-tested. Everything else below is a record
 of what was checked and how, so the next review starts from evidence rather than
@@ -134,9 +135,9 @@ flags both. Both were re-read for this review and are safe:
 ## Free build
 
 `bin/check-free-build.php` was run against the **generated zip**, not just the
-source tree: 70 PHP files, no premium-only code, no Freemius gatekeeper secret.
-The only paths matching `premium` are three unmodified Freemius SDK templates,
-which ship in every Freemius free build.
+source tree: 70 PHP files, no premium-only code, no licensing gatekeeper secret.
+The only paths matching `premium` were three unmodified SDK templates, which the
+SDK shipped in every free build. Both the script and the SDK are gone.
 
 Plugin Check reports **0 errors** against the built plugin.
 
@@ -144,8 +145,8 @@ Plugin Check reports **0 errors** against the built plugin.
 
 ## What was NOT checked
 
-1. **The Freemius SDK.** Vendored third-party code, excluded from PHPCS and
-   Plugin Check. Unmodified upstream, but unaudited by us.
+1. **The vendored licensing SDK.** Third-party code, excluded from PHPCS and
+   Plugin Check. Unmodified upstream, unaudited by us, and since removed.
 2. **No penetration testing, fuzzing, or dependency CVE scan.** This is a code
    review, by reading and by targeted live probes.
 3. **The AI providers' own handling** of what we send them. The plugin discloses

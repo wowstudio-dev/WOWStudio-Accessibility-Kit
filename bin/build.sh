@@ -88,17 +88,24 @@ if [ -d "${OUT}/tests" ] || [ -d "${OUT}/node_modules" ] || [ -f "${OUT}/phpcs.x
 fi
 echo "    no development files in the build"
 
-# The licensing SDK went in 0.16.0, but its directory did not: one leftover
-# image stayed behind, .distignore never listed it, and every zip built since
-# has shipped a folder called freemius inside a plugin that advertises no
-# licensing SDK at all. Checked here rather than trusted to .distignore, so
-# that anything reappearing under that name fails the build instead of being
-# quietly published.
-if [ -e "${OUT}/freemius" ]; then
-	echo "    ERROR: a freemius/ directory reached the build" >&2
-	exit 1
-fi
-echo "    no licensing SDK in the build"
+# What ships is an allowlist, not a blocklist. The licensing SDK's directory
+# outlived the SDK itself by thirteen versions precisely because nothing was
+# looking for it: .distignore excludes what somebody remembered to name, and
+# the thing nobody remembers to name is the thing that ships. Anything new at
+# the top level now has to be added here on purpose.
+EXPECTED="LICENSE assets build composer.json languages readme.txt src vendor wowstudio-accessibility-kit.php"
+for entry in "${OUT}"/* "${OUT}"/.[!.]*; do
+	[ -e "${entry}" ] || continue
+	name="$(basename "${entry}")"
+	case " ${EXPECTED} " in
+		*" ${name} "*) ;;
+		*)
+			echo "    ERROR: unexpected file in the build: ${name}" >&2
+			exit 1
+			;;
+	esac
+done
+echo "    nothing in the build but the plugin"
 
 echo "==> Built ${OUT} ($(du -sh "${OUT}" | cut -f1))"
 
