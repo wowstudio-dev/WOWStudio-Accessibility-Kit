@@ -610,7 +610,7 @@ msgstr ""
 #: src/Rest/IssueController.php:289
 #: src/Rest/IssueController.php:358
 #: src/Rest/IssuePresenter.php:167
-#: src/Rest/OverviewController.php:447
+#: src/Rest/OverviewController.php:461
 #: assets/src/components/dismissed.js:169
 #: assets/src/components/scan-picker.js:164
 msgid "(no title)"

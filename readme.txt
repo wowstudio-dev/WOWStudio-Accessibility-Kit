@@ -93,9 +93,20 @@ No. Everything in this plugin is free, including checking your whole site at onc
 
 In WordPress's own alt text field on the media item. It therefore applies everywhere that image is used, works with every theme and plugin, and stays behind if you remove this plugin.
 
+== Screenshots ==
+
+1. The report. What was found across everything checked, what needs a person rather than a machine, and what each figure is made of. Every bar opens the findings behind it.
+2. A page being inspected. The findings sit beside a live preview of the page, and choosing one highlights the element it is about, so you are never guessing which paragraph or which button.
+3. Choosing what to check. Posts and pages, with what is already known about each, checked in the background so nothing blocks the admin.
+4. Images that have never been described, with a field beside each. What you write goes into WordPress's own alt text, so it applies everywhere the image is used and stays behind if this plugin is removed.
+5. Site-wide fixes. Switches that supply what a theme leaves out — a skip link, a visible focus outline, a page title. Each one says what it might disturb before you turn it on.
+6. The accessibility statement. A draft you review, edit and attest to, including the feedback contact mechanism European rules expect. The plugin never asserts conformance on your behalf.
+7. The setup, on first activation. Three steps, none of them mandatory, and nothing switched on for you.
+
 == Changelog ==
 
 = 0.29.0 =
+* Changed: hardening found by the WordPress.org Plugin Check — the setup's query argument is sanitised before it is read, and the report's grouped counts no longer build a column name into a query.
 * Fixed: the Accessibility column on the Posts and Pages screens showed "Not checked" for every row, including pages that had been checked many times. On a block theme another query was running first and using up the one lookup the column allowed itself.
 * Fixed: a finding marked a false positive can now be put back on the list from the False positives screen. Previously the undo was only offered on the card you had just dismissed, which disappeared as soon as you left the screen or scanned the page again.
 * Changed: scanning covers posts and pages only. Templates, patterns, page-builder libraries and custom post types are no longer offered — none of them is a page a visitor can open, and a pattern's problems are already found on the pages it appears in. Sites that need more can add post types with the wsak_post_types filter.

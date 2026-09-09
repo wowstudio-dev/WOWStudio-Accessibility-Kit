@@ -303,8 +303,8 @@ final class OverviewController implements Registrable {
 	/**
 	 * Counts open issues grouped by one column.
 	 *
-	 * The column is never caller-supplied — it is chosen from a fixed set at
-	 * each call site, so it cannot carry anything into the query.
+	 * The column names the query rather than being put into one. See the note
+	 * below: there is no assembled SQL here for anybody to have to verify.
 	 *
 	 * @since 0.16.0
 	 *
@@ -314,16 +314,30 @@ final class OverviewController implements Registrable {
 	private function count_by( string $column ): array {
 		global $wpdb;
 
-		$allowed = array( 'severity', 'found_by', 'detection', 'status' );
+		$table = $wpdb->prefix . 'wsak_issues';
 
-		if ( ! in_array( $column, $allowed, true ) ) {
+		/*
+		 * Four whole queries rather than one query with the column dropped into
+		 * it. The allowlist above this was correct and the comment explaining it
+		 * was true, but both required somebody to read them: what reached the
+		 * database was still a string with a variable in it, and every reviewer
+		 * of this file — human or static analysis — has to work out for
+		 * themselves that the variable cannot carry anything. Written out, there
+		 * is nothing to work out. No column name is ever assembled.
+		 */
+		$queries = array(
+			'severity'  => "SELECT severity AS k, COUNT(*) AS n FROM {$table} WHERE status = 'open' GROUP BY severity ORDER BY n DESC",
+			'found_by'  => "SELECT found_by AS k, COUNT(*) AS n FROM {$table} WHERE status = 'open' GROUP BY found_by ORDER BY n DESC",
+			'detection' => "SELECT detection AS k, COUNT(*) AS n FROM {$table} WHERE status = 'open' GROUP BY detection ORDER BY n DESC",
+			'status'    => "SELECT status AS k, COUNT(*) AS n FROM {$table} GROUP BY status ORDER BY n DESC",
+		);
+
+		if ( ! isset( $queries[ $column ] ) ) {
 			return array();
 		}
 
-		$where = 'status' === $column ? '' : "WHERE status = 'open'";
-
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $column is matched against a fixed allowlist directly above.
-		$rows = $wpdb->get_results( "SELECT {$column} AS k, COUNT(*) AS n FROM {$wpdb->prefix}wsak_issues {$where} GROUP BY {$column} ORDER BY n DESC" );
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- One of four fixed strings; the only interpolation is $wpdb->prefix and there are no parameters to prepare.
+		$rows = $wpdb->get_results( $queries[ $column ] );
 
 		return array_map(
 			static fn( $row ): array => array(

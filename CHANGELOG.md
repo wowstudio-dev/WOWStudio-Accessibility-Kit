@@ -112,6 +112,33 @@ Findings that keep their identity, and figures you can open.
   Where the incumbent rule is `!important`, no stylesheet rule can win, and the
   proposal says so before it is applied rather than after.
 
+- **Everything WordPress.org asks for.** The plugin passes Plugin Check with
+  nothing reported in shipped code, and the directory assets exist: an icon at
+  128 and 256, a banner at 772x250 and 1544x500, and seven screenshots of the
+  real screens.
+
+  Both generators are checked in rather than the output alone. The icon and
+  banner are drawn from the palette in `style.scss` and the exact zigzag the
+  admin header draws, so they cannot drift from the interface they advertise;
+  the screenshots are taken from a running site in a fixed order that matches
+  the readme's captions, because WordPress.org numbers those files and reads
+  the captions positionally.
+
+  They live in `.wordpress-org/` and `.distignore` keeps them out of the zip —
+  WordPress.org reads them from the SVN `assets/` directory beside the plugin
+  folder, and shipping a megabyte of banner art to every install would be a
+  megabyte for nothing.
+
+  Three code changes came out of the check itself. The setup's query argument is
+  unslashed and sanitised before it is read. The overview's grouped counts are
+  four whole queries rather than one with a column name interpolated into it —
+  the allowlist guarding that was correct and the comment explaining it was
+  true, but both needed reading, and now there is no assembled column name to
+  verify. And the queries built from fixed placeholder fragments say so to
+  Plugin Check's own sniff as well as to PHPCS; that checker cannot see through
+  any variable, so restructuring to satisfy it produced worse code and the
+  existing explanations were extended to cover it instead.
+
 - **The Accessibility column said "Not checked" on every row, including pages
   with nineteen completed scans behind them.** Reported from a Pages screen
   where nothing had a score.

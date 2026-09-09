@@ -39,6 +39,10 @@ final class OnboardingTest extends TestCase {
 		Functions\when( 'wp_doing_cron' )->justReturn( false );
 		Functions\when( 'is_network_admin' )->justReturn( false );
 		Functions\when( 'current_user_can' )->justReturn( true );
+		Functions\when( 'wp_unslash' )->returnArg();
+		Functions\when( 'sanitize_key' )->alias(
+			static fn( $value ): string => strtolower( preg_replace( '/[^a-z0-9_\-]/i', '', (string) $value ) )
+		);
 		unset( $_GET['activate-multi'] );
 	}
 

@@ -31,3 +31,9 @@ README.md
 PRO-NOTES.md
 CHANGELOG.md
 docs
+
+# Directory assets. These belong in the SVN repository's own assets/
+# directory, beside the plugin folder rather than inside it — WordPress.org
+# reads them from there, and shipping them in the zip would put a megabyte of
+# banner art on every install for nothing.
+.wordpress-org

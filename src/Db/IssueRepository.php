@@ -151,7 +151,7 @@ class IssueRepository {
 			. ' (scan_id, post_id, rule_id, wcag_sc, severity, detection, found_by, status, fingerprint, selector, context, message, note, resolved_by, created_at, updated_at)'
 			. ' VALUES ' . implode( ', ', $placeholders );
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared -- Assembled from placeholders only; the table and every value go through prepare().
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Assembled from placeholders only; the table and every value go through prepare().
 		$written = $wpdb->query( $wpdb->prepare( $sql, $values ) );
 
 		return false === $written ? 0 : (int) $written;
@@ -330,7 +330,7 @@ class IssueRepository {
 		$sql = 'SELECT * FROM %i WHERE ' . implode( ' AND ', $where )
 			. ' ORDER BY ' . self::severity_order() . ', id ASC LIMIT %d OFFSET %d';
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared -- Conditions are fixed placeholder fragments; every value goes through prepare().
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Conditions are fixed placeholder fragments; every value goes through prepare().
 		$rows = $wpdb->get_results( $wpdb->prepare( $sql, $values ) );
 
 		return array_map(
@@ -370,7 +370,7 @@ class IssueRepository {
 			WHERE ' . implode( ' AND ', $where )
 			. ' ORDER BY ' . self::severity_order() . ', i.post_id ASC, i.id ASC LIMIT %d OFFSET %d';
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared -- Conditions are fixed placeholder fragments; every value goes through prepare().
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Conditions are fixed placeholder fragments; every value goes through prepare().
 		$rows = $wpdb->get_results( $wpdb->prepare( $sql, $values ) );
 
 		return array_map(
@@ -401,7 +401,7 @@ class IssueRepository {
 			LEFT JOIN %i AS p ON p.ID = i.post_id
 			WHERE ' . implode( ' AND ', $where );
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared -- As above.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- As above.
 		return (int) $wpdb->get_var( $wpdb->prepare( $sql, $values ) );
 	}
 
@@ -454,7 +454,7 @@ class IssueRepository {
 			ORDER BY pages DESC, instances DESC, sample_id ASC
 			LIMIT %d OFFSET %d';
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared -- Conditions are fixed placeholder fragments; every value goes through prepare().
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- Conditions are fixed placeholder fragments; every value goes through prepare().
 		$rows = $wpdb->get_results( $wpdb->prepare( $sql, $values ) );
 
 		return array_map(
@@ -562,7 +562,7 @@ class IssueRepository {
 			LEFT JOIN %i AS p ON p.ID = i.post_id
 			WHERE ' . implode( ' AND ', $where );
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared -- As above.
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- As above.
 		return (int) $wpdb->get_var( $wpdb->prepare( $sql, $values ) );
 	}
 
@@ -594,7 +594,7 @@ class IssueRepository {
 			WHERE fingerprint IN ( {$slots} ) AND status = %s AND post_id > 0
 			ORDER BY post_id ASC";
 
-		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared -- The IN list is placeholders only; every value goes through prepare().
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared, PluginCheck.Security.DirectDB.UnescapedDBParameter -- The IN list is placeholders only; every value goes through prepare().
 		$rows = $wpdb->get_results( $wpdb->prepare( $sql, $values ) );
 
 		$pages = array();

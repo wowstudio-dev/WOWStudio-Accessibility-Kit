@@ -223,6 +223,8 @@ final class Onboarding implements Registrable {
 	 */
 	public static function is_requested(): bool {
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Chooses which read-only view renders; nothing is written and no capability is decided by it.
-		return isset( $_GET[ self::QUERY_ARG ] ) && '' !== (string) $_GET[ self::QUERY_ARG ];
+		$asked = isset( $_GET[ self::QUERY_ARG ] ) ? sanitize_key( wp_unslash( $_GET[ self::QUERY_ARG ] ) ) : '';
+
+		return '' !== $asked;
 	}
 }
