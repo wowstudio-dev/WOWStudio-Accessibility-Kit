@@ -10,6 +10,7 @@ namespace WOWStudio\AccessibilityKit\Rest;
 use WOWStudio\AccessibilityKit\Core\Registrable;
 use WOWStudio\AccessibilityKit\Scanner\RuleRegistry;
 use WOWStudio\AccessibilityKit\Support\Capabilities;
+use WOWStudio\AccessibilityKit\Support\ScannableTypes;
 use WP_REST_Request;
 use WOWStudio\AccessibilityKit\Guidance\NextStep;
 use WP_REST_Response;
@@ -180,7 +181,11 @@ final class OverviewController implements Registrable {
 
 		$total = 0;
 
-		foreach ( get_post_types( array( 'public' => true ) ) as $type ) {
+		// Only what the plugin would ever check. Counting everything published
+		// made the denominator include content no scan will ever reach, so
+		// "8 of 40 scanned" was measuring the site against a target that
+		// cannot be met.
+		foreach ( ScannableTypes::names() as $type ) {
 			$counts = wp_count_posts( $type );
 			$total += isset( $counts->publish ) ? (int) $counts->publish : 0;
 		}

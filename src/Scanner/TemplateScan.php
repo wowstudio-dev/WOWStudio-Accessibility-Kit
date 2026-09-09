@@ -10,6 +10,7 @@ namespace WOWStudio\AccessibilityKit\Scanner;
 use WOWStudio\AccessibilityKit\Db\IssueRepository;
 use WOWStudio\AccessibilityKit\Db\ScanRepository;
 use WOWStudio\AccessibilityKit\Remediation\Substitution;
+use WOWStudio\AccessibilityKit\Support\ScannableTypes;
 use WP_Error;
 
 defined( 'ABSPATH' ) || exit;
@@ -127,8 +128,8 @@ final class TemplateScan {
 	/**
 	 * Picks the posts whose pages stand in for the theme.
 	 *
-	 * One published post per public type, on the theory that a product page and
-	 * a blog post rarely share a template. Not exhaustive, and not claimed to
+	 * One published post per scanned type, on the theory that a page and a blog
+	 * post rarely share a template. Not exhaustive, and not claimed to
 	 * be: a site whose every page is individually built by a page builder is
 	 * covered by the rendered strategy instead.
 	 *
@@ -139,11 +140,7 @@ final class TemplateScan {
 	public function representatives(): array {
 		$ids = array();
 
-		foreach ( get_post_types( array( 'public' => true ), 'names' ) as $type ) {
-			if ( 'attachment' === $type ) {
-				continue;
-			}
-
+		foreach ( ScannableTypes::names() as $type ) {
 			$found = get_posts(
 				array(
 					'post_type'        => $type,

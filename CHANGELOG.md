@@ -112,6 +112,40 @@ Findings that keep their identity, and figures you can open.
   Where the incumbent rule is `!important`, no stylesheet rule can win, and the
   proposal says so before it is applied rather than after.
 
+- **Scanning covers posts and pages, and nothing else.** It used to walk every
+  public post type, which brought in things that are not pages at all: a page
+  builder's template library registers itself public, so Elementor's appeared in
+  the content picker as "My Templates", beside Posts and Pages, as though it
+  were somewhere a visitor could go.
+
+  A template and a pattern have no URL. There is nothing to render in the
+  browser pass, and roughly half the checks only mean anything about a whole
+  document — a heading-order fault reported against a fragment that appears
+  inside twenty pages says nothing about any of them. A pattern is worse: the
+  same pattern is inserted into content that gets scanned properly, so its
+  faults are already found where they actually occur, attached to a page
+  somebody can open. Scanning the source as well doubles every finding. And
+  nothing on a custom post type says whether it holds a document or a box of
+  settings, so the safe default is the two types WordPress guarantees are
+  pages.
+
+  One list, in `src/Support/ScannableTypes.php`, read by every gate: the two
+  pickers, both scan routes, the admin column, the theme profile, the coverage
+  figure and the WP-CLI command. A test names each of them, because the failure
+  is silent in both directions. The routes enforce it rather than the interface
+  — post ids arrive in a request body, not from the picker that offered them —
+  and `wp wsak scan` refuses an unsupported `--post-type` outright rather than
+  filtering it out, since an unknown post type matches nothing and a typo would
+  otherwise report "nothing to check" on a site full of content.
+
+  This narrows what the plugin claims to cover; it gates nothing. A site that
+  knows a custom type is a real page says so with `wsak_post_types`, in one
+  line, and every screen and route follows.
+
+  The site-wide coverage figure changes as a result: the denominator now counts
+  only content a scan can reach, so "8 of 40 scanned" no longer measures the
+  site against a target it cannot meet.
+
 - **A setup, on the first run.** Activating the plugin now opens a three-step
   screen instead of dropping somebody on an empty report. Nothing here scans on
   its own, so a fresh install's honest state is "no data yet" — and a dashboard

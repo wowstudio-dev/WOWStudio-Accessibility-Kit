@@ -96,6 +96,7 @@ In WordPress's own alt text field on the media item. It therefore applies everyw
 == Changelog ==
 
 = 0.29.0 =
+* Changed: scanning covers posts and pages only. Templates, patterns, page-builder libraries and custom post types are no longer offered — none of them is a page a visitor can open, and a pattern's problems are already found on the pages it appears in. Sites that need more can add post types with the wsak_post_types filter.
 * New: activating the plugin opens a short setup instead of an empty report — what the plugin does and refuses to claim, the site-wide fixes, and your first scan. Every step is optional and nothing is switched on for you.
 * Fixed: the cards on the report drew a box around their contents with no padding, so every label sat against an edge.
 * Fixed: a theme finding with no code correction to hand over showed a paragraph of explanation formatted as a code snippet, on one line wide enough to need scrolling. It now reads as ordinary text.

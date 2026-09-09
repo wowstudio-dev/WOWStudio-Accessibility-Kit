@@ -22,6 +22,7 @@ use WOWStudio\AccessibilityKit\Scanner\ScanScope;
 use WOWStudio\AccessibilityKit\Scanner\ScanStatus;
 use WOWStudio\AccessibilityKit\Scanner\TemplateScan;
 use WOWStudio\AccessibilityKit\Support\Capabilities;
+use WOWStudio\AccessibilityKit\Support\ScannableTypes;
 use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -280,10 +281,15 @@ final class RunController implements Registrable {
 		// Filtered against what this user may actually read, one at a time. A
 		// run is started by somebody who can scan, which is not the same as
 		// somebody who can see every post on the site.
+		//
+		// And against the types the plugin covers, because ids arrive in the
+		// request body rather than from the picker that offered them.
+		// BulkScan::start() is deliberately left alone: it is the seam an
+		// add-on drives, and narrowing it would narrow that too.
 		foreach ( $requested as $post_id ) {
 			$post_id = absint( $post_id );
 
-			if ( $post_id > 0 && current_user_can( 'read_post', $post_id ) ) {
+			if ( $post_id > 0 && current_user_can( 'read_post', $post_id ) && ScannableTypes::covers( $post_id ) ) {
 				$allowed[] = $post_id;
 			}
 		}
@@ -291,7 +297,7 @@ final class RunController implements Registrable {
 		if ( array() === $allowed ) {
 			return new WP_Error(
 				'wsak_nothing_selected',
-				__( 'None of the selected content could be read with your account, so there is nothing to scan.', 'wowstudio-accessibility-kit' ),
+				__( 'None of the selected content is a post or page you can read, so there is nothing to scan.', 'wowstudio-accessibility-kit' ),
 				array( 'status' => 400 )
 			);
 		}

@@ -40,23 +40,23 @@ msgstr ""
 msgid "https://wowstudio.dev/"
 msgstr ""
 
-#: src/Admin/ContentColumns.php:153
+#: src/Admin/ContentColumns.php:154
 #: assets/src/editor/panel.js:102
 #: assets/src/editor/panel.js:108
 msgid "Accessibility"
 msgstr ""
 
-#: src/Admin/ContentColumns.php:208
+#: src/Admin/ContentColumns.php:209
 #: src/Scanner/ScanCoverage.php:75
 msgid "Not checked"
 msgstr ""
 
-#: src/Admin/ContentColumns.php:220
+#: src/Admin/ContentColumns.php:221
 msgid "Checked"
 msgstr ""
 
 #. translators: %d: number of findings.
-#: src/Admin/ContentColumns.php:225
+#: src/Admin/ContentColumns.php:226
 #: assets/src/components/bulk-scan.js:539
 #: assets/src/components/markup-groups.js:37
 #, php-format,js-format
@@ -95,8 +95,8 @@ msgstr ""
 
 #: src/Admin/Menu.php:178
 #: src/Rest/ReviewController.php:191
-#: src/Rest/RunController.php:222
-#: src/Rest/ScanController.php:205
+#: src/Rest/RunController.php:223
+#: src/Rest/ScanController.php:206
 #: src/Rest/StatementController.php:116
 msgid "You do not have permission to view accessibility reports."
 msgstr ""
@@ -358,7 +358,7 @@ msgid "None of the selected content could be added to the queue."
 msgstr ""
 
 #: src/Jobs/BulkScan.php:285
-#: src/Rest/RunController.php:323
+#: src/Rest/RunController.php:329
 msgid "That run could not be found."
 msgstr ""
 
@@ -610,7 +610,7 @@ msgstr ""
 #: src/Rest/IssueController.php:289
 #: src/Rest/IssueController.php:358
 #: src/Rest/IssuePresenter.php:167
-#: src/Rest/OverviewController.php:442
+#: src/Rest/OverviewController.php:447
 #: assets/src/components/dismissed.js:242
 #: assets/src/components/scan-picker.js:164
 msgid "(no title)"
@@ -642,92 +642,96 @@ msgstr ""
 msgid "This fix changes how your theme renders every page, and your account is not allowed to change theme settings. An administrator can apply it."
 msgstr ""
 
-#: src/Rest/RunController.php:203
-#: src/Rest/ScanController.php:186
+#: src/Rest/RunController.php:204
+#: src/Rest/ScanController.php:187
 msgid "You do not have permission to run accessibility scans."
 msgstr ""
 
-#: src/Rest/RunController.php:294
-msgid "None of the selected content could be read with your account, so there is nothing to scan."
+#: src/Rest/RunController.php:300
+msgid "None of the selected content is a post or page you can read, so there is nothing to scan."
 msgstr ""
 
 #. translators: %s: theme name.
-#: src/Rest/RunController.php:502
+#: src/Rest/RunController.php:508
 #, php-format
 msgid "Accessibility changes needed in the %s theme"
 msgstr ""
 
-#: src/Rest/RunController.php:506
+#: src/Rest/RunController.php:512
 msgid "These are in theme files rather than in page content, so they cannot be changed from the WordPress admin. Each one lists what a person loses because of it, and the smallest change that would fix it."
 msgstr ""
 
-#: src/Rest/RunController.php:508
+#: src/Rest/RunController.php:514
 msgid "Found by WOWStudio Accessibility Kit. Automated checks cover part of WCAG, not all of it — this list is a starting point rather than a complete audit."
 msgstr ""
 
-#: src/Rest/RunController.php:524
+#: src/Rest/RunController.php:530
 msgid "Why it matters:"
 msgstr ""
 
-#: src/Rest/RunController.php:525
+#: src/Rest/RunController.php:531
 #: assets/src/components/issue-list.js:293
 msgid "Where:"
 msgstr ""
 
-#: src/Rest/RunController.php:528
+#: src/Rest/RunController.php:534
 msgid "Current markup:"
 msgstr ""
 
-#: src/Rest/RunController.php:532
+#: src/Rest/RunController.php:538
 msgid "Change to:"
 msgstr ""
 
-#: src/Rest/RunController.php:542
+#: src/Rest/RunController.php:548
 msgid "What to change:"
 msgstr ""
 
-#: src/Rest/RunController.php:545
+#: src/Rest/RunController.php:551
 msgid "WCAG:"
 msgstr ""
 
-#: src/Rest/ScanController.php:76
+#: src/Rest/ScanController.php:77
 msgid "The post or page to scan."
 msgstr ""
 
-#: src/Rest/ScanController.php:96
+#: src/Rest/ScanController.php:97
 msgid "The scan to read."
 msgstr ""
 
-#: src/Rest/ScanController.php:115
+#: src/Rest/ScanController.php:116
 msgid "Filter the list by title."
 msgstr ""
 
-#: src/Rest/ScanController.php:147
+#: src/Rest/ScanController.php:148
 msgid "Whether the browser pass completed."
 msgstr ""
 
-#: src/Rest/ScanController.php:152
+#: src/Rest/ScanController.php:153
 msgid "Findings the browser pass produced."
 msgstr ""
 
-#: src/Rest/ScanController.php:236
+#: src/Rest/ScanController.php:237
 #: src/Scanner/PageSource.php:169
 #: src/Scanner/PageSource.php:227
 msgid "That content could not be found."
 msgstr ""
 
-#: src/Rest/ScanController.php:244
-#: src/Rest/ScanController.php:353
-#: src/Rest/ScanController.php:474
+#: src/Rest/ScanController.php:245
+#: src/Rest/ScanController.php:367
+#: src/Rest/ScanController.php:488
 msgid "You do not have permission to read that content."
 msgstr ""
 
-#: src/Rest/ScanController.php:277
+#: src/Rest/ScanController.php:258
+msgid "This plugin checks posts and pages. Templates, patterns and other content types are not pages a visitor can open, so a scan of one says very little about what anybody would meet."
+msgstr ""
+
+#: src/Rest/ScanController.php:291
 msgid "The scan could not be recorded. Check that the plugin tables exist."
 msgstr ""
 
-#: src/Rest/ScanController.php:345
-#: src/Rest/ScanController.php:466
+#: src/Rest/ScanController.php:359
+#: src/Rest/ScanController.php:480
 msgid "That scan could not be found."
 msgstr ""
 
@@ -1867,19 +1871,19 @@ msgstr ""
 msgid "Minor"
 msgstr ""
 
-#: src/Scanner/TemplateScan.php:188
+#: src/Scanner/TemplateScan.php:185
 msgid "There is no published content to check the theme against. Publish a page or a post, then try again."
 msgstr ""
 
-#: src/Scanner/TemplateScan.php:198
+#: src/Scanner/TemplateScan.php:195
 msgid "The theme check could not be recorded. Check that the plugin tables exist."
 msgstr ""
 
-#: src/Scanner/TemplateScan.php:254
+#: src/Scanner/TemplateScan.php:251
 msgid "The theme could not be checked, because this site cannot fetch its own pages."
 msgstr ""
 
-#: src/Scanner/TemplateScan.php:258
+#: src/Scanner/TemplateScan.php:255
 msgid "Your theme could not be checked, because this site cannot make requests to itself. Everything else still works: pages are checked on their own content, and opening one in the inspector checks it in full."
 msgstr ""
 

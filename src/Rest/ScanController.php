@@ -19,6 +19,7 @@ use WOWStudio\AccessibilityKit\Scanner\PageScanner;
 use WOWStudio\AccessibilityKit\Scanner\Preview;
 use WOWStudio\AccessibilityKit\Scanner\ScanScope;
 use WOWStudio\AccessibilityKit\Support\Capabilities;
+use WOWStudio\AccessibilityKit\Support\ScannableTypes;
 use WP_Error;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -246,6 +247,19 @@ final class ScanController implements Registrable {
 			);
 		}
 
+		/*
+		 * Last, and after both checks above, for the same reason they are
+		 * ordered the way they are: answering "that type is not scanned" to a
+		 * caller who may not read the post would tell them the post exists.
+		 */
+		if ( ! ScannableTypes::covers( $post_id ) ) {
+			return new WP_Error(
+				'wsak_unsupported_type',
+				__( 'This plugin checks posts and pages. Templates, patterns and other content types are not pages a visitor can open, so a scan of one says very little about what anybody would meet.', 'wowstudio-accessibility-kit' ),
+				array( 'status' => 400 )
+			);
+		}
+
 		return null;
 	}
 
@@ -393,7 +407,7 @@ final class ScanController implements Registrable {
 		$search   = (string) $request->get_param( 'search' );
 
 		$query = array(
-			'post_type'        => array( 'post', 'page' ),
+			'post_type'        => ScannableTypes::names(),
 			'post_status'      => 'publish',
 			'posts_per_page'   => $per_page,
 			'orderby'          => 'modified',

@@ -133,7 +133,21 @@ both.
    from an `id`, because a plausible label is worse than a missing one — it
    closes the finding and leaves the reader no better off.
 3. **Free-tier features the competitor charges for**: full-site report screen,
-   admin columns, dismissal log, extra post types, CSV export.
+   admin columns, dismissal log, CSV export.
+
+   **Post types are posts and pages only**, decided in 0.29.0 and held in
+   `src/Support/ScannableTypes.php`, which is the single list every gate reads.
+   Walking every public post type had put a page builder's template library in
+   the content picker beside Posts and Pages; a template and a pattern have no
+   URL, so half the checks mean nothing about them, and a pattern's faults are
+   found anyway on the pages it is inserted into. Custom types are excluded
+   because nothing on the post type object says whether one is a document or a
+   box of settings.
+
+   This narrows scope, not access — nothing is gated and nothing is sold.
+   `wsak_post_types` widens it in one line, and is a filter rather than a
+   setting because choosing correctly needs knowledge of what a given post type
+   is for.
 4. **Monitoring is not part of the free plugin.** It was built free in 0.21.0
    and removed in 0.22.0 — the whole feature belongs to the paid add-on: the
    schedule, the per-page comparison, the change report, and the alerting that

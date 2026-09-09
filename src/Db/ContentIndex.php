@@ -8,6 +8,7 @@
 namespace WOWStudio\AccessibilityKit\Db;
 
 use WOWStudio\AccessibilityKit\Scanner\ScanCoverage;
+use WOWStudio\AccessibilityKit\Support\ScannableTypes;
 use WP_Post;
 
 defined( 'ABSPATH' ) || exit;
@@ -47,22 +48,28 @@ final class ContentIndex {
 	/**
 	 * Returns the post types worth offering, with how much is in each.
 	 *
-	 * Attachments are excluded: an image has no page of its own to check in any
-	 * meaningful sense, and its alt text is handled by a different screen.
+	 * Posts and pages. This used to walk every public post type, which brought
+	 * in things that are not pages at all: a page builder's template library
+	 * registers itself public, so Elementor's appeared here as "My Templates",
+	 * beside Posts and Pages, as though it were somewhere a visitor could go.
+	 * See ScannableTypes for why the boundary is where it is.
 	 *
 	 * @since 0.13.0
+	 * @since 0.29.0 Narrowed to ScannableTypes.
 	 *
 	 * @return array<int, array<string, mixed>>
 	 */
 	public function types(): array {
 		$types = array();
 
-		foreach ( get_post_types( array( 'public' => true ), 'objects' ) as $type ) {
-			if ( 'attachment' === $type->name ) {
+		foreach ( ScannableTypes::names() as $name ) {
+			$type = get_post_type_object( $name );
+
+			if ( null === $type ) {
 				continue;
 			}
 
-			$counts = wp_count_posts( $type->name );
+			$counts = wp_count_posts( $name );
 			$total  = (int) ( $counts->publish ?? 0 );
 
 			if ( 0 === $total ) {
@@ -70,8 +77,8 @@ final class ContentIndex {
 			}
 
 			$types[] = array(
-				'name'  => $type->name,
-				'label' => $type->labels->name ?? $type->name,
+				'name'  => $name,
+				'label' => $type->labels->name ?? $name,
 				'count' => $total,
 			);
 		}
@@ -98,6 +105,21 @@ final class ContentIndex {
 	 * @return array<string, mixed>
 	 */
 	public function items( string $type, int $page = 1, int $per_page = 50, string $search = '' ): array {
+		/*
+		 * The type arrives from the request, so the allowlist is applied here
+		 * as well as on the picker that produced it. Without this, asking for a
+		 * type nobody was offered returns its contents anyway, and the
+		 * restriction is a matter of which buttons happen to be on screen.
+		 */
+		if ( ! ScannableTypes::includes( $type ) ) {
+			return array(
+				'items'       => array(),
+				'total'       => 0,
+				'total_pages' => 0,
+				'page'        => max( 1, $page ),
+			);
+		}
+
 		$query = new \WP_Query(
 			array(
 				'post_type'        => $type,

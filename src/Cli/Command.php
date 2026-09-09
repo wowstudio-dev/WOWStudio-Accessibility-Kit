@@ -13,6 +13,7 @@ use WOWStudio\AccessibilityKit\Scanner\PageScanner;
 use WOWStudio\AccessibilityKit\Scanner\RuleRegistry;
 use WOWStudio\AccessibilityKit\Scanner\ScanScope;
 use WOWStudio\AccessibilityKit\SiteFixes\SiteFixManager;
+use WOWStudio\AccessibilityKit\Support\ScannableTypes;
 use WP_CLI;
 
 defined( 'ABSPATH' ) || exit;
@@ -47,7 +48,8 @@ final class Command {
 	 * : Check every published post of the given types.
 	 *
 	 * [--post-type=<types>]
-	 * : Comma-separated post types to include with --all. Default: page,post
+	 * : Comma-separated post types to include with --all. Only types this
+	 * plugin checks are accepted; by default that is page and post.
 	 *
 	 * [--format=<format>]
 	 * : Output format. Accepts table, json, csv, yaml, count. Default: table
@@ -68,10 +70,33 @@ final class Command {
 		$post_ids = array_map( 'intval', $args );
 
 		if ( isset( $assoc_args['all'] ) ) {
-			$types    = explode( ',', (string) ( $assoc_args['post-type'] ?? 'page,post' ) );
+			$scannable = ScannableTypes::names();
+
+			$types = isset( $assoc_args['post-type'] )
+				? array_map( 'trim', explode( ',', (string) $assoc_args['post-type'] ) )
+				: $scannable;
+
+			/*
+			 * Refused rather than quietly dropped. WP_Query matches nothing for
+			 * a post type it does not recognise, so silently filtering a typo
+			 * out of this list would report "nothing to check" on a site full
+			 * of content and leave the operator to work out why.
+			 */
+			$unsupported = array_values( array_diff( $types, $scannable ) );
+
+			if ( array() !== $unsupported ) {
+				WP_CLI::error(
+					sprintf(
+						'This plugin checks %1$s. It cannot check: %2$s.',
+						implode( ', ', $scannable ),
+						implode( ', ', $unsupported )
+					)
+				);
+			}
+
 			$post_ids = get_posts(
 				array(
-					'post_type'   => array_map( 'trim', $types ),
+					'post_type'   => $types,
 					'post_status' => 'publish',
 					'numberposts' => -1,
 					'fields'      => 'ids',
@@ -82,6 +107,21 @@ final class Command {
 
 		if ( array() === $post_ids ) {
 			WP_CLI::error( 'Nothing to check. Give one or more post ids, or use --all.' );
+		}
+
+		// Ids given on the command line go through the same gate the REST
+		// routes use, so `wp wsak scan 12` is not a way around it.
+		$refused  = array_values( array_filter( $post_ids, static fn( int $id ): bool => ! ScannableTypes::covers( $id ) ) );
+		$post_ids = array_values( array_filter( $post_ids, static fn( int $id ): bool => ScannableTypes::covers( $id ) ) );
+
+		foreach ( $refused as $id ) {
+			WP_CLI::warning(
+				sprintf( '%d is not a post or page, so it was skipped.', $id )
+			);
+		}
+
+		if ( array() === $post_ids ) {
+			WP_CLI::error( 'None of that content is a post or page.' );
 		}
 
 		$scans    = new ScanRepository();

@@ -11,6 +11,7 @@ use WOWStudio\AccessibilityKit\Core\Registrable;
 use WOWStudio\AccessibilityKit\Db\Scan;
 use WOWStudio\AccessibilityKit\Db\ScanRepository;
 use WOWStudio\AccessibilityKit\Support\Capabilities;
+use WOWStudio\AccessibilityKit\Support\ScannableTypes;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -262,23 +263,24 @@ final class ContentColumns implements Registrable {
 	 * @return string[]
 	 */
 	private function post_types(): array {
-		$types = get_post_types(
-			array(
-				'public'  => true,
-				'show_ui' => true,
-			),
-			'names'
-		);
-
-		$types = array_diff( (array) $types, array( 'attachment' ) );
+		/*
+		 * The types the plugin actually scans. A column reading "not checked"
+		 * on a list of things this plugin will not check is a column that
+		 * reports its own absence as a fault on somebody else's screen.
+		 */
+		$types = ScannableTypes::names();
 
 		/**
 		 * Filters which post types get the accessibility column.
+		 *
+		 * Narrows within what is scanned. Adding a type here that
+		 * `wsak_post_types` does not cover gets a column that can only ever say
+		 * "not checked".
 		 *
 		 * @since 0.22.0
 		 *
 		 * @param string[] $types Post type names.
 		 */
-		return (array) apply_filters( 'wsak_column_post_types', array_values( $types ) );
+		return (array) apply_filters( 'wsak_column_post_types', $types );
 	}
 }
