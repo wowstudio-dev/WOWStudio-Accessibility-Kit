@@ -40,23 +40,23 @@ msgstr ""
 msgid "https://wowstudio.dev/"
 msgstr ""
 
-#: src/Admin/ContentColumns.php:154
+#: src/Admin/ContentColumns.php:168
 #: assets/src/editor/panel.js:102
 #: assets/src/editor/panel.js:108
 msgid "Accessibility"
 msgstr ""
 
-#: src/Admin/ContentColumns.php:209
+#: src/Admin/ContentColumns.php:280
 #: src/Scanner/ScanCoverage.php:75
 msgid "Not checked"
 msgstr ""
 
-#: src/Admin/ContentColumns.php:221
+#: src/Admin/ContentColumns.php:292
 msgid "Checked"
 msgstr ""
 
 #. translators: %d: number of findings.
-#: src/Admin/ContentColumns.php:226
+#: src/Admin/ContentColumns.php:297
 #: assets/src/components/bulk-scan.js:539
 #: assets/src/components/markup-groups.js:37
 #, php-format,js-format

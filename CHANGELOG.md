@@ -112,6 +112,30 @@ Findings that keep their identity, and figures you can open.
   Where the incumbent rule is `!important`, no stylesheet rule can win, and the
   proposal says so before it is applied rather than after.
 
+- **The Accessibility column said "Not checked" on every row, including pages
+  with nineteen completed scans behind them.** Reported from a Pages screen
+  where nothing had a score.
+
+  The column fetches every scan the screen needs in one query, primed from
+  `the_posts` — once, on the assumption that the first query to fire it is the
+  list table's. On a block theme it is not. The Pages screen runs a
+  `wp_global_styles` query first, so the single lookup the class allowed itself
+  was spent on one post nobody was going to render, came back empty, and empty
+  was stored. The guard that stopped it running twice then read that as
+  "already primed" and turned the real query away. Every row after it printed
+  "Not checked".
+
+  Two changes. Only posts of the types this plugin scans are looked up, so a
+  query for something that is not a page cannot consume the lookup. And what is
+  remembered is which ids have been asked about, rather than whether anything
+  was asked at all — "we asked and there was nothing" and "we never asked" were
+  the same state, which is what made an empty result indistinguishable from an
+  unprimed one. A row the batch never saw is now looked up on its own rather
+  than reported as unchecked, because "Not checked" has to be a fact about the
+  page rather than about our own bookkeeping.
+
+  Still one query for the whole screen in the normal case.
+
 - **A false positive can be put back.** The control existed and was in the one
   place it was no use: the card you dismiss offers "not a false positive after
   all" straight away, but that card is on the findings list, and the finding

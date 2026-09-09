@@ -46,12 +46,26 @@ final class ContentColumns implements Registrable {
 	private const COLUMN = 'wsak_accessibility';
 
 	/**
-	 * Scans for everything on the current screen, fetched once.
+	 * Scans found for the rows on this screen, keyed by post id.
 	 *
 	 * @since 0.22.0
-	 * @var array<int, Scan>|null
+	 * @var array<int, Scan>
 	 */
-	private ?array $scans = null;
+	private array $scans = array();
+
+	/**
+	 * Post ids already looked up, whether or not a scan was found.
+	 *
+	 * Kept apart from the scans themselves, because "we asked and there was
+	 * nothing" and "we never asked" are different states that have to be
+	 * distinguishable. Conflating them is what broke this: an empty result was
+	 * indistinguishable from an unprimed one, so the guard that stopped the
+	 * lookup running twice also stopped it running at all.
+	 *
+	 * @since 0.29.0
+	 * @var array<int, true>
+	 */
+	private array $primed = array();
 
 	/**
 	 * Scans.
@@ -161,7 +175,22 @@ final class ContentColumns implements Registrable {
 	}
 
 	/**
-	 * Fetches every scan the current screen will need, in one query.
+	 * Fetches the scans the rows on this screen will need, in one query.
+	 *
+	 * This used to prime once, from whichever query fired `the_posts` first,
+	 * and assume that was the list table's. On a block theme it is not: the
+	 * Pages screen runs a `wp_global_styles` query before the list, so the one
+	 * lookup this class allowed itself was spent on a single post nobody was
+	 * going to render, came back empty — and empty was stored, which the guard
+	 * then read as "already primed". Every row after that found nothing and
+	 * printed "Not checked" over a page with nineteen completed scans.
+	 *
+	 * Two changes, and the second is the one that matters. Only posts of the
+	 * types this plugin scans are looked up, so a query for something that is
+	 * not a page cannot consume the lookup. And what is remembered is which ids
+	 * have been asked about rather than whether anything was asked at all, so a
+	 * second query on the same screen primes the rows the first one did not
+	 * cover instead of being turned away.
 	 *
 	 * @since 0.22.0
 	 *
@@ -169,21 +198,52 @@ final class ContentColumns implements Registrable {
 	 * @return mixed The posts, untouched.
 	 */
 	public function prime( $posts ) {
-		if ( ! is_array( $posts ) || array() === $posts || null !== $this->scans ) {
+		if ( ! is_array( $posts ) || array() === $posts ) {
 			return $posts;
 		}
 
-		$ids = array();
+		$scanned = ScannableTypes::names();
+		$ids     = array();
 
 		foreach ( $posts as $post ) {
-			if ( isset( $post->ID ) ) {
-				$ids[] = (int) $post->ID;
+			if ( ! isset( $post->ID, $post->post_type ) ) {
+				continue;
 			}
+
+			$id = (int) $post->ID;
+
+			if ( isset( $this->primed[ $id ] ) || ! in_array( $post->post_type, $scanned, true ) ) {
+				continue;
+			}
+
+			$ids[] = $id;
 		}
 
-		$this->scans = $this->repository->latest_for_posts( $ids );
+		if ( array() === $ids ) {
+			return $posts;
+		}
+
+		$this->remember( $ids );
 
 		return $posts;
+	}
+
+	/**
+	 * Looks up a set of ids and records that they have been looked up.
+	 *
+	 * @since 0.29.0
+	 *
+	 * @param int[] $ids Post ids.
+	 * @return void
+	 */
+	private function remember( array $ids ): void {
+		foreach ( $ids as $id ) {
+			$this->primed[ (int) $id ] = true;
+		}
+
+		foreach ( $this->repository->latest_for_posts( $ids ) as $id => $scan ) {
+			$this->scans[ (int) $id ] = $scan;
+		}
 	}
 
 	/**
@@ -201,7 +261,18 @@ final class ContentColumns implements Registrable {
 		}
 
 		$post_id = (int) $post_id;
-		$scan    = $this->scans[ $post_id ] ?? null;
+
+		/*
+		 * The batch should already have this. Where it does not — a list table
+		 * whose rows did not come through `the_posts` at all — one row costs
+		 * one indexed query, which is worth paying so that "Not checked" is
+		 * always a fact about the page rather than about our own bookkeeping.
+		 */
+		if ( ! isset( $this->primed[ $post_id ] ) ) {
+			$this->remember( array( $post_id ) );
+		}
+
+		$scan = $this->scans[ $post_id ] ?? null;
 
 		if ( ! $scan instanceof Scan ) {
 			printf(

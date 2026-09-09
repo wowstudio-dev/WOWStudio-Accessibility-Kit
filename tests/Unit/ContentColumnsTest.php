@@ -9,6 +9,7 @@ declare( strict_types = 1 );
 
 namespace WOWStudio\AccessibilityKit\Tests\Unit;
 
+use Brain\Monkey\Functions;
 use WOWStudio\AccessibilityKit\Admin\ContentColumns;
 use WOWStudio\AccessibilityKit\Db\Scan;
 use WOWStudio\AccessibilityKit\Db\ScanRepository;
@@ -23,6 +24,35 @@ use WOWStudio\AccessibilityKit\Tests\TestCase;
  * @covers \WOWStudio\AccessibilityKit\Admin\ContentColumns
  */
 final class ContentColumnsTest extends TestCase {
+
+	/**
+	 * Every post type named is registered, as far as these tests care.
+	 *
+	 * @return void
+	 */
+	protected function setUp(): void {
+		parent::setUp();
+
+		Functions\when( 'post_type_exists' )->justReturn( true );
+	}
+
+	/**
+	 * A row as a list table hands it over: an id and a type.
+	 *
+	 * The type is not decoration. Priming ignores posts of types this plugin
+	 * does not scan, which is what stops a query for something else consuming
+	 * the lookup, so a fixture without one is not testing the real path.
+	 *
+	 * @param int    $id   Post id.
+	 * @param string $type Post type.
+	 * @return object
+	 */
+	private function page( int $id, string $type = 'page' ): object {
+		return (object) array(
+			'ID'        => $id,
+			'post_type' => $type,
+		);
+	}
 
 	/**
 	 * Builds a column reading from a fixed set of scans.
@@ -133,7 +163,7 @@ final class ContentColumnsTest extends TestCase {
 	 */
 	public function test_an_unscanned_page_is_not_a_zero(): void {
 		$columns = $this->columns( array() );
-		$columns->prime( array( (object) array( 'ID' => 7 ) ) );
+		$columns->prime( array( $this->page( 7 ) ) );
 
 		$cell = $this->cell( $columns, 7 );
 
@@ -143,13 +173,76 @@ final class ContentColumnsTest extends TestCase {
 	}
 
 	/**
+	 * Another query on the same screen cannot spend the lookup.
+	 *
+	 * This is the bug, and it was reported as "every page says Not checked".
+	 * Priming used to happen once, from whichever query fired `the_posts`
+	 * first, on the assumption that was the list table's. On a block theme it
+	 * is not: the Pages screen runs a `wp_global_styles` query before the list.
+	 * The one lookup this class allowed itself went on a single post nobody was
+	 * going to render, came back empty, and empty was stored — which the guard
+	 * then read as "already primed". Every row after that said "Not checked"
+	 * over pages with nineteen completed scans behind them.
+	 *
+	 * @return void
+	 */
+	public function test_a_query_for_something_else_does_not_consume_the_lookup(): void {
+		$columns = $this->columns( array( 7 => $this->scan( 7, 82, 4 ) ) );
+
+		// What a block theme runs before the list table's own query.
+		$columns->prime( array( $this->page( 39, 'wp_global_styles' ) ) );
+
+		// The list table's query, arriving second.
+		$columns->prime( array( $this->page( 7 ) ) );
+
+		$this->assertStringContainsString( '82/100', $this->cell( $columns, 7 ) );
+	}
+
+	/**
+	 * A second query primes the rows the first one did not cover.
+	 *
+	 * The same screen can run more than one query for the same post type, and
+	 * a class that primes once has nothing to say about the rows in the second.
+	 *
+	 * @return void
+	 */
+	public function test_a_later_query_primes_the_rows_the_first_one_missed(): void {
+		$columns = $this->columns(
+			array(
+				7 => $this->scan( 7, 82, 4 ),
+				9 => $this->scan( 9, 51, 6 ),
+			)
+		);
+
+		$columns->prime( array( $this->page( 7 ) ) );
+		$columns->prime( array( $this->page( 9 ) ) );
+
+		$this->assertStringContainsString( '82/100', $this->cell( $columns, 7 ) );
+		$this->assertStringContainsString( '51/100', $this->cell( $columns, 9 ) );
+	}
+
+	/**
+	 * A row the batch never saw is still reported honestly.
+	 *
+	 * One indexed query for one row, and worth paying: "Not checked" has to be
+	 * a fact about the page rather than about our own bookkeeping.
+	 *
+	 * @return void
+	 */
+	public function test_a_row_that_was_never_primed_is_looked_up(): void {
+		$columns = $this->columns( array( 7 => $this->scan( 7, 82, 4 ) ) );
+
+		$this->assertStringContainsString( '82/100', $this->cell( $columns, 7 ) );
+	}
+
+	/**
 	 * A scanned page shows its score and how many findings are open.
 	 *
 	 * @return void
 	 */
 	public function test_a_scanned_page_shows_its_score_and_count(): void {
 		$columns = $this->columns( array( 7 => $this->scan( 7, 82, 4 ) ) );
-		$columns->prime( array( (object) array( 'ID' => 7 ) ) );
+		$columns->prime( array( $this->page( 7 ) ) );
 
 		$cell = $this->cell( $columns, 7 );
 
@@ -164,7 +257,7 @@ final class ContentColumnsTest extends TestCase {
 	 */
 	public function test_one_finding_reads_as_one(): void {
 		$columns = $this->columns( array( 7 => $this->scan( 7, 95, 1 ) ) );
-		$columns->prime( array( (object) array( 'ID' => 7 ) ) );
+		$columns->prime( array( $this->page( 7 ) ) );
 
 		$this->assertStringContainsString( '1 finding', $this->cell( $columns, 7 ) );
 		$this->assertStringNotContainsString( '1 findings', $this->cell( $columns, 7 ) );
@@ -186,7 +279,7 @@ final class ContentColumnsTest extends TestCase {
 			20 => 'low',
 		) as $score => $band ) {
 			$columns = $this->columns( array( 7 => $this->scan( 7, $score, 1 ) ) );
-			$columns->prime( array( (object) array( 'ID' => 7 ) ) );
+			$columns->prime( array( $this->page( 7 ) ) );
 
 			$cell = $this->cell( $columns, 7 );
 
@@ -209,7 +302,7 @@ final class ContentColumnsTest extends TestCase {
 	 */
 	public function test_other_columns_are_not_touched(): void {
 		$columns = $this->columns( array( 7 => $this->scan( 7, 82, 4 ) ) );
-		$columns->prime( array( (object) array( 'ID' => 7 ) ) );
+		$columns->prime( array( $this->page( 7 ) ) );
 
 		ob_start();
 		$columns->render( 'author', 7 );
