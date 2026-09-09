@@ -9,6 +9,7 @@ namespace WOWStudio\AccessibilityKit\Core;
 
 use WOWStudio\AccessibilityKit\Admin\ContentColumns;
 use WOWStudio\AccessibilityKit\Admin\Menu;
+use WOWStudio\AccessibilityKit\Admin\Onboarding;
 use WOWStudio\AccessibilityKit\Conformance\StatementBlock;
 use WOWStudio\AccessibilityKit\Remediation\OverrideStore;
 use WOWStudio\AccessibilityKit\Scanner\Preview;
@@ -21,6 +22,7 @@ use WOWStudio\AccessibilityKit\Rest\AltTextController;
 use WOWStudio\AccessibilityKit\Rest\SiteFixController;
 use WOWStudio\AccessibilityKit\Rest\BlockCheckController;
 use WOWStudio\AccessibilityKit\Rest\IssueController;
+use WOWStudio\AccessibilityKit\Rest\OnboardingController;
 use WOWStudio\AccessibilityKit\Rest\OverviewController;
 use WOWStudio\AccessibilityKit\Rest\ReviewController;
 use WOWStudio\AccessibilityKit\Rest\RunController;
@@ -150,6 +152,7 @@ final class Plugin {
 			'assets'         => new Assets(),
 			'admin.columns'  => new ContentColumns(),
 			'admin.menu'     => new Menu(),
+			'admin.welcome'  => new Onboarding(),
 			'rest.scan'      => new ScanController(),
 			'rest.fix.css'   => new CssFixController(),
 			'rest.media'     => new AltTextController(),
@@ -159,6 +162,7 @@ final class Plugin {
 			'rest.blocks'    => new BlockCheckController(),
 			'rest.overview'  => new OverviewController(),
 			'rest.issues'    => new IssueController(),
+			'rest.welcome'   => new OnboardingController(),
 			'jobs.worker'    => new Worker(),
 			'jobs.backfill'  => new Backfill(),
 			'summary'        => new SimplifiedSummary(),

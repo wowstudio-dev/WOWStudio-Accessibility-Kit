@@ -477,3 +477,21 @@ export function reopenMarkup( fingerprint ) {
 		method: 'POST',
 	} );
 }
+
+/**
+ * Records whether somebody has been through the setup.
+ *
+ * Writable in both directions on purpose. "Done" is a claim about a person
+ * rather than about the site, and the only cost of letting them take it back is
+ * that they see the setup again.
+ *
+ * @param {boolean} done Whether the setup is finished.
+ * @return {Promise<Object>} The state as stored.
+ */
+export function setOnboarded( done ) {
+	return apiFetch( {
+		path: `/${ namespace }/onboarding`,
+		method: 'POST',
+		data: { done },
+	} );
+}

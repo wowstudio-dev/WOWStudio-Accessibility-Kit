@@ -44,6 +44,10 @@ const STEPS = [
 	},
 ];
 
+const settings = window.wsakSettings ?? {};
+const welcomeUrl = settings.screens?.welcome ?? '';
+const onboarded = Boolean( settings.onboarded );
+
 /**
  * The overview.
  *
@@ -168,6 +172,23 @@ export default function Overview( { onGo, onDrill } ) {
 							'wowstudio-accessibility-kit'
 						) }
 					</Button>
+
+					{ /*
+					 * Offered only to somebody who has not been through it.
+					 * The setup is reached by a redirect on activation, and a
+					 * redirect is the easiest thing in WordPress to miss —
+					 * another plugin activating alongside, a bulk activation, a
+					 * back button. This is the way back to it, and it stops
+					 * being offered the moment it has been done.
+					 */ }
+					{ ! onboarded && welcomeUrl && (
+						<Button variant="link" href={ welcomeUrl }>
+							{ __(
+								'Walk me through the setup',
+								'wowstudio-accessibility-kit'
+							) }
+						</Button>
+					) }
 				</p>
 			</section>
 		);

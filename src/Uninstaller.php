@@ -7,6 +7,7 @@
 
 namespace WOWStudio\AccessibilityKit;
 
+use WOWStudio\AccessibilityKit\Admin\Onboarding;
 use WOWStudio\AccessibilityKit\Core\Installer;
 use WOWStudio\AccessibilityKit\Db\Schema;
 use WOWStudio\AccessibilityKit\Remediation\CustomCss;
@@ -100,6 +101,7 @@ final class Uninstaller {
 		delete_option( Installer::SETTINGS_OPTION );
 		delete_option( Installer::VERSION_OPTION );
 		delete_option( Installer::DECISIONS_MIGRATED_OPTION );
+		delete_option( Onboarding::OPTION );
 
 		self::delete_transients();
 		self::delete_post_meta();

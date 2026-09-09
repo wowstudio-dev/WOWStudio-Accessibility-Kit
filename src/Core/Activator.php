@@ -7,6 +7,8 @@
 
 namespace WOWStudio\AccessibilityKit\Core;
 
+use WOWStudio\AccessibilityKit\Admin\Onboarding;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -35,6 +37,15 @@ final class Activator {
 		}
 
 		Installer::install_site();
+
+		/*
+		 * Set here rather than on `wsak_activated`, which fires two lines down
+		 * and which nothing is listening to during an activation: WordPress
+		 * includes the plugin file after `plugins_loaded` has already run, so
+		 * Plugin::boot() never happens in this request and no service has
+		 * registered a hook.
+		 */
+		Onboarding::note_activation();
 
 		/**
 		 * Fires after the plugin finishes activating on a site.

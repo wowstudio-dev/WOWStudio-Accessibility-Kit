@@ -77,12 +77,23 @@ final class ThemeTriage {
 			return $setting;
 		}
 
+		$snippet = $this->snippet_for( $issue );
+
 		return array(
 			'tier'        => self::TIER_HANDOFF,
 			'label'       => __( 'Someone has to edit the theme', 'wowstudio-accessibility-kit' ),
-			'instruction' => __( 'No setting reaches this, and nothing here can change a theme file. Send the change below to whoever maintains your theme — or paste it into a child theme if you keep one.', 'wowstudio-accessibility-kit' ),
+
+			/*
+			 * Two sentences, because only one of them is ever true. "The change
+			 * below", said over nothing at all, is a promise the card does not
+			 * keep, and the reader goes looking for a snippet that is not there.
+			 */
+			'instruction' => '' !== $snippet
+				? __( 'No setting reaches this, and nothing here can change a theme file. Send the change below to whoever maintains your theme — or paste it into a child theme if you keep one.', 'wowstudio-accessibility-kit' )
+				: __( 'No setting reaches this, and nothing here can change a theme file. What the correction is depends on the template it lives in, so this one goes to whoever maintains your theme.', 'wowstudio-accessibility-kit' ),
 			'url'         => '',
-			'snippet'     => $this->snippet_for( $issue, $rule ),
+			'snippet'     => $snippet,
+			'guidance'    => '' === $snippet && null !== $rule ? $rule->description() : '',
 		);
 	}
 
@@ -109,6 +120,7 @@ final class ThemeTriage {
 				'instruction' => __( 'This is your site logo. Describe it in the media library and every page that shows it is fixed at once — including pages nothing here has scanned.', 'wowstudio-accessibility-kit' ),
 				'url'         => (string) get_edit_post_link( $logo, 'raw' ),
 				'snippet'     => '',
+				'guidance'    => '',
 			);
 		}
 
@@ -127,6 +139,7 @@ final class ThemeTriage {
 					: __( 'This is an item in one of your menus. Give it a label in Appearance → Menus and the problem is gone — no code, and nothing here needs to stay installed for it to hold.', 'wowstudio-accessibility-kit' ),
 				'url'         => $block_theme ? admin_url( 'site-editor.php' ) : admin_url( 'nav-menus.php' ),
 				'snippet'     => '',
+				'guidance'    => '',
 			);
 		}
 
@@ -192,13 +205,19 @@ final class ThemeTriage {
 	 * Guessing at surrounding template code would produce something that looks
 	 * pasteable and is not, which wastes the time of whoever receives it.
 	 *
+	 * Code only. Where no correction is listed this used to fall through to the
+	 * rule's description — a paragraph of English — which the panel then set in
+	 * the dark monospaced block kept for markup, under a line telling the reader
+	 * to send the change below to their developer. It was not a change, and the
+	 * typeface made a claim about it that was not true. That text is worth
+	 * showing; it goes out as `guidance` now and reads as the prose it is.
+	 *
 	 * @since 0.14.0
 	 *
-	 * @param Issue               $issue The finding.
-	 * @param RuleDescriptor|null $rule  The rule that produced it.
-	 * @return string
+	 * @param Issue $issue The finding.
+	 * @return string The correction, or '' when there is no general one.
 	 */
-	private function snippet_for( Issue $issue, ?RuleDescriptor $rule ): string {
+	private function snippet_for( Issue $issue ): string {
 		$corrections = array(
 			'html-lang-missing'          => '<html <?php language_attributes(); ?>>',
 			'document-title-missing'     => "add_theme_support( 'title-tag' ); // in the theme's after_setup_theme",
@@ -211,8 +230,6 @@ final class ThemeTriage {
 			'table-headers-missing'      => '<th scope="col">Column heading</th>',
 		);
 
-		$correction = $corrections[ $issue->rule_id ] ?? '';
-
-		return '' === $correction && null !== $rule ? $rule->description() : $correction;
+		return $corrections[ $issue->rule_id ] ?? '';
 	}
 }

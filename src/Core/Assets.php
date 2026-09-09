@@ -8,6 +8,7 @@
 namespace WOWStudio\AccessibilityKit\Core;
 
 use WOWStudio\AccessibilityKit\Admin\Menu;
+use WOWStudio\AccessibilityKit\Admin\Onboarding;
 use WOWStudio\AccessibilityKit\Rest\ScanController;
 use WOWStudio\AccessibilityKit\Support\Capabilities;
 
@@ -214,6 +215,14 @@ final class Assets implements Registrable {
 			// which one somebody asked for.
 			'screen'       => $this->view_for( $this->hook ),
 			'screens'      => $this->screen_urls(),
+			// Whether anybody has been through the setup here. The dashboard's
+			// empty state offers it when they have not; the setup itself uses
+			// it to know whether this is a first run or a revisit.
+			'onboarded'    => Onboarding::is_done(),
+			// Whether this request asked for the setup. It is a view on the
+			// dashboard rather than a screen of its own — see the note on
+			// Onboarding::QUERY_ARG for why WordPress leaves no better option.
+			'welcome'      => Onboarding::is_requested(),
 			'capabilities' => array(
 				'runScan'     => current_user_can( Capabilities::RUN_SCAN ),
 				'applyFix'    => current_user_can( Capabilities::APPLY_FIX ),
@@ -262,6 +271,9 @@ final class Assets implements Registrable {
 		foreach ( Menu::views() as $slug => $view ) {
 			$urls[ $view ] = admin_url( 'admin.php?page=' . $slug );
 		}
+
+		// Not one of the menu's screens, but somewhere the app links to.
+		$urls['welcome'] = Onboarding::url();
 
 		return $urls;
 	}

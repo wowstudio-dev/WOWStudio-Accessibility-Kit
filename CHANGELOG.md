@@ -112,6 +112,31 @@ Findings that keep their identity, and figures you can open.
   Where the incumbent rule is `!important`, no stylesheet rule can win, and the
   proposal says so before it is applied rather than after.
 
+- **A setup, on the first run.** Activating the plugin now opens a three-step
+  screen instead of dropping somebody on an empty report. Nothing here scans on
+  its own, so a fresh install's honest state is "no data yet" — and a dashboard
+  of zeroes says "broken" far more loudly than it says "waiting".
+
+  The first step is what the plugin is and, more usefully, what it will not
+  claim on anybody's behalf: nothing leaves the site, nothing is added to the
+  front of it, and it will not tell you the law is settled. The second and third
+  are the site-wide fixes and the first scan, and both render the real screen
+  rather than a summary of it — a wizard that paraphrases the settings it is
+  setting is two copies of the same text that will disagree within a release,
+  and on the fixes screen the text being paraphrased away would be the caveat
+  under each switch, which is exactly what somebody needs in front of them at
+  the moment they flip it.
+
+  Every step is optional and nothing is switched on for anybody. Leaving halfway
+  is a supported outcome rather than an abandoned funnel.
+
+  It is a view on the dashboard page rather than a page of its own, which is
+  WordPress's decision rather than a preference: a page with no menu entry has
+  to be registered and then removed from the menu, and
+  `user_can_access_admin_page()` resolves a page's parent by walking the menu it
+  was just taken out of — so it looks the page up under an empty parent, misses
+  it, and refuses access. The page exists and nobody may open it.
+
 - **Layout faults introduced by going full width, found by sweeping every
   screen rather than by looking at them.** The theme findings had lost their
   padding entirely and sat against their own border: they render the same card
@@ -128,6 +153,35 @@ Findings that keep their identity, and figures you can open.
 
   And the preview frame was two pixels wider than the pane holding it — an
   iframe does not inherit the admin's border-box.
+
+- **The dashboard cards had a box and no padding, so every label in them sat
+  hard against an edge.** Flattening those cards zeroed their padding, border,
+  radius and background so the charts inside would carry the colour on their
+  own. The shadow did not go with them, and a shadow on its own is still a
+  container — it draws a hairline box on all four sides. They are panels again,
+  matching every other panel in the plugin.
+
+  A second sweep found it. The first one checked each element against its
+  parent's box and each block of prose against its line length, which is why it
+  missed this: nothing here overflowed anything, and the container drawing the
+  box had no border and no background for the audit to notice. The check now
+  asks whether an element draws an enclosing box at all — border, background or
+  shadow — and then whether anything inside it reaches the edge.
+
+- **A paragraph of English was being typeset as a code snippet.** Where a theme
+  finding had no general correction to hand over, the panel fell back to the
+  rule's description and set it in the dark monospaced block kept for markup,
+  under a line telling the reader to send the change below to their developer.
+  It was not a change: it was the explanation from further up the same card,
+  reworded. On a real finding it came out as one unwrapped line two thousand
+  pixels wide. The text is worth showing and now reads as the prose it is, and
+  the sentence above it no longer points at a snippet that is not there.
+
+- **Chart labels wrapped instead of truncated.** The names of the checks are
+  sentences, and an ellipsis landed mid-sentence on most of them — "Clickable
+  target is smaller t…" does not say smaller than what, which is the whole
+  content of the row. The bars already carried a full summary for a screen
+  reader, so it was only the sighted reader who was not getting the name.
 
 - **The report is figures on a page rather than figures in boxes.** Four
   bordered cards holding one number each spent most of their pixels drawing

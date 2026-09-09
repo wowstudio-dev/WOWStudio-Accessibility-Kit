@@ -532,6 +532,16 @@ final class RunController implements Registrable {
 				$lines[] = '   ' . __( 'Change to:', 'wowstudio-accessibility-kit' ) . ' ' . $finding['triage']['snippet'];
 			}
 
+			/*
+			 * "Change to:" over a paragraph of English is a mislabel, and this
+			 * document promises the receiving developer the smallest change
+			 * that would fix each item. Where the correction depends on the
+			 * template, what there is to give them is a description of it.
+			 */
+			if ( '' !== trim( (string) ( $finding['triage']['guidance'] ?? '' ) ) ) {
+				$lines[] = '   ' . __( 'What to change:', 'wowstudio-accessibility-kit' ) . ' ' . $finding['triage']['guidance'];
+			}
+
 			$lines[] = '   ' . __( 'WCAG:', 'wowstudio-accessibility-kit' ) . ' ' . $finding['wcag_sc'];
 			$lines[] = '';
 		}

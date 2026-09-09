@@ -96,6 +96,10 @@ In WordPress's own alt text field on the media item. It therefore applies everyw
 == Changelog ==
 
 = 0.29.0 =
+* New: activating the plugin opens a short setup instead of an empty report — what the plugin does and refuses to claim, the site-wide fixes, and your first scan. Every step is optional and nothing is switched on for you.
+* Fixed: the cards on the report drew a box around their contents with no padding, so every label sat against an edge.
+* Fixed: a theme finding with no code correction to hand over showed a paragraph of explanation formatted as a code snippet, on one line wide enough to need scrolling. It now reads as ordinary text.
+* Fixed: chart labels are no longer cut off mid-sentence.
 * New: findings of one check can be grouped by the markup behind them, so a fault your theme repeats on every page is judged once rather than once per page. Setting one aside everywhere requires a reason, lists the pages it covers first, needs permission to edit other people's content, and can be withdrawn in one step from the "False positives" screen.
 * New: the figures on the report screen now open. "What comes up most" and "Pages with the most to do" were counts you could read and not act on; each row is now a control that lists the findings behind it, with an explanation of the check at the top rather than repeated against every row.
 * Fixed: a suggested style fix could be written correctly and still do nothing, because a theme or page builder styled the same element with a more specific rule. Suggestions are now weighted to outrank what is already there, and say so when nothing can — for instance when the existing rule is marked !important.

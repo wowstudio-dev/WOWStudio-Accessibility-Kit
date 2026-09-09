@@ -278,6 +278,12 @@ function Finding( { finding } ) {
 				</p>
 			) }
 
+			{ triage.guidance && (
+				<p className="wsak-issue__plan wsak-theme__guidance">
+					{ triage.guidance }
+				</p>
+			) }
+
 			{ triage.snippet && (
 				<pre
 					className="wsak-issue__context"

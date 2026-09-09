@@ -1937,18 +1937,28 @@
 	}
 }
 
-/* ── Overview: cards ──────────────────────────────────────────────────────
+/* ── Overview: cards ──────────────────────────────────────────────────────────
  *
- * A panel, a heading and a footnote. Deliberately plain: the charts inside
- * carry the colour, and a container that competes with them makes a page of
- * six panels harder to read rather than easier.
+ * A panel, a heading and a footnote — the same panel every other screen in
+ * this plugin draws, because a card on the dashboard is not a different kind
+ * of object from a card on Settings and had started to look like one.
+ *
+ * An earlier pass flattened these so the charts inside would carry the colour
+ * on their own: padding, border, radius and background all went to zero. The
+ * shadow did not go with them, and a shadow on its own is still a container —
+ * it draws a hairline box on all four sides. What shipped was a visible box
+ * with no padding at all, every label in it hard against an edge. Reported
+ * twice, which is twice more than a decision this arbitrary is worth.
+ *
+ * Either answer would have been fine. This is the one that leaves the plugin
+ * with a single panel to maintain rather than two.
  */
 
 .wsak-card {
-	padding: 0;
-	border: 0;
-	border-radius: 0;
-	background: none;
+	padding: var(--wsak-space-5);
+	background: var(--wsak-surface);
+	border: 1px solid var(--wsak-line);
+	border-radius: var(--wsak-radius);
 
 	/* Matches .wsak-bulk and .wsak-theme, which set the house recipe for a
 	   panel before this component existed. Padding is one step tighter
@@ -1956,9 +1966,8 @@
 	box-shadow: var(--wsak-shadow);
 }
 
-/* Small caps above the thing it names, in the muted ink. A card title used to
-   have a card to sit in; without one it has to look like a label rather than a
-   heading floating in space. */
+/* Small caps above the thing it names, in the muted ink — a label for the
+   figure under it rather than a heading competing with the page's own. */
 .wsak-card__title {
 	margin: 0 0 var(--wsak-space-3);
 	color: var(--wsak-muted);
@@ -2033,10 +2042,11 @@
 	border-bottom: 1px solid var(--wsak-line);
 }
 
+/* The rule and the extra top padding here were separating the trend from the
+   row above it while both were flat. It is a panel again, so the panel does
+   that, and drawing a second line inside one was just a line. */
 .wsak-overview__trend {
-	margin-top: var(--wsak-space-8);
-	padding-top: var(--wsak-space-6);
-	border-top: 1px solid var(--wsak-line);
+	margin-top: var(--wsak-space-4);
 }
 
 .wsak-overview__caveat {
@@ -2152,18 +2162,23 @@
 
 .wsak-bars__row {
 	display: grid;
-	grid-template-columns: minmax(6rem, 11rem) 1fr auto;
+	grid-template-columns: minmax(6rem, 13rem) minmax(3.5rem, 1fr) auto;
 	gap: var(--wsak-space-3);
 	align-items: center;
 	padding: 5px 0;
 }
 
+/* Wraps rather than truncates. These labels are the names of the checks, and
+   an ellipsis lands mid-sentence on most of them — "Clickable target is
+   smaller t…" does not say smaller than what, which is the entire content of
+   the row. The bars carry an aria-hidden summary, so a screen reader was
+   already getting the whole name and only the sighted reader was not.
+   A minimum on the track keeps the bar from being squeezed to nothing by the
+   longer labels this allows. */
 .wsak-bars__label {
-	overflow: hidden;
 	color: var(--wsak-text);
 	font-size: 12.5px;
-	text-overflow: ellipsis;
-	white-space: nowrap;
+	line-height: 1.35;
 }
 
 /* The track is 1.08:1 against the card, and deliberately left that way —
@@ -2235,7 +2250,7 @@
 
 .wsak-bars__button {
 	display: grid;
-	grid-template-columns: minmax(6rem, 11rem) 1fr auto;
+	grid-template-columns: minmax(6rem, 13rem) minmax(3.5rem, 1fr) auto;
 	gap: var(--wsak-space-3);
 	align-items: center;
 	width: 100%;
@@ -2750,4 +2765,270 @@
 
 .wsak-back {
 	margin: 0 0 var(--wsak-space-3);
+}
+
+/* ── The first run ────────────────────────────────────────────────────────
+ *
+ * A quieter screen than the rest of the plugin, and deliberately so: it is the
+ * only one somebody meets before they have decided whether to trust the thing.
+ * One column, one heading, one action, and no figures — there is nothing to
+ * report yet, and a dashboard of zeroes was the first impression this replaces.
+ *
+ * The gradient is here and almost nowhere else. It is the mark's own, and the
+ * lavender end of it measures 2.08:1, so it draws rules and never sits behind a
+ * word.
+ */
+
+.wsak--welcome {
+	max-width: 68rem;
+	padding-bottom: var(--wsak-space-16);
+}
+
+.wsak-welcome__head {
+	padding: var(--wsak-space-16) 0 var(--wsak-space-12);
+}
+
+.wsak-welcome__eyebrow {
+	margin: 0 0 var(--wsak-space-3);
+	color: var(--wsak-indigo);
+	font-size: 12px;
+	font-weight: 700;
+	letter-spacing: 0.08em;
+	text-transform: uppercase;
+}
+
+.wsak-welcome__heading {
+	max-width: 22ch;
+	margin: 0 0 var(--wsak-space-4);
+	color: var(--wsak-ink);
+	font-size: 34px;
+	font-weight: 650;
+	letter-spacing: -0.02em;
+	line-height: 1.15;
+}
+
+.wsak-welcome__sub {
+	max-width: 60ch;
+	margin: 0;
+	color: var(--wsak-muted);
+	font-size: 15px;
+	line-height: 1.6;
+}
+
+.wsak-welcome__body {
+	display: grid;
+	grid-template-columns: 14rem 1fr;
+	gap: var(--wsak-space-8);
+	align-items: start;
+}
+
+/* One column below the width where a rail beside the stage would leave the
+   stage too narrow to hold the screens embedded in it. The rail turns on its
+   side rather than becoming three full-width rows, which read as a menu of
+   destinations instead of as three positions in one sequence. */
+@media (width <= 60rem) {
+
+	.wsak-welcome__body {
+		grid-template-columns: 1fr;
+	}
+
+	.wsak-welcome__rail {
+		position: static;
+	}
+
+	.wsak-welcome__rail-items {
+		display: flex;
+		flex-wrap: wrap;
+		gap: var(--wsak-space-1);
+	}
+
+	.wsak-rail-step__button {
+		width: auto;
+	}
+}
+
+.wsak-welcome__rail {
+	position: sticky;
+	top: var(--wsak-space-8);
+}
+
+.wsak-welcome__rail-items {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.wsak-rail-step__button {
+	display: flex;
+	gap: var(--wsak-space-3);
+	align-items: center;
+	width: 100%;
+	padding: var(--wsak-space-3);
+	border: 0;
+	border-radius: var(--wsak-radius-sm);
+	background: none;
+	color: var(--wsak-muted);
+	font-size: 13.5px;
+	text-align: start;
+	cursor: pointer;
+	transition: background 140ms ease, color 140ms ease;
+}
+
+.wsak-rail-step__button:hover {
+	background: var(--wsak-raised);
+	color: var(--wsak-ink);
+}
+
+/* The number stays in the accessible name rather than being hidden from it.
+   Hiding it would be defensible — position is already carried by aria-current
+   and by "Step 2 of 3" — but it is visible text inside the control, and this
+   codebase's rule is that a name contains the words somebody can see, so that
+   anyone driving it by voice can say what is in front of them. One digit is a
+   cheap price for that. */
+.wsak-rail-step__n {
+	display: grid;
+	flex: none;
+	place-items: center;
+	width: 26px;
+	height: 26px;
+	border: 1px solid var(--wsak-line-strong);
+	border-radius: 999px;
+	background: var(--wsak-surface);
+	color: var(--wsak-muted);
+	font-size: 12px;
+	font-weight: 700;
+}
+
+.wsak-rail-step.is-current .wsak-rail-step__button {
+	background: var(--wsak-raised);
+	color: var(--wsak-ink);
+	font-weight: 600;
+}
+
+.wsak-rail-step.is-current .wsak-rail-step__n {
+	border-color: var(--wsak-indigo);
+	background: var(--wsak-indigo);
+	color: #fff;
+}
+
+.wsak-rail-step.is-done .wsak-rail-step__n {
+	border-color: var(--wsak-indigo);
+	color: var(--wsak-indigo);
+}
+
+.wsak-welcome__stage {
+
+	/* The panel recipe, one step more generous. This is the only thing on the
+	   screen, so it can afford the room. */
+	position: relative;
+	overflow: hidden;
+	padding: var(--wsak-space-8);
+	background: var(--wsak-surface);
+	border: 1px solid var(--wsak-line);
+	border-radius: var(--wsak-radius);
+	box-shadow: var(--wsak-shadow-lift);
+}
+
+/* The mark's gradient, as a rule rather than a fill. Nothing is ever printed
+   on top of it. */
+.wsak-welcome__stage::before {
+	content: "";
+	position: absolute;
+	inset: 0 0 auto;
+	height: 3px;
+	background: var(--wsak-brand-gradient);
+}
+
+/* Focus moves here on every step change, so it has to be visible without
+   drawing a box around the whole panel on a mouse click. */
+.wsak-welcome__stage:focus {
+	outline: none;
+}
+
+.wsak-welcome__stage:focus-visible {
+	outline: 2px solid var(--wsak-indigo);
+	outline-offset: 2px;
+}
+
+.wsak-welcome__counter {
+	margin: 0 0 var(--wsak-space-2);
+	color: var(--wsak-muted);
+	font-size: 12px;
+	font-weight: 650;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+}
+
+.wsak-welcome__title {
+	margin: 0 0 var(--wsak-space-3);
+	color: var(--wsak-ink);
+	font-size: 22px;
+	font-weight: 650;
+	letter-spacing: -0.01em;
+}
+
+.wsak-welcome__lede {
+	max-width: 66ch;
+	margin: 0 0 var(--wsak-space-8);
+	color: var(--wsak-text);
+	font-size: 15px;
+	line-height: 1.65;
+}
+
+.wsak-welcome__promises {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+/* A rule between them rather than a card each. Three bordered boxes in a
+   column is three containers holding one paragraph apiece. */
+.wsak-promise + .wsak-promise {
+	margin-top: var(--wsak-space-6);
+	padding-top: var(--wsak-space-6);
+	border-top: 1px solid var(--wsak-line);
+}
+
+.wsak-promise__title {
+	margin: 0 0 var(--wsak-space-2);
+	color: var(--wsak-ink);
+	font-size: 15px;
+	font-weight: 650;
+}
+
+.wsak-promise__body {
+	max-width: 68ch;
+	margin: 0;
+	color: var(--wsak-muted);
+	font-size: 13.5px;
+	line-height: 1.6;
+}
+
+.wsak-welcome__actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--wsak-space-3);
+	align-items: center;
+	margin-top: var(--wsak-space-8);
+	padding-top: var(--wsak-space-6);
+	border-top: 1px solid var(--wsak-line);
+}
+
+/* Pushed away from the two buttons it is not one of. Leaving and continuing
+   are opposite decisions and should not be adjacent targets. */
+.wsak-welcome__leave {
+	margin-inline-start: auto;
+}
+
+/* The screens embedded in steps two and three bring their own panel with them,
+   and a panel inside a panel is a border inside a border. */
+.wsak-welcome__stage .wsak-fixes,
+.wsak-welcome__stage .wsak-bulk,
+.wsak-welcome__stage .wsak-settings {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	border-radius: 0;
+	background: none;
+	box-shadow: none;
 }

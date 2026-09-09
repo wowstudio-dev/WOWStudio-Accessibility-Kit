@@ -12,6 +12,7 @@ import CoveragePanel from './components/coverage-panel';
 import Inspector from './components/inspector';
 import IssueDrilldown from './components/issue-drilldown';
 import IssueList from './components/issue-list';
+import Onboarding from './components/onboarding';
 import Overview from './components/overview';
 import AltTextEditor from './components/alt-text-editor';
 import SiteFixes from './components/site-fixes';
@@ -24,6 +25,18 @@ import { ErrorState, Skeleton } from './components/states';
 
 const settings = window.wsakSettings ?? {};
 const capabilities = settings.capabilities ?? {};
+
+/**
+ * The line at the foot of every screen.
+ *
+ * Written once because it is the same sentence everywhere and because it is the
+ * one string in this file that must not drift: `bin/check-claims.php` reads it,
+ * and two copies is two things to keep true.
+ */
+const DISCLAIMER = __(
+	'This plugin helps you find, fix and document accessibility problems. It does not determine whether your site meets the ADA, the European Accessibility Act, Section 508, or any other legal requirement, and nothing here is legal advice.',
+	'wowstudio-accessibility-kit'
+);
 
 /**
  * What each admin screen contains.
@@ -92,6 +105,17 @@ const SCREENS = {
 };
 
 /**
+ * Where the setup lives, and whether this request asked for it.
+ *
+ * Not a screen in its own right. It is a view on the dashboard page, because a
+ * WordPress admin page with no menu entry cannot be opened — core resolves a
+ * page's parent by walking the menu it was removed from, and then refuses
+ * access to what it cannot find.
+ */
+const WELCOME_URL = settings.screens?.welcome ?? '';
+const WANTS_WELCOME = Boolean( settings.welcome );
+
+/**
  * Which screen each view lives on, derived from the screens themselves.
  *
  * Written down once. Two lists that have to agree about where a view lives are
@@ -125,7 +149,9 @@ export default function App() {
 		( item ) => ! item.needs || capabilities[ item.needs ]
 	);
 
-	const [ view, setView ] = useState( tabs[ 0 ]?.id ?? 'overview' );
+	const [ view, setView ] = useState(
+		WANTS_WELCOME ? 'welcome' : tabs[ 0 ]?.id ?? 'overview'
+	);
 
 	/*
 	 * Going to a view that may not be on this screen.
@@ -141,6 +167,12 @@ export default function App() {
 		( target ) => {
 			if ( tabs.some( ( tab ) => tab.id === target ) ) {
 				setView( target );
+
+				return;
+			}
+
+			if ( 'welcome' === target && WELCOME_URL ) {
+				window.location.href = WELCOME_URL;
 
 				return;
 			}
@@ -235,6 +267,28 @@ export default function App() {
 	}, [] );
 
 	const byDetection = scan?.summary?.by_detection ?? {};
+
+	/*
+	 * The setup is the whole screen rather than a panel inside the usual
+	 * chrome. It carries its own heading, and the header's "Check pages" button
+	 * would sit above a flow whose third step is choosing pages to check —
+	 * two routes to the same place, one of which abandons the setup.
+	 */
+	if ( 'welcome' === view ) {
+		return (
+			<div className="wsak wsak--welcome">
+				<Onboarding
+					onGo={ go }
+					homeUrl={ settings.screens?.overview }
+					revisit={ Boolean( settings.onboarded ) }
+				/>
+
+				<footer className="wsak__footer">
+					<p>{ DISCLAIMER }</p>
+				</footer>
+			</div>
+		);
+	}
 
 	return (
 		<div className="wsak">
@@ -572,12 +626,7 @@ export default function App() {
 			) }
 
 			<footer className="wsak__footer">
-				<p>
-					{ __(
-						'This plugin helps you find, fix and document accessibility problems. It does not determine whether your site meets the ADA, the European Accessibility Act, Section 508, or any other legal requirement, and nothing here is legal advice.',
-						'wowstudio-accessibility-kit'
-					) }
-				</p>
+				<p>{ DISCLAIMER }</p>
 			</footer>
 		</div>
 	);

@@ -15,6 +15,7 @@ use WOWStudio\AccessibilityKit\Remediation\ThemeTriage;
 use WOWStudio\AccessibilityKit\Scanner\Detection;
 use WOWStudio\AccessibilityKit\Scanner\Fingerprint;
 use WOWStudio\AccessibilityKit\Scanner\IssueStatus;
+use WOWStudio\AccessibilityKit\Scanner\RuleRegistry;
 use WOWStudio\AccessibilityKit\Scanner\ScanPass;
 use WOWStudio\AccessibilityKit\Scanner\Severity;
 use WOWStudio\AccessibilityKit\Tests\TestCase;
@@ -183,6 +184,51 @@ final class ThemeTriageTest extends TestCase {
 		$this->assertSame( ThemeTriage::TIER_HANDOFF, $out['tier'] );
 		$this->assertStringContainsString( 'language_attributes', $out['snippet'] );
 		$this->assertSame( '', $out['url'], 'A hand-off has no screen to send anybody to.' );
+	}
+
+	/**
+	 * The snippet is code or it is nothing.
+	 *
+	 * It used to be neither. Where no correction was listed the method fell
+	 * through to the rule's description — a paragraph of English — and the
+	 * panel set it in the dark monospaced block kept for markup, beneath a line
+	 * telling the reader to send the change below to their developer. It was
+	 * not a change: it was the explanation from further up the same card,
+	 * reworded, typeset as though it were something you could paste. On a real
+	 * finding it came out as one unwrapped line two thousand pixels wide.
+	 *
+	 * The text is still worth showing. It comes out as `guidance` and reads as
+	 * the prose it is.
+	 *
+	 * @return void
+	 */
+	public function test_prose_is_never_passed_off_as_a_snippet(): void {
+		$rule = RuleRegistry::with_defaults()->descriptor( 'heading-level-skipped' );
+
+		$this->assertNotNull( $rule, 'The rule this test is about has been renamed or removed.' );
+
+		$out = ( new ThemeTriage() )->triage( $this->issue( 'heading-level-skipped', '<h4>Speakers</h4>' ), $rule );
+
+		$this->assertSame( '', $out['snippet'], 'There is no general correction for this rule.' );
+		$this->assertSame( $rule->description(), $out['guidance'] );
+		$this->assertStringNotContainsString(
+			'the change below',
+			$out['instruction'],
+			'Nothing is below: the card must not point at a snippet it has not got.'
+		);
+	}
+
+	/**
+	 * Where there is a correction, it is pointed at.
+	 *
+	 * @return void
+	 */
+	public function test_a_real_correction_is_pointed_at_and_stands_alone(): void {
+		$out = ( new ThemeTriage() )->triage( $this->issue( 'html-lang-missing', '<html>' ) );
+
+		$this->assertStringContainsString( 'language_attributes', $out['snippet'] );
+		$this->assertSame( '', $out['guidance'], 'The snippet says it; saying it twice is padding.' );
+		$this->assertStringContainsString( 'the change below', $out['instruction'] );
 	}
 
 	/**
