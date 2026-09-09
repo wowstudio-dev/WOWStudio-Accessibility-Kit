@@ -611,7 +611,7 @@ msgstr ""
 #: src/Rest/IssueController.php:358
 #: src/Rest/IssuePresenter.php:167
 #: src/Rest/OverviewController.php:447
-#: assets/src/components/dismissed.js:242
+#: assets/src/components/dismissed.js:169
 #: assets/src/components/scan-picker.js:164
 msgid "(no title)"
 msgstr ""
@@ -629,16 +629,16 @@ msgstr ""
 msgid "Why this is not a problem anywhere it appears."
 msgstr ""
 
-#: src/Rest/ReviewController.php:224
-#: src/Rest/ReviewController.php:267
+#: src/Rest/ReviewController.php:226
+#: src/Rest/ReviewController.php:282
 msgid "Somebody no longer on this site"
 msgstr ""
 
-#: src/Rest/ReviewController.php:289
+#: src/Rest/ReviewController.php:304
 msgid "You do not have permission to make decisions about findings."
 msgstr ""
 
-#: src/Rest/ReviewController.php:315
+#: src/Rest/ReviewController.php:330
 msgid "This fix changes how your theme renders every page, and your account is not allowed to change theme settings. An administrator can apply it."
 msgstr ""
 
@@ -2136,7 +2136,7 @@ msgid "Images"
 msgstr ""
 
 #: assets/src/app.js:84
-#: assets/src/components/dismissed.js:169
+#: assets/src/components/dismissed.js:307
 msgid "False positives"
 msgstr ""
 
@@ -2683,7 +2683,8 @@ msgid "— %s"
 msgstr ""
 
 #: assets/src/components/dismiss-action.js:101
-#: assets/src/components/dismissed.js:103
+#: assets/src/components/dismissed.js:122
+#: assets/src/components/dismissed.js:202
 msgid "Not a false positive after all"
 msgstr ""
 
@@ -2705,49 +2706,65 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: assets/src/components/dismissed.js:41
+#: assets/src/components/dismissed.js:48
 msgid "False positives everywhere"
 msgstr ""
 
-#: assets/src/components/dismissed.js:48
+#: assets/src/components/dismissed.js:55
 msgid "These cover one piece of markup wherever it appears, including on pages added since the decision was taken. Withdrawing one puts every finding it covers back on the list."
 msgstr ""
 
 #. translators: 1: who set it aside. 2: when.
-#: assets/src/components/dismissed.js:78
+#: assets/src/components/dismissed.js:85
 #, js-format
 msgid "Marked a false positive everywhere by %1$s on %2$s"
 msgstr ""
 
-#: assets/src/components/dismissed.js:155
+#. translators: %s: name of the check.
+#: assets/src/components/dismissed.js:107
+#, js-format
+msgid "Put back everywhere: %s."
+msgstr ""
+
+#. translators: 1: who set it aside. 2: when.
+#: assets/src/components/dismissed.js:187
+#, js-format
+msgid "Marked a false positive by %1$s on %2$s"
+msgstr ""
+
+#. translators: %s: the page the finding is on.
+#: assets/src/components/dismissed.js:270
+#, js-format
+msgid "Put back on the list of open findings for %s."
+msgstr ""
+
+#: assets/src/components/dismissed.js:275
+msgid "that page"
+msgstr ""
+
+#: assets/src/components/dismissed.js:293
 msgid "Loading your false positives…"
 msgstr ""
 
-#: assets/src/components/dismissed.js:173
+#: assets/src/components/dismissed.js:311
 msgid "Findings somebody decided not to act on, with the reason they gave. Setting something aside is a judgement rather than a fix — the barrier is still there — so this screen exists to make those judgements reviewable by somebody other than whoever made them."
 msgstr ""
 
-#: assets/src/components/dismissed.js:197
+#: assets/src/components/dismissed.js:340
 msgid "No false positives yet"
 msgstr ""
 
-#: assets/src/components/dismissed.js:201
+#: assets/src/components/dismissed.js:344
 msgid "When somebody marks a finding as reviewed and not applicable, it appears here with their name, the date, and the reason they gave."
 msgstr ""
 
 #. translators: %d: how many findings are marked false positives.
-#: assets/src/components/dismissed.js:212
+#: assets/src/components/dismissed.js:355
 #, js-format
 msgid "%d finding is currently marked a false positive."
 msgid_plural "%d findings are currently marked false positives."
 msgstr[0] ""
 msgstr[1] ""
-
-#. translators: 1: who set it aside. 2: when.
-#: assets/src/components/dismissed.js:263
-#, js-format
-msgid "Marked a false positive by %1$s on %2$s"
-msgstr ""
 
 #: assets/src/components/finding-status.js:38
 #: assets/src/components/finding-status.js:49

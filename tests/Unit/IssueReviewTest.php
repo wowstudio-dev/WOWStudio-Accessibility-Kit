@@ -129,6 +129,74 @@ final class IssueReviewTest extends TestCase {
 	}
 
 	/**
+	 * Putting one back takes the durable record out with it.
+	 *
+	 * This is the half that decides whether "not a false positive after all"
+	 * means anything. A dismissal is stored in its own table and applied to
+	 * every future scan, so reopening that only flipped the row would hold
+	 * until the next scan and then quietly put the finding back in the log —
+	 * the same fault the decisions table was added to fix, running the other
+	 * way.
+	 *
+	 * @return void
+	 */
+	public function test_reopening_withdraws_the_decision_that_would_reapply_it(): void {
+		$store     = new FakeIssueStore();
+		$decisions = new FakeDecisionStore();
+		$review    = new IssueReview( $store, $decisions );
+
+		$review->ignore( 1, 'Decorative image, the caption already says what it shows.', 7 );
+
+		$this->assertNotSame( array(), $decisions->records, 'A dismissal should be recorded to survive a rescan.' );
+
+		$review->reopen( 1, 9 );
+
+		$this->assertSame(
+			array(),
+			$decisions->records,
+			'The record that would re-dismiss this on the next scan is still there.'
+		);
+	}
+
+	/**
+	 * The log offers the way back, and the payload says who may take it.
+	 *
+	 * Source-reading, because both halves fail silently. Once a finding is set
+	 * aside it leaves every list of open findings, so this log is the only
+	 * screen it appears on — the card that offers "not a false positive after
+	 * all" while you are dismissing it is on a list the finding is about to
+	 * leave, which made the undo available for exactly as long as it took to
+	 * change your mind immediately. If the flag stops being sent or the control
+	 * stops being rendered, the button simply is not there and nothing errors.
+	 *
+	 * @return void
+	 */
+	public function test_the_log_offers_a_way_back(): void {
+		// phpcs:disable WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Reading local source files in a unit test; WordPress is not loaded.
+		$controller = (string) file_get_contents( __DIR__ . '/../../src/Rest/ReviewController.php' );
+		$screen     = (string) file_get_contents( __DIR__ . '/../../assets/src/components/dismissed.js' );
+		// phpcs:enable WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+
+		$this->assertStringContainsString(
+			"'may_reopen'",
+			$controller,
+			'The dismissed log no longer says whether each row can be put back.'
+		);
+
+		$this->assertStringContainsString(
+			'reopenIssue',
+			$screen,
+			'The false-positives screen no longer offers a way back.'
+		);
+
+		$this->assertStringContainsString(
+			'row.may_reopen',
+			$screen,
+			'The control must be gated on the flag the route sends, not on a guess.'
+		);
+	}
+
+	/**
 	 * A finding that does not exist cannot be dismissed.
 	 *
 	 * @return void

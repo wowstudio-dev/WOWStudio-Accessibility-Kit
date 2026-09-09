@@ -204,6 +204,8 @@ final class ReviewController implements Registrable {
 	public function dismissed( WP_REST_Request $request ): WP_REST_Response {
 		$issues = new IssueRepository();
 
+		$may_decide = current_user_can( Capabilities::APPLY_FIX );
+
 		$rows = array();
 
 		foreach ( $issues->dismissed( (int) $request->get_param( 'limit' ), (int) $request->get_param( 'offset' ) ) as $issue ) {
@@ -223,6 +225,19 @@ final class ReviewController implements Registrable {
 				// nobody can act on without another lookup.
 				'by'         => false !== $user ? $user->display_name : __( 'Somebody no longer on this site', 'wowstudio-accessibility-kit' ),
 				'at'         => $issue->updated_at,
+
+				/*
+				 * Per row rather than once for the screen, because that is how
+				 * the route decides. IssueReview::reopen() asks for our
+				 * capability and then for edit_post on the content the finding
+				 * is on, so an editor can have the first and not the second for
+				 * some of these. One flag for the whole list would offer a
+				 * control that fails on the rows it should not have been on.
+				 *
+				 * This decides what is on screen and nothing else; the route
+				 * checks again regardless.
+				 */
+				'may_reopen' => $may_decide && ( 0 === $issue->post_id || current_user_can( 'edit_post', $issue->post_id ) ),
 			);
 		}
 

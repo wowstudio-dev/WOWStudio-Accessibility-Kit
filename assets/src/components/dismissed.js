@@ -5,7 +5,12 @@ import { Button, Notice } from '@wordpress/components';
 import { useCallback, useEffect, useRef, useState } from '@wordpress/element';
 import { __, _n, sprintf } from '@wordpress/i18n';
 
-import { fetchDismissed, readableError, reopenMarkup } from '../api';
+import {
+	fetchDismissed,
+	readableError,
+	reopenIssue,
+	reopenMarkup,
+} from '../api';
 import { EmptyState, Skeleton } from './states';
 import { SeverityTag } from './tags';
 
@@ -18,13 +23,15 @@ import { SeverityTag } from './tags';
  * nothing displaying it and no way to undo it. A decision that cannot be
  * withdrawn is not one worth offering, and this is where it is withdrawn.
  *
- * @param {Object}   props           Component props.
- * @param {Array}    props.rows      The decisions.
- * @param {boolean}  props.mayDecide Whether this person may withdraw them.
- * @param {Function} props.onChange  Called after one is withdrawn.
+ * @param {Object}   props            Component props.
+ * @param {Array}    props.rows       The decisions.
+ * @param {boolean}  props.mayDecide  Whether this person may withdraw them.
+ * @param {Function} props.onChange   Called after one is withdrawn.
+ * @param {Function} props.onAnnounce Says what happened, for anyone not
+ *                                    watching the list get shorter.
  * @return {?Element} The section, or nothing when there are none.
  */
-function SiteWide( { rows, mayDecide, onChange } ) {
+function SiteWide( { rows, mayDecide, onChange, onAnnounce } ) {
 	const [ busy, setBusy ] = useState( '' );
 	const [ error, setError ] = useState( '' );
 
@@ -93,7 +100,19 @@ function SiteWide( { rows, mayDecide, onChange } ) {
 									setError( '' );
 
 									reopenMarkup( row.fingerprint )
-										.then( onChange )
+										.then( () => {
+											onAnnounce(
+												sprintf(
+													/* translators: %s: name of the check. */
+													__(
+														'Put back everywhere: %s.',
+														'wowstudio-accessibility-kit'
+													),
+													row.rule_title
+												)
+											);
+											onChange();
+										} )
 										.catch( ( caught ) =>
 											setError( readableError( caught ) )
 										)
@@ -114,6 +133,83 @@ function SiteWide( { rows, mayDecide, onChange } ) {
 }
 
 /**
+ * One finding set aside on one page, and the way back.
+ *
+ * The control was missing here, and only here. Dismissing a finding shows
+ * "Not a false positive after all" on the card you just dismissed — but that
+ * card is on the findings list, and the finding leaves that list the moment the
+ * decision is taken. Close the screen, or scan the page again, and the only
+ * place the finding still exists is this log, which had no way to undo
+ * anything. So the way back was available for about as long as it took to
+ * change your mind immediately, and not afterwards.
+ *
+ * Withdrawing is durable rather than cosmetic. The decision is stored in its
+ * own table and applied to every future scan, so reopening takes the record out
+ * rather than flipping a row that the next scan would overwrite — which is the
+ * whole reason that table exists.
+ *
+ * @param {Object}   props           Component props.
+ * @param {Object}   props.row       The dismissed finding.
+ * @param {Function} props.onRestore Puts it back.
+ * @param {boolean}  props.busy      Whether this row is in flight.
+ * @return {Element} The row.
+ */
+function DismissedRow( { row, onRestore, busy } ) {
+	return (
+		<li className="wsak-dismissed__row">
+			<div className="wsak-dismissed__head">
+				<h3 className="wsak-dismissed__rule">{ row.message }</h3>
+				<SeverityTag severity={ row.severity } label={ row.severity } />
+			</div>
+
+			<p className="wsak-dismissed__where">
+				{ row.edit_url ? (
+					<a href={ row.edit_url }>
+						{ row.post_title ||
+							__( '(no title)', 'wowstudio-accessibility-kit' ) }
+					</a>
+				) : (
+					row.post_title
+				) }
+				{ ' · ' }
+				{ row.wcag_sc }
+			</p>
+
+			{ row.note && (
+				<blockquote className="wsak-dismissed__note">
+					{ row.note }
+				</blockquote>
+			) }
+
+			<p className="wsak-dismissed__by">
+				{ sprintf(
+					/* translators: 1: who set it aside. 2: when. */
+					__(
+						'Marked a false positive by %1$s on %2$s',
+						'wowstudio-accessibility-kit'
+					),
+					row.by,
+					row.at
+				) }
+			</p>
+
+			{ row.may_reopen && (
+				<Button
+					variant="link"
+					disabled={ busy }
+					onClick={ () => onRestore( row ) }
+				>
+					{ __(
+						'Not a false positive after all',
+						'wowstudio-accessibility-kit'
+					) }
+				</Button>
+			) }
+		</li>
+	);
+}
+
+/**
  * The dismissed log.
  *
  * Setting a finding aside is a judgement — that it does not apply, that it was
@@ -128,6 +224,8 @@ function SiteWide( { rows, mayDecide, onChange } ) {
 export default function Dismissed() {
 	const [ data, setData ] = useState( null );
 	const [ error, setError ] = useState( '' );
+	const [ busy, setBusy ] = useState( 0 );
+	const [ announcement, setAnnouncement ] = useState( '' );
 
 	const live = useRef( true );
 
@@ -148,6 +246,46 @@ export default function Dismissed() {
 			live.current = false;
 		};
 	}, [ load ] );
+
+	/*
+	 * The row leaves this screen when it succeeds, which is the whole point and
+	 * also means nothing is left to report the outcome. Hence the announcement:
+	 * without it, somebody using a screen reader presses a button and the list
+	 * silently gets shorter.
+	 */
+	const restore = useCallback(
+		( row ) => {
+			setBusy( row.id );
+			setError( '' );
+
+			reopenIssue( row.id )
+				.then( () => {
+					if ( ! live.current ) {
+						return;
+					}
+
+					setAnnouncement(
+						sprintf(
+							/* translators: %s: the page the finding is on. */
+							__(
+								'Put back on the list of open findings for %s.',
+								'wowstudio-accessibility-kit'
+							),
+							row.post_title ||
+								__( 'that page', 'wowstudio-accessibility-kit' )
+						)
+					);
+
+					load();
+				} )
+				.catch(
+					( caught ) =>
+						live.current && setError( readableError( caught ) )
+				)
+				.finally( () => live.current && setBusy( 0 ) );
+		},
+		[ load ]
+	);
 
 	if ( ! data && ! error ) {
 		return (
@@ -176,6 +314,10 @@ export default function Dismissed() {
 				) }
 			</p>
 
+			<p className="screen-reader-text" role="status" aria-live="polite">
+				{ announcement }
+			</p>
+
 			{ error && (
 				<Notice status="error" isDismissible={ false }>
 					{ error }
@@ -187,6 +329,7 @@ export default function Dismissed() {
 					rows={ data.site_wide ?? [] }
 					mayDecide={ Boolean( data.may_decide ) }
 					onChange={ load }
+					onAnnounce={ setAnnouncement }
 				/>
 			) }
 
@@ -221,54 +364,12 @@ export default function Dismissed() {
 
 						<ul className="wsak-dismissed__list">
 							{ data.dismissed.map( ( row ) => (
-								<li
-									className="wsak-dismissed__row"
+								<DismissedRow
 									key={ row.id }
-								>
-									<div className="wsak-dismissed__head">
-										<h3 className="wsak-dismissed__rule">
-											{ row.message }
-										</h3>
-										<SeverityTag
-											severity={ row.severity }
-											label={ row.severity }
-										/>
-									</div>
-
-									<p className="wsak-dismissed__where">
-										{ row.edit_url ? (
-											<a href={ row.edit_url }>
-												{ row.post_title ||
-													__(
-														'(no title)',
-														'wowstudio-accessibility-kit'
-													) }
-											</a>
-										) : (
-											row.post_title
-										) }
-										{ ' · ' }
-										{ row.wcag_sc }
-									</p>
-
-									{ row.note && (
-										<blockquote className="wsak-dismissed__note">
-											{ row.note }
-										</blockquote>
-									) }
-
-									<p className="wsak-dismissed__by">
-										{ sprintf(
-											/* translators: 1: who set it aside. 2: when. */
-											__(
-												'Marked a false positive by %1$s on %2$s',
-												'wowstudio-accessibility-kit'
-											),
-											row.by,
-											row.at
-										) }
-									</p>
-								</li>
+									row={ row }
+									busy={ busy === row.id }
+									onRestore={ restore }
+								/>
 							) ) }
 						</ul>
 					</>

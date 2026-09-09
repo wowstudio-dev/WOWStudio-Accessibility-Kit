@@ -112,6 +112,29 @@ Findings that keep their identity, and figures you can open.
   Where the incumbent rule is `!important`, no stylesheet rule can win, and the
   proposal says so before it is applied rather than after.
 
+- **A false positive can be put back.** The control existed and was in the one
+  place it was no use: the card you dismiss offers "not a false positive after
+  all" straight away, but that card is on the findings list, and the finding
+  leaves that list the moment the decision is taken. Close the screen or scan
+  the page again and the only place it still appeared was the False positives
+  log, which had no way to undo anything. So the way back was available for
+  about as long as it took to change your mind immediately, and not afterwards.
+
+  Every row in that log now offers it, and each row says whether this account
+  may take it — reopening asks for the fix capability and then for the right to
+  edit the page the finding is on, which is not the same answer for every row,
+  and one flag for the whole screen would have put a control on rows where it
+  would fail.
+
+  It withdraws the stored decision rather than flipping a row, so it holds
+  across future scans. A reopen that only changed the row would have lasted
+  until the next scan and then quietly put the finding back in the log.
+
+  Withdrawing one now also says so out loud. The row leaves the screen when it
+  succeeds, which is the point and also meant there was nothing left to report
+  the outcome to anybody not watching the list get shorter — true of the
+  site-wide withdrawals too, and fixed for both.
+
 - **Scanning covers posts and pages, and nothing else.** It used to walk every
   public post type, which brought in things that are not pages at all: a page
   builder's template library registers itself public, so Elementor's appeared in
