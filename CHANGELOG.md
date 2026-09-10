@@ -8,18 +8,37 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Still outstanding
 
-- The check count. Seventeen is well under what the established free competitor
-  ships, and the gap is widest in checks that are cheap to add — empty buttons
-  and links, duplicate labels, `aria-labelledby` pointing at nothing, links to
-  PDFs and Office files, justified text, tiny text. That list is the next block
-  of work.
-- WP-CLI. There is no command-line entry point at all, which rules the plugin
-  out of CI and staging audits.
-- Driving the redesigned admin in a real browser with a screen reader, and
-  testing with disabled users. The contrast guard checks 91 colour pairings on
-  every push, which is not the same thing as somebody using the interface.
+Rewritten at 1.0.0, because the previous version of this list had gone stale in
+both directions: it asked for WP-CLI, which shipped in 0.24.0, and it counted
+seventeen checks when there are forty. A list of what is missing is only worth
+keeping if it is true.
 
-## [0.29.0] - 2026-09-06
+- **Testing with disabled users, and a real screen-reader pass over the admin.**
+  The contrast guard measures 91 colour pairings on every push and the interface
+  is built to WCAG 2.2 AA, neither of which is the same thing as somebody using
+  it. This is the largest gap and the one no amount of tooling closes.
+- **Three checks that need work the current passes cannot do**: text too small
+  to read, which is a computed size rather than a declared one; carousels; and
+  animated GIFs, which means reading frame counts out of the file rather than
+  guessing from the extension.
+- **Page builders beyond Elementor.** Oxygen and Beaver Builder both store
+  content outside `post_content` and are therefore suspect in the same way
+  Elementor was before 0.27.0. Avada, ACF and WooCommerce are untested. The way
+  to find out is to build a page and scan it.
+
+## [1.0.0] - 2026-09-10
+
+**First public release.**
+
+Everything below shipped during development under version numbers nobody ever
+installed — the plugin has never been on WordPress.org until now, so 1.0.0 is
+the first version that exists as far as anybody outside this repository is
+concerned. The entries are kept rather than collapsed because they are the
+record of why the plugin is shaped the way it is, and several of them are the
+reasoning behind decisions somebody will want to revisit.
+
+The `@since` tags in the source are left at the versions the code was actually
+written in, for the same reason.
 
 Findings that keep their identity, and figures you can open.
 

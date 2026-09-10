@@ -1,10 +1,10 @@
 === WOWStudio Accessibility Kit ===
-Contributors: wowstudio
+Contributors: wowstudioplugin
 Tags: accessibility, wcag, a11y, alt text, accessibility scanner
 Requires at least: 6.8
 Tested up to: 7.1
 Requires PHP: 8.1
-Stable tag: 0.29.0
+Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -105,257 +105,19 @@ In WordPress's own alt text field on the media item. It therefore applies everyw
 
 == Changelog ==
 
-= 0.29.0 =
-* Changed: hardening found by the WordPress.org Plugin Check — the setup's query argument is sanitised before it is read, and the report's grouped counts no longer build a column name into a query.
-* Fixed: the Accessibility column on the Posts and Pages screens showed "Not checked" for every row, including pages that had been checked many times. On a block theme another query was running first and using up the one lookup the column allowed itself.
-* Fixed: a finding marked a false positive can now be put back on the list from the False positives screen. Previously the undo was only offered on the card you had just dismissed, which disappeared as soon as you left the screen or scanned the page again.
-* Changed: scanning covers posts and pages only. Templates, patterns, page-builder libraries and custom post types are no longer offered — none of them is a page a visitor can open, and a pattern's problems are already found on the pages it appears in. Sites that need more can add post types with the wsak_post_types filter.
-* New: activating the plugin opens a short setup instead of an empty report — what the plugin does and refuses to claim, the site-wide fixes, and your first scan. Every step is optional and nothing is switched on for you.
-* Fixed: the cards on the report drew a box around their contents with no padding, so every label sat against an edge.
-* Fixed: a theme finding with no code correction to hand over showed a paragraph of explanation formatted as a code snippet, on one line wide enough to need scrolling. It now reads as ordinary text.
-* Fixed: chart labels are no longer cut off mid-sentence.
-* New: findings of one check can be grouped by the markup behind them, so a fault your theme repeats on every page is judged once rather than once per page. Setting one aside everywhere requires a reason, lists the pages it covers first, needs permission to edit other people's content, and can be withdrawn in one step from the "False positives" screen.
-* New: the figures on the report screen now open. "What comes up most" and "Pages with the most to do" were counts you could read and not act on; each row is now a control that lists the findings behind it, with an explanation of the check at the top rather than repeated against every row.
-* Fixed: a suggested style fix could be written correctly and still do nothing, because a theme or page builder styled the same element with a more specific rule. Suggestions are now weighted to outrank what is already there, and say so when nothing can — for instance when the existing rule is marked !important.
-* Changed: the report reads as figures on a page rather than numbers in boxes, with the score's caveat beside the score and the trend line given the full width.
-* Changed: the plugin is four pages in the WordPress menu — Dashboard, Scan & Fix, Settings and Statement — instead of one page with eight tabs across it. The header now shows when anything was last checked, with a shortcut to check more.
-* New: a proper first screen. A new install used to open on an empty report; it now says what to do and how the plugin is meant to be used.
-* Changed: the findings list shows one finding open at a time instead of every finding expanded at once. Closed findings are a single row saying what is wrong and where; arrow keys move between them.
-* New: findings say where they are in readable terms — the element and the words on it, like span.first-title — "About the Conference" — instead of a long DOM path. The path is still there, one click down.
-* New: every finding now says what happens next — whether the plugin can fix it, whether you need to, whether it belongs to your theme, or whether someone needs to look at it — with a sentence saying how.
-* Changed: "Set aside" is now "False positives", the term most people already use.
-* Changed: the plugin's screens use the full width of the window.
-* Fixed: on sites that cannot make requests to themselves, the score and counts could still show the first pass's result above the second pass's findings — reading "0 issues" over a list of issues.
-* New: findings listed by check now name the page each one is on, and link to it.
-* Changed: the report now separates barriers found from findings that need a person to look at them, instead of adding both into one number.
-* Fixed: text sitting on a background image is reported once per background rather than once per phrase, and text styled to be invisible is no longer reported as a contrast failure. On our test site this took 387 findings down to 128 without hiding anything.
-* Fixed: a size measurement could round up to the very threshold it had failed, so a finding read "24.0 pixels, so it is not quite 24 tall enough".
-* Fixed: an empty folder left over from the licensing SDK removed in 0.16.0 was still being included in the plugin package. It is gone, and the build now refuses to produce a package containing one.
-* Fixed: dismissals are no longer lost when a page is scanned again. A finding you set aside, and the reason you gave for it, now stay with that finding across every future scan. Previously the decision was kept only on the record the scan happened to be holding, so the next scan quietly put the finding back with no sign that anything had been discarded.
-* Fixed: site-wide counts no longer include findings from earlier scans. A page scanned repeatedly was contributing a separate copy of each of its findings every time, so the totals grew the more the plugin was used. Only the most recent scan of each page is counted now, which is what the score on the same screen was already doing.
-* Upgrading tidies this up in one pass: existing dismissals are preserved first, then superseded findings are cleared out. Expect the open counts to drop — the earlier numbers were counting the same findings several times over, and nothing has been hidden.
+= 1.0.0 =
+First public release.
 
-= 0.28.0 =
-* New: the dashboard now suggests one thing to do next, worked out from your own site — check a page, switch on the site-wide fixes, describe your images, or work through what is open. One suggestion at a time, never a checklist, and it disappears entirely when there is nothing worth suggesting.
-* New: a link to "what these checks cover, and what they cannot" from the dashboard and from the foot of every findings list. It documents all forty-one checks and was previously hard to find.
+* Finds accessibility problems on your posts and pages, checking against WCAG 2.2 A and AA with 41 checks across two passes — one on the server that reads the rendered HTML, and one in your own browser for the things no parser can know: real contrast, real target sizes, real layout.
+* Puts every finding beside a live preview of the page it is on, so choosing one highlights the element it is about.
+* Fixes what can honestly be fixed from here. Markup fixes are shown as a preview and a diff and stored in a reversible layer that never overwrites your content; styling problems get a rule written into your own Additional CSS, weighted so it actually wins against your theme, then measured again to confirm it worked.
+* 14 site-wide fixes for the things a theme leaves out — skip link, focus outline, page title, form labels and more — each one stating what it might disturb before you switch it on. Nothing is on by default.
+* Lists every image in your media library that has never been described, with a field beside each. What you write goes into WordPress's own alt text, so it applies everywhere and stays behind if you remove this plugin.
+* Generates an accessibility statement you review, edit and attest to, including the feedback contact mechanism European rules expect.
+* Labels every finding as either settled by an automated check or needing a person to look at it, and says plainly which parts of WCAG automation cannot reach.
+* Contacts no external service. No API, no account, no telemetry, no phone-home — which is also why there are no scanning limits.
+* Free, all of it. No paid tier, no locked controls, no upgrade prompts.
 
-= 0.27.0 =
-* Fixed: pages built with Elementor were not being scanned properly on sites where the plugin cannot fetch the whole page. Elementor keeps the real page outside WordPress's own content field and leaves a short text summary in its place, so the scan was reading the summary — and reporting a clean result for a page it had barely seen. It now asks Elementor for the page itself. Divi and WP Bakery were never affected.
-* Fixed: when there is genuinely nothing to scan, the message now says so and names what to check, instead of reporting that the page could not be parsed.
-* Changed: the generated accessibility statement is written in plainer language, and now passes this plugin's own reading-level check.
-
-= 0.26.0 =
-* For developers: hooks so a separate add-on can register a report export format, and restrict who may set a finding aside. Nothing changes for you — the dismissal hook can only ever narrow permission, never widen it, and no export control appears unless something has registered a format, so there are no locked buttons.
-
-= 0.25.0 =
-* New: reading level. Pages are checked against the Flesch–Kincaid grade level, and flagged when they read above lower secondary school level — the point at which WCAG 3.1.5 asks for a simpler version.
-* New: a plain-language summary field in the editor's Accessibility sidebar, which you can optionally show above your content.
-* The reading level is reported as something to look at, never as a failure. The formula counts sentence length and syllables and understands nothing about meaning, so a page written for a specialist audience may be right as it is. It stays quiet on short pages and on sites that are not in English, where it would produce a number that means nothing.
-* Nothing writes the summary for you. A summary a machine guessed at reads convincingly and means whatever it guessed, which is worse than none.
-
-= 0.24.0 =
-* New: WP-CLI support. `wp wsak scan --all` checks your whole site from the command line, `wp wsak issues` lists what it found, `wp wsak checks` lists every check, and `wp wsak fixes` switches the site-wide fixes on and off.
-* Bulk scanning is included, so this works in a deployment pipeline or on staging.
-
-= 0.23.0 =
-* New: an Accessibility column on your Posts and Pages screens, showing each page's score and how many findings are open. Pages nobody has checked say "Not checked" rather than showing a zero.
-* New: a "Set aside" screen listing every finding somebody chose not to act on, with the reason they gave, who they were and when. Anybody who can view reports can read it, not only the people who can dismiss.
-
-= 0.22.0 =
-* Scheduled checking has been moved out of this plugin. It was added in 0.21.0 and is now part of a separate paid add-on, along with the change report that went with it.
-* "Monitor" has been removed from how this plugin describes itself, because it no longer does it. Everything else is unchanged: every check, every fix, site-wide scanning and the full report all stay here and stay free.
-
-= 0.21.0 =
-* New: scheduled checking. Your site can now re-check itself every week or every month, so a problem introduced by an edit, a plugin update or a theme change is noticed without anybody having to remember to look.
-* New: a "What has changed" screen showing which pages started failing something they used to pass, and which stopped.
-* Off by default. Each run covers the fifty most recently updated pages in the background.
-* Nothing is emailed and nothing is sent anywhere — this plugin still contacts no outside service at all.
-
-= 0.20.0 =
-* Five more site-wide fixes, completing the set at fourteen.
-* Lets people pinch-zoom on a phone where the theme blocked it.
-* Puts the tab order back in reading order where something claimed a place ahead of the page.
-* Removes tooltips that only repeat the link text, which some screen readers announce twice.
-* Gives a form field the name its own placeholder already carries — and never invents one where there is no placeholder, because a made-up label is worse than a missing one.
-* Explains an empty search beside the search box instead of loading a results page that cannot say what went wrong.
-* These five are carried out in the reader's browser, because they correct markup your theme has already printed. They add no widget, no toolbar and no controls — nothing appears on your site — and the settings screen says plainly which fixes need JavaScript.
-
-= 0.19.0 =
-* New: fixes for the whole site. Nine switches that supply what your theme leaves out, on every page at once.
-* A skip link, so keyboard users can jump past your menu instead of tabbing through it on every page.
-* A visible outline on whatever has keyboard focus, for themes that switched the browser's own one off.
-* Underlines on links inside body text, where colour alone does not mark them.
-* The page language, and a title on every page.
-* Names for your search box and comment fields where the theme left them without one.
-* "(opens in a new tab)" and "(PDF, 1.2 MB)" added to links in your content that need them.
-* An option to refuse PDF uploads from anyone but an administrator.
-* Nothing is written into your content: every one of these is reversible by switching it back off.
-
-= 0.18.0 =
-* Eleven new checks, taking the scanner from 29 to 40.
-* Tables and forms: header cells with no text; image buttons with no name; the same id used twice, which quietly stops labels and ARIA references reaching the right element.
-* Keyboard and zoom: a positive tabindex, which moves an element ahead of everything else when tabbing; a viewport tag that stops the page being pinch-zoomed on a phone.
-* Presentation: blinking and scrolling text; text justified to both margins; underlined text that is not a link; a bold paragraph standing in for a heading, which is how a page ends up looking structured while having no outline.
-* Media: video with no caption track, and audio with no transcript.
-
-= 0.17.0 =
-* Twelve new checks, taking the scanner from 17 to 29.
-* Images: alt text that is really a file name or a placeholder; alt text long enough to be a paragraph; alt text that just repeats the caption; image-map regions with no name.
-* Links: links that open a new tab without saying so; links that download a PDF, spreadsheet or archive without saying so; in-page links pointing at a section that does not exist — which is how skip links quietly stop working; links that respond to a click but cannot be reached by keyboard.
-* Structure and forms: empty headings; pages with no headings at all; labels attached to a field that is not there, or two labels on one field; ARIA attributes naming an element that does not exist.
-
-= 0.16.0 =
-* Everything in this plugin is now free. Checking your whole site at once was the paid feature; it is not paid any more, and there are no locked buttons left anywhere.
-* Removed the licensing SDK entirely. No account, no opt-in screen, no telemetry.
-* Removed the AI features. Nothing is generated and nothing leaves your site — this plugin now makes no outbound requests of any kind, to anyone, ever.
-* Added: an Images screen listing every image in your media library that has never been described, with a field beside each and one button to save them all. It writes WordPress's own alt text, so it applies wherever the image is used and stays behind if you remove the plugin.
-* Images already marked decorative are left alone. An empty description is a decision somebody made, not a gap to fill.
-* Findings whose wording depends on what your content means — alt text, link names, button names, labels — are now grouped under "Needs a decision from you" rather than offering a draft. That is what they always were.
-
-= 0.15.1 =
-* Fixed: findings that a style rule answers — colour contrast, links marked by colour alone, and targets under 24 by 24 — offered a button that asked for an AI provider key. They need no AI at all. They now send you to the page view, where the fix has always been, and say so.
-
-= 0.15.0 =
-* The opt-in screen can now send its confirmation to an address you choose, instead of only the one on your WordPress account. If that address is one nobody reads, the confirmation used to go nowhere and the opt-in could not be finished. Opting in is still optional and the plugin still works fully without it.
-
-= 0.14.0 =
-* Added an accessibility panel inside the block editor, checking what you write as you write it. Fixes you apply there go straight into the block, so they are part of your content and undo works on them like any other edit.
-* A finished bulk check can now go on to check colour, text size and layout, working through your pages in your own browser. That part only runs while the tab is open, and it says so before it starts.
-* Your theme is now reported separately, with each fault sorted by who can fix it: the ones you can change in a setting, and the ones that need whoever maintains your theme — with a copyable summary written out for them.
-* Fixed two accessibility faults in this plugin's own screens, found by auditing them against the standard we report on. Details in docs/accessibility-audit.md, including what has still not been checked.
-
-= 0.13.0 =
-* Findings are now grouped by what they ask of you — fix now, read then apply, decide for yourself, or hand to your developer — rather than by how serious they are. Severity tells you how bad something is; it never tells you where to start.
-* Every finding now says, in one plain sentence, what it costs an actual person. The WCAG number is still there, one level down.
-* Added bulk checking by content type, so you can check pages, posts or products together instead of one at a time.
-* Added bulk image descriptions, generated in the background and shown to you on one screen. Nothing is saved to your media library until you have read it.
-* You can now set a finding aside as not a problem. The reason is required, and it is kept with your name and the date — that is what makes it a record you can rely on later.
-* Images you have deliberately marked as decorative are left alone. An empty description is a decision, not a gap.
-
-= 0.12.0 =
-* Bulk work now runs in the background, so a long job cannot time out halfway through an admin page. Runs can be stopped, and anything already found is kept.
-* Checking many pages no longer asks your site to fetch each one. On hosts that block those requests — a common and reasonable setting — checking now works where it previously fell back to less.
-* Your theme is checked once rather than reported against every page that uses it.
-* Requires WordPress 6.8 or newer. This is needed by the background scheduler we now bundle, whose current version carries a security fix that was never added to the older line.
-
-= 0.11.0 =
-* Findings caused by styling can now be fixed, not just reported: text contrast, links marked by colour alone, and controls too small to hit reliably. The proposed colour keeps the hue and saturation you chose and moves only as far as it has to.
-* Fixes of this kind are written into your own Additional CSS, under Appearance → Customise, where you can read, edit or delete them with or without this plugin. Everything already in that stylesheet is preserved exactly.
-* Before applying, you see the selector, how many elements it matches, and a warning when the selector is one that will break as your content changes. The selector is editable.
-* After applying, the page is loaded again and measured again — so you are told when a rule in your theme overrode the fix, instead of being told it worked.
-* The two rules a stylesheet cannot answer now say why, and what to change instead.
-* Redesigned admin screens.
-* Fixed a finding that reported a control as "170 by 24 pixels" and then asked for 24 by 24. The measurement was rounded and the comparison was not.
-
-= 0.10.0 =
-* Added a second scanning pass that runs in your browser, checking what only a rendered page can show: text contrast, target size, links distinguished by colour alone, scrollable regions no keyboard can reach, and hidden elements still in the tab order.
-* Added the inspector: findings on the left, a live preview of the page on the right. Choosing a finding highlights the element on the page.
-* Contrast that cannot be measured — text over a photograph, stacked translucency — is reported as needing a person rather than guessed at and reported as a pass.
-* Fixed a build failure on a fresh checkout, where static analysis ran before the admin bundle existed.
-
-= 0.9.0 =
-* Security: closed a hole that let anyone, without logging in, work out which post IDs existed on your site — including drafts and private posts. No titles or content were ever exposed, only whether an ID was in use. Please update.
-* Added the External services section describing exactly what each AI provider receives, and when.
-* Fixed JavaScript strings not being checked for their text domain, which had been quietly leaving some of them untranslatable.
-
-= 0.8.0 =
-* Held the plugin's own admin UI to the standard it reports on. Named the focusable code and diff blocks, fixed the statement preview competing with the panel around it in the heading outline, and fixed three status messages that announced nothing to a screen reader.
-* Added guards that run on every push: all 41 colour pairings in the admin UI are checked against WCAG 2.2 AA contrast, and 17 required honesty disclosures across 10 screens are checked for still being there.
-* Added the audit of our own interface, including a full account of what has not been checked. See docs/accessibility-audit.md in the repository.
-
-= 0.7.0 =
-* Accessibility statement generator, as a block and a shortcode, with the feedback contact route European rules expect.
-* Sign-off: an unsigned statement publishes as a draft, and editing the wording withdraws the sign-off automatically.
-
-= 0.6.0 =
-* Suggested fixes, one at a time, with a preview, a diff, and an undo. Applied fixes are stored in a reversible override layer and never overwrite your content.
-
-= 0.5.0 =
-* Bring-your-own-key AI providers (OpenAI, Anthropic, Gemini, OpenRouter), with keys encrypted at rest and never returned to the browser.
-* AI alt-text suggestions for a single image, always shown in an editable field before anything is saved.
-
-= 0.4.0 =
-* The dashboard: run a scan, read the findings grouped by whether a machine settled them, and open the coverage panel listing every check and what it can decide.
-
-= 0.3.0 =
-* The scanner: server-side WCAG 2.2 checks over the rendered HTML of a page, with every finding tagged auto-detected or needs manual review.
-
-= 0.2.0 =
-* Storage layer for scans and findings.
-
-= 0.1.0 =
-* Initial scaffold: plugin bootstrap, capabilities, activation and uninstall handling.
-
-== Upgrade Notice ==
-
-= 0.29.0 =
-The report's figures now open onto the findings behind them, and repeated markup can be judged once instead of once per page. Dismissed findings survive a rescan, and the site-wide counts no longer count the same finding once per scan, so your open totals will drop after upgrading.
-
-= 0.28.0 =
-The dashboard now tells you what to do next, and the list of what the checks cover is easier to find.
-
-= 0.27.0 =
-Fixes Elementor pages being scanned as empty, and makes the generated accessibility statement easier to read.
-
-= 0.26.0 =
-Developer hooks only; nothing changes in how the plugin behaves.
-
-= 0.25.0 =
-Adds reading-level checking and a plain-language summary field, for WCAG 3.1.5.
-
-= 0.24.0 =
-Adds WP-CLI commands, including whole-site scanning for use in a pipeline.
-
-= 0.23.0 =
-Adds an accessibility column to your Posts and Pages lists, and a screen recording what has been set aside and why.
-
-= 0.22.0 =
-Scheduled checking has moved to a separate paid add-on. Everything else is unchanged and still free.
-
-= 0.21.0 =
-Your site can now re-check itself on a schedule and tell you what changed since last time.
-
-= 0.20.0 =
-Five more site-wide fixes: pinch-zoom, tab order, repeated tooltips, placeholder-only form fields, and empty searches.
-
-= 0.19.0 =
-Adds nine site-wide fixes — skip link, focus outline, link underlines, page language and title, form labels, and warnings on links that open a new tab or download a file.
-
-= 0.18.0 =
-Eleven new checks, covering tables, image buttons, duplicate ids, tab order, pinch-zoom, blinking and justified text, and captions for video and audio.
-
-= 0.17.0 =
-Twelve new checks, covering alt-text quality, links that surprise you, broken skip links, empty headings and mislabelled form fields.
-
-= 0.16.0 =
-Everything is free now, and the AI features are gone. The plugin no longer contacts any external service. Site-wide scanning is no longer paid, and there is a new Images screen for writing alt text in bulk.
-
-= 0.15.1 =
-Contrast, colour-only links and small targets no longer ask for an AI key to fix something that needs no AI.
-
-= 0.15.0 =
-You can now opt in with an email address of your choosing, rather than only the one on your WordPress account.
-
-= 0.14.0 =
-Adds an accessibility panel to the block editor, a separate report for your theme, and colour and layout checking across a whole run.
-
-= 0.13.0 =
-Findings are now ordered by what you can actually do about them, and images and pages can be handled in bulk.
-
-= 0.12.0 =
-Requires WordPress 6.8. Bulk work moves to the background and now works on hosts that block loopback requests.
-
-= 0.11.0 =
-Style-caused findings can now be fixed as well as found, written into your own Additional CSS and verified by re-measuring the page.
-
-= 0.10.0 =
-Adds a browser-level scanning pass and the inspector, which shows each finding on the page it came from.
-
-= 0.9.0 =
-Security fix: an unauthenticated visitor could determine which post IDs existed on your site, drafts included. No content was exposed. Update recommended.
-
-= 0.8.0 =
-Accessibility fixes to the plugin's own admin screens, and new checks that keep them fixed. No changes to your site's content.
-
-= 0.1.0 =
-First development release.
+The plugin was built over 29 development versions before this one. None of them
+were released publicly; the full history is in CHANGELOG.md in the source
+repository.

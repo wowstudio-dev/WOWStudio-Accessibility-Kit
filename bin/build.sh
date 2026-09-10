@@ -72,6 +72,27 @@ composer install \
 # appears without the manifest that produced it. composer.lock is dev-only.
 rm -f "${OUT}/composer.lock"
 
+echo "==> Trimming vendor documentation"
+#
+# Action Scheduler ships its own readme.txt, and it is a plugin readme: it has
+# Contributors, Stable tag and Tested up to headers describing a different
+# plugin. A second one of those inside the package is a thing WordPress.org
+# reviewers ask about, and there is no reading of it that helps anybody
+# installing this.
+#
+# The rest is documentation for people reading the library's repository, which
+# is not what a vendor directory is for. None of it is loaded by any code — the
+# grep that proved that is worth re-running if this list ever grows.
+#
+# Every licence file stays. The GPL and the MIT licence both require their text
+# to travel with the code, so removing one would be an actual violation rather
+# than tidying.
+find "${OUT}/vendor" \
+	\( -name 'readme.txt' -o -name 'changelog.txt' -o -name 'README.md' \
+	   -o -name 'CLAUDE.md' -o -name 'AGENTS.md' -o -name 'CONTRIBUTING.md' \) \
+	-type f -delete
+echo "    vendor docs removed, licences kept"
+
 echo "==> Verifying the build"
 php "${ROOT}/bin/check-claims.php" > /dev/null
 echo "    no unqualified compliance claims"
@@ -81,6 +102,25 @@ if [ ! -f "${OUT}/build/index.js" ]; then
 	exit 1
 fi
 echo "    compiled admin app included"
+
+STRAY_READMES="$(find "${OUT}" -name 'readme.txt' -type f | grep -v "^${OUT}/readme.txt$" || true)"
+if [ -n "${STRAY_READMES}" ]; then
+	echo "    ERROR: a second readme.txt is in the build:" >&2
+	echo "${STRAY_READMES}" >&2
+	exit 1
+fi
+echo "    one readme, and it is ours"
+
+if [ ! -f "${OUT}/LICENSE" ]; then
+	echo "    ERROR: the plugin licence is missing from the build" >&2
+	exit 1
+fi
+LICENCES="$(find "${OUT}/vendor" -iname 'licen[cs]e*' -type f | wc -l | tr -d ' ')"
+if [ "${LICENCES}" -lt 3 ]; then
+	echo "    ERROR: vendor licence files were removed; the GPL and MIT both require them" >&2
+	exit 1
+fi
+echo "    licences intact (${LICENCES} in vendor)"
 
 if [ -d "${OUT}/tests" ] || [ -d "${OUT}/node_modules" ] || [ -f "${OUT}/phpcs.xml.dist" ]; then
 	echo "    ERROR: development files leaked into the build" >&2

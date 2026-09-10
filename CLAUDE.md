@@ -86,8 +86,8 @@ See `SPEC.md` → "Explicitly NOT included (anti-features)" for the full stop-li
 
 ## Where the work is
 Roughly in order. The competitor ships 44 checks and 11 free site-wide fixes;
-we ship 40 checks, 14 site-wide fixes and 4 one-click fixes, so we are ahead on
-both.
+we ship 41 checks (36 on the server, 5 in the browser pass), 14 site-wide fixes
+and 4 one-click fixes, so we are ahead on both.
 
 1. **Checks, 40 → ~48.** Twelve landed in 0.17.0: alt text that is a file name,
    a placeholder or a repeated caption; alt long enough to be a paragraph;
