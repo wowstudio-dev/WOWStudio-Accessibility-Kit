@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #
-# Regenerates languages/wowstudio-accessibility-kit.pot.
+# Regenerates languages/wowstudio-accessibility-remediation.pot.
 #
 # Runs against the built plugin rather than the working tree, because
 # `wp i18n make-pot` walks whatever directory it is given and the working tree
@@ -14,7 +14,7 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-SLUG="wowstudio-accessibility-kit"
+SLUG="wowstudio-accessibility-remediation"
 OUT="${ROOT}/dist/${SLUG}"
 
 cd "${ROOT}"

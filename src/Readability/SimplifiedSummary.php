@@ -164,7 +164,7 @@ final class SimplifiedSummary implements Registrable {
 				<h2 id="wsak-summary-heading" class="wsak-summary__heading">%1$s</h2>
 				%2$s
 			</aside>',
-			esc_html__( 'In short', 'wowstudio-accessibility-kit' ),
+			esc_html__( 'In short', 'wowstudio-accessibility-remediation' ),
 			wpautop( wp_kses_post( $summary ) )
 		);
 

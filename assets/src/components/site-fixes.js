@@ -39,7 +39,7 @@ function FixRow( { fix, busy, onToggle } ) {
 				<p className="wsak-fix-row__browser">
 					{ __(
 						'Needs JavaScript: this one is carried out in the reader\u2019s browser, because the markup it corrects has already been printed by the time the page leaves your server. It does nothing for anyone browsing with JavaScript off.',
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					) }
 				</p>
 			) }
@@ -49,7 +49,7 @@ function FixRow( { fix, busy, onToggle } ) {
 					<span className="wsak-fix-row__caveat-label">
 						{ __(
 							'Worth knowing:',
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 						) }
 					</span>{ ' ' }
 					{ fix.caveat }
@@ -114,12 +114,12 @@ export default function SiteFixes() {
 						/* translators: 1: the name of the fix. 2: on or off, already translated. */
 						__(
 							'%1$s is now %2$s.',
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 						),
 						changed?.title || id,
 						changed?.enabled
-							? __( 'on', 'wowstudio-accessibility-kit' )
-							: __( 'off', 'wowstudio-accessibility-kit' )
+							? __( 'on', 'wowstudio-accessibility-remediation' )
+							: __( 'off', 'wowstudio-accessibility-remediation' )
 					)
 				);
 			} )
@@ -134,7 +134,7 @@ export default function SiteFixes() {
 			<Skeleton
 				label={ __(
 					'Loading the site-wide fixes…',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 			/>
 		);
@@ -147,21 +147,21 @@ export default function SiteFixes() {
 			<h2 id="wsak-fixes-title" className="wsak-fixes__title">
 				{ __(
 					'Fixes for the whole site',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 			</h2>
 
 			<p className="wsak-fixes__lede">
 				{ __(
 					'These are switches rather than edits. Each one supplies something your theme leaves out — a skip link, a visible focus outline, a page title — on every page at once. Nothing is written into your content, and switching one off leaves your site exactly as it was.',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 			</p>
 
 			<p className="wsak-fixes__lede">
 				{ __(
 					'They also cover only part of what a scan finds. A switch can supply what is missing everywhere; it cannot decide what one of your images is for, or what a link should be called. Those stay on the findings list.',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 			</p>
 
@@ -184,7 +184,7 @@ export default function SiteFixes() {
 								'%1$d of %2$d switched on.',
 								'%1$d of %2$d switched on.',
 								fixes.length,
-								'wowstudio-accessibility-kit'
+								'wowstudio-accessibility-remediation'
 							),
 							on,
 							fixes.length
@@ -205,7 +205,7 @@ export default function SiteFixes() {
 					<p className="wsak-fixes__note">
 						{ __(
 							'Most of these take effect the next time a page is loaded, because they are decided early in the request. If you have a page open in another tab, reload it before checking.',
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 						) }
 					</p>
 				</>

@@ -24,7 +24,7 @@ export function readableError( error ) {
 
 	return __(
 		'The check could not run just now. It will try again as you write.',
-		'wowstudio-accessibility-kit'
+		'wowstudio-accessibility-remediation'
 	);
 }
 

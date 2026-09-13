@@ -80,12 +80,12 @@ enum FixTarget: string {
 	 */
 	public function label(): string {
 		return match ( $this ) {
-			self::Content => __( 'Your page content', 'wowstudio-accessibility-kit' ),
-			self::Css     => __( 'Your site’s Additional CSS', 'wowstudio-accessibility-kit' ),
-			self::Media   => __( 'Your media library', 'wowstudio-accessibility-kit' ),
-			self::Setting => __( 'A WordPress setting', 'wowstudio-accessibility-kit' ),
-			self::Theme   => __( 'Your theme', 'wowstudio-accessibility-kit' ),
-			self::None    => __( 'Nowhere', 'wowstudio-accessibility-kit' ),
+			self::Content => __( 'Your page content', 'wowstudio-accessibility-remediation' ),
+			self::Css     => __( 'Your site’s Additional CSS', 'wowstudio-accessibility-remediation' ),
+			self::Media   => __( 'Your media library', 'wowstudio-accessibility-remediation' ),
+			self::Setting => __( 'A WordPress setting', 'wowstudio-accessibility-remediation' ),
+			self::Theme   => __( 'Your theme', 'wowstudio-accessibility-remediation' ),
+			self::None    => __( 'Nowhere', 'wowstudio-accessibility-remediation' ),
 		};
 	}
 

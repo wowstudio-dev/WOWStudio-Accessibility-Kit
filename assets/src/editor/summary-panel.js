@@ -35,18 +35,18 @@ export default function SummaryPanel() {
 		<PanelBody
 			title={ __(
 				'Plain-language summary',
-				'wowstudio-accessibility-kit'
+				'wowstudio-accessibility-remediation'
 			) }
 			initialOpen={ false }
 		>
 			<TextareaControl
 				label={ __(
 					'Summary of this page',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 				help={ __(
 					'For readers who would struggle with the full text: what this page says, in the simplest words that still say it. Leave it empty if the page is already plain. Nothing writes this for you — a summary a machine guessed at reads convincingly and means whatever it guessed, which is worse than none.',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 				value={ meta.wsak_simplified_summary || '' }
 				rows={ 6 }

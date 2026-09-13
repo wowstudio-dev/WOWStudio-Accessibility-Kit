@@ -81,7 +81,7 @@ final class ThemeTriage {
 
 		return array(
 			'tier'        => self::TIER_HANDOFF,
-			'label'       => __( 'Someone has to edit the theme', 'wowstudio-accessibility-kit' ),
+			'label'       => __( 'Someone has to edit the theme', 'wowstudio-accessibility-remediation' ),
 
 			/*
 			 * Two sentences, because only one of them is ever true. "The change
@@ -89,8 +89,8 @@ final class ThemeTriage {
 			 * keep, and the reader goes looking for a snippet that is not there.
 			 */
 			'instruction' => '' !== $snippet
-				? __( 'No setting reaches this, and nothing here can change a theme file. Send the change below to whoever maintains your theme — or paste it into a child theme if you keep one.', 'wowstudio-accessibility-kit' )
-				: __( 'No setting reaches this, and nothing here can change a theme file. What the correction is depends on the template it lives in, so this one goes to whoever maintains your theme.', 'wowstudio-accessibility-kit' ),
+				? __( 'No setting reaches this, and nothing here can change a theme file. Send the change below to whoever maintains your theme — or paste it into a child theme if you keep one.', 'wowstudio-accessibility-remediation' )
+				: __( 'No setting reaches this, and nothing here can change a theme file. What the correction is depends on the template it lives in, so this one goes to whoever maintains your theme.', 'wowstudio-accessibility-remediation' ),
 			'url'         => '',
 			'snippet'     => $snippet,
 			'guidance'    => '' === $snippet && null !== $rule ? $rule->description() : '',
@@ -116,8 +116,8 @@ final class ThemeTriage {
 		if ( null !== $logo ) {
 			return array(
 				'tier'        => self::TIER_SETTING,
-				'label'       => __( 'This is a setting, not code', 'wowstudio-accessibility-kit' ),
-				'instruction' => __( 'This is your site logo. Describe it in the media library and every page that shows it is fixed at once — including pages nothing here has scanned.', 'wowstudio-accessibility-kit' ),
+				'label'       => __( 'This is a setting, not code', 'wowstudio-accessibility-remediation' ),
+				'instruction' => __( 'This is your site logo. Describe it in the media library and every page that shows it is fixed at once — including pages nothing here has scanned.', 'wowstudio-accessibility-remediation' ),
 				'url'         => (string) get_edit_post_link( $logo, 'raw' ),
 				'snippet'     => '',
 				'guidance'    => '',
@@ -133,10 +133,10 @@ final class ThemeTriage {
 
 			return array(
 				'tier'        => self::TIER_SETTING,
-				'label'       => __( 'This is a setting, not code', 'wowstudio-accessibility-kit' ),
+				'label'       => __( 'This is a setting, not code', 'wowstudio-accessibility-remediation' ),
 				'instruction' => $block_theme
-					? __( 'This is an item in one of your menus. Open the navigation block in the editor and give it a label — no code, and nothing here needs to stay installed for it to hold.', 'wowstudio-accessibility-kit' )
-					: __( 'This is an item in one of your menus. Give it a label in Appearance → Menus and the problem is gone — no code, and nothing here needs to stay installed for it to hold.', 'wowstudio-accessibility-kit' ),
+					? __( 'This is an item in one of your menus. Open the navigation block in the editor and give it a label — no code, and nothing here needs to stay installed for it to hold.', 'wowstudio-accessibility-remediation' )
+					: __( 'This is an item in one of your menus. Give it a label in Appearance → Menus and the problem is gone — no code, and nothing here needs to stay installed for it to hold.', 'wowstudio-accessibility-remediation' ),
 				'url'         => $block_theme ? admin_url( 'site-editor.php' ) : admin_url( 'nav-menus.php' ),
 				'snippet'     => '',
 				'guidance'    => '',

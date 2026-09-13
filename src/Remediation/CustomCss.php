@@ -41,7 +41,7 @@ final class CustomCss {
 	 * @since 0.11.0
 	 * @var string
 	 */
-	public const START = '/* BEGIN WOWStudio Accessibility Kit — managed rules. Edit above or below this block, not inside it. */';
+	public const START = '/* BEGIN WOWStudio Accessibility Remediation — managed rules. Edit above or below this block, not inside it. */';
 
 	/**
 	 * Closing marker for the managed block.
@@ -49,7 +49,7 @@ final class CustomCss {
 	 * @since 0.11.0
 	 * @var string
 	 */
-	public const END = '/* END WOWStudio Accessibility Kit */';
+	public const END = '/* END WOWStudio Accessibility Remediation */';
 
 	/**
 	 * Returns the site's whole Additional CSS.

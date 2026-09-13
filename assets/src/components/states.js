@@ -20,7 +20,8 @@ export function Skeleton( { label, rows = 3 } ) {
 	return (
 		<div className="wsak-skeleton" aria-busy="true">
 			<p className="screen-reader-text" role="status">
-				{ label || __( 'Loading…', 'wowstudio-accessibility-kit' ) }
+				{ label ||
+					__( 'Loading…', 'wowstudio-accessibility-remediation' ) }
 			</p>
 			{ Array.from( { length: rows } ).map( ( _, index ) => (
 				<div
@@ -47,7 +48,7 @@ export function ErrorState( { message, onRetry } ) {
 			<p>{ message }</p>
 			{ onRetry && (
 				<Button variant="secondary" onClick={ onRetry }>
-					{ __( 'Try again', 'wowstudio-accessibility-kit' ) }
+					{ __( 'Try again', 'wowstudio-accessibility-remediation' ) }
 				</Button>
 			) }
 		</Notice>

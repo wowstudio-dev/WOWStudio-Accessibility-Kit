@@ -32,7 +32,7 @@ function CssHandoff( { onInspect } ) {
 				<span className="wsak-issue__handoff-note">
 					{ __(
 						'This one is answered by a style rule measured off the element itself, so it is fixed in the page view — which needs a preview of this page, and this scan has none.',
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					) }
 				</span>
 			</p>
@@ -42,12 +42,15 @@ function CssHandoff( { onInspect } ) {
 	return (
 		<p className="wsak-issue__handoff">
 			<Button variant="secondary" onClick={ onInspect }>
-				{ __( 'Fix this on the page', 'wowstudio-accessibility-kit' ) }
+				{ __(
+					'Fix this on the page',
+					'wowstudio-accessibility-remediation'
+				) }
 			</Button>
 			<span className="wsak-issue__handoff-note">
 				{ __(
 					'Answered by a style rule measured off the element itself, so it is fixed in the page view where the element can be measured.',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 			</span>
 		</p>
@@ -158,7 +161,10 @@ function IssueCard( {
 						<p className="wsak-issue__sc">
 							{ sprintf(
 								/* translators: %s: WCAG success criterion number. */
-								__( 'WCAG %s', 'wowstudio-accessibility-kit' ),
+								__(
+									'WCAG %s',
+									'wowstudio-accessibility-remediation'
+								),
 								issue.wcag_sc
 							) }
 						</p>
@@ -211,7 +217,7 @@ function IssueCard( {
 								/* translators: %s: name of the accessibility check. */
 								__(
 									'Markup for: %s',
-									'wowstudio-accessibility-kit'
+									'wowstudio-accessibility-remediation'
 								),
 								issue.rule_title
 							) }
@@ -227,7 +233,7 @@ function IssueCard( {
 							<summary>
 								{ __(
 									'How to fix this',
-									'wowstudio-accessibility-kit'
+									'wowstudio-accessibility-remediation'
 								) }
 							</summary>
 							<p>{ issue.how_to_fix }</p>
@@ -236,7 +242,7 @@ function IssueCard( {
 									<span className="wsak-issue__selector-label">
 										{ __(
 											'Element:',
-											'wowstudio-accessibility-kit'
+											'wowstudio-accessibility-remediation'
 										) }
 									</span>{ ' ' }
 									<code>{ issue.selector }</code>
@@ -258,7 +264,10 @@ function IssueCard( {
 					{ showPage && issue.page && (
 						<p className="wsak-issue__page">
 							<span className="wsak-issue__selector-label">
-								{ __( 'Page:', 'wowstudio-accessibility-kit' ) }
+								{ __(
+									'Page:',
+									'wowstudio-accessibility-remediation'
+								) }
 							</span>{ ' ' }
 							{ issue.page.edit_link ? (
 								<a href={ issue.page.edit_link }>
@@ -273,7 +282,7 @@ function IssueCard( {
 									<a href={ issue.page.view_link }>
 										{ __(
 											'View',
-											'wowstudio-accessibility-kit'
+											'wowstudio-accessibility-remediation'
 										) }
 									</a>
 								</>
@@ -292,7 +301,7 @@ function IssueCard( {
 							<span className="wsak-issue__selector-label">
 								{ __(
 									'Where:',
-									'wowstudio-accessibility-kit'
+									'wowstudio-accessibility-remediation'
 								) }
 							</span>{ ' ' }
 							<code>{ issue.locator }</code>
@@ -304,7 +313,7 @@ function IssueCard( {
 							<summary>
 								{ __(
 									'Exact path in the page',
-									'wowstudio-accessibility-kit'
+									'wowstudio-accessibility-remediation'
 								) }
 							</summary>
 							<p className="wsak-issue__selector">
@@ -342,37 +351,40 @@ function IssueCard( {
 const BANDS = [
 	{
 		id: 'now',
-		title: __( 'Fix these now', 'wowstudio-accessibility-kit' ),
+		title: __( 'Fix these now', 'wowstudio-accessibility-remediation' ),
 		blurb: __(
 			'There is one correct answer and we already know it. Nothing here is a guess, so nothing here needs checking first.',
-			'wowstudio-accessibility-kit'
+			'wowstudio-accessibility-remediation'
 		),
 	},
 	{
 		id: 'review',
-		title: __( 'Read, then apply', 'wowstudio-accessibility-kit' ),
+		title: __( 'Read, then apply', 'wowstudio-accessibility-remediation' ),
 		blurb: __(
 			'We can draft these, but a draft is not an answer. Read what it says before you apply it — it was written by a model that cannot see why your page exists.',
-			'wowstudio-accessibility-kit'
+			'wowstudio-accessibility-remediation'
 		),
 	},
 	{
 		id: 'decide',
-		title: __( 'Needs a decision from you', 'wowstudio-accessibility-kit' ),
+		title: __(
+			'Needs a decision from you',
+			'wowstudio-accessibility-remediation'
+		),
 		blurb: __(
 			'These depend on what your content means, which is not something any tool can work out for you. Each one explains what to weigh up.',
-			'wowstudio-accessibility-kit'
+			'wowstudio-accessibility-remediation'
 		),
 	},
 	{
 		id: 'delegate',
 		title: __(
 			'For whoever looks after your theme',
-			'wowstudio-accessibility-kit'
+			'wowstudio-accessibility-remediation'
 		),
 		blurb: __(
 			'These are in your theme rather than your content, so nothing here can reach them. Each one comes with what to change and where.',
-			'wowstudio-accessibility-kit'
+			'wowstudio-accessibility-remediation'
 		),
 	},
 ];
@@ -416,7 +428,7 @@ function IssueGroup( {
 				<span className="wsak-group__count">
 					{ sprintf(
 						/* translators: %d: number of items in this group. */
-						__( '(%d)', 'wowstudio-accessibility-kit' ),
+						__( '(%d)', 'wowstudio-accessibility-remediation' ),
 						issues.length
 					) }
 				</span>
@@ -552,11 +564,11 @@ export default function IssueList( {
 			<EmptyState
 				title={ __(
 					'Nothing found by the automated checks',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 				body={ __(
 					'None of the checks we can run automatically flagged anything on this page. That is a good sign, and it is not the same as the page being accessible — most of WCAG needs a person. The manual checklists are the next step.',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 			/>
 		);
@@ -591,7 +603,7 @@ export default function IssueList( {
 					<Button variant="link" onClick={ () => onGo( 'coverage' ) }>
 						{ __(
 							'What these checks cover, and what they cannot',
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 						) }
 					</Button>
 				</p>

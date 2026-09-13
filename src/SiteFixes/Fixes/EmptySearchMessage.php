@@ -52,7 +52,7 @@ final class EmptySearchMessage implements RunsInBrowser, ProvidesCss {
 	 * @return string
 	 */
 	public function title(): string {
-		return __( 'Explain an empty search', 'wowstudio-accessibility-kit' );
+		return __( 'Explain an empty search', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -63,7 +63,7 @@ final class EmptySearchMessage implements RunsInBrowser, ProvidesCss {
 	 * @return string
 	 */
 	public function description(): string {
-		return __( 'When somebody presses Search without typing anything, this keeps them on the page and says so beside the field, instead of loading a results page that cannot explain itself. Focus moves back to the search box so the next keystroke lands where it should.', 'wowstudio-accessibility-kit' );
+		return __( 'When somebody presses Search without typing anything, this keeps them on the page and says so beside the field, instead of loading a results page that cannot explain itself. Focus moves back to the search box so the next keystroke lands where it should.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -85,7 +85,7 @@ final class EmptySearchMessage implements RunsInBrowser, ProvidesCss {
 	 * @return string
 	 */
 	public function caveat(): string {
-		return __( 'Changes what your search form does: an empty search no longer submits. Only WordPress\'s own search form is affected, and with JavaScript off the form behaves exactly as it does now.', 'wowstudio-accessibility-kit' );
+		return __( 'Changes what your search form does: an empty search no longer submits. Only WordPress\'s own search form is affected, and with JavaScript off the form behaves exactly as it does now.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**

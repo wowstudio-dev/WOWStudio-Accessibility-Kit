@@ -100,7 +100,7 @@ export default function RenderedQueue( { pages, onDismiss } ) {
 				/* translators: 1: page title, 2: position, 3: total pages. */
 				__(
 					'Checking %1$s — %2$d of %3$d.',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				),
 				current.title,
 				index + 1,
@@ -137,11 +137,11 @@ export default function RenderedQueue( { pages, onDismiss } ) {
 					{ finished
 						? __(
 								'Colour and layout checked',
-								'wowstudio-accessibility-kit'
+								'wowstudio-accessibility-remediation'
 						  )
 						: __(
 								'Checking colour and layout…',
-								'wowstudio-accessibility-kit'
+								'wowstudio-accessibility-remediation'
 						  ) }
 				</h4>
 				{ /*
@@ -153,14 +153,14 @@ export default function RenderedQueue( { pages, onDismiss } ) {
 				 */ }
 				{ finished ? (
 					<Button variant="secondary" onClick={ onDismiss }>
-						{ __( 'Done', 'wowstudio-accessibility-kit' ) }
+						{ __( 'Done', 'wowstudio-accessibility-remediation' ) }
 					</Button>
 				) : (
 					<Button
 						variant="secondary"
 						onClick={ () => setStopped( true ) }
 					>
-						{ __( 'Stop', 'wowstudio-accessibility-kit' ) }
+						{ __( 'Stop', 'wowstudio-accessibility-remediation' ) }
 					</Button>
 				) }
 			</div>
@@ -187,7 +187,7 @@ export default function RenderedQueue( { pages, onDismiss } ) {
 					_x(
 						'%1$d of %2$d',
 						'pages checked in the browser',
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					),
 					Math.min( index, pages.length ),
 					pages.length
@@ -202,7 +202,7 @@ export default function RenderedQueue( { pages, onDismiss } ) {
 				<p className="wsak-rendered__note">
 					{ __(
 						'This one needs your browser, so it only runs while this tab is open. Everything already checked is saved as it goes.',
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					) }
 				</p>
 			) }
@@ -215,13 +215,13 @@ export default function RenderedQueue( { pages, onDismiss } ) {
 							'%d page would not open here, so its colour and layout were not checked.',
 							'%d pages would not open here, so their colour and layout were not checked.',
 							blocked,
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 						),
 						blocked
 					) }{ ' ' }
 					{ __(
 						'Some sites refuse to be shown inside another page, which is a reasonable security setting and not a fault.',
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					) }
 				</Notice>
 			) }
@@ -237,7 +237,10 @@ export default function RenderedQueue( { pages, onDismiss } ) {
 					src={ current.preview_url }
 					title={ sprintf(
 						/* translators: %s: page title. */
-						__( 'Checking: %s', 'wowstudio-accessibility-kit' ),
+						__(
+							'Checking: %s',
+							'wowstudio-accessibility-remediation'
+						),
 						current.title
 					) }
 					onLoad={ onLoad }
@@ -253,7 +256,7 @@ export default function RenderedQueue( { pages, onDismiss } ) {
 								{ one.status === BLOCKED
 									? __(
 											'would not open',
-											'wowstudio-accessibility-kit'
+											'wowstudio-accessibility-remediation'
 									  )
 									: sprintf(
 											/* translators: %d: number of further findings. */
@@ -261,7 +264,7 @@ export default function RenderedQueue( { pages, onDismiss } ) {
 												'%d more finding',
 												'%d more findings',
 												one.stored,
-												'wowstudio-accessibility-kit'
+												'wowstudio-accessibility-remediation'
 											),
 											one.stored
 									  ) }

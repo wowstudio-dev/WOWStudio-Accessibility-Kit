@@ -95,7 +95,7 @@ final class ViewportScalingDisabled implements Rule {
 	 * @return string
 	 */
 	public function title(): string {
-		return __( 'The page cannot be zoomed', 'wowstudio-accessibility-kit' );
+		return __( 'The page cannot be zoomed', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -106,7 +106,7 @@ final class ViewportScalingDisabled implements Rule {
 	 * @return string
 	 */
 	public function description(): string {
-		return __( 'This page\'s viewport tag stops pinch-zoom, or caps it below twice the normal size. Readers with low vision rely on zooming to read at all, and this takes that away on exactly the devices where it matters most. Remove user-scalable=no and any maximum-scale below 2 — the browser behaviour these were once working around no longer exists.', 'wowstudio-accessibility-kit' );
+		return __( 'This page\'s viewport tag stops pinch-zoom, or caps it below twice the normal size. Readers with low vision rely on zooming to read at all, and this takes that away on exactly the devices where it matters most. Remove user-scalable=no and any maximum-scale below 2 — the browser behaviour these were once working around no longer exists.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -117,7 +117,7 @@ final class ViewportScalingDisabled implements Rule {
 	 * @return string
 	 */
 	public function consequence(): string {
-		return __( 'Readers who need larger text cannot enlarge the page on a phone or tablet.', 'wowstudio-accessibility-kit' );
+		return __( 'Readers who need larger text cannot enlarge the page on a phone or tablet.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -132,7 +132,7 @@ final class ViewportScalingDisabled implements Rule {
 		return new FixPlan(
 			FixKind::Manual,
 			FixTarget::Theme,
-			__( 'The viewport tag is printed in the theme\'s head, so this is a one-line change there rather than anything in your content: drop user-scalable=no and any maximum-scale below 2.', 'wowstudio-accessibility-kit' )
+			__( 'The viewport tag is printed in the theme\'s head, so this is a one-line change there rather than anything in your content: drop user-scalable=no and any maximum-scale below 2.', 'wowstudio-accessibility-remediation' )
 		);
 	}
 
@@ -160,13 +160,13 @@ final class ViewportScalingDisabled implements Rule {
 			$reasons = array();
 
 			if ( str_contains( $content, 'user-scalable=no' ) || str_contains( $content, 'user-scalable=0' ) ) {
-				$reasons[] = __( 'zooming is switched off', 'wowstudio-accessibility-kit' );
+				$reasons[] = __( 'zooming is switched off', 'wowstudio-accessibility-remediation' );
 			}
 
 			if ( 1 === preg_match( '/maximum-scale=([0-9.]+)/', $content, $matches ) && (float) $matches[1] < 2.0 ) {
 				$reasons[] = sprintf(
 					/* translators: %s: the maximum-scale value found. */
-					__( 'zooming stops at %s times', 'wowstudio-accessibility-kit' ),
+					__( 'zooming stops at %s times', 'wowstudio-accessibility-remediation' ),
 					$matches[1]
 				);
 			}
@@ -182,8 +182,8 @@ final class ViewportScalingDisabled implements Rule {
 				$this->detection(),
 				sprintf(
 					/* translators: %s: what the viewport tag does, already phrased. */
-					__( 'The viewport tag means %s, so the page cannot be enlarged to twice its size.', 'wowstudio-accessibility-kit' ),
-					implode( __( ' and ', 'wowstudio-accessibility-kit' ), $reasons )
+					__( 'The viewport tag means %s, so the page cannot be enlarged to twice its size.', 'wowstudio-accessibility-remediation' ),
+					implode( __( ' and ', 'wowstudio-accessibility-remediation' ), $reasons )
 				),
 				$document->selector_for( $meta ),
 				$document->context_for( $meta )

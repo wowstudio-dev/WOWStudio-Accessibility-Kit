@@ -201,7 +201,7 @@ final class RunController implements Registrable {
 
 		return new WP_Error(
 			'wsak_forbidden',
-			__( 'You do not have permission to run accessibility scans.', 'wowstudio-accessibility-kit' ),
+			__( 'You do not have permission to run accessibility scans.', 'wowstudio-accessibility-remediation' ),
 			array( 'status' => rest_authorization_required_code() )
 		);
 	}
@@ -220,7 +220,7 @@ final class RunController implements Registrable {
 
 		return new WP_Error(
 			'wsak_forbidden',
-			__( 'You do not have permission to view accessibility reports.', 'wowstudio-accessibility-kit' ),
+			__( 'You do not have permission to view accessibility reports.', 'wowstudio-accessibility-remediation' ),
 			array( 'status' => rest_authorization_required_code() )
 		);
 	}
@@ -297,7 +297,7 @@ final class RunController implements Registrable {
 		if ( array() === $allowed ) {
 			return new WP_Error(
 				'wsak_nothing_selected',
-				__( 'None of the selected content is a post or page you can read, so there is nothing to scan.', 'wowstudio-accessibility-kit' ),
+				__( 'None of the selected content is a post or page you can read, so there is nothing to scan.', 'wowstudio-accessibility-remediation' ),
 				array( 'status' => 400 )
 			);
 		}
@@ -326,7 +326,7 @@ final class RunController implements Registrable {
 		if ( null === $run || ScanScope::Site !== $run->scope ) {
 			return new WP_Error(
 				'wsak_unknown_run',
-				__( 'That run could not be found.', 'wowstudio-accessibility-kit' ),
+				__( 'That run could not be found.', 'wowstudio-accessibility-remediation' ),
 				array( 'status' => 404 )
 			);
 		}
@@ -505,13 +505,13 @@ final class RunController implements Registrable {
 		$lines = array(
 			sprintf(
 				/* translators: %s: theme name. */
-				__( 'Accessibility changes needed in the %s theme', 'wowstudio-accessibility-kit' ),
+				__( 'Accessibility changes needed in the %s theme', 'wowstudio-accessibility-remediation' ),
 				$theme
 			),
 			'',
-			__( 'These are in theme files rather than in page content, so they cannot be changed from the WordPress admin. Each one lists what a person loses because of it, and the smallest change that would fix it.', 'wowstudio-accessibility-kit' ),
+			__( 'These are in theme files rather than in page content, so they cannot be changed from the WordPress admin. Each one lists what a person loses because of it, and the smallest change that would fix it.', 'wowstudio-accessibility-remediation' ),
 			'',
-			__( 'Found by WOWStudio Accessibility Kit. Automated checks cover part of WCAG, not all of it — this list is a starting point rather than a complete audit.', 'wowstudio-accessibility-kit' ),
+			__( 'Found by WOWStudio Accessibility Remediation. Automated checks cover part of WCAG, not all of it — this list is a starting point rather than a complete audit.', 'wowstudio-accessibility-remediation' ),
 			'',
 			str_repeat( '-', 60 ),
 			'',
@@ -527,15 +527,15 @@ final class RunController implements Registrable {
 			++$handoffs;
 
 			$lines[] = sprintf( '%d. %s', $handoffs, $finding['rule_title'] );
-			$lines[] = '   ' . __( 'Why it matters:', 'wowstudio-accessibility-kit' ) . ' ' . $finding['consequence'];
-			$lines[] = '   ' . __( 'Where:', 'wowstudio-accessibility-kit' ) . ' ' . $finding['selector'];
+			$lines[] = '   ' . __( 'Why it matters:', 'wowstudio-accessibility-remediation' ) . ' ' . $finding['consequence'];
+			$lines[] = '   ' . __( 'Where:', 'wowstudio-accessibility-remediation' ) . ' ' . $finding['selector'];
 
 			if ( '' !== trim( (string) $finding['context'] ) ) {
-				$lines[] = '   ' . __( 'Current markup:', 'wowstudio-accessibility-kit' ) . ' ' . trim( $finding['context'] );
+				$lines[] = '   ' . __( 'Current markup:', 'wowstudio-accessibility-remediation' ) . ' ' . trim( $finding['context'] );
 			}
 
 			if ( '' !== trim( (string) ( $finding['triage']['snippet'] ?? '' ) ) ) {
-				$lines[] = '   ' . __( 'Change to:', 'wowstudio-accessibility-kit' ) . ' ' . $finding['triage']['snippet'];
+				$lines[] = '   ' . __( 'Change to:', 'wowstudio-accessibility-remediation' ) . ' ' . $finding['triage']['snippet'];
 			}
 
 			/*
@@ -545,10 +545,10 @@ final class RunController implements Registrable {
 			 * template, what there is to give them is a description of it.
 			 */
 			if ( '' !== trim( (string) ( $finding['triage']['guidance'] ?? '' ) ) ) {
-				$lines[] = '   ' . __( 'What to change:', 'wowstudio-accessibility-kit' ) . ' ' . $finding['triage']['guidance'];
+				$lines[] = '   ' . __( 'What to change:', 'wowstudio-accessibility-remediation' ) . ' ' . $finding['triage']['guidance'];
 			}
 
-			$lines[] = '   ' . __( 'WCAG:', 'wowstudio-accessibility-kit' ) . ' ' . $finding['wcag_sc'];
+			$lines[] = '   ' . __( 'WCAG:', 'wowstudio-accessibility-remediation' ) . ' ' . $finding['wcag_sc'];
 			$lines[] = '';
 		}
 

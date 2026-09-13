@@ -31,10 +31,13 @@ export function DetectionTag( { detection, label } ) {
 			</span>
 			{ label ||
 				( isAuto
-					? __( 'Auto-detected', 'wowstudio-accessibility-kit' )
+					? __(
+							'Auto-detected',
+							'wowstudio-accessibility-remediation'
+					  )
 					: __(
 							'Needs manual review',
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 					  ) ) }
 		</span>
 	);

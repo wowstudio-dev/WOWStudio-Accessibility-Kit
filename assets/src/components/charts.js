@@ -34,10 +34,10 @@ function ScreenReaderText( { children } ) {
  * and these four have a fixed meaning that the ordering should carry.
  */
 const SEVERITIES = [
-	[ 'critical', __( 'Critical', 'wowstudio-accessibility-kit' ) ],
-	[ 'serious', __( 'Serious', 'wowstudio-accessibility-kit' ) ],
-	[ 'moderate', __( 'Moderate', 'wowstudio-accessibility-kit' ) ],
-	[ 'minor', __( 'Minor', 'wowstudio-accessibility-kit' ) ],
+	[ 'critical', __( 'Critical', 'wowstudio-accessibility-remediation' ) ],
+	[ 'serious', __( 'Serious', 'wowstudio-accessibility-remediation' ) ],
+	[ 'moderate', __( 'Moderate', 'wowstudio-accessibility-remediation' ) ],
+	[ 'minor', __( 'Minor', 'wowstudio-accessibility-remediation' ) ],
 ];
 
 /**
@@ -93,7 +93,7 @@ export function Donut( { value, label, caption } ) {
 					/* translators: 1: what the number measures. 2: the number, out of 100. */
 					__(
 						'%1$s: %2$d out of 100.',
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					),
 					label,
 					clamped
@@ -133,7 +133,7 @@ export function Donut( { value, label, caption } ) {
 			<div className="wsak-donut__centre" aria-hidden="true">
 				<span className="wsak-donut__value">{ clamped }</span>
 				<span className="wsak-donut__of">
-					{ __( '/ 100', 'wowstudio-accessibility-kit' ) }
+					{ __( '/ 100', 'wowstudio-accessibility-remediation' ) }
 				</span>
 			</div>
 
@@ -199,13 +199,17 @@ export function BarList( { items, label, unit, onSelect } ) {
 	if ( ! rows.length ) {
 		return (
 			<p className="wsak-chart__empty">
-				{ __( 'Nothing to show yet.', 'wowstudio-accessibility-kit' ) }
+				{ __(
+					'Nothing to show yet.',
+					'wowstudio-accessibility-remediation'
+				) }
 			</p>
 		);
 	}
 
 	const largest = Math.max( ...rows.map( ( row ) => row.count || 0 ), 1 );
-	const noun = unit || __( 'findings', 'wowstudio-accessibility-kit' );
+	const noun =
+		unit || __( 'findings', 'wowstudio-accessibility-remediation' );
 
 	if ( onSelect ) {
 		return (
@@ -259,7 +263,7 @@ export function BarList( { items, label, unit, onSelect } ) {
 			<ScreenReaderText>
 				{ sprintf(
 					/* translators: 1: what the chart shows. 2: the figures, already joined into a sentence. */
-					__( '%1$s. %2$s', 'wowstudio-accessibility-kit' ),
+					__( '%1$s. %2$s', 'wowstudio-accessibility-remediation' ),
 					label,
 					rows
 						.map( ( row ) =>
@@ -267,7 +271,7 @@ export function BarList( { items, label, unit, onSelect } ) {
 								/* translators: 1: row name. 2: how many. 3: what is being counted. */
 								__(
 									'%1$s: %2$d %3$s.',
-									'wowstudio-accessibility-kit'
+									'wowstudio-accessibility-remediation'
 								),
 								row.label,
 								row.count,
@@ -315,7 +319,7 @@ export function Sparkline( { points } ) {
 			<p className="wsak-chart__empty">
 				{ __(
 					'A line appears here once a page has been scanned more than once.',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 			</p>
 		);
@@ -356,7 +360,7 @@ export function Sparkline( { points } ) {
 					/* translators: 1: how many scans. 2: the first score. 3: the most recent score. */
 					__(
 						'Scores across the last %1$d scans, from %2$d to %3$d out of 100.',
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					),
 					data.length,
 					first,

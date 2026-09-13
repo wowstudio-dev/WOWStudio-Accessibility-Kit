@@ -92,7 +92,7 @@ final class UnderlineNotALink implements Rule {
 	 * @return string
 	 */
 	public function title(): string {
-		return __( 'Text is underlined but is not a link', 'wowstudio-accessibility-kit' );
+		return __( 'Text is underlined but is not a link', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -103,7 +103,7 @@ final class UnderlineNotALink implements Rule {
 	 * @return string
 	 */
 	public function description(): string {
-		return __( 'This text is underlined and is not a link. Underlining means "link" to most readers, so they will try to click it and find that nothing happens. If the intent was emphasis, em or strong says so to a screen reader as well as to the eye, which an underline does not. There are real uses for the u element — marking a misspelling, for instance — so this is worth a look rather than an automatic change.', 'wowstudio-accessibility-kit' );
+		return __( 'This text is underlined and is not a link. Underlining means "link" to most readers, so they will try to click it and find that nothing happens. If the intent was emphasis, em or strong says so to a screen reader as well as to the eye, which an underline does not. There are real uses for the u element — marking a misspelling, for instance — so this is worth a look rather than an automatic change.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -114,7 +114,7 @@ final class UnderlineNotALink implements Rule {
 	 * @return string
 	 */
 	public function consequence(): string {
-		return __( 'Readers try to click text that is not a link, and cannot tell whether the page is broken.', 'wowstudio-accessibility-kit' );
+		return __( 'Readers try to click text that is not a link, and cannot tell whether the page is broken.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -129,7 +129,7 @@ final class UnderlineNotALink implements Rule {
 		return new FixPlan(
 			FixKind::Manual,
 			FixTarget::Content,
-			__( 'Whether this was meant as emphasis — in which case em or strong carries it to a screen reader too — or is one of the genuine uses of the u element, is something only the author knows.', 'wowstudio-accessibility-kit' )
+			__( 'Whether this was meant as emphasis — in which case em or strong carries it to a screen reader too — or is one of the genuine uses of the u element, is something only the author knows.', 'wowstudio-accessibility-remediation' )
 		);
 	}
 
@@ -168,7 +168,7 @@ final class UnderlineNotALink implements Rule {
 				$this->detection(),
 				sprintf(
 					/* translators: %s: the underlined text. */
-					__( '"%s" is underlined but is not a link.', 'wowstudio-accessibility-kit' ),
+					__( '"%s" is underlined but is not a link.', 'wowstudio-accessibility-remediation' ),
 					$this->shorten( $text )
 				),
 				$document->selector_for( $element ),

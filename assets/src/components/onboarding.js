@@ -23,32 +23,35 @@ import SiteFixes from './site-fixes';
 const PROMISES = [
 	{
 		key: 'private',
-		title: __( 'Nothing leaves your site', 'wowstudio-accessibility-kit' ),
+		title: __(
+			'Nothing leaves your site',
+			'wowstudio-accessibility-remediation'
+		),
 		body: __(
 			'No API, no account, no telemetry. Every check runs on your own server and in your own browser, and the plugin makes no outbound request at all — which is a promise it keeps by having nowhere to send anything.',
-			'wowstudio-accessibility-kit'
+			'wowstudio-accessibility-remediation'
 		),
 	},
 	{
 		key: 'no-overlay',
 		title: __(
 			'Nothing is added to your site',
-			'wowstudio-accessibility-kit'
+			'wowstudio-accessibility-remediation'
 		),
 		body: __(
 			'No widget, no toolbar, no floating button for your visitors to find. Their browser and their operating system already do larger text and higher contrast better than any overlay could. What this changes is your markup and your styles.',
-			'wowstudio-accessibility-kit'
+			'wowstudio-accessibility-remediation'
 		),
 	},
 	{
 		key: 'honest',
 		title: __(
 			'It will not tell you that you are compliant',
-			'wowstudio-accessibility-kit'
+			'wowstudio-accessibility-remediation'
 		),
 		body: __(
 			'Automated checks reach part of WCAG, never all of it. Every finding is labelled either as settled by a check or as needing a person to look, and the conformance report is a draft you review and put your own name to.',
-			'wowstudio-accessibility-kit'
+			'wowstudio-accessibility-remediation'
 		),
 	},
 ];
@@ -67,14 +70,14 @@ function WhatThisIs() {
 			<h2 id="wsak-welcome-intro" className="wsak-welcome__title">
 				{ __(
 					'Find, fix and document',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 			</h2>
 
 			<p className="wsak-welcome__lede">
 				{ __(
 					'This plugin reads your pages, tells you what is wrong with them and where, fixes what can honestly be fixed from here, and writes the rest down for whoever can. It is free, all of it, and nothing in it is held back.',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 			</p>
 
@@ -109,17 +112,23 @@ function stepsFor( onGo ) {
 	return [
 		{
 			key: 'about',
-			label: __( 'What this is', 'wowstudio-accessibility-kit' ),
+			label: __( 'What this is', 'wowstudio-accessibility-remediation' ),
 			render: () => <WhatThisIs />,
 		},
 		{
 			key: 'fixes',
-			label: __( 'Switch on fixes', 'wowstudio-accessibility-kit' ),
+			label: __(
+				'Switch on fixes',
+				'wowstudio-accessibility-remediation'
+			),
 			render: () => <SiteFixes />,
 		},
 		{
 			key: 'scan',
-			label: __( 'Check your pages', 'wowstudio-accessibility-kit' ),
+			label: __(
+				'Check your pages',
+				'wowstudio-accessibility-remediation'
+			),
 			render: () => <BulkScan onInspect={ () => onGo( 'scan' ) } />,
 		},
 	];
@@ -189,22 +198,22 @@ export default function Onboarding( { onGo, homeUrl, revisit } ) {
 			<header className="wsak-welcome__head">
 				<p className="wsak-welcome__eyebrow">
 					{ revisit
-						? __( 'Setup', 'wowstudio-accessibility-kit' )
+						? __( 'Setup', 'wowstudio-accessibility-remediation' )
 						: __(
-								'Welcome to Accessibility Kit',
-								'wowstudio-accessibility-kit'
+								'Welcome to Accessibility Remediation',
+								'wowstudio-accessibility-remediation'
 						  ) }
 				</p>
 				<h1 className="wsak-welcome__heading">
 					{ __(
 						'Three steps, and none of them are mandatory',
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					) }
 				</h1>
 				<p className="wsak-welcome__sub">
 					{ __(
 						'You can leave at any point and the plugin works exactly the same. Nothing here is switched on for you.',
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					) }
 				</p>
 			</header>
@@ -221,7 +230,7 @@ export default function Onboarding( { onGo, homeUrl, revisit } ) {
 					className="wsak-welcome__rail"
 					aria-label={ __(
 						'Setup steps',
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					) }
 				>
 					<ol className="wsak-welcome__rail-items">
@@ -267,7 +276,7 @@ export default function Onboarding( { onGo, homeUrl, revisit } ) {
 							/* translators: 1: current step number. 2: how many steps there are. */
 							__(
 								'Step %1$d of %2$d',
-								'wowstudio-accessibility-kit'
+								'wowstudio-accessibility-remediation'
 							),
 							index + 1,
 							steps.length
@@ -288,7 +297,10 @@ export default function Onboarding( { onGo, homeUrl, revisit } ) {
 								variant="secondary"
 								onClick={ () => setIndex( index - 1 ) }
 							>
-								{ __( 'Back', 'wowstudio-accessibility-kit' ) }
+								{ __(
+									'Back',
+									'wowstudio-accessibility-remediation'
+								) }
 							</Button>
 						) }
 
@@ -301,7 +313,7 @@ export default function Onboarding( { onGo, homeUrl, revisit } ) {
 							>
 								{ __(
 									'Finish setup',
-									'wowstudio-accessibility-kit'
+									'wowstudio-accessibility-remediation'
 								) }
 							</Button>
 						) : (
@@ -309,7 +321,10 @@ export default function Onboarding( { onGo, homeUrl, revisit } ) {
 								variant="primary"
 								onClick={ () => setIndex( index + 1 ) }
 							>
-								{ __( 'Next', 'wowstudio-accessibility-kit' ) }
+								{ __(
+									'Next',
+									'wowstudio-accessibility-remediation'
+								) }
 							</Button>
 						) }
 
@@ -328,7 +343,7 @@ export default function Onboarding( { onGo, homeUrl, revisit } ) {
 							>
 								{ __(
 									'I will do this later',
-									'wowstudio-accessibility-kit'
+									'wowstudio-accessibility-remediation'
 								) }
 							</Button>
 						) }

@@ -84,7 +84,7 @@ final class MainLandmarkMissing implements Rule {
 	 * @return string
 	 */
 	public function title(): string {
-		return __( 'Page has no main landmark', 'wowstudio-accessibility-kit' );
+		return __( 'Page has no main landmark', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -95,7 +95,7 @@ final class MainLandmarkMissing implements Rule {
 	 * @return string
 	 */
 	public function description(): string {
-		return __( 'Landmarks let someone using a screen reader jump straight to the content instead of listening through the header and navigation on every page. Wrap the primary content of the page in a main element.', 'wowstudio-accessibility-kit' );
+		return __( 'Landmarks let someone using a screen reader jump straight to the content instead of listening through the header and navigation on every page. Wrap the primary content of the page in a main element.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -106,7 +106,7 @@ final class MainLandmarkMissing implements Rule {
 	 * @return string
 	 */
 	public function consequence(): string {
-		return __( 'There is no way to skip past the header, so keyboard and screen reader users go through it again on every page.', 'wowstudio-accessibility-kit' );
+		return __( 'There is no way to skip past the header, so keyboard and screen reader users go through it again on every page.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -121,7 +121,7 @@ final class MainLandmarkMissing implements Rule {
 		return new FixPlan(
 			FixKind::Manual,
 			FixTarget::Theme,
-			__( 'The landmark has to wrap the page\'s main content, which is a decision about the template and belongs in the theme.', 'wowstudio-accessibility-kit' )
+			__( 'The landmark has to wrap the page\'s main content, which is a decision about the template and belongs in the theme.', 'wowstudio-accessibility-remediation' )
 		);
 	}
 
@@ -148,7 +148,7 @@ final class MainLandmarkMissing implements Rule {
 				$this->wcag_sc(),
 				$this->severity(),
 				$this->detection(),
-				__( 'The page has no main landmark, so there is no quick way to skip to the content.', 'wowstudio-accessibility-kit' ),
+				__( 'The page has no main landmark, so there is no quick way to skip to the content.', 'wowstudio-accessibility-remediation' ),
 				'/html/body'
 			),
 		);

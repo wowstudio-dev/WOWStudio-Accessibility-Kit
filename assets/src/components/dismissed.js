@@ -47,14 +47,14 @@ function SiteWide( { rows, mayDecide, onChange, onAnnounce } ) {
 			<h3 id="wsak-sitewide-title">
 				{ __(
 					'False positives everywhere',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 			</h3>
 
 			<p className="wsak-dismissed__lede">
 				{ __(
 					'These cover one piece of markup wherever it appears, including on pages added since the decision was taken. Withdrawing one puts every finding it covers back on the list.',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 			</p>
 
@@ -84,7 +84,7 @@ function SiteWide( { rows, mayDecide, onChange, onAnnounce } ) {
 								/* translators: 1: who set it aside. 2: when. */
 								__(
 									'Marked a false positive everywhere by %1$s on %2$s',
-									'wowstudio-accessibility-kit'
+									'wowstudio-accessibility-remediation'
 								),
 								row.by,
 								row.at
@@ -106,7 +106,7 @@ function SiteWide( { rows, mayDecide, onChange, onAnnounce } ) {
 													/* translators: %s: name of the check. */
 													__(
 														'Put back everywhere: %s.',
-														'wowstudio-accessibility-kit'
+														'wowstudio-accessibility-remediation'
 													),
 													row.rule_title
 												)
@@ -121,7 +121,7 @@ function SiteWide( { rows, mayDecide, onChange, onAnnounce } ) {
 							>
 								{ __(
 									'Not a false positive after all',
-									'wowstudio-accessibility-kit'
+									'wowstudio-accessibility-remediation'
 								) }
 							</Button>
 						) }
@@ -166,7 +166,10 @@ function DismissedRow( { row, onRestore, busy } ) {
 				{ row.edit_url ? (
 					<a href={ row.edit_url }>
 						{ row.post_title ||
-							__( '(no title)', 'wowstudio-accessibility-kit' ) }
+							__(
+								'(no title)',
+								'wowstudio-accessibility-remediation'
+							) }
 					</a>
 				) : (
 					row.post_title
@@ -186,7 +189,7 @@ function DismissedRow( { row, onRestore, busy } ) {
 					/* translators: 1: who set it aside. 2: when. */
 					__(
 						'Marked a false positive by %1$s on %2$s',
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					),
 					row.by,
 					row.at
@@ -201,7 +204,7 @@ function DismissedRow( { row, onRestore, busy } ) {
 				>
 					{ __(
 						'Not a false positive after all',
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					) }
 				</Button>
 			) }
@@ -269,10 +272,13 @@ export default function Dismissed() {
 							/* translators: %s: the page the finding is on. */
 							__(
 								'Put back on the list of open findings for %s.',
-								'wowstudio-accessibility-kit'
+								'wowstudio-accessibility-remediation'
 							),
 							row.post_title ||
-								__( 'that page', 'wowstudio-accessibility-kit' )
+								__(
+									'that page',
+									'wowstudio-accessibility-remediation'
+								)
 						)
 					);
 
@@ -292,7 +298,7 @@ export default function Dismissed() {
 			<Skeleton
 				label={ __(
 					'Loading your false positives…',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 			/>
 		);
@@ -304,13 +310,16 @@ export default function Dismissed() {
 			aria-labelledby="wsak-dismissed-title"
 		>
 			<h2 id="wsak-dismissed-title" className="wsak-dismissed__title">
-				{ __( 'False positives', 'wowstudio-accessibility-kit' ) }
+				{ __(
+					'False positives',
+					'wowstudio-accessibility-remediation'
+				) }
 			</h2>
 
 			<p className="wsak-dismissed__lede">
 				{ __(
 					'Findings somebody decided not to act on, with the reason they gave. Setting something aside is a judgement rather than a fix — the barrier is still there — so this screen exists to make those judgements reviewable by somebody other than whoever made them.',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 			</p>
 
@@ -339,11 +348,11 @@ export default function Dismissed() {
 				<EmptyState
 					title={ __(
 						'No false positives yet',
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					) }
 					body={ __(
 						'When somebody marks a finding as reviewed and not applicable, it appears here with their name, the date, and the reason they gave.',
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					) }
 				/>
 			) : (
@@ -356,7 +365,7 @@ export default function Dismissed() {
 									'%d finding is currently marked a false positive.',
 									'%d findings are currently marked false positives.',
 									data.total,
-									'wowstudio-accessibility-kit'
+									'wowstudio-accessibility-remediation'
 								),
 								data.total
 							) }

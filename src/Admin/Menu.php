@@ -34,7 +34,7 @@ final class Menu implements Registrable {
 	 * @since 0.1.0
 	 * @var string
 	 */
-	public const SLUG = 'wowstudio-accessibility-kit';
+	public const SLUG = 'wowstudio-accessibility-remediation';
 
 	/**
 	 * The screens hanging off the top-level menu.
@@ -123,8 +123,8 @@ final class Menu implements Registrable {
 		$position = (int) apply_filters( 'wsak_menu_position', 58 );
 
 		add_menu_page(
-			__( 'WOWStudio Accessibility Kit', 'wowstudio-accessibility-kit' ),
-			__( 'Accessibility Kit', 'wowstudio-accessibility-kit' ),
+			__( 'WOWStudio Accessibility Remediation', 'wowstudio-accessibility-remediation' ),
+			__( 'Accessibility Remediation', 'wowstudio-accessibility-remediation' ),
 			Capabilities::VIEW_REPORTS,
 			self::SLUG,
 			array( $this, 'render' ),
@@ -138,10 +138,10 @@ final class Menu implements Registrable {
 		 * evaluated long before any text domain is loaded.
 		 */
 		$titles = array(
-			self::SLUG       => __( 'Dashboard', 'wowstudio-accessibility-kit' ),
-			'wsak-scan-fix'  => __( 'Scan & Fix', 'wowstudio-accessibility-kit' ),
-			'wsak-settings'  => __( 'Settings', 'wowstudio-accessibility-kit' ),
-			'wsak-statement' => __( 'Statement', 'wowstudio-accessibility-kit' ),
+			self::SLUG       => __( 'Dashboard', 'wowstudio-accessibility-remediation' ),
+			'wsak-scan-fix'  => __( 'Scan & Fix', 'wowstudio-accessibility-remediation' ),
+			'wsak-settings'  => __( 'Settings', 'wowstudio-accessibility-remediation' ),
+			'wsak-statement' => __( 'Statement', 'wowstudio-accessibility-remediation' ),
 		);
 
 		foreach ( self::SCREENS as $screen ) {
@@ -151,7 +151,7 @@ final class Menu implements Registrable {
 				self::SLUG,
 				sprintf(
 					/* translators: %s: name of the screen, e.g. Dashboard. */
-					__( '%s — Accessibility Kit', 'wowstudio-accessibility-kit' ),
+					__( '%s — Accessibility Remediation', 'wowstudio-accessibility-remediation' ),
 					$title
 				),
 				$title,
@@ -175,19 +175,19 @@ final class Menu implements Registrable {
 	 */
 	public function render(): void {
 		if ( ! current_user_can( Capabilities::VIEW_REPORTS ) ) {
-			wp_die( esc_html__( 'You do not have permission to view accessibility reports.', 'wowstudio-accessibility-kit' ) );
+			wp_die( esc_html__( 'You do not have permission to view accessibility reports.', 'wowstudio-accessibility-remediation' ) );
 		}
 		?>
 		<div class="wrap wsak-wrap">
 			<div id="wsak-app" class="wsak-app">
 				<p class="wsak-boot" role="status">
-					<?php esc_html_e( 'Loading the accessibility dashboard…', 'wowstudio-accessibility-kit' ); ?>
+					<?php esc_html_e( 'Loading the accessibility dashboard…', 'wowstudio-accessibility-remediation' ); ?>
 				</p>
 			</div>
 			<noscript>
-				<h1><?php esc_html_e( 'WOWStudio Accessibility Kit', 'wowstudio-accessibility-kit' ); ?></h1>
+				<h1><?php esc_html_e( 'WOWStudio Accessibility Remediation', 'wowstudio-accessibility-remediation' ); ?></h1>
 				<p>
-					<?php esc_html_e( 'This dashboard needs JavaScript to run a scan and show results. Everything it does is also available through the REST API if you would rather not enable it.', 'wowstudio-accessibility-kit' ); ?>
+					<?php esc_html_e( 'This dashboard needs JavaScript to run a scan and show results. Everything it does is also available through the REST API if you would rather not enable it.', 'wowstudio-accessibility-remediation' ); ?>
 				</p>
 			</noscript>
 		</div>

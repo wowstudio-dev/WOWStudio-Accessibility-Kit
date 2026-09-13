@@ -79,7 +79,7 @@ final class DownloadFileInfo implements SiteFix {
 	 * @return string
 	 */
 	public function title(): string {
-		return __( 'Name the format of linked files', 'wowstudio-accessibility-kit' );
+		return __( 'Name the format of linked files', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -90,7 +90,7 @@ final class DownloadFileInfo implements SiteFix {
 	 * @return string
 	 */
 	public function description(): string {
-		return __( 'Adds "(PDF, 1.2 MB)" after links in your content that point at a document rather than a page, so the reader knows a download is coming before they commit to it. The size is included when the file is in your media library.', 'wowstudio-accessibility-kit' );
+		return __( 'Adds "(PDF, 1.2 MB)" after links in your content that point at a document rather than a page, so the reader knows a download is coming before they commit to it. The size is included when the file is in your media library.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -112,7 +112,7 @@ final class DownloadFileInfo implements SiteFix {
 	 * @return string
 	 */
 	public function caveat(): string {
-		return __( 'Covers links inside post and page content, not links your theme prints. Links that already name their format are left alone. The file size only appears for files in your media library, because finding the size of anything else would mean a request to another server every time the page loads.', 'wowstudio-accessibility-kit' );
+		return __( 'Covers links inside post and page content, not links your theme prints. Links that already name their format are left alone. The file size only appears for files in your media library, because finding the size of anything else would mean a request to another server every time the page loads.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -189,12 +189,12 @@ final class DownloadFileInfo implements SiteFix {
 		$suffix = '' === $size
 			? sprintf(
 				/* translators: %s: file format, for example PDF. */
-				__( '(%s)', 'wowstudio-accessibility-kit' ),
+				__( '(%s)', 'wowstudio-accessibility-remediation' ),
 				$label
 			)
 			: sprintf(
 				/* translators: 1: file format, for example PDF. 2: file size, already formatted. */
-				__( '(%1$s, %2$s)', 'wowstudio-accessibility-kit' ),
+				__( '(%1$s, %2$s)', 'wowstudio-accessibility-remediation' ),
 				$label,
 				$size
 			);

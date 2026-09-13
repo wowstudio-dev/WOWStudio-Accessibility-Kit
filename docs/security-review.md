@@ -170,6 +170,6 @@ Item 5 is the one to revisit first if the capability model ever widens.
 composer lint                              # phpcs, phpstan, phpunit, guards
 npm run lint:js                            # includes the i18n rules
 npm run dist:free:zip
-php bin/check-free-build.php dist/wowstudio-accessibility-kit-free.zip
+php bin/check-free-build.php dist/wowstudio-accessibility-remediation-free.zip
 npm run plugin-check
 ```

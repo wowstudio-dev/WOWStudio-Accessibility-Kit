@@ -35,7 +35,7 @@ const capabilities = settings.capabilities ?? {};
  */
 const DISCLAIMER = __(
 	'This plugin helps you find, fix and document accessibility problems. It does not determine whether your site meets the ADA, the European Accessibility Act, Section 508, or any other legal requirement, and nothing here is legal advice.',
-	'wowstudio-accessibility-kit'
+	'wowstudio-accessibility-remediation'
 );
 
 /**
@@ -54,7 +54,7 @@ const SCREENS = {
 		views: [
 			{
 				id: 'overview',
-				label: __( 'Report', 'wowstudio-accessibility-kit' ),
+				label: __( 'Report', 'wowstudio-accessibility-remediation' ),
 			},
 		],
 	},
@@ -62,26 +62,32 @@ const SCREENS = {
 		views: [
 			{
 				id: 'scan',
-				label: __( 'One page', 'wowstudio-accessibility-kit' ),
+				label: __( 'One page', 'wowstudio-accessibility-remediation' ),
 			},
 			{
 				id: 'bulk',
-				label: __( 'Your content', 'wowstudio-accessibility-kit' ),
+				label: __(
+					'Your content',
+					'wowstudio-accessibility-remediation'
+				),
 				needs: 'runScan',
 			},
 			{
 				id: 'theme',
-				label: __( 'Theme', 'wowstudio-accessibility-kit' ),
+				label: __( 'Theme', 'wowstudio-accessibility-remediation' ),
 				needs: 'viewReports',
 			},
 			{
 				id: 'images',
-				label: __( 'Images', 'wowstudio-accessibility-kit' ),
+				label: __( 'Images', 'wowstudio-accessibility-remediation' ),
 				needs: 'applyFix',
 			},
 			{
 				id: 'aside',
-				label: __( 'False positives', 'wowstudio-accessibility-kit' ),
+				label: __(
+					'False positives',
+					'wowstudio-accessibility-remediation'
+				),
 				needs: 'viewReports',
 			},
 		],
@@ -90,7 +96,10 @@ const SCREENS = {
 		views: [
 			{
 				id: 'fixes',
-				label: __( 'Site fixes', 'wowstudio-accessibility-kit' ),
+				label: __(
+					'Site fixes',
+					'wowstudio-accessibility-remediation'
+				),
 			},
 		],
 	},
@@ -98,7 +107,7 @@ const SCREENS = {
 		views: [
 			{
 				id: 'statement',
-				label: __( 'Statement', 'wowstudio-accessibility-kit' ),
+				label: __( 'Statement', 'wowstudio-accessibility-remediation' ),
 			},
 		],
 	},
@@ -113,7 +122,22 @@ const SCREENS = {
  * access to what it cannot find.
  */
 const WELCOME_URL = settings.screens?.welcome ?? '';
-const WANTS_WELCOME = Boolean( settings.welcome );
+
+/*
+ * Whether to open on the setup rather than the report.
+ *
+ * Either because the URL asked for it, or because this is the dashboard and
+ * nobody has been through the setup yet. The second half used to be a redirect
+ * fired on activation; it came out in the 1.0.1 review round, because taking
+ * over whatever screen somebody was already on is what Guideline 11 asks
+ * plugins not to do, however careful the safeguards around it were.
+ *
+ * Opening our own screen on our own setup reaches outside nothing, and lands
+ * somebody in the same place the redirect did.
+ */
+const WANTS_WELCOME =
+	Boolean( settings.welcome ) ||
+	( 'overview' === settings.screen && ! settings.onboarded );
 
 /**
  * Which screen each view lives on, derived from the screens themselves.
@@ -224,7 +248,7 @@ export default function App() {
 		setError( '' );
 		setScanning( postId );
 		setAnnouncement(
-			__( 'Scanning the page…', 'wowstudio-accessibility-kit' )
+			__( 'Scanning the page…', 'wowstudio-accessibility-remediation' )
 		);
 
 		runScan( postId )
@@ -241,7 +265,7 @@ export default function App() {
 						/* translators: %d: number of findings. */
 						__(
 							'Scan finished. %d findings.',
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 						),
 						data.issues?.length ?? 0
 					)
@@ -250,7 +274,10 @@ export default function App() {
 			.catch( ( caught ) => {
 				setError( readableError( caught ) );
 				setAnnouncement(
-					__( 'The scan failed.', 'wowstudio-accessibility-kit' )
+					__(
+						'The scan failed.',
+						'wowstudio-accessibility-remediation'
+					)
 				);
 			} )
 			.finally( () => setScanning( 0 ) );
@@ -311,14 +338,14 @@ export default function App() {
 				<div className="wsak__titles">
 					<h1 className="wsak__title">
 						{ __(
-							'Accessibility Kit',
-							'wowstudio-accessibility-kit'
+							'Accessibility Remediation',
+							'wowstudio-accessibility-remediation'
 						) }
 					</h1>
 					<p className="wsak__lede">
 						{ __(
 							'Find, fix and document accessibility problems at the code level.',
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 						) }
 					</p>
 				</div>
@@ -343,13 +370,13 @@ export default function App() {
 										/* translators: %s: when the most recent scan finished. */
 										__(
 											'Last checked %s',
-											'wowstudio-accessibility-kit'
+											'wowstudio-accessibility-remediation'
 										),
 										lastScan
 								  )
 								: __(
 										'Nothing checked yet',
-										'wowstudio-accessibility-kit'
+										'wowstudio-accessibility-remediation'
 								  ) }
 						</p>
 						<Button
@@ -358,7 +385,7 @@ export default function App() {
 						>
 							{ __(
 								'Check pages',
-								'wowstudio-accessibility-kit'
+								'wowstudio-accessibility-remediation'
 							) }
 						</Button>
 					</div>
@@ -375,7 +402,7 @@ export default function App() {
 					className="wsak__nav"
 					aria-label={ __(
 						'Sections',
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					) }
 				>
 					<ul className="wsak__nav-items">
@@ -413,7 +440,7 @@ export default function App() {
 				<Notice status="warning" isDismissible={ false }>
 					{ __(
 						'You can read results here but not start a scan. An administrator can grant that.',
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					) }
 				</Notice>
 			) }
@@ -465,7 +492,7 @@ export default function App() {
 				<Skeleton
 					label={ __(
 						'Loading the scan…',
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					) }
 				/>
 			) }
@@ -487,13 +514,13 @@ export default function App() {
 										/* translators: %s: content title. */
 										__(
 											'Results for “%s”',
-											'wowstudio-accessibility-kit'
+											'wowstudio-accessibility-remediation'
 										),
 										scan.post_title
 								  )
 								: __(
 										'Scan results',
-										'wowstudio-accessibility-kit'
+										'wowstudio-accessibility-remediation'
 								  ) }
 						</h2>
 						<div className="wsak-result__actions">
@@ -516,11 +543,11 @@ export default function App() {
 								{ resultView === 'inspect'
 									? __(
 											'Show as a list',
-											'wowstudio-accessibility-kit'
+											'wowstudio-accessibility-remediation'
 									  )
 									: __(
 											'Show on the page',
-											'wowstudio-accessibility-kit'
+											'wowstudio-accessibility-remediation'
 									  ) }
 							</Button>
 							<Button
@@ -529,7 +556,7 @@ export default function App() {
 							>
 								{ __(
 									'Back to your content',
-									'wowstudio-accessibility-kit'
+									'wowstudio-accessibility-remediation'
 								) }
 							</Button>
 						</div>
@@ -540,7 +567,7 @@ export default function App() {
 							<strong>
 								{ __(
 									'This scan covered less than usual.',
-									'wowstudio-accessibility-kit'
+									'wowstudio-accessibility-remediation'
 								) }
 							</strong>{ ' ' }
 							{ scan.coverage_notice }
@@ -617,7 +644,7 @@ export default function App() {
 						>
 							{ __(
 								'← Back to the overview',
-								'wowstudio-accessibility-kit'
+								'wowstudio-accessibility-remediation'
 							) }
 						</Button>
 					</p>

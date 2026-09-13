@@ -92,7 +92,7 @@ final class TextBlinking implements Rule {
 	 * @return string
 	 */
 	public function title(): string {
-		return __( 'Content blinks or scrolls on its own', 'wowstudio-accessibility-kit' );
+		return __( 'Content blinks or scrolls on its own', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -103,7 +103,7 @@ final class TextBlinking implements Rule {
 	 * @return string
 	 */
 	public function description(): string {
-		return __( 'This page uses a blink or marquee element. Both move without being asked and give the reader no way to stop them, which makes surrounding text hard to read for anybody with an attention or reading difficulty, and can be a seizure risk. Neither element is part of HTML any more. Replace it with static text, or with something the reader can pause.', 'wowstudio-accessibility-kit' );
+		return __( 'This page uses a blink or marquee element. Both move without being asked and give the reader no way to stop them, which makes surrounding text hard to read for anybody with an attention or reading difficulty, and can be a seizure risk. Neither element is part of HTML any more. Replace it with static text, or with something the reader can pause.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -114,7 +114,7 @@ final class TextBlinking implements Rule {
 	 * @return string
 	 */
 	public function consequence(): string {
-		return __( 'Text moves or flashes with no way to stop it, which some readers cannot read past and others cannot safely look at.', 'wowstudio-accessibility-kit' );
+		return __( 'Text moves or flashes with no way to stop it, which some readers cannot read past and others cannot safely look at.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -129,7 +129,7 @@ final class TextBlinking implements Rule {
 		return new FixPlan(
 			FixKind::Manual,
 			FixTarget::Content,
-			__( 'Whether the content should simply stop moving, or become something the reader can pause, is an editorial decision. Both are edits where the content lives.', 'wowstudio-accessibility-kit' )
+			__( 'Whether the content should simply stop moving, or become something the reader can pause, is an editorial decision. Both are edits where the content lives.', 'wowstudio-accessibility-remediation' )
 		);
 	}
 
@@ -156,7 +156,7 @@ final class TextBlinking implements Rule {
 				$this->detection(),
 				sprintf(
 					/* translators: %s: the element name, blink or marquee. */
-					__( 'This page uses a %s element, which moves on its own and cannot be stopped.', 'wowstudio-accessibility-kit' ),
+					__( 'This page uses a %s element, which moves on its own and cannot be stopped.', 'wowstudio-accessibility-remediation' ),
 					strtolower( $element->nodeName )
 				),
 				$document->selector_for( $element ),

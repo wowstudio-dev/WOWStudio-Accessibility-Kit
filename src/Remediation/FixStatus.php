@@ -36,8 +36,8 @@ enum FixStatus: string {
 	 */
 	public function label(): string {
 		return match ( $this ) {
-			self::Applied  => __( 'Applied', 'wowstudio-accessibility-kit' ),
-			self::Reverted => __( 'Undone', 'wowstudio-accessibility-kit' ),
+			self::Applied  => __( 'Applied', 'wowstudio-accessibility-remediation' ),
+			self::Reverted => __( 'Undone', 'wowstudio-accessibility-remediation' ),
 		};
 	}
 }

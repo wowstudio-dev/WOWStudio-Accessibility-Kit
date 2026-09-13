@@ -115,7 +115,7 @@ final class BlockCheckController implements Registrable {
 
 		return new WP_Error(
 			'wsak_forbidden',
-			__( 'You do not have permission to run accessibility checks.', 'wowstudio-accessibility-kit' ),
+			__( 'You do not have permission to run accessibility checks.', 'wowstudio-accessibility-remediation' ),
 			array( 'status' => rest_authorization_required_code() )
 		);
 	}
@@ -191,7 +191,7 @@ final class BlockCheckController implements Registrable {
 				// Said with every reply, because a panel that goes quiet is
 				// easily read as "this page is fine" rather than "this checked
 				// what it can see from here".
-				'scope'  => __( 'This checks the blocks you are editing. Colour, text size and layout need the page open in a browser, and the theme around your content is checked separately.', 'wowstudio-accessibility-kit' ),
+				'scope'  => __( 'This checks the blocks you are editing. Colour, text size and layout need the page open in a browser, and the theme around your content is checked separately.', 'wowstudio-accessibility-remediation' ),
 			)
 		);
 	}

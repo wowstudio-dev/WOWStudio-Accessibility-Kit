@@ -65,12 +65,12 @@ final class CssFixController implements Registrable {
 						'selector'     => array(
 							'required'    => true,
 							'type'        => 'string',
-							'description' => __( 'The selector the rule applies to. Checked again before it is written.', 'wowstudio-accessibility-kit' ),
+							'description' => __( 'The selector the rule applies to. Checked again before it is written.', 'wowstudio-accessibility-remediation' ),
 						),
 						'declarations' => array(
 							'required'    => true,
 							'type'        => 'array',
-							'description' => __( 'Property and value pairs, restricted to what the finding is about.', 'wowstudio-accessibility-kit' ),
+							'description' => __( 'Property and value pairs, restricted to what the finding is about.', 'wowstudio-accessibility-remediation' ),
 							'items'       => array(
 								'type'       => 'object',
 								'properties' => array(
@@ -120,7 +120,7 @@ final class CssFixController implements Registrable {
 		if ( ! current_user_can( Capabilities::APPLY_FIX ) ) {
 			return new WP_Error(
 				'wsak_forbidden',
-				__( 'You do not have permission to apply accessibility fixes.', 'wowstudio-accessibility-kit' ),
+				__( 'You do not have permission to apply accessibility fixes.', 'wowstudio-accessibility-remediation' ),
 				array( 'status' => rest_authorization_required_code() )
 			);
 		}
@@ -128,7 +128,7 @@ final class CssFixController implements Registrable {
 		if ( ! current_user_can( 'edit_css' ) ) {
 			return new WP_Error(
 				'wsak_forbidden_css',
-				__( 'Applying this kind of fix edits your site\'s Additional CSS, which your account is not allowed to change. An administrator can apply it, or make the change in Appearance → Customise.', 'wowstudio-accessibility-kit' ),
+				__( 'Applying this kind of fix edits your site\'s Additional CSS, which your account is not allowed to change. An administrator can apply it, or make the change in Appearance → Customise.', 'wowstudio-accessibility-remediation' ),
 				array( 'status' => rest_authorization_required_code() )
 			);
 		}

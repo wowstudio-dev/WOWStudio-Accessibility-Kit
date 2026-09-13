@@ -83,7 +83,7 @@ final class DocumentTitleMissing implements Rule {
 	 * @return string
 	 */
 	public function title(): string {
-		return __( 'Page has no title', 'wowstudio-accessibility-kit' );
+		return __( 'Page has no title', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -94,7 +94,7 @@ final class DocumentTitleMissing implements Rule {
 	 * @return string
 	 */
 	public function description(): string {
-		return __( 'The page title is the first thing a screen reader announces, and the label people see in browser tabs, bookmarks, and search results. Give the page a title that describes what is on it.', 'wowstudio-accessibility-kit' );
+		return __( 'The page title is the first thing a screen reader announces, and the label people see in browser tabs, bookmarks, and search results. Give the page a title that describes what is on it.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -105,7 +105,7 @@ final class DocumentTitleMissing implements Rule {
 	 * @return string
 	 */
 	public function consequence(): string {
-		return __( 'Browser tabs, bookmarks and search results have nothing to show for this page but its address.', 'wowstudio-accessibility-kit' );
+		return __( 'Browser tabs, bookmarks and search results have nothing to show for this page but its address.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -120,7 +120,7 @@ final class DocumentTitleMissing implements Rule {
 		return new FixPlan(
 			FixKind::Deterministic,
 			FixTarget::Setting,
-			__( 'WordPress writes the title itself once the theme declares support for it, and a plugin can declare that support on the theme\'s behalf before wp_loaded. One right answer, and somewhere to put it.', 'wowstudio-accessibility-kit' )
+			__( 'WordPress writes the title itself once the theme declares support for it, and a plugin can declare that support on the theme\'s behalf before wp_loaded. One right answer, and somewhere to put it.', 'wowstudio-accessibility-remediation' )
 		);
 	}
 
@@ -150,8 +150,8 @@ final class DocumentTitleMissing implements Rule {
 				$this->severity(),
 				$this->detection(),
 				null === $title
-					? __( 'The page has no title element.', 'wowstudio-accessibility-kit' )
-					: __( 'The page title is empty.', 'wowstudio-accessibility-kit' ),
+					? __( 'The page has no title element.', 'wowstudio-accessibility-remediation' )
+					: __( 'The page title is empty.', 'wowstudio-accessibility-remediation' ),
 				'/html/head/title'
 			),
 		);

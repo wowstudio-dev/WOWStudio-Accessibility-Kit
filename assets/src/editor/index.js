@@ -13,7 +13,7 @@ import Panel from './panel';
 import './editor.scss';
 
 domReady( () => {
-	registerPlugin( 'wowstudio-accessibility-kit', {
+	registerPlugin( 'wowstudio-accessibility-remediation', {
 		render: Panel,
 		icon: 'universal-access-alt',
 	} );

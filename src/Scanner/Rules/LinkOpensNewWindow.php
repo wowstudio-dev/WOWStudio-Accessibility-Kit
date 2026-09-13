@@ -116,7 +116,7 @@ final class LinkOpensNewWindow implements Rule {
 	 * @return string
 	 */
 	public function title(): string {
-		return __( 'Link opens a new tab without saying so', 'wowstudio-accessibility-kit' );
+		return __( 'Link opens a new tab without saying so', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -127,7 +127,7 @@ final class LinkOpensNewWindow implements Rule {
 	 * @return string
 	 */
 	public function description(): string {
-		return __( 'This link opens in a new tab, and nothing in its text or title says it will. A new tab removes the back button, which is a quiet problem for a sighted user and a confusing one for somebody who cannot see that a tab opened. Either say so in the link text — "(opens in a new tab)" — or let the link open normally and leave the choice to the reader.', 'wowstudio-accessibility-kit' );
+		return __( 'This link opens in a new tab, and nothing in its text or title says it will. A new tab removes the back button, which is a quiet problem for a sighted user and a confusing one for somebody who cannot see that a tab opened. Either say so in the link text — "(opens in a new tab)" — or let the link open normally and leave the choice to the reader.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -138,7 +138,7 @@ final class LinkOpensNewWindow implements Rule {
 	 * @return string
 	 */
 	public function consequence(): string {
-		return __( 'The reader lands somewhere new with no announcement, and pressing Back does nothing.', 'wowstudio-accessibility-kit' );
+		return __( 'The reader lands somewhere new with no announcement, and pressing Back does nothing.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -153,7 +153,7 @@ final class LinkOpensNewWindow implements Rule {
 		return new FixPlan(
 			FixKind::Manual,
 			FixTarget::Content,
-			__( 'Two possible answers, and choosing between them is an editorial call: add the warning to the link text, or stop opening a new tab. Both are edits to the link in your content.', 'wowstudio-accessibility-kit' )
+			__( 'Two possible answers, and choosing between them is an editorial call: add the warning to the link text, or stop opening a new tab. Both are edits to the link in your content.', 'wowstudio-accessibility-remediation' )
 		);
 	}
 
@@ -202,10 +202,10 @@ final class LinkOpensNewWindow implements Rule {
 				$this->severity(),
 				$this->detection(),
 				'' === $name
-					? __( 'This link opens in a new tab and does not say so.', 'wowstudio-accessibility-kit' )
+					? __( 'This link opens in a new tab and does not say so.', 'wowstudio-accessibility-remediation' )
 					: sprintf(
 						/* translators: %s: the link text. */
-						__( 'The link "%s" opens in a new tab and does not say so.', 'wowstudio-accessibility-kit' ),
+						__( 'The link "%s" opens in a new tab and does not say so.', 'wowstudio-accessibility-remediation' ),
 						$name
 					),
 				$document->selector_for( $link ),

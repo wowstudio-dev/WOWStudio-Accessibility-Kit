@@ -43,7 +43,7 @@ final class CliTest extends TestCase {
 	 * @return void
 	 */
 	public function test_the_command_registers_only_under_wp_cli(): void {
-		$main = $this->source( 'wowstudio-accessibility-kit.php' );
+		$main = $this->source( 'wowstudio-accessibility-remediation.php' );
 
 		$this->assertStringContainsString( "defined( 'WP_CLI' ) && WP_CLI", $main );
 		$this->assertStringContainsString( "WP_CLI::add_command( 'wsak'", $main );

@@ -19,7 +19,7 @@
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-SLUG="wowstudio-accessibility-kit"
+SLUG="wowstudio-accessibility-remediation"
 
 ZIP=0
 for arg in "$@"; do
@@ -133,7 +133,7 @@ echo "    no development files in the build"
 # looking for it: .distignore excludes what somebody remembered to name, and
 # the thing nobody remembers to name is the thing that ships. Anything new at
 # the top level now has to be added here on purpose.
-EXPECTED="LICENSE assets build composer.json languages readme.txt src vendor wowstudio-accessibility-kit.php"
+EXPECTED="LICENSE assets build composer.json languages readme.txt src vendor wowstudio-accessibility-remediation.php"
 for entry in "${OUT}"/* "${OUT}"/.[!.]*; do
 	[ -e "${entry}" ] || continue
 	name="$(basename "${entry}")"

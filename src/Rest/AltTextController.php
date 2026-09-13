@@ -93,7 +93,7 @@ final class AltTextController implements Registrable {
 						'items' => array(
 							'required'    => true,
 							'type'        => 'array',
-							'description' => __( 'Descriptions to write, one per image.', 'wowstudio-accessibility-kit' ),
+							'description' => __( 'Descriptions to write, one per image.', 'wowstudio-accessibility-remediation' ),
 							'items'       => array(
 								'type'       => 'object',
 								'properties' => array(
@@ -126,7 +126,7 @@ final class AltTextController implements Registrable {
 		if ( ! current_user_can( Capabilities::APPLY_FIX ) ) {
 			return new WP_Error(
 				'wsak_cannot_apply_fix',
-				__( 'You do not have permission to apply fixes.', 'wowstudio-accessibility-kit' ),
+				__( 'You do not have permission to apply fixes.', 'wowstudio-accessibility-remediation' ),
 				array( 'status' => rest_authorization_required_code() )
 			);
 		}
@@ -134,7 +134,7 @@ final class AltTextController implements Registrable {
 		if ( ! current_user_can( 'upload_files' ) ) {
 			return new WP_Error(
 				'wsak_cannot_edit_media',
-				__( 'Describing an image changes the media library, and your account cannot edit media.', 'wowstudio-accessibility-kit' ),
+				__( 'Describing an image changes the media library, and your account cannot edit media.', 'wowstudio-accessibility-remediation' ),
 				array( 'status' => rest_authorization_required_code() )
 			);
 		}
@@ -208,7 +208,7 @@ final class AltTextController implements Registrable {
 			return array(
 				'saved'   => false,
 				'code'    => 'wsak_media_missing',
-				'message' => __( 'That image is no longer in the media library.', 'wowstudio-accessibility-kit' ),
+				'message' => __( 'That image is no longer in the media library.', 'wowstudio-accessibility-remediation' ),
 			);
 		}
 
@@ -216,7 +216,7 @@ final class AltTextController implements Registrable {
 			return array(
 				'saved'   => false,
 				'code'    => 'wsak_media_forbidden',
-				'message' => __( 'Your account cannot edit this image.', 'wowstudio-accessibility-kit' ),
+				'message' => __( 'Your account cannot edit this image.', 'wowstudio-accessibility-remediation' ),
 			);
 		}
 
@@ -233,7 +233,7 @@ final class AltTextController implements Registrable {
 			return array(
 				'saved'   => false,
 				'code'    => 'wsak_alt_empty',
-				'message' => __( 'Write a description, or tick “decorative” if this image carries no meaning of its own.', 'wowstudio-accessibility-kit' ),
+				'message' => __( 'Write a description, or tick “decorative” if this image carries no meaning of its own.', 'wowstudio-accessibility-remediation' ),
 			);
 		}
 

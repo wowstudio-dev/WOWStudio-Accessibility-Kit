@@ -57,7 +57,7 @@ final class VersionTest extends TestCase {
 	 * @return void
 	 */
 	public function test_every_file_agrees_on_the_version(): void {
-		$plugin = $this->read( 'wowstudio-accessibility-kit.php' );
+		$plugin = $this->read( 'wowstudio-accessibility-remediation.php' );
 
 		$header   = $this->capture( '/^ \* Version:\s+(\S+)$/m', $plugin, 'the plugin header version' );
 		$constant = $this->capture( "/define\( 'WSAK_VERSION', '([^']+)' \);/", $plugin, 'the WSAK_VERSION constant' );
@@ -80,7 +80,7 @@ final class VersionTest extends TestCase {
 	public function test_the_current_version_is_written_down(): void {
 		$version = $this->capture(
 			"/define\( 'WSAK_VERSION', '([^']+)' \);/",
-			$this->read( 'wowstudio-accessibility-kit.php' ),
+			$this->read( 'wowstudio-accessibility-remediation.php' ),
 			'the WSAK_VERSION constant'
 		);
 

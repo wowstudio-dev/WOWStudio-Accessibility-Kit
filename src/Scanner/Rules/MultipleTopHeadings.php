@@ -85,7 +85,7 @@ final class MultipleTopHeadings implements Rule {
 	 * @return string
 	 */
 	public function title(): string {
-		return __( 'Page has more than one top-level heading', 'wowstudio-accessibility-kit' );
+		return __( 'Page has more than one top-level heading', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -96,7 +96,7 @@ final class MultipleTopHeadings implements Rule {
 	 * @return string
 	 */
 	public function description(): string {
-		return __( 'A page normally has one h1 naming what the page is about. More than one gives it competing titles and muddles the outline people navigate by. Check whether the extra headings should be h2 instead.', 'wowstudio-accessibility-kit' );
+		return __( 'A page normally has one h1 naming what the page is about. More than one gives it competing titles and muddles the outline people navigate by. Check whether the extra headings should be h2 instead.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -107,7 +107,7 @@ final class MultipleTopHeadings implements Rule {
 	 * @return string
 	 */
 	public function consequence(): string {
-		return __( 'The page says it is about two different things at once, which makes its outline unreliable for anyone navigating by it.', 'wowstudio-accessibility-kit' );
+		return __( 'The page says it is about two different things at once, which makes its outline unreliable for anyone navigating by it.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -122,7 +122,7 @@ final class MultipleTopHeadings implements Rule {
 		return new FixPlan(
 			FixKind::Manual,
 			FixTarget::Content,
-			__( 'Which of the two should stop being a top-level heading depends on which one the page is actually about.', 'wowstudio-accessibility-kit' )
+			__( 'Which of the two should stop being a top-level heading depends on which one the page is actually about.', 'wowstudio-accessibility-remediation' )
 		);
 	}
 
@@ -180,10 +180,10 @@ final class MultipleTopHeadings implements Rule {
 				$this->severity(),
 				$inferred ? Detection::Manual : $this->detection(),
 				$inferred
-					? __( 'Your theme appears to put a top-level heading above your content, which would make this one the second on the page. Worth checking on the page itself — if your theme does not, this is fine as it is.', 'wowstudio-accessibility-kit' )
+					? __( 'Your theme appears to put a top-level heading above your content, which would make this one the second on the page. Worth checking on the page itself — if your theme does not, this is fine as it is.', 'wowstudio-accessibility-remediation' )
 					: sprintf(
 						/* translators: %d: position of this top-level heading on the page. */
-						__( 'This is top-level heading number %d on the page.', 'wowstudio-accessibility-kit' ),
+						__( 'This is top-level heading number %d on the page.', 'wowstudio-accessibility-remediation' ),
 						$seen
 					),
 				$document->selector_for( $heading ),

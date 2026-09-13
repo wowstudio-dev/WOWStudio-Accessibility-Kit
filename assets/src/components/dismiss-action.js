@@ -85,7 +85,7 @@ export default function DismissAction( { issue, onChange } ) {
 					<strong>
 						{ __(
 							'Marked a false positive.',
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 						) }
 					</strong>{ ' ' }
 					{ review.note }
@@ -93,14 +93,17 @@ export default function DismissAction( { issue, onChange } ) {
 						' ' +
 							sprintf(
 								/* translators: %s: name of the person who dismissed the finding. */
-								__( '— %s', 'wowstudio-accessibility-kit' ),
+								__(
+									'— %s',
+									'wowstudio-accessibility-remediation'
+								),
 								review.name
 							) }
 				</p>
 				<Button variant="link" disabled={ busy } onClick={ restore }>
 					{ __(
 						'Not a false positive after all',
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					) }
 				</Button>
 			</div>
@@ -116,7 +119,7 @@ export default function DismissAction( { issue, onChange } ) {
 			>
 				{ __(
 					'Add to false positives',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 			</Button>
 		);
@@ -134,11 +137,11 @@ export default function DismissAction( { issue, onChange } ) {
 				__nextHasNoMarginBottom
 				label={ __(
 					'Why is this a false positive?',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 				help={ __(
 					'Kept with the finding, with your name and the date. This is the part that makes it a record somebody can rely on later rather than an unexplained dismissal — so write it for whoever reads it in a year, which may well be you.',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 				value={ note }
 				rows={ 3 }
@@ -149,7 +152,7 @@ export default function DismissAction( { issue, onChange } ) {
 				<Button variant="secondary" disabled={ busy } onClick={ save }>
 					{ __(
 						'Add to false positives',
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					) }
 				</Button>
 				<Button
@@ -159,7 +162,7 @@ export default function DismissAction( { issue, onChange } ) {
 						setError( '' );
 					} }
 				>
-					{ __( 'Cancel', 'wowstudio-accessibility-kit' ) }
+					{ __( 'Cancel', 'wowstudio-accessibility-remediation' ) }
 				</Button>
 			</div>
 		</div>

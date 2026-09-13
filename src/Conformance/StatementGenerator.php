@@ -73,8 +73,8 @@ final class StatementGenerator {
 	 */
 	public static function standard_label( string $key ): string {
 		$standards = array(
-			'wcag22aa' => __( 'WCAG 2.2 level AA', 'wowstudio-accessibility-kit' ),
-			'wcag21aa' => __( 'WCAG 2.1 level AA', 'wowstudio-accessibility-kit' ),
+			'wcag22aa' => __( 'WCAG 2.2 level AA', 'wowstudio-accessibility-remediation' ),
+			'wcag21aa' => __( 'WCAG 2.1 level AA', 'wowstudio-accessibility-remediation' ),
 		);
 
 		return $standards[ $key ] ?? $standards['wcag22aa'];
@@ -103,18 +103,18 @@ final class StatementGenerator {
 		$missing  = array();
 
 		if ( '' === trim( (string) $settings['organisation'] ) ) {
-			$missing[] = __( 'Who this statement is from.', 'wowstudio-accessibility-kit' );
+			$missing[] = __( 'Who this statement is from.', 'wowstudio-accessibility-remediation' );
 		}
 
 		if ( '' === trim( (string) $settings['feedback_email'] )
 			&& '' === trim( (string) $settings['feedback_url'] )
 			&& '' === trim( (string) $settings['feedback_phone'] ) ) {
-			$missing[] = __( 'A way for people to report a problem. A statement without one is of little use to the person who has just hit a barrier, and European rules expect it.', 'wowstudio-accessibility-kit' );
+			$missing[] = __( 'A way for people to report a problem. A statement without one is of little use to the person who has just hit a barrier, and European rules expect it.', 'wowstudio-accessibility-remediation' );
 		}
 
 		if ( ConformanceStatus::Partial->value === $settings['status']
 			&& '' === trim( (string) $settings['known_limitations'] ) ) {
-			$missing[] = __( 'What the known problems are. Saying the site is partially conformant without saying which parts is not much of an answer.', 'wowstudio-accessibility-kit' );
+			$missing[] = __( 'What the known problems are. Saying the site is partially conformant without saying which parts is not much of an answer.', 'wowstudio-accessibility-remediation' );
 		}
 
 		return $missing;
@@ -145,23 +145,23 @@ final class StatementGenerator {
 			$html .= $this->draft_banner();
 		}
 
-		$html .= $this->heading( 2, __( 'Accessibility statement', 'wowstudio-accessibility-kit' ) );
+		$html .= $this->heading( 2, __( 'Accessibility statement', 'wowstudio-accessibility-remediation' ) );
 
 		$html .= '<p>' . esc_html(
 			sprintf(
 				/* translators: %s: organisation name. */
-				__( '%s wants as many people as possible to use this website. We are working to make it easier for everyone, including disabled people.', 'wowstudio-accessibility-kit' ),
+				__( '%s wants as many people as possible to use this website. We are working to make it easier for everyone, including disabled people.', 'wowstudio-accessibility-remediation' ),
 				$organisation
 			)
 		) . '</p>';
 
-		$html .= $this->heading( 3, __( 'How accessible this website is', 'wowstudio-accessibility-kit' ) );
+		$html .= $this->heading( 3, __( 'How accessible this website is', 'wowstudio-accessibility-remediation' ) );
 		$html .= '<p>' . esc_html( $status->sentence( $organisation, $standard ) ) . '</p>';
 
 		$limitations = trim( (string) $settings['known_limitations'] );
 
 		if ( '' !== $limitations ) {
-			$html .= $this->heading( 3, __( 'Known problems', 'wowstudio-accessibility-kit' ) );
+			$html .= $this->heading( 3, __( 'Known problems', 'wowstudio-accessibility-remediation' ) );
 			$html .= '<ul>';
 
 			foreach ( $this->as_lines( $limitations ) as $line ) {
@@ -197,8 +197,8 @@ final class StatementGenerator {
 	 */
 	private function draft_banner(): string {
 		return '<div class="wsak-statement__draft" role="note">'
-			. '<p><strong>' . esc_html__( 'Draft — not yet reviewed or approved', 'wowstudio-accessibility-kit' ) . '</strong></p>'
-			. '<p>' . esc_html__( 'This statement was made from settings, and nobody has confirmed that it is accurate. Do not treat it as a statement from this organisation yet. Somebody has to read it and sign it off in the Accessibility settings first.', 'wowstudio-accessibility-kit' ) . '</p>'
+			. '<p><strong>' . esc_html__( 'Draft — not yet reviewed or approved', 'wowstudio-accessibility-remediation' ) . '</strong></p>'
+			. '<p>' . esc_html__( 'This statement was made from settings, and nobody has confirmed that it is accurate. Do not treat it as a statement from this organisation yet. Somebody has to read it and sign it off in the Accessibility settings first.', 'wowstudio-accessibility-remediation' ) . '</p>'
 			. '</div>';
 	}
 
@@ -214,9 +214,9 @@ final class StatementGenerator {
 	 * @return string
 	 */
 	private function feedback_section( array $settings ): string {
-		$html = $this->heading( 3, __( 'Tell us about a problem', 'wowstudio-accessibility-kit' ) );
+		$html = $this->heading( 3, __( 'Tell us about a problem', 'wowstudio-accessibility-remediation' ) );
 
-		$html .= '<p>' . esc_html__( 'Tell us if you find something on this site you cannot use. Tell us too if you need information in another format. We want to know what happened.', 'wowstudio-accessibility-kit' ) . '</p>';
+		$html .= '<p>' . esc_html__( 'Tell us if you find something on this site you cannot use. Tell us too if you need information in another format. We want to know what happened.', 'wowstudio-accessibility-remediation' ) . '</p>';
 
 		$routes = array();
 
@@ -224,7 +224,7 @@ final class StatementGenerator {
 			$email    = (string) $settings['feedback_email'];
 			$routes[] = sprintf(
 				'<li>%s <a href="%s">%s</a></li>',
-				esc_html__( 'Email:', 'wowstudio-accessibility-kit' ),
+				esc_html__( 'Email:', 'wowstudio-accessibility-remediation' ),
 				esc_url( 'mailto:' . $email ),
 				esc_html( $email )
 			);
@@ -233,7 +233,7 @@ final class StatementGenerator {
 		if ( '' !== trim( (string) $settings['feedback_phone'] ) ) {
 			$routes[] = sprintf(
 				'<li>%s %s</li>',
-				esc_html__( 'Phone:', 'wowstudio-accessibility-kit' ),
+				esc_html__( 'Phone:', 'wowstudio-accessibility-remediation' ),
 				esc_html( (string) $settings['feedback_phone'] )
 			);
 		}
@@ -242,12 +242,12 @@ final class StatementGenerator {
 			$routes[] = sprintf(
 				'<li><a href="%s">%s</a></li>',
 				esc_url( (string) $settings['feedback_url'] ),
-				esc_html__( 'Use our contact form', 'wowstudio-accessibility-kit' )
+				esc_html__( 'Use our contact form', 'wowstudio-accessibility-remediation' )
 			);
 		}
 
 		if ( array() === $routes ) {
-			return $html . '<p><em>' . esc_html__( 'No contact route has been set yet.', 'wowstudio-accessibility-kit' ) . '</em></p>';
+			return $html . '<p><em>' . esc_html__( 'No contact route has been set yet.', 'wowstudio-accessibility-remediation' ) . '</em></p>';
 		}
 
 		$html .= '<ul>' . implode( '', $routes ) . '</ul>';
@@ -257,7 +257,7 @@ final class StatementGenerator {
 		$html .= '<p>' . esc_html(
 			sprintf(
 				/* translators: %d: number of working days. */
-				_n( 'We aim to reply within %d working day.', 'We aim to reply within %d working days.', $days, 'wowstudio-accessibility-kit' ),
+				_n( 'We aim to reply within %d working day.', 'We aim to reply within %d working days.', $days, 'wowstudio-accessibility-remediation' ),
 				$days
 			)
 		) . '</p>';
@@ -280,14 +280,14 @@ final class StatementGenerator {
 			return '';
 		}
 
-		$html = $this->heading( 3, __( 'If you are not happy with our response', 'wowstudio-accessibility-kit' ) );
+		$html = $this->heading( 3, __( 'If you are not happy with our response', 'wowstudio-accessibility-remediation' ) );
 
 		$url = trim( (string) $settings['enforcement_url'] );
 
 		if ( '' !== $url ) {
 			$html .= '<p>' . sprintf(
 				/* translators: %s: name of the enforcement body, linked when a URL was given. */
-				esc_html__( 'You can contact %s.', 'wowstudio-accessibility-kit' ),
+				esc_html__( 'You can contact %s.', 'wowstudio-accessibility-remediation' ),
 				sprintf( '<a href="%s">%s</a>', esc_url( $url ), esc_html( $body ) )
 			) . '</p>';
 
@@ -297,7 +297,7 @@ final class StatementGenerator {
 		return $html . '<p>' . esc_html(
 			sprintf(
 				/* translators: %s: name of the enforcement body, linked when a URL was given. */
-				__( 'You can contact %s.', 'wowstudio-accessibility-kit' ),
+				__( 'You can contact %s.', 'wowstudio-accessibility-remediation' ),
 				$body
 			)
 		) . '</p>';
@@ -317,7 +317,7 @@ final class StatementGenerator {
 	 * @return string
 	 */
 	private function preparation_section( array $settings ): string {
-		$html = $this->heading( 3, __( 'How we prepared this statement', 'wowstudio-accessibility-kit' ) );
+		$html = $this->heading( 3, __( 'How we prepared this statement', 'wowstudio-accessibility-remediation' ) );
 
 		$reviewed = trim( (string) $settings['reviewed_on'] );
 
@@ -325,7 +325,7 @@ final class StatementGenerator {
 			$html .= '<p>' . esc_html(
 				sprintf(
 					/* translators: %s: date the statement was last reviewed. */
-					__( 'This statement was last reviewed on %s.', 'wowstudio-accessibility-kit' ),
+					__( 'This statement was last reviewed on %s.', 'wowstudio-accessibility-remediation' ),
 					$this->readable_date( $reviewed )
 				)
 			) . '</p>';
@@ -333,11 +333,11 @@ final class StatementGenerator {
 
 		$html .= '<p>' . esc_html(
 			'external' === $settings['assessment']
-				? __( 'The website was assessed by an external organisation, alongside automated testing.', 'wowstudio-accessibility-kit' )
-				: __( 'The website was assessed by us, using automated testing alongside our own checks.', 'wowstudio-accessibility-kit' )
+				? __( 'The website was assessed by an external organisation, alongside automated testing.', 'wowstudio-accessibility-remediation' )
+				: __( 'The website was assessed by us, using automated testing alongside our own checks.', 'wowstudio-accessibility-remediation' )
 		) . '</p>';
 
-		$html .= '<p>' . esc_html__( 'Automated testing finds only some accessibility problems. Some things need a person to judge. Is the alternative text accurate? Does the focus order make sense? Does the page read sensibly aloud? Where a person has not checked, this site has not been fully assessed.', 'wowstudio-accessibility-kit' ) . '</p>';
+		$html .= '<p>' . esc_html__( 'Automated testing finds only some accessibility problems. Some things need a person to judge. Is the alternative text accurate? Does the focus order make sense? Does the page read sensibly aloud? Where a person has not checked, this site has not been fully assessed.', 'wowstudio-accessibility-remediation' ) . '</p>';
 
 		if ( ! empty( $settings['attested'] ) ) {
 			$by   = (string) $settings['attested_by'];
@@ -348,14 +348,14 @@ final class StatementGenerator {
 				'' !== $role
 					? sprintf(
 						/* translators: 1: name, 2: role, 3: date. */
-						__( 'Reviewed and approved by %1$s, %2$s, on %3$s.', 'wowstudio-accessibility-kit' ),
+						__( 'Reviewed and approved by %1$s, %2$s, on %3$s.', 'wowstudio-accessibility-remediation' ),
 						$by,
 						$role,
 						$when
 					)
 					: sprintf(
 						/* translators: 1: name, 2: date. */
-						__( 'Reviewed and approved by %1$s on %2$s.', 'wowstudio-accessibility-kit' ),
+						__( 'Reviewed and approved by %1$s on %2$s.', 'wowstudio-accessibility-remediation' ),
 						$by,
 						$when
 					)

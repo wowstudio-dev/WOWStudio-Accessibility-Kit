@@ -93,7 +93,7 @@ final class AudioNeedsTranscript implements Rule {
 	 * @return string
 	 */
 	public function title(): string {
-		return __( 'Audio needs a transcript', 'wowstudio-accessibility-kit' );
+		return __( 'Audio needs a transcript', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -104,7 +104,7 @@ final class AudioNeedsTranscript implements Rule {
 	 * @return string
 	 */
 	public function description(): string {
-		return __( 'This page plays audio, and audio has only one alternative: a transcript of what is said. Nothing in the markup distinguishes a transcript from any other text, so this cannot be checked automatically — it is here as a prompt. If there is already a transcript on the page, mark this as reviewed and it will not ask again.', 'wowstudio-accessibility-kit' );
+		return __( 'This page plays audio, and audio has only one alternative: a transcript of what is said. Nothing in the markup distinguishes a transcript from any other text, so this cannot be checked automatically — it is here as a prompt. If there is already a transcript on the page, mark this as reviewed and it will not ask again.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -115,7 +115,7 @@ final class AudioNeedsTranscript implements Rule {
 	 * @return string
 	 */
 	public function consequence(): string {
-		return __( 'Anybody who cannot hear the recording has no way to get at what it says.', 'wowstudio-accessibility-kit' );
+		return __( 'Anybody who cannot hear the recording has no way to get at what it says.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -130,7 +130,7 @@ final class AudioNeedsTranscript implements Rule {
 		return new FixPlan(
 			FixKind::Manual,
 			FixTarget::Content,
-			__( 'Publish the transcript as text on the page, near the player. Nothing here can tell a transcript from any other paragraph, so this will keep asking until you mark it reviewed.', 'wowstudio-accessibility-kit' )
+			__( 'Publish the transcript as text on the page, near the player. Nothing here can tell a transcript from any other paragraph, so this will keep asking until you mark it reviewed.', 'wowstudio-accessibility-remediation' )
 		);
 	}
 
@@ -155,7 +155,7 @@ final class AudioNeedsTranscript implements Rule {
 				$this->wcag_sc(),
 				$this->severity(),
 				$this->detection(),
-				__( 'This page plays audio. Check that a transcript is published with it.', 'wowstudio-accessibility-kit' ),
+				__( 'This page plays audio. Check that a transcript is published with it.', 'wowstudio-accessibility-remediation' ),
 				$document->selector_for( $audio ),
 				$document->context_for( $audio )
 			);

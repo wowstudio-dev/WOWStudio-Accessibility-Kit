@@ -79,7 +79,7 @@ function BlastRadius( { matches, stable } ) {
 			<p className="wsak-css-fix__radius is-warning">
 				{ __(
 					'That selector will not parse, so nothing can be counted and nothing can be applied.',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 			</p>
 		);
@@ -91,7 +91,7 @@ function BlastRadius( { matches, stable } ) {
 				{ matches === 0
 					? __(
 							'This selector matches nothing on this page. Applying it would write a rule that does nothing.',
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 					  )
 					: sprintf(
 							/* translators: %d: number of matching elements. */
@@ -99,7 +99,7 @@ function BlastRadius( { matches, stable } ) {
 								'Matches %d element on this page — and every element it matches on pages that have not been scanned.',
 								'Matches %d elements on this page — and every element they match on pages that have not been scanned.',
 								matches,
-								'wowstudio-accessibility-kit'
+								'wowstudio-accessibility-remediation'
 							),
 							matches
 					  ) }
@@ -108,7 +108,7 @@ function BlastRadius( { matches, stable } ) {
 				<p className="wsak-css-fix__radius is-warning">
 					{ __(
 						'This element has no id or usable class, so the selector describes where it sits in the page. It will stop matching the next time the content around it changes. A class added in your theme would make a better anchor.',
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					) }
 				</p>
 			) }
@@ -186,7 +186,7 @@ export default function CssFixAction( {
 			setError(
 				__(
 					'This element sits too deep in the page to name reliably, so no rule is offered for it. It needs a class in your theme before a stylesheet can reach it.',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				)
 			);
 
@@ -218,7 +218,7 @@ export default function CssFixAction( {
 		setAnnouncement(
 			__(
 				'A style rule has been proposed. Review the selector and what it will affect before applying it.',
-				'wowstudio-accessibility-kit'
+				'wowstudio-accessibility-remediation'
 			)
 		);
 	};
@@ -235,7 +235,7 @@ export default function CssFixAction( {
 				setAnnouncement(
 					__(
 						'Rule written. Reloading the page to measure whether it took effect.',
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					)
 				);
 
@@ -259,7 +259,7 @@ export default function CssFixAction( {
 						? measured.detail
 						: __(
 								'Rule written. It could not be measured again automatically.',
-								'wowstudio-accessibility-kit'
+								'wowstudio-accessibility-remediation'
 						  )
 				);
 			} )
@@ -280,7 +280,7 @@ export default function CssFixAction( {
 				setAnnouncement(
 					__(
 						'Rule removed from your Additional CSS.',
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					)
 				);
 
@@ -312,7 +312,7 @@ export default function CssFixAction( {
 				<Button variant="secondary" onClick={ propose }>
 					{ __(
 						'Suggest a style fix',
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					) }
 				</Button>
 			) }
@@ -335,7 +335,7 @@ export default function CssFixAction( {
 								/* translators: %s: the CSS selector already styling this element. */
 								__(
 									'Something already sets this with !important, in a rule for %s. No stylesheet rule can outrank that, so this one will probably not take effect — the change has to be made where that rule lives.',
-									'wowstudio-accessibility-kit'
+									'wowstudio-accessibility-remediation'
 								),
 								outranked
 							) }
@@ -347,7 +347,7 @@ export default function CssFixAction( {
 							<Swatch
 								label={ __(
 									'Now',
-									'wowstudio-accessibility-kit'
+									'wowstudio-accessibility-remediation'
 								) }
 								colour={ proposal.before.swatch }
 								ratio={ `${ proposal.before.ratio.toFixed(
@@ -357,7 +357,7 @@ export default function CssFixAction( {
 							<Swatch
 								label={ __(
 									'Proposed',
-									'wowstudio-accessibility-kit'
+									'wowstudio-accessibility-remediation'
 								) }
 								colour={ proposal.after.swatch }
 								ratio={ `${ proposal.after.ratio.toFixed(
@@ -373,7 +373,7 @@ export default function CssFixAction( {
 								/* translators: 1: current size, 2: size after the fix. */
 								__(
 									'Now %1$s, at least %2$s after the fix.',
-									'wowstudio-accessibility-kit'
+									'wowstudio-accessibility-remediation'
 								),
 								proposal.before.size,
 								proposal.after.size
@@ -385,11 +385,11 @@ export default function CssFixAction( {
 						__nextHasNoMarginBottom
 						label={ __(
 							'Selector this rule applies to',
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 						) }
 						help={ __(
 							'Edit this to widen or narrow what the rule reaches. Broader is often right: a colour that is wrong here is usually wrong everywhere that class is used.',
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 						) }
 						value={ selector }
 						onChange={ setSelector }
@@ -400,7 +400,7 @@ export default function CssFixAction( {
 					<h5 className="wsak-css-fix__title">
 						{ __(
 							'What would be added to your Additional CSS',
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 						) }
 					</h5>
 					<pre
@@ -409,7 +409,7 @@ export default function CssFixAction( {
 						role="group"
 						aria-label={ __(
 							'Proposed style rule',
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 						) }
 					>
 						<code>
@@ -422,7 +422,7 @@ export default function CssFixAction( {
 							/* translators: %s: the active theme's name. */
 							__(
 								'This goes into Appearance → Customise → Additional CSS, where you can read, edit or delete it without this plugin. WordPress stores that per theme, so it belongs to %s and will stop applying if you switch themes.',
-								'wowstudio-accessibility-kit'
+								'wowstudio-accessibility-remediation'
 							),
 							theme
 						) }
@@ -440,7 +440,7 @@ export default function CssFixAction( {
 						>
 							{ __(
 								'Apply this rule',
-								'wowstudio-accessibility-kit'
+								'wowstudio-accessibility-remediation'
 							) }
 						</Button>
 						<Button
@@ -450,7 +450,10 @@ export default function CssFixAction( {
 								setStatus( 'idle' );
 							} }
 						>
-							{ __( 'Discard', 'wowstudio-accessibility-kit' ) }
+							{ __(
+								'Discard',
+								'wowstudio-accessibility-remediation'
+							) }
 						</Button>
 					</div>
 				</div>
@@ -460,14 +463,17 @@ export default function CssFixAction( {
 				<Busy
 					label={ __(
 						'Reloading the page and measuring again…',
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					) }
 				/>
 			) }
 
 			{ status === 'reverting' && (
 				<Busy
-					label={ __( 'Removing…', 'wowstudio-accessibility-kit' ) }
+					label={ __(
+						'Removing…',
+						'wowstudio-accessibility-remediation'
+					) }
 				/>
 			) }
 
@@ -482,11 +488,11 @@ export default function CssFixAction( {
 								{ outcome.resolved
 									? __(
 											'Applied, and it took effect.',
-											'wowstudio-accessibility-kit'
+											'wowstudio-accessibility-remediation'
 									  )
 									: __(
 											'Applied, but it did not take effect.',
-											'wowstudio-accessibility-kit'
+											'wowstudio-accessibility-remediation'
 									  ) }
 							</strong>{ ' ' }
 							{ outcome.detail }
@@ -494,7 +500,7 @@ export default function CssFixAction( {
 								' ' +
 									__(
 										'Something in your theme is more specific than this rule. Narrowing the selector to the element itself usually wins.',
-										'wowstudio-accessibility-kit'
+										'wowstudio-accessibility-remediation'
 									) }
 						</Notice>
 					) }
@@ -503,7 +509,7 @@ export default function CssFixAction( {
 						<p>
 							{ __(
 								'A rule for this finding is in your Additional CSS.',
-								'wowstudio-accessibility-kit'
+								'wowstudio-accessibility-remediation'
 							) }
 						</p>
 					) }
@@ -511,7 +517,7 @@ export default function CssFixAction( {
 					<Button variant="secondary" onClick={ undo }>
 						{ __(
 							'Remove this rule',
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 						) }
 					</Button>
 				</div>

@@ -133,7 +133,7 @@ final class LoopbackProbe {
 				'redirection' => 2,
 				'sslverify'   => apply_filters( 'wsak_page_source_sslverify', true, 0 ),
 				'headers'     => array( 'Accept' => 'text/html' ),
-				'user-agent'  => 'WOWStudio Accessibility Kit/' . WSAK_VERSION . '; ' . home_url( '/' ),
+				'user-agent'  => 'WOWStudio Accessibility Remediation/' . WSAK_VERSION . '; ' . home_url( '/' ),
 			)
 		);
 

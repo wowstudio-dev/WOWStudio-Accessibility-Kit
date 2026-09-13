@@ -66,7 +66,7 @@ final class SiteFixManager implements Registrable {
 	 */
 	public function register(): void {
 		add_action( 'after_setup_theme', array( $this, 'apply_enabled' ), 5 );
-		add_action( 'wp_head', array( $this, 'print_css' ), 8 );
+		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_css' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_script' ) );
 	}
 
@@ -111,7 +111,7 @@ final class SiteFixManager implements Registrable {
 			'wsak-site-fixes',
 			'window.wsakSiteFixes = ' . wp_json_encode( $ids ) . ';'
 			. ' window.wsakSearchMessage = ' . wp_json_encode(
-				__( 'Type something to search for.', 'wowstudio-accessibility-kit' )
+				__( 'Type something to search for.', 'wowstudio-accessibility-remediation' )
 			) . ';',
 			'before'
 		);
@@ -131,19 +131,25 @@ final class SiteFixManager implements Registrable {
 	}
 
 	/**
-	 * Prints the combined stylesheet for the enabled CSS fixes.
+	 * Adds the combined stylesheet for the enabled CSS fixes.
 	 *
-	 * One inline style element rather than an enqueued file, because the whole
-	 * of it is a few hundred bytes and a separate request would cost more than
-	 * the rules do. Printed early in the head so that a theme's own stylesheet,
-	 * which loads after, can still win — these are meant to supply what is
-	 * missing, not to overrule a decision somebody made on purpose.
+	 * Inline rather than a file, because the whole of it is a few hundred bytes
+	 * and a separate request would cost more than the rules do. The handle is
+	 * registered with no source purely so there is something to attach them to;
+	 * WordPress prints a style element and fetches nothing.
+	 *
+	 * Enqueued on `wp_enqueue_scripts` rather than printed on `wp_head`, which
+	 * also keeps the ordering these rules depend on. Plugins register before a
+	 * theme's `functions.php` runs, so this handle is queued first and printed
+	 * first, and a theme's own stylesheet still wins — these supply what is
+	 * missing rather than overruling a decision somebody made on purpose.
 	 *
 	 * @since 0.19.0
+	 * @since 1.0.1 Enqueued rather than printed.
 	 *
 	 * @return void
 	 */
-	public function print_css(): void {
+	public function enqueue_css(): void {
 		$css = array();
 
 		foreach ( $this->enabled() as $fix ) {
@@ -160,11 +166,9 @@ final class SiteFixManager implements Registrable {
 			return;
 		}
 
-		printf(
-			"<style id=\"wsak-site-fixes\">\n%s\n</style>\n",
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Not HTML. See self::safe_css(), which is the correct escaping for this context and explains why esc_html() is not.
-			self::safe_css( implode( "\n\n", $css ) )
-		);
+		wp_register_style( 'wsak-site-fixes', false, array(), WSAK_VERSION );
+		wp_enqueue_style( 'wsak-site-fixes' );
+		wp_add_inline_style( 'wsak-site-fixes', self::safe_css( implode( "\n\n", $css ) ) );
 	}
 
 	/**

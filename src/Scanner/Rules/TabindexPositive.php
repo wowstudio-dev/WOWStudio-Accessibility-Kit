@@ -98,7 +98,7 @@ final class TabindexPositive implements Rule {
 	 * @return string
 	 */
 	public function title(): string {
-		return __( 'Positive tabindex changes the focus order', 'wowstudio-accessibility-kit' );
+		return __( 'Positive tabindex changes the focus order', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -109,7 +109,7 @@ final class TabindexPositive implements Rule {
 	 * @return string
 	 */
 	public function description(): string {
-		return __( 'This element has a tabindex above zero, which does not adjust its position slightly — it moves the element into a queue the browser visits before everything else on the page. One of these makes the first Tab press jump past your navigation to land here. Use tabindex="0" to make something focusable in its natural place, and let the order of the markup do the rest.', 'wowstudio-accessibility-kit' );
+		return __( 'This element has a tabindex above zero, which does not adjust its position slightly — it moves the element into a queue the browser visits before everything else on the page. One of these makes the first Tab press jump past your navigation to land here. Use tabindex="0" to make something focusable in its natural place, and let the order of the markup do the rest.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -120,7 +120,7 @@ final class TabindexPositive implements Rule {
 	 * @return string
 	 */
 	public function consequence(): string {
-		return __( 'Tabbing through the page jumps out of order, past everything the reader can see comes first.', 'wowstudio-accessibility-kit' );
+		return __( 'Tabbing through the page jumps out of order, past everything the reader can see comes first.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -135,7 +135,7 @@ final class TabindexPositive implements Rule {
 		return new FixPlan(
 			FixKind::Manual,
 			FixTarget::Content,
-			__( 'Almost always tabindex="0" was what was wanted — focusable, in the order it appears. Confirming that means knowing why the number was put there.', 'wowstudio-accessibility-kit' )
+			__( 'Almost always tabindex="0" was what was wanted — focusable, in the order it appears. Confirming that means knowing why the number was put there.', 'wowstudio-accessibility-remediation' )
 		);
 	}
 
@@ -170,7 +170,7 @@ final class TabindexPositive implements Rule {
 				$this->detection(),
 				sprintf(
 					/* translators: %d: the tabindex value found. */
-					__( 'This element has tabindex="%d", which moves it ahead of everything else in the tab order.', 'wowstudio-accessibility-kit' ),
+					__( 'This element has tabindex="%d", which moves it ahead of everything else in the tab order.', 'wowstudio-accessibility-remediation' ),
 					(int) $value
 				),
 				$document->selector_for( $element ),

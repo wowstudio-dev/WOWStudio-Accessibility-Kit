@@ -96,7 +96,7 @@ final class DuplicateId implements Rule {
 	 * @return string
 	 */
 	public function title(): string {
-		return __( 'The same id is used more than once', 'wowstudio-accessibility-kit' );
+		return __( 'The same id is used more than once', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -107,7 +107,7 @@ final class DuplicateId implements Rule {
 	 * @return string
 	 */
 	public function description(): string {
-		return __( 'Two or more elements on this page share an id. Labels, ARIA references, in-page links and scripts all resolve an id to the first match, so everything pointing at the later ones silently reaches the wrong element instead — a second form field with the same id cannot be labelled at all. Usually this comes from a template being rendered twice on one page.', 'wowstudio-accessibility-kit' );
+		return __( 'Two or more elements on this page share an id. Labels, ARIA references, in-page links and scripts all resolve an id to the first match, so everything pointing at the later ones silently reaches the wrong element instead — a second form field with the same id cannot be labelled at all. Usually this comes from a template being rendered twice on one page.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -118,7 +118,7 @@ final class DuplicateId implements Rule {
 	 * @return string
 	 */
 	public function consequence(): string {
-		return __( 'Labels and ARIA references reach the wrong element, so the later ones are left unnamed.', 'wowstudio-accessibility-kit' );
+		return __( 'Labels and ARIA references reach the wrong element, so the later ones are left unnamed.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -133,7 +133,7 @@ final class DuplicateId implements Rule {
 		return new FixPlan(
 			FixKind::Manual,
 			FixTarget::Theme,
-			__( 'Which copy should be renamed depends on what is emitting them, which is usually a template or a block rendered more than once rather than something typed into your content.', 'wowstudio-accessibility-kit' )
+			__( 'Which copy should be renamed depends on what is emitting them, which is usually a template or a block rendered more than once rather than something typed into your content.', 'wowstudio-accessibility-remediation' )
 		);
 	}
 
@@ -186,7 +186,7 @@ final class DuplicateId implements Rule {
 				$this->detection(),
 				sprintf(
 					/* translators: %s: the id that appears more than once. */
-					__( 'The id "%s" is used on more than one element, so anything pointing at it reaches only the first.', 'wowstudio-accessibility-kit' ),
+					__( 'The id "%s" is used on more than one element, so anything pointing at it reaches only the first.', 'wowstudio-accessibility-remediation' ),
 					$id
 				),
 				$document->selector_for( $element ),

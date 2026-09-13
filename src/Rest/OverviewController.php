@@ -458,7 +458,7 @@ final class OverviewController implements Registrable {
 
 			$out[] = array(
 				'post_id' => (int) $row->post_id,
-				'title'   => '' !== $title ? $title : __( '(no title)', 'wowstudio-accessibility-kit' ),
+				'title'   => '' !== $title ? $title : __( '(no title)', 'wowstudio-accessibility-remediation' ),
 				'count'   => (int) $row->n,
 			);
 		}

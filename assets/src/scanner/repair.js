@@ -59,17 +59,17 @@ export function whyNoCssFix( ruleId ) {
 		case 'scrolling-region-not-reachable':
 			return __(
 				'This one needs tabindex="0" and a label on the scrolling container. Those are attributes in the markup, and no stylesheet can add them — it has to be changed in your theme or the block that produced it.',
-				'wowstudio-accessibility-kit'
+				'wowstudio-accessibility-remediation'
 			);
 		case 'hidden-element-still-focusable':
 			return __(
 				'This one needs either aria-hidden removed or the control taken out of the tab order. Both are attributes in the markup, which a stylesheet cannot change — it has to be done in your theme or the block that produced it.',
-				'wowstudio-accessibility-kit'
+				'wowstudio-accessibility-remediation'
 			);
 		default:
 			return __(
 				'There is no style rule that would answer this one. It has to be changed where the markup is produced.',
-				'wowstudio-accessibility-kit'
+				'wowstudio-accessibility-remediation'
 			);
 	}
 }
@@ -122,7 +122,7 @@ function repairContrast( element, view ) {
 			/* translators: 1: current contrast ratio, 2: proposed contrast ratio. */
 			__(
 				'Darkens or lightens the text just enough to clear the threshold: %1$s becomes %2$s. The hue and saturation you chose are kept exactly.',
-				'wowstudio-accessibility-kit'
+				'wowstudio-accessibility-remediation'
 			),
 			`${ measured.ratio.toFixed( 2 ) }:1`,
 			`${ proposed.ratio.toFixed( 2 ) }:1`
@@ -143,7 +143,7 @@ function repairLinkColour() {
 		declarations: [ { property: 'text-decoration', value: 'underline' } ],
 		summary: __(
 			'Underlines the link, so it is recognisable as one without depending on telling two colours apart.',
-			'wowstudio-accessibility-kit'
+			'wowstudio-accessibility-remediation'
 		),
 	};
 }
@@ -193,11 +193,11 @@ function repairTargetSize( element, view ) {
 		summary: inline
 			? __(
 					'Gives the control a floor of 24 by 24 pixels. It also switches it to inline-block, because a browser ignores a minimum size on a plain inline element — without that the rule would apply and change nothing.',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 			  )
 			: __(
 					'Gives the control a floor of 24 by 24 pixels, so it stays hittable for anyone whose aim is not exact. It can still grow past that.',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 			  ),
 	};
 }
@@ -280,7 +280,7 @@ export function verifyFix( issue, element, view ) {
 				/* translators: 1: measured contrast ratio, 2: required ratio. */
 				__(
 					'Measured again on the page: %1$s, against the %2$s required.',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				),
 				`${ measured.ratio.toFixed( 2 ) }:1`,
 				`${ measured.required }:1`
@@ -299,7 +299,7 @@ export function verifyFix( issue, element, view ) {
 				/* translators: %s: measured size, such as "24 × 24px". */
 				__(
 					'Measured again on the page: %s.',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				),
 				`${ px( box.width ) } × ${ px( box.height ) }px`
 			),
@@ -318,11 +318,11 @@ export function verifyFix( issue, element, view ) {
 			detail: resolved
 				? __(
 						'The link is underlined on the page now.',
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 				  )
 				: __(
 						'The link is still not underlined on the page, so something in your theme is overriding the rule.',
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 				  ),
 		};
 	}

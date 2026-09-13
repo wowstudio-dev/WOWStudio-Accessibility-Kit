@@ -1,6 +1,6 @@
 <?php
 /**
- * WOWStudio Accessibility Kit
+ * WOWStudio Accessibility Remediation
  *
  * @package           WOWStudio\AccessibilityKit
  * @author            WOWStudio
@@ -8,17 +8,17 @@
  * @license           GPL-2.0-or-later
  *
  * @wordpress-plugin
- * Plugin Name:       WOWStudio Accessibility Kit
- * Plugin URI:        https://wowstudio.dev/accessibility-kit/
+ * Plugin Name:       WOWStudio Accessibility Remediation
+ * Plugin URI:        https://wowstudio.dev/accessibility-remediation/
  * Description:       Helps you find, fix and document WCAG accessibility issues at the code level. Real markup fixes with preview and undo — not an overlay.
- * Version:           1.0.0
+ * Version:           1.0.1
  * Requires at least: 6.8
  * Requires PHP:      8.1
  * Author:            WOWStudio
  * Author URI:        https://wowstudio.dev/
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
- * Text Domain:       wowstudio-accessibility-kit
+ * Text Domain:       wowstudio-accessibility-remediation
  * Domain Path:       /languages
  */
 
@@ -31,7 +31,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'WSAK_VERSION', '1.0.0' );
+define( 'WSAK_VERSION', '1.0.1' );
 define( 'WSAK_FILE', __FILE__ );
 define( 'WSAK_PATH', plugin_dir_path( __FILE__ ) );
 define( 'WSAK_URL', plugin_dir_url( __FILE__ ) );
@@ -102,7 +102,7 @@ function wsak_requirement_message( $requirement ) {
 		case 'php':
 			return sprintf(
 				/* translators: 1: required PHP version, 2: PHP version running on the server. */
-				__( 'PHP %1$s or newer is required. This server runs PHP %2$s.', 'wowstudio-accessibility-kit' ),
+				__( 'PHP %1$s or newer is required. This server runs PHP %2$s.', 'wowstudio-accessibility-remediation' ),
 				$requirement['required'],
 				$requirement['actual']
 			);
@@ -110,13 +110,13 @@ function wsak_requirement_message( $requirement ) {
 		case 'wp':
 			return sprintf(
 				/* translators: 1: required WordPress version, 2: WordPress version on this site. */
-				__( 'WordPress %1$s or newer is required. This site runs WordPress %2$s.', 'wowstudio-accessibility-kit' ),
+				__( 'WordPress %1$s or newer is required. This site runs WordPress %2$s.', 'wowstudio-accessibility-remediation' ),
 				$requirement['required'],
 				$requirement['actual']
 			);
 
 		default:
-			return __( 'The plugin files are incomplete: the Composer autoloader is missing. Reinstall the plugin.', 'wowstudio-accessibility-kit' );
+			return __( 'The plugin files are incomplete: the Composer autoloader is missing. Reinstall the plugin.', 'wowstudio-accessibility-remediation' );
 	}
 }
 
@@ -138,7 +138,7 @@ function wsak_halt( $unmet ) {
 			?>
 			<div class="notice notice-error">
 				<p>
-					<strong><?php esc_html_e( 'WOWStudio Accessibility Kit could not start.', 'wowstudio-accessibility-kit' ); ?></strong>
+					<strong><?php esc_html_e( 'WOWStudio Accessibility Remediation could not start.', 'wowstudio-accessibility-remediation' ); ?></strong>
 				</p>
 				<ul class="ul-disc">
 					<?php foreach ( $unmet as $requirement ) : ?>

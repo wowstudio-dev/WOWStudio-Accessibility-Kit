@@ -32,7 +32,7 @@ function Edit() {
 					<p>
 						{ __(
 							'Nothing to show yet. Write your accessibility statement in the Accessibility settings.',
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 						) }
 					</p>
 				) }

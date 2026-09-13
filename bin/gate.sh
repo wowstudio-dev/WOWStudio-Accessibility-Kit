@@ -50,7 +50,7 @@ pot_is_current() {
 	# Compared against HEAD rather than the index, so a regenerated template
 	# that was staged but never committed still counts as stale — which is what
 	# CI sees when it checks out the commit.
-	git diff HEAD --quiet -- languages/wowstudio-accessibility-kit.pot || {
+	git diff HEAD --quiet -- languages/wowstudio-accessibility-remediation.pot || {
 		echo "languages/*.pot is stale. It has been regenerated — commit it."
 		return 1
 	}

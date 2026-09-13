@@ -16,25 +16,28 @@ function band( score ) {
 	if ( score >= 90 ) {
 		return __(
 			'Few automated issues found',
-			'wowstudio-accessibility-kit'
+			'wowstudio-accessibility-remediation'
 		);
 	}
 
 	if ( score >= 70 ) {
 		return __(
 			'Some automated issues found',
-			'wowstudio-accessibility-kit'
+			'wowstudio-accessibility-remediation'
 		);
 	}
 
 	if ( score >= 40 ) {
 		return __(
 			'Several automated issues found',
-			'wowstudio-accessibility-kit'
+			'wowstudio-accessibility-remediation'
 		);
 	}
 
-	return __( 'Many automated issues found', 'wowstudio-accessibility-kit' );
+	return __(
+		'Many automated issues found',
+		'wowstudio-accessibility-remediation'
+	);
 }
 
 /**
@@ -67,7 +70,7 @@ export default function ScoreCard( { score, auto, manual, severity } ) {
 					value={ score }
 					label={ __(
 						'Score for this page',
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					) }
 				/>
 			</div>
@@ -82,7 +85,7 @@ export default function ScoreCard( { score, auto, manual, severity } ) {
 								'%d issue detected automatically',
 								'%d issues detected automatically',
 								auto,
-								'wowstudio-accessibility-kit'
+								'wowstudio-accessibility-remediation'
 							),
 							auto
 						) }
@@ -94,7 +97,7 @@ export default function ScoreCard( { score, auto, manual, severity } ) {
 								'%d item still needs a person to check',
 								'%d items still need a person to check',
 								manual,
-								'wowstudio-accessibility-kit'
+								'wowstudio-accessibility-remediation'
 							),
 							manual
 						) }
@@ -106,7 +109,7 @@ export default function ScoreCard( { score, auto, manual, severity } ) {
 							items={ rows }
 							label={ __(
 								'This page\u2019s findings by severity',
-								'wowstudio-accessibility-kit'
+								'wowstudio-accessibility-remediation'
 							) }
 						/>
 					</div>
@@ -115,7 +118,7 @@ export default function ScoreCard( { score, auto, manual, severity } ) {
 				<p className="wsak-score__caveat">
 					{ __(
 						'This score counts only what automated testing can settle, which is a part of WCAG rather than all of it. It does not tell you whether your site meets any legal requirement.',
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					) }
 				</p>
 			</div>

@@ -113,7 +113,7 @@ final class AriaReferenceBroken implements Rule {
 	 * @return string
 	 */
 	public function title(): string {
-		return __( 'ARIA attribute points at an element that does not exist', 'wowstudio-accessibility-kit' );
+		return __( 'ARIA attribute points at an element that does not exist', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -124,7 +124,7 @@ final class AriaReferenceBroken implements Rule {
 	 * @return string
 	 */
 	public function description(): string {
-		return __( 'This element names another element by id, and nothing on the page has that id. The reference resolves to nothing, and in most browsers a broken aria-labelledby also suppresses the name the element would otherwise have had — so the markup looks like an accessibility improvement while leaving the control anonymous. Correct the id, or remove the attribute.', 'wowstudio-accessibility-kit' );
+		return __( 'This element names another element by id, and nothing on the page has that id. The reference resolves to nothing, and in most browsers a broken aria-labelledby also suppresses the name the element would otherwise have had — so the markup looks like an accessibility improvement while leaving the control anonymous. Correct the id, or remove the attribute.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -135,7 +135,7 @@ final class AriaReferenceBroken implements Rule {
 	 * @return string
 	 */
 	public function consequence(): string {
-		return __( 'The element loses the name it was meant to have, and often the one it already had.', 'wowstudio-accessibility-kit' );
+		return __( 'The element loses the name it was meant to have, and often the one it already had.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -150,7 +150,7 @@ final class AriaReferenceBroken implements Rule {
 		return new FixPlan(
 			FixKind::Manual,
 			FixTarget::Theme,
-			__( 'Which element was meant to be pointed at is something only whoever wrote the markup knows. These attributes are usually emitted by a theme or a plugin template rather than typed into your content.', 'wowstudio-accessibility-kit' )
+			__( 'Which element was meant to be pointed at is something only whoever wrote the markup knows. These attributes are usually emitted by a theme or a plugin template rather than typed into your content.', 'wowstudio-accessibility-remediation' )
 		);
 	}
 
@@ -188,7 +188,7 @@ final class AriaReferenceBroken implements Rule {
 					$this->detection(),
 					sprintf(
 						/* translators: 1: the ARIA attribute name. 2: the ids it points at that do not exist, comma separated. */
-						__( 'This element\'s %1$s points at %2$s, and nothing on the page has that id.', 'wowstudio-accessibility-kit' ),
+						__( 'This element\'s %1$s points at %2$s, and nothing on the page has that id.', 'wowstudio-accessibility-remediation' ),
 						$attribute,
 						implode( ', ', $missing )
 					),

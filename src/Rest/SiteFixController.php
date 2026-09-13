@@ -111,7 +111,7 @@ final class SiteFixController implements Registrable {
 
 		return new WP_Error(
 			'wsak_forbidden',
-			__( 'You do not have permission to view accessibility settings.', 'wowstudio-accessibility-kit' ),
+			__( 'You do not have permission to view accessibility settings.', 'wowstudio-accessibility-remediation' ),
 			array( 'status' => rest_authorization_required_code() )
 		);
 	}
@@ -133,7 +133,7 @@ final class SiteFixController implements Registrable {
 
 		return new WP_Error(
 			'wsak_forbidden',
-			__( 'Site-wide fixes change every page for every visitor, so changing one needs the accessibility settings capability.', 'wowstudio-accessibility-kit' ),
+			__( 'Site-wide fixes change every page for every visitor, so changing one needs the accessibility settings capability.', 'wowstudio-accessibility-remediation' ),
 			array( 'status' => rest_authorization_required_code() )
 		);
 	}
@@ -163,7 +163,7 @@ final class SiteFixController implements Registrable {
 		if ( null === $this->fixes->registry()->get( $id ) ) {
 			return new WP_Error(
 				'wsak_unknown_fix',
-				__( 'There is no fix by that name.', 'wowstudio-accessibility-kit' ),
+				__( 'There is no fix by that name.', 'wowstudio-accessibility-remediation' ),
 				array( 'status' => 404 )
 			);
 		}

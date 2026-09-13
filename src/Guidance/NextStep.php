@@ -133,9 +133,9 @@ final class NextStep {
 		if ( 0 === $scanned ) {
 			return $this->step(
 				'scan',
-				__( 'Check one page first', 'wowstudio-accessibility-kit' ),
-				__( 'Pick a page and check it. It takes a few seconds, nothing is changed, and it is the quickest way to see what this plugin actually reports on your site.', 'wowstudio-accessibility-kit' ),
-				__( 'Check a page', 'wowstudio-accessibility-kit' ),
+				__( 'Check one page first', 'wowstudio-accessibility-remediation' ),
+				__( 'Pick a page and check it. It takes a few seconds, nothing is changed, and it is the quickest way to see what this plugin actually reports on your site.', 'wowstudio-accessibility-remediation' ),
+				__( 'Check a page', 'wowstudio-accessibility-remediation' ),
 				'scan'
 			);
 		}
@@ -145,18 +145,18 @@ final class NextStep {
 		if ( $off > 0 ) {
 			return $this->step(
 				'fixes',
-				__( 'Switch on the site-wide fixes', 'wowstudio-accessibility-kit' ),
+				__( 'Switch on the site-wide fixes', 'wowstudio-accessibility-remediation' ),
 				sprintf(
 					/* translators: %d: how many site-wide fixes are switched off. */
 					_n(
 						'There is %d fix you have not switched on. Each one supplies something your theme leaves out — a skip link, a visible focus outline — on every page at once, and switching it off again leaves your site exactly as it was.',
 						'There are %d fixes you have not switched on. Each supplies something your theme leaves out — a skip link, a visible focus outline — on every page at once, and switching them off again leaves your site exactly as it was.',
 						$off,
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					),
 					$off
 				),
-				__( 'See the fixes', 'wowstudio-accessibility-kit' ),
+				__( 'See the fixes', 'wowstudio-accessibility-remediation' ),
 				'fixes'
 			);
 		}
@@ -166,18 +166,18 @@ final class NextStep {
 		if ( $undescribed > 0 ) {
 			return $this->step(
 				'images',
-				__( 'Describe your images', 'wowstudio-accessibility-kit' ),
+				__( 'Describe your images', 'wowstudio-accessibility-remediation' ),
 				sprintf(
 					/* translators: %d: how many images have never been described. */
 					_n(
 						'%d image in your media library has never been described. The Images screen lists them with a field beside each, which is faster than opening them one at a time.',
 						'%d images in your media library have never been described. The Images screen lists them with a field beside each, which is faster than opening them one at a time.',
 						$undescribed,
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					),
 					$undescribed
 				),
-				__( 'Open the Images screen', 'wowstudio-accessibility-kit' ),
+				__( 'Open the Images screen', 'wowstudio-accessibility-remediation' ),
 				'images'
 			);
 		}
@@ -185,18 +185,18 @@ final class NextStep {
 		if ( $open > 0 ) {
 			return $this->step(
 				'review',
-				__( 'Work through what is open', 'wowstudio-accessibility-kit' ),
+				__( 'Work through what is open', 'wowstudio-accessibility-remediation' ),
 				sprintf(
 					/* translators: %d: how many findings are open. */
 					_n(
 						'%d finding is waiting. The page view puts each one beside the part of the page it is about, which is usually the quickest way to deal with them.',
 						'%d findings are waiting. The page view puts each one beside the part of the page it is about, which is usually the quickest way to deal with them.',
 						$open,
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					),
 					$open
 				),
-				__( 'Go to your content', 'wowstudio-accessibility-kit' ),
+				__( 'Go to your content', 'wowstudio-accessibility-remediation' ),
 				'bulk'
 			);
 		}

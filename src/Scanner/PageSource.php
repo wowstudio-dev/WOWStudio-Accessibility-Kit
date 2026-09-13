@@ -99,7 +99,7 @@ final class PageSource {
 		$permalink = get_permalink( $post_id );
 
 		if ( false === $permalink ) {
-			return $this->fallback( $post_id, __( 'that content has no public address', 'wowstudio-accessibility-kit' ) );
+			return $this->fallback( $post_id, __( 'that content has no public address', 'wowstudio-accessibility-remediation' ) );
 		}
 
 		// Established once for the site rather than rediscovered per page. On a
@@ -107,7 +107,7 @@ final class PageSource {
 		// request at all, which is the difference between a bulk run being slow
 		// and a bulk run being unusable.
 		if ( ! $this->probe->works() ) {
-			return $this->fallback( $post_id, __( 'this site cannot make requests to itself', 'wowstudio-accessibility-kit' ) );
+			return $this->fallback( $post_id, __( 'this site cannot make requests to itself', 'wowstudio-accessibility-remediation' ) );
 		}
 
 		$response = wp_remote_get(
@@ -117,7 +117,7 @@ final class PageSource {
 				'redirection' => 3,
 				'sslverify'   => apply_filters( 'wsak_page_source_sslverify', true, $post_id ),
 				'headers'     => array( 'Accept' => 'text/html' ),
-				'user-agent'  => 'WOWStudio Accessibility Kit/' . WSAK_VERSION . '; ' . home_url( '/' ),
+				'user-agent'  => 'WOWStudio Accessibility Remediation/' . WSAK_VERSION . '; ' . home_url( '/' ),
 			)
 		);
 
@@ -132,7 +132,7 @@ final class PageSource {
 				$post_id,
 				sprintf(
 					/* translators: %d: HTTP status code. */
-					__( 'the page returned HTTP %d', 'wowstudio-accessibility-kit' ),
+					__( 'the page returned HTTP %d', 'wowstudio-accessibility-remediation' ),
 					$code
 				)
 			);
@@ -141,7 +141,7 @@ final class PageSource {
 		$body = wp_remote_retrieve_body( $response );
 
 		if ( '' === trim( $body ) ) {
-			return $this->fallback( $post_id, __( 'the page returned no content', 'wowstudio-accessibility-kit' ) );
+			return $this->fallback( $post_id, __( 'the page returned no content', 'wowstudio-accessibility-remediation' ) );
 		}
 
 		return new PageMarkup( $body, true );
@@ -166,7 +166,7 @@ final class PageSource {
 		if ( null === $post ) {
 			return new WP_Error(
 				'wsak_unknown_post',
-				__( 'That content could not be found.', 'wowstudio-accessibility-kit' ),
+				__( 'That content could not be found.', 'wowstudio-accessibility-remediation' ),
 				array( 'status' => 404 )
 			);
 		}
@@ -180,7 +180,7 @@ final class PageSource {
 		return new PageMarkup(
 			$content,
 			false,
-			__( 'This checked the content of the page, not the theme around it. Faults in your header, navigation and footer are reported separately, against the theme, rather than repeated against every page that uses it.', 'wowstudio-accessibility-kit' )
+			__( 'This checked the content of the page, not the theme around it. Faults in your header, navigation and footer are reported separately, against the theme, rather than repeated against every page that uses it.', 'wowstudio-accessibility-remediation' )
 		);
 	}
 
@@ -212,7 +212,7 @@ final class PageSource {
 				'wsak_fetch_failed',
 				sprintf(
 					/* translators: %s: the underlying reason. */
-					__( 'The page could not be fetched for scanning because %s. This usually means the site cannot make requests to itself; ask your host about loopback requests.', 'wowstudio-accessibility-kit' ),
+					__( 'The page could not be fetched for scanning because %s. This usually means the site cannot make requests to itself; ask your host about loopback requests.', 'wowstudio-accessibility-remediation' ),
 					$reason
 				),
 				array( 'status' => 502 )
@@ -224,7 +224,7 @@ final class PageSource {
 		if ( null === $post ) {
 			return new WP_Error(
 				'wsak_unknown_post',
-				__( 'That content could not be found.', 'wowstudio-accessibility-kit' ),
+				__( 'That content could not be found.', 'wowstudio-accessibility-remediation' ),
 				array( 'status' => 404 )
 			);
 		}
@@ -240,7 +240,7 @@ final class PageSource {
 			false,
 			sprintf(
 				/* translators: %s: the underlying reason the whole page could not be fetched. */
-				__( 'Only this content was scanned, not the whole page, because %s. Checks that depend on the surrounding page — its language, its title, its landmarks — were skipped, so this scan covers less than usual. Ask your host about loopback requests to enable full-page scanning.', 'wowstudio-accessibility-kit' ),
+				__( 'Only this content was scanned, not the whole page, because %s. Checks that depend on the surrounding page — its language, its title, its landmarks — were skipped, so this scan covers less than usual. Ask your host about loopback requests to enable full-page scanning.', 'wowstudio-accessibility-remediation' ),
 				$reason
 			)
 		);
@@ -307,7 +307,7 @@ final class PageSource {
 		 */
 		return new WP_Error(
 			'wsak_no_scannable_content',
-			__( 'There was nothing to check: this page\'s content field is empty, and no page builder supplied anything either. If visitors do see content here, something is producing it that this scan cannot reach — reaching it means fetching the whole page, so ask your host about loopback requests or whether a security plugin is blocking them.', 'wowstudio-accessibility-kit' ),
+			__( 'There was nothing to check: this page\'s content field is empty, and no page builder supplied anything either. If visitors do see content here, something is producing it that this scan cannot reach — reaching it means fetching the whole page, so ask your host about loopback requests or whether a security plugin is blocking them.', 'wowstudio-accessibility-remediation' ),
 			array( 'status' => 422 )
 		);
 	}

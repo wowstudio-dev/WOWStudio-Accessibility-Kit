@@ -85,7 +85,7 @@ final class HeadingLevelSkipped implements Rule {
 	 * @return string
 	 */
 	public function title(): string {
-		return __( 'Heading level is skipped', 'wowstudio-accessibility-kit' );
+		return __( 'Heading level is skipped', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -96,7 +96,7 @@ final class HeadingLevelSkipped implements Rule {
 	 * @return string
 	 */
 	public function description(): string {
-		return __( 'People using a screen reader navigate by moving through headings, so the levels need to descend one step at a time. Jumping a level makes the page outline look like a section is missing. Change the heading level, or add the missing intermediate heading.', 'wowstudio-accessibility-kit' );
+		return __( 'People using a screen reader navigate by moving through headings, so the levels need to descend one step at a time. Jumping a level makes the page outline look like a section is missing. Change the heading level, or add the missing intermediate heading.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -107,7 +107,7 @@ final class HeadingLevelSkipped implements Rule {
 	 * @return string
 	 */
 	public function consequence(): string {
-		return __( 'Most screen reader users move around a page by jumping between headings. This one leaves a gap in that path.', 'wowstudio-accessibility-kit' );
+		return __( 'Most screen reader users move around a page by jumping between headings. This one leaves a gap in that path.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -122,7 +122,7 @@ final class HeadingLevelSkipped implements Rule {
 		return new FixPlan(
 			FixKind::Manual,
 			FixTarget::Content,
-			__( 'Renumbering the heading is one possible fix; the other is that a section is genuinely missing and should be written. Choosing between those is a judgement about the document, not a correction to it.', 'wowstudio-accessibility-kit' )
+			__( 'Renumbering the heading is one possible fix; the other is that a section is genuinely missing and should be written. Choosing between those is a judgement about the document, not a correction to it.', 'wowstudio-accessibility-remediation' )
 		);
 	}
 
@@ -175,13 +175,13 @@ final class HeadingLevelSkipped implements Rule {
 					$inferred
 						? sprintf(
 							/* translators: 1: heading level the theme appears to establish, 2: this heading level. */
-							__( 'Your theme appears to put a level %1$d heading above your content, which would make this level %2$d a jump. Worth checking on the page itself.', 'wowstudio-accessibility-kit' ),
+							__( 'Your theme appears to put a level %1$d heading above your content, which would make this level %2$d a jump. Worth checking on the page itself.', 'wowstudio-accessibility-remediation' ),
 							$previous,
 							$level
 						)
 						: sprintf(
 							/* translators: 1: previous heading level, 2: this heading level. */
-							__( 'This heading jumps from level %1$d to level %2$d.', 'wowstudio-accessibility-kit' ),
+							__( 'This heading jumps from level %1$d to level %2$d.', 'wowstudio-accessibility-remediation' ),
 							$previous,
 							$level
 						),

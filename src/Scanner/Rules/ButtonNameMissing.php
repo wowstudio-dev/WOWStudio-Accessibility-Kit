@@ -84,7 +84,7 @@ final class ButtonNameMissing implements Rule {
 	 * @return string
 	 */
 	public function title(): string {
-		return __( 'Button has no accessible name', 'wowstudio-accessibility-kit' );
+		return __( 'Button has no accessible name', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -95,7 +95,7 @@ final class ButtonNameMissing implements Rule {
 	 * @return string
 	 */
 	public function description(): string {
-		return __( 'Someone using a screen reader hears only "button" and cannot tell what it does. Icon-only buttons need an aria-label, or visually hidden text describing the action.', 'wowstudio-accessibility-kit' );
+		return __( 'Someone using a screen reader hears only "button" and cannot tell what it does. Icon-only buttons need an aria-label, or visually hidden text describing the action.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -106,7 +106,7 @@ final class ButtonNameMissing implements Rule {
 	 * @return string
 	 */
 	public function consequence(): string {
-		return __( 'A screen reader announces this as “button” and nothing else, so there is no way to tell what it does.', 'wowstudio-accessibility-kit' );
+		return __( 'A screen reader announces this as “button” and nothing else, so there is no way to tell what it does.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -121,7 +121,7 @@ final class ButtonNameMissing implements Rule {
 		return new FixPlan(
 			FixKind::Manual,
 			FixTarget::Content,
-			__( 'A button\'s name has to describe what it does, which means knowing what it does. Edit the button in the content.', 'wowstudio-accessibility-kit' )
+			__( 'A button\'s name has to describe what it does, which means knowing what it does. Edit the button in the content.', 'wowstudio-accessibility-remediation' )
 		);
 	}
 
@@ -150,7 +150,7 @@ final class ButtonNameMissing implements Rule {
 				$this->wcag_sc(),
 				$this->severity(),
 				$this->detection(),
-				__( 'This button has no text or label, so its purpose is not announced.', 'wowstudio-accessibility-kit' ),
+				__( 'This button has no text or label, so its purpose is not announced.', 'wowstudio-accessibility-remediation' ),
 				$document->selector_for( $button ),
 				$document->context_for( $button )
 			);

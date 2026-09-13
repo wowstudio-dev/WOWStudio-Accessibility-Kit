@@ -84,7 +84,7 @@ final class IframeTitleMissing implements Rule {
 	 * @return string
 	 */
 	public function title(): string {
-		return __( 'Frame has no title', 'wowstudio-accessibility-kit' );
+		return __( 'Frame has no title', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -95,7 +95,7 @@ final class IframeTitleMissing implements Rule {
 	 * @return string
 	 */
 	public function description(): string {
-		return __( 'Screen readers let people jump between frames on a page, but an untitled frame shows up in that list with no name. Add a title attribute describing what the frame contains, such as the name of an embedded video.', 'wowstudio-accessibility-kit' );
+		return __( 'Screen readers let people jump between frames on a page, but an untitled frame shows up in that list with no name. Add a title attribute describing what the frame contains, such as the name of an embedded video.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -106,7 +106,7 @@ final class IframeTitleMissing implements Rule {
 	 * @return string
 	 */
 	public function consequence(): string {
-		return __( 'Anyone moving through the page by its regions meets this embedded content with no idea what it is.', 'wowstudio-accessibility-kit' );
+		return __( 'Anyone moving through the page by its regions meets this embedded content with no idea what it is.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -121,7 +121,7 @@ final class IframeTitleMissing implements Rule {
 		return new FixPlan(
 			FixKind::Manual,
 			FixTarget::Content,
-			__( 'The title has to describe what is embedded, which means looking at it. Add a title attribute to the iframe in the content.', 'wowstudio-accessibility-kit' )
+			__( 'The title has to describe what is embedded, which means looking at it. Add a title attribute to the iframe in the content.', 'wowstudio-accessibility-remediation' )
 		);
 	}
 
@@ -150,7 +150,7 @@ final class IframeTitleMissing implements Rule {
 				$this->wcag_sc(),
 				$this->severity(),
 				$this->detection(),
-				__( 'This frame has no title, so it is announced without a name.', 'wowstudio-accessibility-kit' ),
+				__( 'This frame has no title, so it is announced without a name.', 'wowstudio-accessibility-remediation' ),
 				$document->selector_for( $frame ),
 				$document->context_for( $frame )
 			);

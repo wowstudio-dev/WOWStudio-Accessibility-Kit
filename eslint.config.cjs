@@ -53,7 +53,7 @@ module.exports = [
 		rules: {
 			'@wordpress/i18n-text-domain': [
 				'error',
-				{ allowedTextDomain: [ 'wowstudio-accessibility-kit' ] },
+				{ allowedTextDomain: [ 'wowstudio-accessibility-remediation' ] },
 			],
 		},
 	},

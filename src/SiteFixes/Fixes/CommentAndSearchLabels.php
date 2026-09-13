@@ -54,7 +54,7 @@ final class CommentAndSearchLabels implements SiteFix {
 	 * @return string
 	 */
 	public function title(): string {
-		return __( 'Label the search and comment fields', 'wowstudio-accessibility-kit' );
+		return __( 'Label the search and comment fields', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -65,7 +65,7 @@ final class CommentAndSearchLabels implements SiteFix {
 	 * @return string
 	 */
 	public function description(): string {
-		return __( 'Gives your search box and comment fields a name where the theme left them without one. An unlabelled field is announced as "edit, blank" — the reader can tell there is something to type in, and nothing about what belongs there. Nothing moves on screen; the names are added for assistive technology only.', 'wowstudio-accessibility-kit' );
+		return __( 'Gives your search box and comment fields a name where the theme left them without one. An unlabelled field is announced as "edit, blank" — the reader can tell there is something to type in, and nothing about what belongs there. Nothing moves on screen; the names are added for assistive technology only.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -87,7 +87,7 @@ final class CommentAndSearchLabels implements SiteFix {
 	 * @return string
 	 */
 	public function caveat(): string {
-		return __( 'Covers WordPress\'s own search and comment forms. Forms built by a plugin — contact forms, checkouts, newsletter sign-ups — are not reached by this and have to be labelled where they are built.', 'wowstudio-accessibility-kit' );
+		return __( 'Covers WordPress\'s own search and comment forms. Forms built by a plugin — contact forms, checkouts, newsletter sign-ups — are not reached by this and have to be labelled where they are built.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -121,7 +121,7 @@ final class CommentAndSearchLabels implements SiteFix {
 
 		$replaced = preg_replace(
 			'#(<input\b(?=[^>]*\bname\s*=\s*["\']?s["\']?))#i',
-			'$1 aria-label="' . esc_attr__( 'Search this site', 'wowstudio-accessibility-kit' ) . '"',
+			'$1 aria-label="' . esc_attr__( 'Search this site', 'wowstudio-accessibility-remediation' ) . '"',
 			$form,
 			1
 		);
@@ -152,7 +152,7 @@ final class CommentAndSearchLabels implements SiteFix {
 
 		$replaced = preg_replace(
 			'#(<textarea\b)#i',
-			'$1 aria-label="' . esc_attr__( 'Comment', 'wowstudio-accessibility-kit' ) . '"',
+			'$1 aria-label="' . esc_attr__( 'Comment', 'wowstudio-accessibility-remediation' ) . '"',
 			$field,
 			1
 		);

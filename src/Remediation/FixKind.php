@@ -75,9 +75,9 @@ enum FixKind: string {
 	 */
 	public function label(): string {
 		return match ( $this ) {
-			self::Deterministic => __( 'Fix automatically', 'wowstudio-accessibility-kit' ),
-			self::Generative    => __( 'Suggest a fix to review', 'wowstudio-accessibility-kit' ),
-			self::Manual        => __( 'Needs a person', 'wowstudio-accessibility-kit' ),
+			self::Deterministic => __( 'Fix automatically', 'wowstudio-accessibility-remediation' ),
+			self::Generative    => __( 'Suggest a fix to review', 'wowstudio-accessibility-remediation' ),
+			self::Manual        => __( 'Needs a person', 'wowstudio-accessibility-remediation' ),
 		};
 	}
 

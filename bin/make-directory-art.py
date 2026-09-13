@@ -19,9 +19,13 @@ Arial fallback. Nothing in the plugin depends on it.
 """
 
 import math
+import os
 from PIL import Image, ImageDraw, ImageFont
 
-OUT = "/Users/w/Documents/projects/WOWStudio Accessibility Kit/.wordpress-org"
+# Relative to this file, not an absolute path. The absolute one was rewritten
+# by the 1.0.1 rename sweep, which is exactly the failure mode hard-coding a
+# path invites.
+OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", ".wordpress-org")
 
 LAVENDER = (185, 169, 247)
 VIOLET = (123, 92, 240)
@@ -167,7 +171,7 @@ def build_banner(w, h):
         draw.text((ex, size[1] * 0.250), ch, font=eyebrow, fill=LAVENDER + (255,))
         ex += draw.textlength(ch, font=eyebrow) + size[1] * 0.013
 
-    draw.text((x, size[1] * 0.350), "Accessibility Kit", font=title, fill=WHITE + (255,))
+    draw.text((x, size[1] * 0.350), "Accessibility Remediation", font=title, fill=WHITE + (255,))
     draw.text(
         (x, size[1] * 0.615),
         "Find, fix and document WCAG issues at the code level",

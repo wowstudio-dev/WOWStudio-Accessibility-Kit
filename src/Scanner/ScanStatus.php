@@ -66,11 +66,11 @@ enum ScanStatus: string {
 	 */
 	public function label(): string {
 		return match ( $this ) {
-			self::Queued    => __( 'Waiting', 'wowstudio-accessibility-kit' ),
-			self::Running   => __( 'Running', 'wowstudio-accessibility-kit' ),
-			self::Complete  => __( 'Complete', 'wowstudio-accessibility-kit' ),
-			self::Failed    => __( 'Failed', 'wowstudio-accessibility-kit' ),
-			self::Cancelled => __( 'Stopped', 'wowstudio-accessibility-kit' ),
+			self::Queued    => __( 'Waiting', 'wowstudio-accessibility-remediation' ),
+			self::Running   => __( 'Running', 'wowstudio-accessibility-remediation' ),
+			self::Complete  => __( 'Complete', 'wowstudio-accessibility-remediation' ),
+			self::Failed    => __( 'Failed', 'wowstudio-accessibility-remediation' ),
+			self::Cancelled => __( 'Stopped', 'wowstudio-accessibility-remediation' ),
 		};
 	}
 }

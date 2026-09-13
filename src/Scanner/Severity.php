@@ -45,10 +45,10 @@ enum Severity: string {
 	 */
 	public function label(): string {
 		return match ( $this ) {
-			self::Critical => __( 'Critical', 'wowstudio-accessibility-kit' ),
-			self::Serious  => __( 'Serious', 'wowstudio-accessibility-kit' ),
-			self::Moderate => __( 'Moderate', 'wowstudio-accessibility-kit' ),
-			self::Minor    => __( 'Minor', 'wowstudio-accessibility-kit' ),
+			self::Critical => __( 'Critical', 'wowstudio-accessibility-remediation' ),
+			self::Serious  => __( 'Serious', 'wowstudio-accessibility-remediation' ),
+			self::Moderate => __( 'Moderate', 'wowstudio-accessibility-remediation' ),
+			self::Minor    => __( 'Minor', 'wowstudio-accessibility-remediation' ),
 		};
 	}
 

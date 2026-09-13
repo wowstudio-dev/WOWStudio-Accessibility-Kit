@@ -107,7 +107,7 @@ final class LinkAnchorBroken implements Rule {
 	 * @return string
 	 */
 	public function title(): string {
-		return __( 'In-page link points at nothing', 'wowstudio-accessibility-kit' );
+		return __( 'In-page link points at nothing', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -118,7 +118,7 @@ final class LinkAnchorBroken implements Rule {
 	 * @return string
 	 */
 	public function description(): string {
-		return __( 'This link jumps to a part of the page that does not exist, so activating it does nothing at all — focus stays where it was, with no error and no message. If it is a skip link, keyboard users are tabbing through your whole header on every page. Either give the target element the matching id, or correct the link.', 'wowstudio-accessibility-kit' );
+		return __( 'This link jumps to a part of the page that does not exist, so activating it does nothing at all — focus stays where it was, with no error and no message. If it is a skip link, keyboard users are tabbing through your whole header on every page. Either give the target element the matching id, or correct the link.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -129,7 +129,7 @@ final class LinkAnchorBroken implements Rule {
 	 * @return string
 	 */
 	public function consequence(): string {
-		return __( 'The link does nothing when activated, and nothing says so — focus simply stays put.', 'wowstudio-accessibility-kit' );
+		return __( 'The link does nothing when activated, and nothing says so — focus simply stays put.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -144,7 +144,7 @@ final class LinkAnchorBroken implements Rule {
 		return new FixPlan(
 			FixKind::Manual,
 			FixTarget::Theme,
-			__( 'Two ends, and only you know which one moved: either the target lost its id, or the link points at the wrong name. Skip links and their targets almost always live in the theme header rather than in your content.', 'wowstudio-accessibility-kit' )
+			__( 'Two ends, and only you know which one moved: either the target lost its id, or the link points at the wrong name. Skip links and their targets almost always live in the theme header rather than in your content.', 'wowstudio-accessibility-remediation' )
 		);
 	}
 
@@ -194,12 +194,12 @@ final class LinkAnchorBroken implements Rule {
 				'' === $name
 					? sprintf(
 						/* translators: %s: the fragment the link points at, including the hash. */
-						__( 'A link points to %s, but nothing on this page has that id.', 'wowstudio-accessibility-kit' ),
+						__( 'A link points to %s, but nothing on this page has that id.', 'wowstudio-accessibility-remediation' ),
 						$href
 					)
 					: sprintf(
 						/* translators: 1: the link text. 2: the fragment the link points at, including the hash. */
-						__( 'The link "%1$s" points to %2$s, but nothing on this page has that id.', 'wowstudio-accessibility-kit' ),
+						__( 'The link "%1$s" points to %2$s, but nothing on this page has that id.', 'wowstudio-accessibility-remediation' ),
 						$name,
 						$href
 					),

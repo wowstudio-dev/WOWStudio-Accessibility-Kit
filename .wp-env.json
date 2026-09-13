@@ -2,7 +2,7 @@
 	"core": null,
 	"phpVersion": "8.1",
 	"mappings": {
-		"wp-content/plugins/wowstudio-accessibility-kit": "."
+		"wp-content/plugins/wowstudio-accessibility-remediation": "."
 	},
 	"plugins": [
 		"https://downloads.wordpress.org/plugin/plugin-check.zip"
@@ -14,6 +14,6 @@
 		"SCRIPT_DEBUG": true
 	},
 	"lifecycleScripts": {
-		"afterStart": "wp-env run cli wp plugin activate wowstudio-accessibility-kit"
+		"afterStart": "wp-env run cli wp plugin activate wowstudio-accessibility-remediation"
 	}
 }

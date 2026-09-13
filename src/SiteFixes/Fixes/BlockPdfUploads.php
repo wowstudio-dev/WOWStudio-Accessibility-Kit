@@ -55,7 +55,7 @@ final class BlockPdfUploads implements SiteFix {
 	 * @return string
 	 */
 	public function title(): string {
-		return __( 'Do not allow PDF uploads', 'wowstudio-accessibility-kit' );
+		return __( 'Do not allow PDF uploads', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -66,7 +66,7 @@ final class BlockPdfUploads implements SiteFix {
 	 * @return string
 	 */
 	public function description(): string {
-		return __( 'Stops anyone but an administrator adding a PDF to the media library, and explains why when it happens. A PDF is a separate document with its own accessibility, which nothing here can inspect or repair — the same content published as a page is accessible by default. This is a policy, not a repair, so it changes nothing already on your site.', 'wowstudio-accessibility-kit' );
+		return __( 'Stops anyone but an administrator adding a PDF to the media library, and explains why when it happens. A PDF is a separate document with its own accessibility, which nothing here can inspect or repair — the same content published as a page is accessible by default. This is a policy, not a repair, so it changes nothing already on your site.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -88,7 +88,7 @@ final class BlockPdfUploads implements SiteFix {
 	 * @return string
 	 */
 	public function caveat(): string {
-		return __( 'Administrators can still upload PDFs, because anybody who can install a plugin can put a file wherever they like and pretending otherwise would only make this look broken. PDFs already in your media library are untouched, and existing links to them keep working.', 'wowstudio-accessibility-kit' );
+		return __( 'Administrators can still upload PDFs, because anybody who can install a plugin can put a file wherever they like and pretending otherwise would only make this look broken. PDFs already in your media library are untouched, and existing links to them keep working.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -148,7 +148,7 @@ final class BlockPdfUploads implements SiteFix {
 			return $file;
 		}
 
-		$file['error'] = __( 'PDF uploads are switched off on this site. A PDF carries its own accessibility, which cannot be checked or repaired from WordPress — publishing the content as a page instead makes it readable by everybody, and searchable. An administrator can change this in the accessibility settings.', 'wowstudio-accessibility-kit' );
+		$file['error'] = __( 'PDF uploads are switched off on this site. A PDF carries its own accessibility, which cannot be checked or repaired from WordPress — publishing the content as a page instead makes it readable by everybody, and searchable. An administrator can change this in the accessibility settings.', 'wowstudio-accessibility-remediation' );
 
 		return $file;
 	}

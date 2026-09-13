@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to WOWStudio Accessibility Kit are documented here.
+All notable changes to WOWStudio Accessibility Remediation are documented here.
 This project follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/)
 and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
@@ -25,6 +25,53 @@ keeping if it is true.
   content outside `post_content` and are therefore suspect in the same way
   Elementor was before 0.27.0. Avada, ACF and WooCommerce are untested. The way
   to find out is to build a page and scan it.
+
+## [1.0.1] - 2026-09-13
+
+The first WordPress.org review round.
+
+### Changed
+
+- **The plugin is now WOWStudio Accessibility Remediation**, slug
+  `wowstudio-accessibility-remediation`. The review flagged "Accessibility Kit"
+  as too close to existing plugins in the directory, and they were right: it is
+  a generic name in a crowded category, and it does not say the thing that makes
+  this plugin different. Remediation does. The brief has described this as a
+  real-remediation plugin from the start; the name now says so too.
+
+  The text domain follows the slug, as it must, which is 919 strings across 196
+  files. Nothing that touches data moved: the `wsak_` prefix, the `wp_wsak_*`
+  tables and the `WOWStudio\AccessibilityKit` namespace are all unchanged, so
+  there is no migration. The namespace keeps "AccessibilityKit" deliberately —
+  it is internal, no reviewer reads it, and renaming it would be two hundred
+  more files of churn for nothing.
+
+- **The two inline `<style>` blocks are enqueued.** One printed the site-wide
+  fixes' CSS into `wp_head`, the other the admin column's rules into
+  `admin_head-edit.php`. Both now register a handle with no source and attach
+  their rules with `wp_add_inline_style()`, which is what the guidelines ask for
+  and which keeps the property that made them inline in the first place: a few
+  hundred bytes, printed in a style element, no extra request. The front-end one
+  moved to `wp_enqueue_scripts`, where it is still queued before the theme's own
+  stylesheet and therefore still loses to it, which is the point.
+
+### Removed
+
+- **The redirect on activation.** It fired once, checked the capability and
+  skipped bulk activations, and it was still the wrong thing: Guideline 11 asks
+  plugins not to hijack the admin, and taking over whatever screen somebody was
+  already on is the plainest reading of that however careful the safeguards
+  were. The setup itself stays exactly as it was — the dashboard simply opens on
+  it while it has not been done, which lands people in the same place without
+  reaching outside the plugin's own screens.
+
+  `Onboarding` registers no hooks at all now, and a test reads the file to keep
+  it that way. A hook added back there would work perfectly and fail a review
+  months later, with nothing failing in between to say so.
+
+### Fixed
+
+- **`Plugin URI` returned a 404.** It pointed at a page that does not exist.
 
 ## [1.0.0] - 2026-09-10
 

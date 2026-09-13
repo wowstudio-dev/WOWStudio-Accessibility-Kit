@@ -46,6 +46,17 @@ final class ContentColumns implements Registrable {
 	private const COLUMN = 'wsak_accessibility';
 
 	/**
+	 * The style handle the column's rules hang off.
+	 *
+	 * Registered with no source: there is no file to fetch, only somewhere for
+	 * `wp_add_inline_style()` to attach to.
+	 *
+	 * @since 1.0.1
+	 * @var string
+	 */
+	private const STYLE = 'wsak-columns';
+
+	/**
 	 * Scans found for the rows on this screen, keyed by post id.
 	 *
 	 * @since 0.22.0
@@ -119,33 +130,46 @@ final class ContentColumns implements Registrable {
 		// the posts back, and add_action would discard the return value.
 		add_filter( 'the_posts', array( $this, 'prime' ), 10, 1 );
 
-		add_action( 'admin_head-edit.php', array( $this, 'print_styles' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_styles' ) );
 	}
 
 	/**
-	 * Prints the few rules the column needs.
+	 * Adds the few rules the column needs.
 	 *
-	 * Inline and only on the list screen. Enqueuing a stylesheet would be a
-	 * whole extra request for under three hundred bytes, on a screen this
-	 * plugin is a guest on.
+	 * Inline, and still only on the list screen. Enqueuing a stylesheet would
+	 * be a whole extra request for under three hundred bytes, on a screen this
+	 * plugin is a guest on — so the handle is registered with no source and the
+	 * rules are attached to it. WordPress prints them in a style element and
+	 * fetches nothing, which is the same outcome as echoing the element and the
+	 * one the directory's guidelines ask for.
 	 *
 	 * The colours are the same values the plugin's own palette uses, so they
 	 * are already covered by the contrast guard rather than being a second set
 	 * nobody checks.
 	 *
 	 * @since 0.22.0
+	 * @since 1.0.1 Enqueued rather than printed.
 	 *
+	 * @param string $hook_suffix Current admin screen.
 	 * @return void
 	 */
-	public function print_styles(): void {
-		echo '<style>
+	public function enqueue_styles( string $hook_suffix ): void {
+		if ( 'edit.php' !== $hook_suffix ) {
+			return;
+		}
+
+		wp_register_style( self::STYLE, false, array(), WSAK_VERSION );
+		wp_enqueue_style( self::STYLE );
+		wp_add_inline_style(
+			self::STYLE,
+			'
 			.wsak-col { display: inline-flex; gap: 6px; align-items: baseline; }
 			.wsak-col__count { color: #565471; font-size: 12px; }
 			.wsak-col--high strong { color: #15803d; }
 			.wsak-col--mid strong { color: #b54708; }
 			.wsak-col--low strong { color: #b42318; }
-			.wsak-col--none, .wsak-col--unknown { color: #565471; }
-		</style>' . "\n";
+			.wsak-col--none, .wsak-col--unknown { color: #565471; }'
+		);
 	}
 
 	/**
@@ -165,7 +189,7 @@ final class ContentColumns implements Registrable {
 
 		unset( $columns['date'] );
 
-		$columns[ self::COLUMN ] = __( 'Accessibility', 'wowstudio-accessibility-kit' );
+		$columns[ self::COLUMN ] = __( 'Accessibility', 'wowstudio-accessibility-remediation' );
 
 		if ( null !== $date ) {
 			$columns['date'] = $date;
@@ -277,7 +301,7 @@ final class ContentColumns implements Registrable {
 		if ( ! $scan instanceof Scan ) {
 			printf(
 				'<span class="wsak-col wsak-col--none">%s</span>',
-				esc_html__( 'Not checked', 'wowstudio-accessibility-kit' )
+				esc_html__( 'Not checked', 'wowstudio-accessibility-remediation' )
 			);
 
 			return;
@@ -289,12 +313,12 @@ final class ContentColumns implements Registrable {
 			'<span class="wsak-col wsak-col--%1$s"><strong>%2$s</strong> <span class="wsak-col__count">%3$s</span></span>',
 			esc_attr( $this->band( $scan->score ) ),
 			null === $scan->score
-				? esc_html__( 'Checked', 'wowstudio-accessibility-kit' )
+				? esc_html__( 'Checked', 'wowstudio-accessibility-remediation' )
 				: esc_html( sprintf( '%d/100', $scan->score ) ),
 			esc_html(
 				sprintf(
 					/* translators: %d: number of findings. */
-					_n( '%d finding', '%d findings', $open, 'wowstudio-accessibility-kit' ),
+					_n( '%d finding', '%d findings', $open, 'wowstudio-accessibility-remediation' ),
 					$open
 				)
 			)

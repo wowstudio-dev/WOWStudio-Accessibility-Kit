@@ -133,7 +133,7 @@ class PageScanner {
 		if ( null === $result ) {
 			$error = new WP_Error(
 				'wsak_unparseable',
-				__( 'The page could not be parsed as HTML, so it could not be scanned.', 'wowstudio-accessibility-kit' ),
+				__( 'The page could not be parsed as HTML, so it could not be scanned.', 'wowstudio-accessibility-remediation' ),
 				array( 'status' => 422 )
 			);
 

@@ -69,7 +69,7 @@ final class NewWindowWarning implements ProvidesCss {
 	 * @return string
 	 */
 	public function title(): string {
-		return __( 'Say when a link opens a new tab', 'wowstudio-accessibility-kit' );
+		return __( 'Say when a link opens a new tab', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -80,7 +80,7 @@ final class NewWindowWarning implements ProvidesCss {
 	 * @return string
 	 */
 	public function description(): string {
-		return __( 'Adds "(opens in a new tab)" to links in your content that open one, announced to screen readers but not shown on screen. A new tab removes the back button, and without warning the reader has no way to tell that is what happened.', 'wowstudio-accessibility-kit' );
+		return __( 'Adds "(opens in a new tab)" to links in your content that open one, announced to screen readers but not shown on screen. A new tab removes the back button, and without warning the reader has no way to tell that is what happened.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -102,7 +102,7 @@ final class NewWindowWarning implements ProvidesCss {
 	 * @return string
 	 */
 	public function caveat(): string {
-		return __( 'Covers links inside post and page content. Links your theme prints — in menus, headers, footers or widgets — are not reached by this, because changing those would mean rewriting the whole page rather than the part you wrote.', 'wowstudio-accessibility-kit' );
+		return __( 'Covers links inside post and page content. Links your theme prints — in menus, headers, footers or widgets — are not reached by this, because changing those would mean rewriting the whole page rather than the part you wrote.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -170,7 +170,7 @@ final class NewWindowWarning implements ProvidesCss {
 
 		$warning = sprintf(
 			'<span class="wsak-visually-hidden"> %s</span>',
-			esc_html__( '(opens in a new tab)', 'wowstudio-accessibility-kit' )
+			esc_html__( '(opens in a new tab)', 'wowstudio-accessibility-remediation' )
 		);
 
 		// Inserted before the closing tag so it becomes part of the link's

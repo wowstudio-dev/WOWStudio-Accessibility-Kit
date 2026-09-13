@@ -107,7 +107,7 @@ final class LinkNotKeyboardReachable implements Rule {
 	 * @return string
 	 */
 	public function title(): string {
-		return __( 'Clickable link cannot be reached by keyboard', 'wowstudio-accessibility-kit' );
+		return __( 'Clickable link cannot be reached by keyboard', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -118,7 +118,7 @@ final class LinkNotKeyboardReachable implements Rule {
 	 * @return string
 	 */
 	public function description(): string {
-		return __( 'This element does something when clicked, but it has no href, so the browser does not treat it as a link. It cannot be tabbed to, it does not appear in a screen reader\'s list of links, and pressing Enter on it does nothing. Give it a real href if it goes somewhere, or make it a button element if it performs an action.', 'wowstudio-accessibility-kit' );
+		return __( 'This element does something when clicked, but it has no href, so the browser does not treat it as a link. It cannot be tabbed to, it does not appear in a screen reader\'s list of links, and pressing Enter on it does nothing. Give it a real href if it goes somewhere, or make it a button element if it performs an action.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -129,7 +129,7 @@ final class LinkNotKeyboardReachable implements Rule {
 	 * @return string
 	 */
 	public function consequence(): string {
-		return __( 'Anyone not using a mouse cannot reach this control at all — it does not exist for them.', 'wowstudio-accessibility-kit' );
+		return __( 'Anyone not using a mouse cannot reach this control at all — it does not exist for them.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -144,7 +144,7 @@ final class LinkNotKeyboardReachable implements Rule {
 		return new FixPlan(
 			FixKind::Manual,
 			FixTarget::Content,
-			__( 'Which element it should be depends on what it does: somewhere to go is a link with a real href, something to happen is a button. Both are keyboard-operable for free; a div or a bare anchor never is.', 'wowstudio-accessibility-kit' )
+			__( 'Which element it should be depends on what it does: somewhere to go is a link with a real href, something to happen is a button. Both are keyboard-operable for free; a div or a bare anchor never is.', 'wowstudio-accessibility-remediation' )
 		);
 	}
 
@@ -183,10 +183,10 @@ final class LinkNotKeyboardReachable implements Rule {
 				$this->severity(),
 				$this->detection(),
 				'' === $name
-					? __( 'This element responds to a click but has no href, so the keyboard cannot reach it.', 'wowstudio-accessibility-kit' )
+					? __( 'This element responds to a click but has no href, so the keyboard cannot reach it.', 'wowstudio-accessibility-remediation' )
 					: sprintf(
 						/* translators: %s: the element's text. */
-						__( '"%s" responds to a click but has no href, so the keyboard cannot reach it.', 'wowstudio-accessibility-kit' ),
+						__( '"%s" responds to a click but has no href, so the keyboard cannot reach it.', 'wowstudio-accessibility-remediation' ),
 						$name
 					),
 				$document->selector_for( $link ),

@@ -74,7 +74,7 @@ export default function StatementSettings() {
 			<Skeleton
 				label={ __(
 					'Loading your statement…',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 			/>
 		);
@@ -102,14 +102,14 @@ export default function StatementSettings() {
 			<h2 className="wsak-settings__title" id="wsak-statement-title">
 				{ __(
 					'Accessibility statement',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 			</h2>
 
 			<p className="wsak-settings__lede">
 				{ __(
 					'A statement tells people what you know about your own site and how to reach you when something does not work for them. This writes the draft; what it says is yours to decide, and yours to stand behind.',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 			</p>
 
@@ -126,11 +126,11 @@ export default function StatementSettings() {
 				{ attested
 					? __(
 							'Signed off. This statement is published as a finished document.',
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 					  )
 					: __(
 							'Draft. Until somebody signs this off it publishes with a notice saying nobody has checked it.',
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 					  ) }
 			</Notice>
 
@@ -138,7 +138,7 @@ export default function StatementSettings() {
 				__nextHasNoMarginBottom
 				label={ __(
 					'Who this statement is from',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 				value={ settings.organisation }
 				onChange={ ( organisation ) => save( { organisation } ) }
@@ -148,7 +148,7 @@ export default function StatementSettings() {
 				__nextHasNoMarginBottom
 				label={ __(
 					'Standard you are aiming for',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 				value={ settings.standard }
 				options={ standards.map( ( s ) => ( {
@@ -162,11 +162,11 @@ export default function StatementSettings() {
 				__nextHasNoMarginBottom
 				label={ __(
 					'Where you think you stand',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 				help={ __(
 					'This is your assessment, published under your name. Nothing in this plugin can verify it — automated testing covers only part of the standard, and the statement says so.',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 				value={ settings.status }
 				options={ statuses.map( ( s ) => ( {
@@ -180,11 +180,11 @@ export default function StatementSettings() {
 				__nextHasNoMarginBottom
 				label={ __(
 					'Known problems, one per line',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 				help={ __(
 					'Plain descriptions of what does not work yet. This is the part readers find most useful.',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 				rows={ 4 }
 				value={ settings.known_limitations }
@@ -206,13 +206,19 @@ export default function StatementSettings() {
 			/>
 
 			<h3 className="wsak-settings__subtitle">
-				{ __( 'How people reach you', 'wowstudio-accessibility-kit' ) }
+				{ __(
+					'How people reach you',
+					'wowstudio-accessibility-remediation'
+				) }
 			</h3>
 
 			<TextControl
 				__nextHasNoMarginBottom
 				type="email"
-				label={ __( 'Email address', 'wowstudio-accessibility-kit' ) }
+				label={ __(
+					'Email address',
+					'wowstudio-accessibility-remediation'
+				) }
 				value={ settings.feedback_email }
 				onChange={ ( email ) => save( { feedback_email: email } ) }
 			/>
@@ -221,7 +227,7 @@ export default function StatementSettings() {
 				__nextHasNoMarginBottom
 				label={ __(
 					'Contact form address',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 				value={ settings.feedback_url }
 				onChange={ ( url ) => save( { feedback_url: url } ) }
@@ -232,7 +238,7 @@ export default function StatementSettings() {
 				type="number"
 				label={ __(
 					'Working days you aim to reply within',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 				value={ String( settings.response_days ) }
 				onChange={ ( days ) => save( { response_days: days } ) }
@@ -242,11 +248,11 @@ export default function StatementSettings() {
 				__nextHasNoMarginBottom
 				label={ __(
 					'Who people can escalate to (optional)',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 				help={ __(
 					'The body that handles complaints where you operate. This differs by country, so it is left to you.',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 				value={ settings.enforcement_body }
 				onChange={ ( body ) => save( { enforcement_body: body } ) }
@@ -257,7 +263,7 @@ export default function StatementSettings() {
 					<p>
 						{ __(
 							'Still to do before this can be signed off:',
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 						) }
 					</p>
 					<ul className="wsak-statement-panel__missing">
@@ -269,13 +275,16 @@ export default function StatementSettings() {
 			) }
 
 			<h3 className="wsak-settings__subtitle">
-				{ __( 'Sign-off', 'wowstudio-accessibility-kit' ) }
+				{ __( 'Sign-off', 'wowstudio-accessibility-remediation' ) }
 			</h3>
 
 			{ attested ? (
 				<>
 					<p className="wsak-settings__usage">
-						{ __( 'Signed off by', 'wowstudio-accessibility-kit' ) }{ ' ' }
+						{ __(
+							'Signed off by',
+							'wowstudio-accessibility-remediation'
+						) }{ ' ' }
 						<strong>{ settings.attested_by }</strong>
 						{ settings.attested_role
 							? `, ${ settings.attested_role }`
@@ -302,7 +311,7 @@ export default function StatementSettings() {
 					>
 						{ __(
 							'Withdraw sign-off',
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 						) }
 					</Button>
 				</>
@@ -311,14 +320,14 @@ export default function StatementSettings() {
 					<p className="wsak-settings__privacy">
 						{ __(
 							'Read the preview below before signing off. Putting your name to it says you have checked that it is accurate — not that the plugin has, because it cannot.',
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 						) }
 					</p>
 					<TextControl
 						__nextHasNoMarginBottom
 						label={ __(
 							'Your name',
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 						) }
 						value={ name }
 						onChange={ setName }
@@ -327,7 +336,7 @@ export default function StatementSettings() {
 						__nextHasNoMarginBottom
 						label={ __(
 							'Your role (optional)',
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 						) }
 						value={ role }
 						onChange={ setRole }
@@ -351,26 +360,26 @@ export default function StatementSettings() {
 					>
 						{ __(
 							'I have read this and it is accurate',
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 						) }
 					</Button>
 				</>
 			) }
 
 			<h3 className="wsak-settings__subtitle">
-				{ __( 'Publishing it', 'wowstudio-accessibility-kit' ) }
+				{ __( 'Publishing it', 'wowstudio-accessibility-remediation' ) }
 			</h3>
 
 			<p className="wsak-settings__usage">
 				{ __(
 					'Add the Accessibility statement block to any page, or use this shortcode:',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }{ ' ' }
 				<code>{ shortcode }</code>
 			</p>
 
 			<h3 className="wsak-settings__subtitle">
-				{ __( 'Preview', 'wowstudio-accessibility-kit' ) }
+				{ __( 'Preview', 'wowstudio-accessibility-remediation' ) }
 			</h3>
 
 			<div

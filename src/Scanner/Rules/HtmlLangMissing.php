@@ -84,7 +84,7 @@ final class HtmlLangMissing implements Rule {
 	 * @return string
 	 */
 	public function title(): string {
-		return __( 'Page language is not set', 'wowstudio-accessibility-kit' );
+		return __( 'Page language is not set', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -95,7 +95,7 @@ final class HtmlLangMissing implements Rule {
 	 * @return string
 	 */
 	public function description(): string {
-		return __( 'The page does not say what language it is written in, so a screen reader may read it with the wrong pronunciation. Set a lang attribute on the html element, such as lang="en".', 'wowstudio-accessibility-kit' );
+		return __( 'The page does not say what language it is written in, so a screen reader may read it with the wrong pronunciation. Set a lang attribute on the html element, such as lang="en".', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -106,7 +106,7 @@ final class HtmlLangMissing implements Rule {
 	 * @return string
 	 */
 	public function consequence(): string {
-		return __( 'A screen reader may read the whole page in the wrong accent, which can make it genuinely hard to follow.', 'wowstudio-accessibility-kit' );
+		return __( 'A screen reader may read the whole page in the wrong accent, which can make it genuinely hard to follow.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -121,7 +121,7 @@ final class HtmlLangMissing implements Rule {
 		return new FixPlan(
 			FixKind::Deterministic,
 			FixTarget::Theme,
-			__( 'The right value is known — it is the site\'s own language setting — but the html element is printed by the theme and no filter reaches it. Knowing the answer is not the same as being able to write it, which is why this is a hand-off rather than a button.', 'wowstudio-accessibility-kit' )
+			__( 'The right value is known — it is the site\'s own language setting — but the html element is printed by the theme and no filter reaches it. Knowing the answer is not the same as being able to write it, which is why this is a hand-off rather than a button.', 'wowstudio-accessibility-remediation' )
 		);
 	}
 
@@ -154,7 +154,7 @@ final class HtmlLangMissing implements Rule {
 				$this->wcag_sc(),
 				$this->severity(),
 				$this->detection(),
-				__( 'The page does not declare a language.', 'wowstudio-accessibility-kit' ),
+				__( 'The page does not declare a language.', 'wowstudio-accessibility-remediation' ),
 				'/html'
 			),
 		);

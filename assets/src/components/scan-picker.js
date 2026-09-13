@@ -66,18 +66,18 @@ export default function ScanPicker( { onScan, onOpen, scanning, canScan } ) {
 	return (
 		<section className="wsak-picker" aria-labelledby="wsak-picker-title">
 			<h2 className="wsak-picker__title" id="wsak-picker-title">
-				{ __( 'Scan a page', 'wowstudio-accessibility-kit' ) }
+				{ __( 'Scan a page', 'wowstudio-accessibility-remediation' ) }
 			</h2>
 
 			<SearchControl
 				__nextHasNoMarginBottom
 				label={ __(
 					'Search your content',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 				placeholder={ __(
 					'Search by title',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 				value={ search }
 				onChange={ setSearch }
@@ -87,7 +87,7 @@ export default function ScanPicker( { onScan, onOpen, scanning, canScan } ) {
 				<Skeleton
 					label={ __(
 						'Loading your content…',
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					) }
 					rows={ 4 }
 				/>
@@ -106,22 +106,22 @@ export default function ScanPicker( { onScan, onOpen, scanning, canScan } ) {
 						search
 							? __(
 									'Nothing matched that search',
-									'wowstudio-accessibility-kit'
+									'wowstudio-accessibility-remediation'
 							  )
 							: __(
 									'No published content yet',
-									'wowstudio-accessibility-kit'
+									'wowstudio-accessibility-remediation'
 							  )
 					}
 					body={
 						search
 							? __(
 									'Try a different word, or clear the search to see everything.',
-									'wowstudio-accessibility-kit'
+									'wowstudio-accessibility-remediation'
 							  )
 							: __(
 									'Publish a post or page and it will appear here, ready to scan.',
-									'wowstudio-accessibility-kit'
+									'wowstudio-accessibility-remediation'
 							  )
 					}
 				/>
@@ -132,25 +132,28 @@ export default function ScanPicker( { onScan, onOpen, scanning, canScan } ) {
 					<caption className="screen-reader-text">
 						{ __(
 							'Your published content, with the result of the last scan.',
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 						) }
 					</caption>
 					<thead>
 						<tr>
 							<th scope="col">
-								{ __( 'Title', 'wowstudio-accessibility-kit' ) }
+								{ __(
+									'Title',
+									'wowstudio-accessibility-remediation'
+								) }
 							</th>
 							<th scope="col">
 								{ __(
 									'Last scan',
-									'wowstudio-accessibility-kit'
+									'wowstudio-accessibility-remediation'
 								) }
 							</th>
 							<th scope="col">
 								<span className="screen-reader-text">
 									{ __(
 										'Actions',
-										'wowstudio-accessibility-kit'
+										'wowstudio-accessibility-remediation'
 									) }
 								</span>
 							</th>
@@ -163,7 +166,7 @@ export default function ScanPicker( { onScan, onOpen, scanning, canScan } ) {
 									{ item.title ||
 										__(
 											'(no title)',
-											'wowstudio-accessibility-kit'
+											'wowstudio-accessibility-remediation'
 										) }
 									<span className="wsak-table__type">
 										{ item.type }
@@ -181,7 +184,7 @@ export default function ScanPicker( { onScan, onOpen, scanning, canScan } ) {
 												/* translators: %d: score out of 100. */
 												__(
 													'Scored %d out of 100',
-													'wowstudio-accessibility-kit'
+													'wowstudio-accessibility-remediation'
 												),
 												item.last_scan.score ?? 0
 											) }
@@ -190,7 +193,7 @@ export default function ScanPicker( { onScan, onOpen, scanning, canScan } ) {
 										<span className="wsak-table__never">
 											{ __(
 												'Not scanned yet',
-												'wowstudio-accessibility-kit'
+												'wowstudio-accessibility-remediation'
 											) }
 										</span>
 									) }
@@ -200,7 +203,7 @@ export default function ScanPicker( { onScan, onOpen, scanning, canScan } ) {
 										<Busy
 											label={ __(
 												'Scanning…',
-												'wowstudio-accessibility-kit'
+												'wowstudio-accessibility-remediation'
 											) }
 										/>
 									) : (
@@ -214,14 +217,14 @@ export default function ScanPicker( { onScan, onOpen, scanning, canScan } ) {
 												/* translators: %s: content title. */
 												__(
 													'Scan “%s”',
-													'wowstudio-accessibility-kit'
+													'wowstudio-accessibility-remediation'
 												),
 												item.title
 											) }
 										>
 											{ __(
 												'Scan',
-												'wowstudio-accessibility-kit'
+												'wowstudio-accessibility-remediation'
 											) }
 										</Button>
 									) }

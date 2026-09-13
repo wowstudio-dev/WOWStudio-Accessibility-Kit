@@ -54,7 +54,7 @@ final class FocusOutline implements ProvidesCss {
 	 * @return string
 	 */
 	public function title(): string {
-		return __( 'Show where the keyboard focus is', 'wowstudio-accessibility-kit' );
+		return __( 'Show where the keyboard focus is', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -65,7 +65,7 @@ final class FocusOutline implements ProvidesCss {
 	 * @return string
 	 */
 	public function description(): string {
-		return __( 'Draws a clear outline around whatever has keyboard focus. Many themes switch the browser\'s own outline off for the sake of appearance; without it, anybody navigating by keyboard cannot tell where they are on the page. This appears for keyboard use only, so mouse clicks look exactly as they do now.', 'wowstudio-accessibility-kit' );
+		return __( 'Draws a clear outline around whatever has keyboard focus. Many themes switch the browser\'s own outline off for the sake of appearance; without it, anybody navigating by keyboard cannot tell where they are on the page. This appears for keyboard use only, so mouse clicks look exactly as they do now.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -87,7 +87,7 @@ final class FocusOutline implements ProvidesCss {
 	 * @return string
 	 */
 	public function caveat(): string {
-		return __( 'This one is deliberately forceful, because its whole job is to overrule a theme that switched the outline off. If your theme already has a focus style you like, leave this off — two indicators at once is worse than either.', 'wowstudio-accessibility-kit' );
+		return __( 'This one is deliberately forceful, because its whole job is to overrule a theme that switched the outline off. If your theme already has a focus style you like, leave this off — two indicators at once is worse than either.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**

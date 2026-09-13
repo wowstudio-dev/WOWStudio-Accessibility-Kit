@@ -101,7 +101,7 @@ final class Assets implements Registrable {
 			true
 		);
 
-		wp_set_script_translations( self::EDITOR_HANDLE, 'wowstudio-accessibility-kit', WSAK_PATH . 'languages' );
+		wp_set_script_translations( self::EDITOR_HANDLE, 'wowstudio-accessibility-remediation', WSAK_PATH . 'languages' );
 
 		wp_enqueue_style(
 			self::EDITOR_HANDLE,
@@ -149,7 +149,7 @@ final class Assets implements Registrable {
 			true
 		);
 
-		wp_set_script_translations( self::HANDLE, 'wowstudio-accessibility-kit', WSAK_PATH . 'languages' );
+		wp_set_script_translations( self::HANDLE, 'wowstudio-accessibility-remediation', WSAK_PATH . 'languages' );
 
 		wp_enqueue_style(
 			self::HANDLE,
@@ -183,7 +183,7 @@ final class Assets implements Registrable {
 		?>
 		<div class="notice notice-error">
 			<p>
-				<?php esc_html_e( 'The Accessibility Kit interface has not been built. Run "npm install && npm run build" in the plugin directory.', 'wowstudio-accessibility-kit' ); ?>
+				<?php esc_html_e( 'The Accessibility Remediation interface has not been built. Run "npm install && npm run build" in the plugin directory.', 'wowstudio-accessibility-remediation' ); ?>
 			</p>
 		</div>
 		<?php

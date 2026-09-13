@@ -126,7 +126,7 @@ export default function BulkScan( { onInspect } ) {
 								/* translators: %d: number of pages checked. */
 								__(
 									'Finished. %d pages checked.',
-									'wowstudio-accessibility-kit'
+									'wowstudio-accessibility-remediation'
 								),
 								data.progress?.complete ?? 0
 							)
@@ -162,7 +162,7 @@ export default function BulkScan( { onInspect } ) {
 						/* translators: %d: number of pages queued. */
 						__(
 							'%d pages queued. This runs in the background — you can leave this page.',
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 						),
 						data.progress?.total ?? 0
 					)
@@ -181,7 +181,7 @@ export default function BulkScan( { onInspect } ) {
 				setAnnouncement(
 					__(
 						'Stopped. Everything already checked has been kept.',
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					)
 				);
 			} )
@@ -193,7 +193,7 @@ export default function BulkScan( { onInspect } ) {
 			<Skeleton
 				label={ __(
 					'Loading your content…',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 			/>
 		);
@@ -202,7 +202,10 @@ export default function BulkScan( { onInspect } ) {
 	return (
 		<section className="wsak-bulk" aria-labelledby="wsak-bulk-title">
 			<h2 className="wsak-bulk__title" id="wsak-bulk-title">
-				{ __( 'Check your content', 'wowstudio-accessibility-kit' ) }
+				{ __(
+					'Check your content',
+					'wowstudio-accessibility-remediation'
+				) }
 			</h2>
 
 			<p className="screen-reader-text" role="status" aria-live="polite">
@@ -226,7 +229,7 @@ export default function BulkScan( { onInspect } ) {
 				<Notice status="warning" isDismissible={ false }>
 					{ __(
 						'This site cannot fetch its own pages, which is a common host setting and not a fault. Bulk checking still works and reads the content of every page you select. What it cannot do is check colour, text size and layout — those need the page open in a browser, so open a page in the inspector to check those.',
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					) }
 				</Notice>
 			) }
@@ -249,7 +252,7 @@ export default function BulkScan( { onInspect } ) {
 				role="group"
 				aria-label={ __(
 					'Filter by content type',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 			>
 				{ types.map( ( one ) => (
@@ -272,7 +275,7 @@ export default function BulkScan( { onInspect } ) {
 				__nextHasNoMarginBottom
 				label={ __(
 					'Search your content',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 				value={ search }
 				onChange={ setSearch }
@@ -287,7 +290,10 @@ export default function BulkScan( { onInspect } ) {
 
 			{ listing.status === 'loading' && (
 				<Skeleton
-					label={ __( 'Loading…', 'wowstudio-accessibility-kit' ) }
+					label={ __(
+						'Loading…',
+						'wowstudio-accessibility-remediation'
+					) }
 				/>
 			) }
 
@@ -297,7 +303,7 @@ export default function BulkScan( { onInspect } ) {
 						<span className="wsak-bulk__picks-label">
 							{ __(
 								'Select the first',
-								'wowstudio-accessibility-kit'
+								'wowstudio-accessibility-remediation'
 							) }
 						</span>
 						{ QUICK_PICKS.map( ( count ) => (
@@ -315,7 +321,10 @@ export default function BulkScan( { onInspect } ) {
 							disabled={ ! selected.length }
 							onClick={ () => setSelected( [] ) }
 						>
-							{ __( 'Clear', 'wowstudio-accessibility-kit' ) }
+							{ __(
+								'Clear',
+								'wowstudio-accessibility-remediation'
+							) }
 						</Button>
 					</div>
 
@@ -340,7 +349,7 @@ export default function BulkScan( { onInspect } ) {
 												/* translators: %d: score out of 100. */
 												__(
 													'%d / 100',
-													'wowstudio-accessibility-kit'
+													'wowstudio-accessibility-remediation'
 												),
 												item.score
 											) }
@@ -367,13 +376,13 @@ export default function BulkScan( { onInspect } ) {
 											'Check %d item',
 											'Check %d items',
 											selected.length,
-											'wowstudio-accessibility-kit'
+											'wowstudio-accessibility-remediation'
 										),
 										selected.length
 								  )
 								: __(
 										'Select something to check',
-										'wowstudio-accessibility-kit'
+										'wowstudio-accessibility-remediation'
 								  ) }
 						</Button>
 					</div>
@@ -418,12 +427,18 @@ function RunProgress( { run, onStop, onInspect } ) {
 			<div className="wsak-run__head">
 				<h3 className="wsak-run__title">
 					{ finished
-						? __( 'Finished', 'wowstudio-accessibility-kit' )
-						: __( 'Checking…', 'wowstudio-accessibility-kit' ) }
+						? __(
+								'Finished',
+								'wowstudio-accessibility-remediation'
+						  )
+						: __(
+								'Checking…',
+								'wowstudio-accessibility-remediation'
+						  ) }
 				</h3>
 				{ ! finished && (
 					<Button variant="secondary" onClick={ onStop }>
-						{ __( 'Stop', 'wowstudio-accessibility-kit' ) }
+						{ __( 'Stop', 'wowstudio-accessibility-remediation' ) }
 					</Button>
 				) }
 			</div>
@@ -443,7 +458,7 @@ function RunProgress( { run, onStop, onInspect } ) {
 			<p className="wsak-run__counts">
 				{ sprintf(
 					/* translators: 1: pages settled, 2: pages in the run. */
-					__( '%1$d of %2$d', 'wowstudio-accessibility-kit' ),
+					__( '%1$d of %2$d', 'wowstudio-accessibility-remediation' ),
 					progress.settled ?? 0,
 					progress.total ?? 0
 				) }
@@ -455,7 +470,7 @@ function RunProgress( { run, onStop, onInspect } ) {
 								'%d could not be checked',
 								'%d could not be checked',
 								progress.failed,
-								'wowstudio-accessibility-kit'
+								'wowstudio-accessibility-remediation'
 							),
 							progress.failed
 						) }
@@ -463,7 +478,10 @@ function RunProgress( { run, onStop, onInspect } ) {
 					', ' +
 						sprintf(
 							/* translators: %d: number of pages not checked because the run was stopped. */
-							__( '%d stopped', 'wowstudio-accessibility-kit' ),
+							__(
+								'%d stopped',
+								'wowstudio-accessibility-remediation'
+							),
 							progress.cancelled
 						) }
 			</p>
@@ -472,7 +490,7 @@ function RunProgress( { run, onStop, onInspect } ) {
 				<Busy
 					label={ __(
 						'This runs in the background. You can leave this page and come back.',
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					) }
 				/>
 			) }
@@ -492,7 +510,7 @@ function RunProgress( { run, onStop, onInspect } ) {
 								'%d page was checked for content only. Colour, text size and layout need the page open in a browser.',
 								'%d pages were checked for content only. Colour, text size and layout need the page open in a browser.',
 								unrendered.length,
-								'wowstudio-accessibility-kit'
+								'wowstudio-accessibility-remediation'
 							),
 							unrendered.length
 						) }
@@ -503,7 +521,7 @@ function RunProgress( { run, onStop, onInspect } ) {
 					>
 						{ __(
 							'Check colour and layout too',
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 						) }
 					</Button>
 				</div>
@@ -540,7 +558,7 @@ function RunProgress( { run, onStop, onInspect } ) {
 												'%d finding',
 												'%d findings',
 												page.findings?.length ?? 0,
-												'wowstudio-accessibility-kit'
+												'wowstudio-accessibility-remediation'
 											),
 											page.findings?.length ?? 0
 										) }
@@ -554,7 +572,7 @@ function RunProgress( { run, onStop, onInspect } ) {
 										>
 											{ __(
 												'Check the rest',
-												'wowstudio-accessibility-kit'
+												'wowstudio-accessibility-remediation'
 											) }
 										</Button>
 									) }

@@ -65,7 +65,7 @@ final class ReviewController implements Registrable {
 							'required'          => true,
 							'type'              => 'string',
 							'sanitize_callback' => 'sanitize_textarea_field',
-							'description'       => __( 'Why this is not a problem. Kept with the finding.', 'wowstudio-accessibility-kit' ),
+							'description'       => __( 'Why this is not a problem. Kept with the finding.', 'wowstudio-accessibility-remediation' ),
 						),
 					),
 				),
@@ -119,7 +119,7 @@ final class ReviewController implements Registrable {
 							'required'          => true,
 							'type'              => 'string',
 							'sanitize_callback' => 'sanitize_textarea_field',
-							'description'       => __( 'Why this is not a problem anywhere it appears.', 'wowstudio-accessibility-kit' ),
+							'description'       => __( 'Why this is not a problem anywhere it appears.', 'wowstudio-accessibility-remediation' ),
 						),
 					),
 				),
@@ -188,7 +188,7 @@ final class ReviewController implements Registrable {
 
 		return new WP_Error(
 			'wsak_forbidden',
-			__( 'You do not have permission to view accessibility reports.', 'wowstudio-accessibility-kit' ),
+			__( 'You do not have permission to view accessibility reports.', 'wowstudio-accessibility-remediation' ),
 			array( 'status' => rest_authorization_required_code() )
 		);
 	}
@@ -223,7 +223,7 @@ final class ReviewController implements Registrable {
 				'note'       => $issue->note,
 				// Named, not just numbered. A log that says "user 4" is a log
 				// nobody can act on without another lookup.
-				'by'         => false !== $user ? $user->display_name : __( 'Somebody no longer on this site', 'wowstudio-accessibility-kit' ),
+				'by'         => false !== $user ? $user->display_name : __( 'Somebody no longer on this site', 'wowstudio-accessibility-remediation' ),
 				'at'         => $issue->updated_at,
 
 				/*
@@ -279,7 +279,7 @@ final class ReviewController implements Registrable {
 				'rule_id'     => $decision->rule_id,
 				'rule_title'  => null === $rule ? $decision->rule_id : $rule->title(),
 				'note'        => $decision->note,
-				'by'          => false !== $user ? $user->display_name : __( 'Somebody no longer on this site', 'wowstudio-accessibility-kit' ),
+				'by'          => false !== $user ? $user->display_name : __( 'Somebody no longer on this site', 'wowstudio-accessibility-remediation' ),
 				'at'          => $decision->updated_at,
 			);
 		}
@@ -301,7 +301,7 @@ final class ReviewController implements Registrable {
 
 		return new WP_Error(
 			'wsak_forbidden',
-			__( 'You do not have permission to make decisions about findings.', 'wowstudio-accessibility-kit' ),
+			__( 'You do not have permission to make decisions about findings.', 'wowstudio-accessibility-remediation' ),
 			array( 'status' => rest_authorization_required_code() )
 		);
 	}
@@ -327,7 +327,7 @@ final class ReviewController implements Registrable {
 		if ( ! current_user_can( 'edit_theme_options' ) ) {
 			return new WP_Error(
 				'wsak_forbidden_theme',
-				__( 'This fix changes how your theme renders every page, and your account is not allowed to change theme settings. An administrator can apply it.', 'wowstudio-accessibility-kit' ),
+				__( 'This fix changes how your theme renders every page, and your account is not allowed to change theme settings. An administrator can apply it.', 'wowstudio-accessibility-remediation' ),
 				array( 'status' => rest_authorization_required_code() )
 			);
 		}

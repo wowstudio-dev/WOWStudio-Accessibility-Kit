@@ -1,5 +1,5 @@
 {
-	"name": "wowstudio/wowstudio-accessibility-kit",
+	"name": "wowstudio/wowstudio-accessibility-remediation",
 	"description": "Helps you find, fix, document, and monitor WCAG accessibility issues in WordPress at the code level.",
 	"type": "wordpress-plugin",
 	"license": "GPL-2.0-or-later",

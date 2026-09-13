@@ -197,7 +197,7 @@ final class SiteWideReview {
 		if ( mb_strlen( trim( wp_strip_all_tags( $note ) ) ) < IssueReview::MIN_NOTE ) {
 			return new WP_Error(
 				'wsak_note_required',
-				__( 'Say why this is not a problem. This decision covers every page carrying this markup, including pages you have not opened, so the reason is what lets somebody else check the judgement later.', 'wowstudio-accessibility-kit' ),
+				__( 'Say why this is not a problem. This decision covers every page carrying this markup, including pages you have not opened, so the reason is what lets somebody else check the judgement later.', 'wowstudio-accessibility-remediation' ),
 				array( 'status' => 400 )
 			);
 		}
@@ -246,7 +246,7 @@ final class SiteWideReview {
 	private function unknown(): WP_Error {
 		return new WP_Error(
 			'wsak_unknown_issue',
-			__( 'That finding could not be found.', 'wowstudio-accessibility-kit' ),
+			__( 'That finding could not be found.', 'wowstudio-accessibility-remediation' ),
 			array( 'status' => 404 )
 		);
 	}
@@ -261,7 +261,7 @@ final class SiteWideReview {
 	private function forbidden(): WP_Error {
 		return new WP_Error(
 			'wsak_forbidden_site_wide',
-			__( 'Setting a finding aside everywhere needs permission to edit other people\'s content. You can still set it aside one page at a time.', 'wowstudio-accessibility-kit' ),
+			__( 'Setting a finding aside everywhere needs permission to edit other people\'s content. You can still set it aside one page at a time.', 'wowstudio-accessibility-remediation' ),
 			array( 'status' => rest_authorization_required_code() )
 		);
 	}

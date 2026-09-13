@@ -72,9 +72,9 @@ enum ScanCoverage: string {
 	 */
 	public function label(): string {
 		return match ( $this ) {
-			self::Never   => __( 'Not checked', 'wowstudio-accessibility-kit' ),
-			self::Content => __( 'Content checked', 'wowstudio-accessibility-kit' ),
-			self::Full    => __( 'Fully checked', 'wowstudio-accessibility-kit' ),
+			self::Never   => __( 'Not checked', 'wowstudio-accessibility-remediation' ),
+			self::Content => __( 'Content checked', 'wowstudio-accessibility-remediation' ),
+			self::Full    => __( 'Fully checked', 'wowstudio-accessibility-remediation' ),
 		};
 	}
 
@@ -87,9 +87,9 @@ enum ScanCoverage: string {
 	 */
 	public function blurb(): string {
 		return match ( $this ) {
-			self::Never   => __( 'Nothing has looked at this page yet.', 'wowstudio-accessibility-kit' ),
-			self::Content => __( 'The words and markup of this page were checked. Colour, text size and layout were not — those need the page open in a browser, which a background run cannot do. Open it in the inspector to check the rest.', 'wowstudio-accessibility-kit' ),
-			self::Full    => __( 'Both passes ran: the markup, and the page as a browser actually draws it.', 'wowstudio-accessibility-kit' ),
+			self::Never   => __( 'Nothing has looked at this page yet.', 'wowstudio-accessibility-remediation' ),
+			self::Content => __( 'The words and markup of this page were checked. Colour, text size and layout were not — those need the page open in a browser, which a background run cannot do. Open it in the inspector to check the rest.', 'wowstudio-accessibility-remediation' ),
+			self::Full    => __( 'Both passes ran: the markup, and the page as a browser actually draws it.', 'wowstudio-accessibility-remediation' ),
 		};
 	}
 

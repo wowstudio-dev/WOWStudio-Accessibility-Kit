@@ -50,7 +50,7 @@ final class HtmlLangAndDir implements SiteFix {
 	 * @return string
 	 */
 	public function title(): string {
-		return __( 'Declare the page language', 'wowstudio-accessibility-kit' );
+		return __( 'Declare the page language', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -61,7 +61,7 @@ final class HtmlLangAndDir implements SiteFix {
 	 * @return string
 	 */
 	public function description(): string {
-		return __( 'Makes sure the page says which language it is written in, and which direction it reads. A screen reader picks its pronunciation from this; without it, an English page can be read aloud with the phonetics of whatever language the listener\'s computer is set to.', 'wowstudio-accessibility-kit' );
+		return __( 'Makes sure the page says which language it is written in, and which direction it reads. A screen reader picks its pronunciation from this; without it, an English page can be read aloud with the phonetics of whatever language the listener\'s computer is set to.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -83,7 +83,7 @@ final class HtmlLangAndDir implements SiteFix {
 	 * @return string
 	 */
 	public function caveat(): string {
-		return __( 'Only works if your theme calls language_attributes() in its html tag, which is what WordPress themes are supposed to do. If the attribute is still missing after switching this on, the theme has hard-coded its html tag and the fix has to be made there — the finding will tell you so.', 'wowstudio-accessibility-kit' );
+		return __( 'Only works if your theme calls language_attributes() in its html tag, which is what WordPress themes are supposed to do. If the attribute is still missing after switching this on, the theme has hard-coded its html tag and the fix has to be made there — the finding will tell you so.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**

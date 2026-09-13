@@ -48,9 +48,9 @@ enum ScanScope: string {
 	 */
 	public function label(): string {
 		return match ( $this ) {
-			self::Page     => __( 'Single page', 'wowstudio-accessibility-kit' ),
-			self::Site     => __( 'Whole site', 'wowstudio-accessibility-kit' ),
-			self::Template => __( 'Theme', 'wowstudio-accessibility-kit' ),
+			self::Page     => __( 'Single page', 'wowstudio-accessibility-remediation' ),
+			self::Site     => __( 'Whole site', 'wowstudio-accessibility-remediation' ),
+			self::Template => __( 'Theme', 'wowstudio-accessibility-remediation' ),
 		};
 	}
 }

@@ -6,7 +6,7 @@
 	"category": "text",
 	"icon": "universal-access-alt",
 	"description": "Shows the accessibility statement you have written in the Accessibility settings, including the route for reporting a problem.",
-	"textdomain": "wowstudio-accessibility-kit",
+	"textdomain": "wowstudio-accessibility-remediation",
 	"supports": {
 		"html": false,
 		"multiple": false,

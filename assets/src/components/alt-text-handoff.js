@@ -28,7 +28,7 @@ export default function AltTextHandoff( { attachmentId } ) {
 			<span className="wsak-issue__handoff-note">
 				{ __(
 					'What this image tells the reader depends on why it is on the page, so nothing here can write it for you. The Images screen lists every undescribed image with a field beside each, which is faster than opening them one at a time.',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 			</span>
 
@@ -41,13 +41,13 @@ export default function AltTextHandoff( { attachmentId } ) {
 				>
 					{ __(
 						'Describe this image',
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					) }
 					<span className="screen-reader-text">
 						{ ' ' }
 						{ __(
 							'(opens the media screen in a new tab)',
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 						) }
 					</span>
 				</a>

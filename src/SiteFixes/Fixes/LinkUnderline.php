@@ -51,7 +51,7 @@ final class LinkUnderline implements ProvidesCss {
 	 * @return string
 	 */
 	public function title(): string {
-		return __( 'Underline links in body text', 'wowstudio-accessibility-kit' );
+		return __( 'Underline links in body text', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -62,7 +62,7 @@ final class LinkUnderline implements ProvidesCss {
 	 * @return string
 	 */
 	public function description(): string {
-		return __( 'Underlines links that sit inside paragraphs and lists. If colour is the only thing marking a link, readers who cannot distinguish that colour cannot see it is a link at all. Navigation, buttons and menus are left alone, because those are recognisable from where they sit rather than from how they look.', 'wowstudio-accessibility-kit' );
+		return __( 'Underlines links that sit inside paragraphs and lists. If colour is the only thing marking a link, readers who cannot distinguish that colour cannot see it is a link at all. Navigation, buttons and menus are left alone, because those are recognisable from where they sit rather than from how they look.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -84,7 +84,7 @@ final class LinkUnderline implements ProvidesCss {
 	 * @return string
 	 */
 	public function caveat(): string {
-		return __( 'This changes how your pages look, which none of the other fixes really do. It targets links inside paragraphs, list items and table cells; a theme that builds body text out of something else will not be covered, and a design that wraps whole cards in a link inside a paragraph may pick up a line you did not want.', 'wowstudio-accessibility-kit' );
+		return __( 'This changes how your pages look, which none of the other fixes really do. It targets links inside paragraphs, list items and table cells; a theme that builds body text out of something else will not be covered, and a design that wraps whole cards in a link inside a paragraph may pick up a line you did not want.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**

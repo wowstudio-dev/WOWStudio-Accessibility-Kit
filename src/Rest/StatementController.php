@@ -113,7 +113,7 @@ final class StatementController implements Registrable {
 
 		return new WP_Error(
 			'wsak_forbidden',
-			__( 'You do not have permission to view accessibility reports.', 'wowstudio-accessibility-kit' ),
+			__( 'You do not have permission to view accessibility reports.', 'wowstudio-accessibility-remediation' ),
 			array( 'status' => rest_authorization_required_code() )
 		);
 	}
@@ -132,7 +132,7 @@ final class StatementController implements Registrable {
 
 		return new WP_Error(
 			'wsak_forbidden',
-			__( 'You do not have permission to change accessibility settings.', 'wowstudio-accessibility-kit' ),
+			__( 'You do not have permission to change accessibility settings.', 'wowstudio-accessibility-remediation' ),
 			array( 'status' => rest_authorization_required_code() )
 		);
 	}
@@ -239,7 +239,7 @@ final class StatementController implements Registrable {
 		if ( array() !== $missing ) {
 			return new WP_Error(
 				'wsak_statement_incomplete',
-				__( 'The statement is not finished yet, so it cannot be signed off.', 'wowstudio-accessibility-kit' ),
+				__( 'The statement is not finished yet, so it cannot be signed off.', 'wowstudio-accessibility-remediation' ),
 				array(
 					'status'  => 422,
 					'missing' => $missing,
@@ -252,7 +252,7 @@ final class StatementController implements Registrable {
 		if ( '' === $name ) {
 			return new WP_Error(
 				'wsak_attestation_needs_a_name',
-				__( 'Sign-off needs the name of the person taking responsibility for the statement.', 'wowstudio-accessibility-kit' ),
+				__( 'Sign-off needs the name of the person taking responsibility for the statement.', 'wowstudio-accessibility-remediation' ),
 				array( 'status' => 400 )
 			);
 		}

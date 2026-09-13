@@ -94,7 +94,7 @@ final class ImageMapAreaAltMissing implements Rule {
 	 * @return string
 	 */
 	public function title(): string {
-		return __( 'Image map region has no alt text', 'wowstudio-accessibility-kit' );
+		return __( 'Image map region has no alt text', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -105,7 +105,7 @@ final class ImageMapAreaAltMissing implements Rule {
 	 * @return string
 	 */
 	public function description(): string {
-		return __( 'A clickable region of an image map is a link, and an area element has nowhere to put visible text — its alt attribute is the only name it can have. Without one, a screen reader announces the raw URL or nothing at all. Add an alt attribute naming where the region goes.', 'wowstudio-accessibility-kit' );
+		return __( 'A clickable region of an image map is a link, and an area element has nowhere to put visible text — its alt attribute is the only name it can have. Without one, a screen reader announces the raw URL or nothing at all. Add an alt attribute naming where the region goes.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -116,7 +116,7 @@ final class ImageMapAreaAltMissing implements Rule {
 	 * @return string
 	 */
 	public function consequence(): string {
-		return __( 'A screen reader reaches a link it cannot name, and reads out the URL instead of the destination.', 'wowstudio-accessibility-kit' );
+		return __( 'A screen reader reaches a link it cannot name, and reads out the URL instead of the destination.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -131,7 +131,7 @@ final class ImageMapAreaAltMissing implements Rule {
 		return new FixPlan(
 			FixKind::Manual,
 			FixTarget::Content,
-			__( 'Naming the region means knowing which part of the picture it covers and where it goes, which is a question about the map rather than the markup. Add an alt attribute to each area.', 'wowstudio-accessibility-kit' )
+			__( 'Naming the region means knowing which part of the picture it covers and where it goes, which is a question about the map rather than the markup. Add an alt attribute to each area.', 'wowstudio-accessibility-remediation' )
 		);
 	}
 
@@ -169,10 +169,10 @@ final class ImageMapAreaAltMissing implements Rule {
 				$this->severity(),
 				$this->detection(),
 				'' === $href
-					? __( 'This image map region has no alt text.', 'wowstudio-accessibility-kit' )
+					? __( 'This image map region has no alt text.', 'wowstudio-accessibility-remediation' )
 					: sprintf(
 						/* translators: %s: the URL the region links to. */
-						__( 'The image map region linking to %s has no alt text.', 'wowstudio-accessibility-kit' ),
+						__( 'The image map region linking to %s has no alt text.', 'wowstudio-accessibility-remediation' ),
 						$href
 					),
 				$document->selector_for( $area ),

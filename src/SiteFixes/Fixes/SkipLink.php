@@ -86,7 +86,7 @@ final class SkipLink implements ProvidesCss {
 	 * @return string
 	 */
 	public function title(): string {
-		return __( 'Add a skip link', 'wowstudio-accessibility-kit' );
+		return __( 'Add a skip link', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -97,7 +97,7 @@ final class SkipLink implements ProvidesCss {
 	 * @return string
 	 */
 	public function description(): string {
-		return __( 'Puts a "Skip to content" link at the very start of every page, visible only while it has keyboard focus, and places the target it jumps to at the start of your content. Without one, reaching the article past a large menu can take dozens of key presses on every page.', 'wowstudio-accessibility-kit' );
+		return __( 'Puts a "Skip to content" link at the very start of every page, visible only while it has keyboard focus, and places the target it jumps to at the start of your content. Without one, reaching the article past a large menu can take dozens of key presses on every page.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -119,7 +119,7 @@ final class SkipLink implements ProvidesCss {
 	 * @return string
 	 */
 	public function caveat(): string {
-		return __( 'Needs your theme to call wp_body_open(), which themes have done since WordPress 5.2; a much older theme may not, and then nothing is printed. The link lands at the start of your post content rather than at your theme\'s own main element, so on a page built entirely out of widgets it may skip less than you expect. If your theme already has a skip link, you will now have two.', 'wowstudio-accessibility-kit' );
+		return __( 'Needs your theme to call wp_body_open(), which themes have done since WordPress 5.2; a much older theme may not, and then nothing is printed. The link lands at the start of your post content rather than at your theme\'s own main element, so on a page built entirely out of widgets it may skip less than you expect. If your theme already has a skip link, you will now have two.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -149,7 +149,7 @@ final class SkipLink implements ProvidesCss {
 		printf(
 			'<a class="wsak-skip-link" href="#%s">%s</a>',
 			esc_attr( self::TARGET_ID ),
-			esc_html__( 'Skip to content', 'wowstudio-accessibility-kit' )
+			esc_html__( 'Skip to content', 'wowstudio-accessibility-remediation' )
 		);
 	}
 

@@ -1,4 +1,4 @@
-# WOWStudio Accessibility Kit
+# WOWStudio Accessibility Remediation
 
 A real-remediation WordPress accessibility plugin. It helps you **find, fix and
 document** WCAG issues at the code level.
@@ -117,7 +117,7 @@ disclosure; reword them freely, but update the pattern when you do.
 ## Repository layout
 
 ```
-wowstudio-accessibility-kit.php   Bootstrap: headers, constants, requirement
+wowstudio-accessibility-remediation.php   Bootstrap: headers, constants, requirement
                                   checks, lifecycle hooks including uninstall
 src/Core/                         Orchestrator, activation, installation
 src/Db/                           Schema, repositories, typed records

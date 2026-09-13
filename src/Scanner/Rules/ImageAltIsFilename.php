@@ -143,7 +143,7 @@ final class ImageAltIsFilename implements Rule {
 	 * @return string
 	 */
 	public function title(): string {
-		return __( 'Alt text is a file name or a placeholder', 'wowstudio-accessibility-kit' );
+		return __( 'Alt text is a file name or a placeholder', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -154,7 +154,7 @@ final class ImageAltIsFilename implements Rule {
 	 * @return string
 	 */
 	public function description(): string {
-		return __( 'The alt attribute is filled in, but with the file name or a placeholder word rather than a description. This is worse than leaving it empty in one specific way: it looks answered, so nothing else will flag it. Replace it with what the image tells the reader, or with alt="" if the image is decorative.', 'wowstudio-accessibility-kit' );
+		return __( 'The alt attribute is filled in, but with the file name or a placeholder word rather than a description. This is worse than leaving it empty in one specific way: it looks answered, so nothing else will flag it. Replace it with what the image tells the reader, or with alt="" if the image is decorative.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -165,7 +165,7 @@ final class ImageAltIsFilename implements Rule {
 	 * @return string
 	 */
 	public function consequence(): string {
-		return __( 'A screen reader reads the file name aloud, letter by letter, in place of what the picture shows.', 'wowstudio-accessibility-kit' );
+		return __( 'A screen reader reads the file name aloud, letter by letter, in place of what the picture shows.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -180,7 +180,7 @@ final class ImageAltIsFilename implements Rule {
 		return new FixPlan(
 			FixKind::Manual,
 			FixTarget::Media,
-			__( 'What the image conveys depends on why it is on the page, so the wording is yours. The Images screen is the quickest route: it lists undescribed images with a field beside each, and what you write goes to the media library.', 'wowstudio-accessibility-kit' )
+			__( 'What the image conveys depends on why it is on the page, so the wording is yours. The Images screen is the quickest route: it lists undescribed images with a field beside each, and what you write goes to the media library.', 'wowstudio-accessibility-remediation' )
 		);
 	}
 
@@ -244,7 +244,7 @@ final class ImageAltIsFilename implements Rule {
 		if ( 1 === preg_match( '/\.(' . $extensions . ')$/i', $alt ) ) {
 			return sprintf(
 				/* translators: %s: the alt text found on the image. */
-				__( 'The alt text is a file name: "%s".', 'wowstudio-accessibility-kit' ),
+				__( 'The alt text is a file name: "%s".', 'wowstudio-accessibility-remediation' ),
 				$alt
 			);
 		}
@@ -252,7 +252,7 @@ final class ImageAltIsFilename implements Rule {
 		if ( in_array( strtolower( $alt ), self::PLACEHOLDERS, true ) ) {
 			return sprintf(
 				/* translators: %s: the alt text found on the image. */
-				__( 'The alt text is "%s", which describes nothing about this particular image.', 'wowstudio-accessibility-kit' ),
+				__( 'The alt text is "%s", which describes nothing about this particular image.', 'wowstudio-accessibility-remediation' ),
 				$alt
 			);
 		}
@@ -270,7 +270,7 @@ final class ImageAltIsFilename implements Rule {
 			if ( '' !== $stem && $this->folded( $alt ) === $this->folded( $stem ) ) {
 				return sprintf(
 					/* translators: %s: the alt text found on the image. */
-					__( 'The alt text repeats the image file name: "%s".', 'wowstudio-accessibility-kit' ),
+					__( 'The alt text repeats the image file name: "%s".', 'wowstudio-accessibility-remediation' ),
 					$alt
 				);
 			}

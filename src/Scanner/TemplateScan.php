@@ -182,7 +182,7 @@ final class TemplateScan {
 		if ( array() === $representatives ) {
 			return new WP_Error(
 				'wsak_no_representatives',
-				__( 'There is no published content to check the theme against. Publish a page or a post, then try again.', 'wowstudio-accessibility-kit' ),
+				__( 'There is no published content to check the theme against. Publish a page or a post, then try again.', 'wowstudio-accessibility-remediation' ),
 				array( 'status' => 422 )
 			);
 		}
@@ -192,7 +192,7 @@ final class TemplateScan {
 		if ( 0 === $scan_id ) {
 			return new WP_Error(
 				'wsak_scan_not_started',
-				__( 'The theme check could not be recorded. Check that the plugin tables exist.', 'wowstudio-accessibility-kit' ),
+				__( 'The theme check could not be recorded. Check that the plugin tables exist.', 'wowstudio-accessibility-remediation' ),
 				array( 'status' => 500 )
 			);
 		}
@@ -248,11 +248,11 @@ final class TemplateScan {
 		}
 
 		if ( 0 === $examined ) {
-			$this->scans->fail( $scan_id, __( 'The theme could not be checked, because this site cannot fetch its own pages.', 'wowstudio-accessibility-kit' ) );
+			$this->scans->fail( $scan_id, __( 'The theme could not be checked, because this site cannot fetch its own pages.', 'wowstudio-accessibility-remediation' ) );
 
 			return new WP_Error(
 				'wsak_no_loopback',
-				__( 'Your theme could not be checked, because this site cannot make requests to itself. Everything else still works: pages are checked on their own content, and opening one in the inspector checks it in full.', 'wowstudio-accessibility-kit' ),
+				__( 'Your theme could not be checked, because this site cannot make requests to itself. Everything else still works: pages are checked on their own content, and opening one in the inspector checks it in full.', 'wowstudio-accessibility-remediation' ),
 				array( 'status' => 503 )
 			);
 		}

@@ -39,7 +39,7 @@ function RuleBrief( { rule } ) {
 			>
 				{ sprintf(
 					/* translators: %s: the check's name. */
-					__( 'About %s', 'wowstudio-accessibility-kit' ),
+					__( 'About %s', 'wowstudio-accessibility-remediation' ),
 					rule.title
 				) }
 			</h3>
@@ -69,7 +69,7 @@ function RuleBrief( { rule } ) {
 							/* translators: %s: a WCAG success criterion number, e.g. 1.1.1. */
 							__(
 								'WCAG success criterion %s',
-								'wowstudio-accessibility-kit'
+								'wowstudio-accessibility-remediation'
 							),
 							rule.wcag_sc
 						) }
@@ -92,12 +92,18 @@ function PageBrief( { page } ) {
 		<p className="wsak-drilldown__page">
 			{ page.edit_link && (
 				<Button variant="secondary" href={ page.edit_link }>
-					{ __( 'Edit this page', 'wowstudio-accessibility-kit' ) }
+					{ __(
+						'Edit this page',
+						'wowstudio-accessibility-remediation'
+					) }
 				</Button>
 			) }
 			{ page.view_link && (
 				<Button variant="link" href={ page.view_link }>
-					{ __( 'View this page', 'wowstudio-accessibility-kit' ) }
+					{ __(
+						'View this page',
+						'wowstudio-accessibility-remediation'
+					) }
 				</Button>
 			) }
 		</p>
@@ -169,7 +175,10 @@ export default function IssueDrilldown( { filter, onBack, onGo } ) {
 	const back = (
 		<p className="wsak-drilldown__back">
 			<Button variant="link" onClick={ onBack }>
-				{ __( '← Back to the report', 'wowstudio-accessibility-kit' ) }
+				{ __(
+					'← Back to the report',
+					'wowstudio-accessibility-remediation'
+				) }
 			</Button>
 		</p>
 	);
@@ -181,7 +190,7 @@ export default function IssueDrilldown( { filter, onBack, onGo } ) {
 				<Skeleton
 					label={ __(
 						'Loading these findings…',
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					) }
 				/>
 			</div>
@@ -210,7 +219,7 @@ export default function IssueDrilldown( { filter, onBack, onGo } ) {
 			role="group"
 			aria-label={ __(
 				'How to list these',
-				'wowstudio-accessibility-kit'
+				'wowstudio-accessibility-remediation'
 			) }
 		>
 			<Button
@@ -218,14 +227,17 @@ export default function IssueDrilldown( { filter, onBack, onGo } ) {
 				aria-pressed={ ! grouped }
 				onClick={ () => setGrouped( false ) }
 			>
-				{ __( 'Every instance', 'wowstudio-accessibility-kit' ) }
+				{ __(
+					'Every instance',
+					'wowstudio-accessibility-remediation'
+				) }
 			</Button>
 			<Button
 				variant={ grouped ? 'primary' : 'tertiary' }
 				aria-pressed={ grouped }
 				onClick={ () => setGrouped( true ) }
 			>
-				{ __( 'By markup', 'wowstudio-accessibility-kit' ) }
+				{ __( 'By markup', 'wowstudio-accessibility-remediation' ) }
 			</Button>
 		</div>
 	);
@@ -248,7 +260,7 @@ export default function IssueDrilldown( { filter, onBack, onGo } ) {
 							/* translators: 1: distinct pieces of markup, already pluralised. 2: the findings they account for, already pluralised. */
 							__(
 								'%1$s, accounting for %2$s',
-								'wowstudio-accessibility-kit'
+								'wowstudio-accessibility-remediation'
 							),
 							sprintf(
 								/* translators: %d: how many distinct pieces of markup. */
@@ -256,7 +268,7 @@ export default function IssueDrilldown( { filter, onBack, onGo } ) {
 									'%d distinct piece of markup',
 									'%d distinct pieces of markup',
 									total,
-									'wowstudio-accessibility-kit'
+									'wowstudio-accessibility-remediation'
 								),
 								total
 							),
@@ -266,7 +278,7 @@ export default function IssueDrilldown( { filter, onBack, onGo } ) {
 									'%d open finding',
 									'%d open findings',
 									data?.instances ?? 0,
-									'wowstudio-accessibility-kit'
+									'wowstudio-accessibility-remediation'
 								),
 								data?.instances ?? 0
 							)
@@ -277,7 +289,7 @@ export default function IssueDrilldown( { filter, onBack, onGo } ) {
 								'%d open finding',
 								'%d open findings',
 								total,
-								'wowstudio-accessibility-kit'
+								'wowstudio-accessibility-remediation'
 							),
 							total
 					  ) }
@@ -299,7 +311,7 @@ export default function IssueDrilldown( { filter, onBack, onGo } ) {
 						/* translators: 1: how many are shown. 2: how many there are. */
 						__(
 							'Showing the first %1$d of %2$d. Work through these and the rest will follow.',
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 						),
 						issues.length,
 						total
@@ -315,7 +327,7 @@ export default function IssueDrilldown( { filter, onBack, onGo } ) {
 							'%d finding was recorded before this version and cannot be grouped until its page is scanned again. It is being brought up to date in the background.',
 							'%d findings were recorded before this version and cannot be grouped until their pages are scanned again. They are being brought up to date in the background.',
 							data.ungrouped,
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 						),
 						data.ungrouped
 					) }
@@ -344,11 +356,11 @@ export default function IssueDrilldown( { filter, onBack, onGo } ) {
 				<EmptyState
 					title={ __(
 						'Nothing open here',
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					) }
 					body={ __(
 						'Everything this filter covers has been fixed or marked a false positive. If that is a surprise, the pages behind it may not have been scanned since they changed.',
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					) }
 				/>
 			) : null }

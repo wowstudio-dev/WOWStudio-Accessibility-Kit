@@ -115,10 +115,10 @@ enum ActionBand: string {
 	 */
 	public function label(): string {
 		return match ( $this ) {
-			self::Now      => __( 'Fix these now', 'wowstudio-accessibility-kit' ),
-			self::Review   => __( 'Read, then apply', 'wowstudio-accessibility-kit' ),
-			self::Decide   => __( 'Needs a decision from you', 'wowstudio-accessibility-kit' ),
-			self::Delegate => __( 'For whoever looks after your theme', 'wowstudio-accessibility-kit' ),
+			self::Now      => __( 'Fix these now', 'wowstudio-accessibility-remediation' ),
+			self::Review   => __( 'Read, then apply', 'wowstudio-accessibility-remediation' ),
+			self::Decide   => __( 'Needs a decision from you', 'wowstudio-accessibility-remediation' ),
+			self::Delegate => __( 'For whoever looks after your theme', 'wowstudio-accessibility-remediation' ),
 		};
 	}
 
@@ -131,10 +131,10 @@ enum ActionBand: string {
 	 */
 	public function blurb(): string {
 		return match ( $this ) {
-			self::Now      => __( 'There is one correct answer and we already know it. Nothing here is a guess, so nothing here needs checking first.', 'wowstudio-accessibility-kit' ),
-			self::Review   => __( 'We can draft these, but a draft is not an answer. Read what it says before you apply it — it was written by a model that cannot see why the page exists.', 'wowstudio-accessibility-kit' ),
-			self::Decide   => __( 'These depend on what your content means, which is not something any tool can work out for you. Each one explains what to weigh up.', 'wowstudio-accessibility-kit' ),
-			self::Delegate => __( 'These are in your theme rather than your content, so nothing here can reach them. Each one comes with what to change and where.', 'wowstudio-accessibility-kit' ),
+			self::Now      => __( 'There is one correct answer and we already know it. Nothing here is a guess, so nothing here needs checking first.', 'wowstudio-accessibility-remediation' ),
+			self::Review   => __( 'We can draft these, but a draft is not an answer. Read what it says before you apply it — it was written by a model that cannot see why the page exists.', 'wowstudio-accessibility-remediation' ),
+			self::Decide   => __( 'These depend on what your content means, which is not something any tool can work out for you. Each one explains what to weigh up.', 'wowstudio-accessibility-remediation' ),
+			self::Delegate => __( 'These are in your theme rather than your content, so nothing here can reach them. Each one comes with what to change and where.', 'wowstudio-accessibility-remediation' ),
 		};
 	}
 }

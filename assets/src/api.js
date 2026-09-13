@@ -28,7 +28,7 @@ export function readableError( error ) {
 
 	return __(
 		'Something went wrong and we could not say what. Please try again.',
-		'wowstudio-accessibility-kit'
+		'wowstudio-accessibility-remediation'
 	);
 }
 

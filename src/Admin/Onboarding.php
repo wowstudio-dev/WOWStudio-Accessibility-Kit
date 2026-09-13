@@ -7,9 +7,6 @@
 
 namespace WOWStudio\AccessibilityKit\Admin;
 
-use WOWStudio\AccessibilityKit\Core\Registrable;
-use WOWStudio\AccessibilityKit\Support\Capabilities;
-
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -37,9 +34,20 @@ defined( 'ABSPATH' ) || exit;
  * works exactly the same either way, and the flow is still there afterwards for
  * anybody who wants to come back to it.
  *
+ * It is reached by opening the plugin, and by nothing else. There was a redirect
+ * on activation once — one-shot, capability-checked, skipped on bulk activation
+ * — and it went in the 1.0.1 review round. Guideline 11 asks plugins not to
+ * hijack the admin, and taking over the screen somebody was already on is the
+ * plainest reading of that whatever the safeguards around it. So the dashboard
+ * simply opens on the setup while the setup has not been done, which is the
+ * same first-run experience without reaching outside our own screens for it.
+ *
+ * This class therefore registers no hooks at all. Every method is static and
+ * called from the places that need the answer.
+ *
  * @since 0.29.0
  */
-final class Onboarding implements Registrable {
+final class Onboarding {
 
 	/**
 	 * The query argument that opens the setup.
@@ -67,41 +75,6 @@ final class Onboarding implements Registrable {
 	 * @var string
 	 */
 	public const OPTION = 'wsak_onboarding';
-
-	/**
-	 * Transient set at activation and read on the next admin request.
-	 *
-	 * A transient rather than an option because the thing it records is true
-	 * for one request. If the redirect never happens — a bulk activation, a
-	 * WP-CLI activation, somebody who cannot manage settings — it expires
-	 * rather than waiting to ambush a later page load.
-	 *
-	 * @since 0.29.0
-	 * @var string
-	 */
-	public const REDIRECT_TRANSIENT = 'wsak_welcome_redirect';
-
-	/**
-	 * Notes that the plugin has just been activated on this site.
-	 *
-	 * Called from the activation hook rather than hooked to `wsak_activated`,
-	 * and that is not a style choice. WordPress includes the plugin file inside
-	 * the activation request, by which point `plugins_loaded` has already
-	 * fired — so `Plugin::boot()` never runs and no service of ours has
-	 * registered a listener for anything. A hook here would be a hook nobody is
-	 * on the other end of.
-	 *
-	 * @since 0.29.0
-	 *
-	 * @return void
-	 */
-	public static function note_activation(): void {
-		if ( self::is_done() ) {
-			return;
-		}
-
-		set_transient( self::REDIRECT_TRANSIENT, 1, 5 * MINUTE_IN_SECONDS );
-	}
 
 	/**
 	 * Reports whether somebody has been through the setup on this site.
@@ -133,74 +106,6 @@ final class Onboarding implements Registrable {
 			),
 			false
 		);
-	}
-
-	/**
-	 * {@inheritDoc}
-	 *
-	 * @since 0.29.0
-	 *
-	 * @return void
-	 */
-	public function register(): void {
-		add_action( 'admin_init', array( $this, 'maybe_redirect' ) );
-	}
-
-	/**
-	 * Opens the setup once, on the first admin request after activation.
-	 *
-	 * @since 0.29.0
-	 *
-	 * @return void
-	 */
-	public function maybe_redirect(): void {
-		if ( ! $this->should_open_setup() ) {
-			return;
-		}
-
-		wp_safe_redirect( self::url() );
-
-		exit;
-	}
-
-	/**
-	 * Decides whether this request is the one to open the setup on.
-	 *
-	 * Separate from the redirect itself so that all of it can be tested: the
-	 * two lines above end in `exit`, which in a test run ends the test run.
-	 *
-	 * Every `false` below is a case where taking over somebody's screen would
-	 * be wrong rather than merely unnecessary, and the flag is spent before any
-	 * of them are reached. A flag that outlives the request it was meant for is
-	 * a flag that ambushes a later one.
-	 *
-	 * @since 0.29.0
-	 *
-	 * @return bool
-	 */
-	public function should_open_setup(): bool {
-		if ( ! get_transient( self::REDIRECT_TRANSIENT ) ) {
-			return false;
-		}
-
-		delete_transient( self::REDIRECT_TRANSIENT );
-
-		if ( wp_doing_ajax() || wp_doing_cron() || is_network_admin() ) {
-			return false;
-		}
-
-		/*
-		 * Activating several plugins at once. WordPress is mid-loop and every
-		 * plugin after this one still has to be activated; redirecting would
-		 * abandon them half done. Nobody activating six plugins at once wants a
-		 * tour of the second one either.
-		 */
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Reading a flag WordPress itself put in the URL; nothing is written.
-		if ( isset( $_GET['activate-multi'] ) ) {
-			return false;
-		}
-
-		return current_user_can( Capabilities::MANAGE_SETTINGS );
 	}
 
 	/**

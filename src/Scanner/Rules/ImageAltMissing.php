@@ -87,7 +87,7 @@ final class ImageAltMissing implements Rule {
 	 * @return string
 	 */
 	public function title(): string {
-		return __( 'Image has no alt attribute', 'wowstudio-accessibility-kit' );
+		return __( 'Image has no alt attribute', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -98,7 +98,7 @@ final class ImageAltMissing implements Rule {
 	 * @return string
 	 */
 	public function description(): string {
-		return __( 'Someone using a screen reader gets nothing useful from this image, and often hears the file name read out instead. Add alt text describing what the image conveys, or alt="" if it is purely decorative and should be skipped.', 'wowstudio-accessibility-kit' );
+		return __( 'Someone using a screen reader gets nothing useful from this image, and often hears the file name read out instead. Add alt text describing what the image conveys, or alt="" if it is purely decorative and should be skipped.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -109,7 +109,7 @@ final class ImageAltMissing implements Rule {
 	 * @return string
 	 */
 	public function consequence(): string {
-		return __( 'Anyone using a screen reader hears the file name read out instead of what the picture shows.', 'wowstudio-accessibility-kit' );
+		return __( 'Anyone using a screen reader hears the file name read out instead of what the picture shows.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -124,7 +124,7 @@ final class ImageAltMissing implements Rule {
 		return new FixPlan(
 			FixKind::Manual,
 			FixTarget::Media,
-			__( 'A description of a photograph is not something a rule can compute — it depends on why the image is on the page, which only you know. The Alt text screen lists every undescribed image so you can write them in one pass. What you write goes to the media library, so it applies wherever that image is used and survives this plugin being removed.', 'wowstudio-accessibility-kit' )
+			__( 'A description of a photograph is not something a rule can compute — it depends on why the image is on the page, which only you know. The Alt text screen lists every undescribed image so you can write them in one pass. What you write goes to the media library, so it applies wherever that image is used and survives this plugin being removed.', 'wowstudio-accessibility-remediation' )
 		);
 	}
 
@@ -152,10 +152,10 @@ final class ImageAltMissing implements Rule {
 				$this->severity(),
 				$this->detection(),
 				'' === $source
-					? __( 'This image has no alt attribute.', 'wowstudio-accessibility-kit' )
+					? __( 'This image has no alt attribute.', 'wowstudio-accessibility-remediation' )
 					: sprintf(
 						/* translators: %s: image file name. */
-						__( 'The image "%s" has no alt attribute.', 'wowstudio-accessibility-kit' ),
+						__( 'The image "%s" has no alt attribute.', 'wowstudio-accessibility-remediation' ),
 						wp_basename( $source )
 					),
 				$document->selector_for( $image ),

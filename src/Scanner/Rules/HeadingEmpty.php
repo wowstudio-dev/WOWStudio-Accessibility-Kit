@@ -95,7 +95,7 @@ final class HeadingEmpty implements Rule {
 	 * @return string
 	 */
 	public function title(): string {
-		return __( 'Heading is empty', 'wowstudio-accessibility-kit' );
+		return __( 'Heading is empty', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -106,7 +106,7 @@ final class HeadingEmpty implements Rule {
 	 * @return string
 	 */
 	public function description(): string {
-		return __( 'This heading contains no text, so a screen reader announces a heading and then nothing. People who navigate by jumping between headings get a stop on that route that tells them nothing about where they are. Either give the heading text, or remove it — an empty heading is usually left over from editing.', 'wowstudio-accessibility-kit' );
+		return __( 'This heading contains no text, so a screen reader announces a heading and then nothing. People who navigate by jumping between headings get a stop on that route that tells them nothing about where they are. Either give the heading text, or remove it — an empty heading is usually left over from editing.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -117,7 +117,7 @@ final class HeadingEmpty implements Rule {
 	 * @return string
 	 */
 	public function consequence(): string {
-		return __( 'Anyone navigating by headings lands on one that announces nothing.', 'wowstudio-accessibility-kit' );
+		return __( 'Anyone navigating by headings lands on one that announces nothing.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -132,7 +132,7 @@ final class HeadingEmpty implements Rule {
 		return new FixPlan(
 			FixKind::Manual,
 			FixTarget::Content,
-			__( 'Whether this heading wants text or wants deleting depends on why it is there, which is a question about the page. Both are edits in the editor.', 'wowstudio-accessibility-kit' )
+			__( 'Whether this heading wants text or wants deleting depends on why it is there, which is a question about the page. Both are edits in the editor.', 'wowstudio-accessibility-remediation' )
 		);
 	}
 
@@ -166,7 +166,7 @@ final class HeadingEmpty implements Rule {
 				$this->detection(),
 				sprintf(
 					/* translators: %s: the heading element name, for example h2. */
-					__( 'This %s contains no text.', 'wowstudio-accessibility-kit' ),
+					__( 'This %s contains no text.', 'wowstudio-accessibility-remediation' ),
 					strtolower( $heading->nodeName )
 				),
 				$document->selector_for( $heading ),

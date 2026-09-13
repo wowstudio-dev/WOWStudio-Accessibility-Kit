@@ -1,4 +1,4 @@
-# CLAUDE.md — WOWStudio Accessibility Kit
+# CLAUDE.md — WOWStudio Accessibility Remediation
 
 Operating brief for Claude Code. **Read `SPEC.md` for the detail** — but read the
 "Superseded" block at the top of it first, because the tiering and AI sections of
@@ -80,7 +80,7 @@ See `SPEC.md` → "Explicitly NOT included (anti-features)" for the full stop-li
 
 ## Naming & conventions
 - Namespace `WOWStudio\AccessibilityKit` · function/hook prefix `wsak_` · DB
-  tables `wp_wsak_*` · text domain `wowstudio-accessibility-kit` · license
+  tables `wp_wsak_*` · text domain `wowstudio-accessibility-remediation` · license
   GPLv2+.
 - Repo layout, data model, and REST routes are defined in `SPEC.md`.
 

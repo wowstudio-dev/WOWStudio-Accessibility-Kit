@@ -54,8 +54,8 @@ enum FetchStrategy: string {
 	 */
 	public function label(): string {
 		return match ( $this ) {
-			self::Loopback => __( 'Whole page', 'wowstudio-accessibility-kit' ),
-			self::Content  => __( 'Content only', 'wowstudio-accessibility-kit' ),
+			self::Loopback => __( 'Whole page', 'wowstudio-accessibility-remediation' ),
+			self::Content  => __( 'Content only', 'wowstudio-accessibility-remediation' ),
 		};
 	}
 }

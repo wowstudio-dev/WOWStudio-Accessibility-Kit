@@ -100,7 +100,7 @@ final class FormLabelOrphaned implements Rule {
 	 * @return string
 	 */
 	public function title(): string {
-		return __( 'Form label is attached to the wrong thing', 'wowstudio-accessibility-kit' );
+		return __( 'Form label is attached to the wrong thing', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -111,7 +111,7 @@ final class FormLabelOrphaned implements Rule {
 	 * @return string
 	 */
 	public function description(): string {
-		return __( 'A label here either points at a field that does not exist, or a single field has been given two labels. Both look correct on screen and neither is: an unattached label leaves the field announced as blank and stops clicking the label from focusing it, and two labels produce a name that differs between browsers and screen readers. Point the label\'s for attribute at the field\'s id, and use exactly one.', 'wowstudio-accessibility-kit' );
+		return __( 'A label here either points at a field that does not exist, or a single field has been given two labels. Both look correct on screen and neither is: an unattached label leaves the field announced as blank and stops clicking the label from focusing it, and two labels produce a name that differs between browsers and screen readers. Point the label\'s for attribute at the field\'s id, and use exactly one.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -122,7 +122,7 @@ final class FormLabelOrphaned implements Rule {
 	 * @return string
 	 */
 	public function consequence(): string {
-		return __( 'The field is announced without its name, or with a different name depending on the software used.', 'wowstudio-accessibility-kit' );
+		return __( 'The field is announced without its name, or with a different name depending on the software used.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -137,7 +137,7 @@ final class FormLabelOrphaned implements Rule {
 		return new FixPlan(
 			FixKind::Manual,
 			FixTarget::Content,
-			__( 'Which field a label belongs to, and which of two labels is the right one, are questions about the form rather than the markup. Forms are usually built by a plugin, so the fix is normally in that plugin\'s form editor.', 'wowstudio-accessibility-kit' )
+			__( 'Which field a label belongs to, and which of two labels is the right one, are questions about the form rather than the markup. Forms are usually built by a plugin, so the fix is normally in that plugin\'s form editor.', 'wowstudio-accessibility-remediation' )
 		);
 	}
 
@@ -180,12 +180,12 @@ final class FormLabelOrphaned implements Rule {
 					'' === $text
 						? sprintf(
 							/* translators: %s: the id the label points at. */
-							__( 'A label points at the id "%s", and no field on this page has it.', 'wowstudio-accessibility-kit' ),
+							__( 'A label points at the id "%s", and no field on this page has it.', 'wowstudio-accessibility-remediation' ),
 							$for
 						)
 						: sprintf(
 							/* translators: 1: the label text. 2: the id the label points at. */
-							__( 'The label "%1$s" points at the id "%2$s", and no field on this page has it.', 'wowstudio-accessibility-kit' ),
+							__( 'The label "%1$s" points at the id "%2$s", and no field on this page has it.', 'wowstudio-accessibility-remediation' ),
 							$text,
 							$for
 						),
@@ -207,7 +207,7 @@ final class FormLabelOrphaned implements Rule {
 					$this->detection(),
 					sprintf(
 						/* translators: %s: the id shared by both labels. */
-						__( 'The field "%s" has more than one label, so which name a reader hears depends on their browser.', 'wowstudio-accessibility-kit' ),
+						__( 'The field "%s" has more than one label, so which name a reader hears depends on their browser.', 'wowstudio-accessibility-remediation' ),
 						$for
 					),
 					$document->selector_for( $label ),

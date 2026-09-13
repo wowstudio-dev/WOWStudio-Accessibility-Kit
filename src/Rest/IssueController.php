@@ -77,12 +77,12 @@ final class IssueController implements Registrable {
 						'rule'      => array(
 							'type'              => 'string',
 							'sanitize_callback' => 'sanitize_key',
-							'description'       => __( 'Limit to one check.', 'wowstudio-accessibility-kit' ),
+							'description'       => __( 'Limit to one check.', 'wowstudio-accessibility-remediation' ),
 						),
 						'post'      => array(
 							'type'              => 'integer',
 							'sanitize_callback' => 'absint',
-							'description'       => __( 'Limit to one page.', 'wowstudio-accessibility-kit' ),
+							'description'       => __( 'Limit to one page.', 'wowstudio-accessibility-remediation' ),
 						),
 						'severity'  => array(
 							'type'              => 'string',
@@ -123,7 +123,7 @@ final class IssueController implements Registrable {
 						'rule'   => array(
 							'type'              => 'string',
 							'sanitize_callback' => 'sanitize_key',
-							'description'       => __( 'Limit to one check.', 'wowstudio-accessibility-kit' ),
+							'description'       => __( 'Limit to one check.', 'wowstudio-accessibility-remediation' ),
 						),
 						'limit'  => array(
 							'type'              => 'integer',
@@ -286,7 +286,7 @@ final class IssueController implements Registrable {
 
 			$named[] = array(
 				'id'        => $post_id,
-				'title'     => '' !== $title ? $title : __( '(no title)', 'wowstudio-accessibility-kit' ),
+				'title'     => '' !== $title ? $title : __( '(no title)', 'wowstudio-accessibility-remediation' ),
 				'edit_link' => (string) get_edit_post_link( $post_id, 'raw' ),
 			);
 		}
@@ -355,7 +355,7 @@ final class IssueController implements Registrable {
 
 		return array(
 			'id'        => $post_id,
-			'title'     => '' !== $title ? $title : __( '(no title)', 'wowstudio-accessibility-kit' ),
+			'title'     => '' !== $title ? $title : __( '(no title)', 'wowstudio-accessibility-remediation' ),
 			'edit_link' => (string) get_edit_post_link( $post_id, 'raw' ),
 			'view_link' => (string) get_permalink( $post_id ),
 		);

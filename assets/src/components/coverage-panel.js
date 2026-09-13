@@ -69,14 +69,14 @@ export default function CoveragePanel() {
 			<h2 className="wsak-coverage__title" id="wsak-coverage-title">
 				{ __(
 					'What these checks cover',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 			</h2>
 
 			<p className="wsak-coverage__lede">
 				{ __(
 					'Automated testing finds a portion of accessibility problems, not all of them. Whether your alt text is accurate, whether the focus order makes sense, whether a page reads sensibly aloud — none of that can be settled by a machine. A clean scan means the automated checks passed, and nothing more.',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 			</p>
 
@@ -89,11 +89,11 @@ export default function CoveragePanel() {
 				{ open
 					? __(
 							'Hide the full list of checks',
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 					  )
 					: __(
 							'See the full list of checks',
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 					  ) }
 			</Button>
 
@@ -102,7 +102,7 @@ export default function CoveragePanel() {
 					<Skeleton
 						label={ __(
 							'Loading the list of checks…',
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 						) }
 					/>
 				) }
@@ -121,7 +121,7 @@ export default function CoveragePanel() {
 						<CoverageGroup
 							title={ __(
 								'Settled automatically',
-								'wowstudio-accessibility-kit'
+								'wowstudio-accessibility-remediation'
 							) }
 							detection="auto"
 							rules={ auto }
@@ -129,7 +129,7 @@ export default function CoveragePanel() {
 						<CoverageGroup
 							title={ __(
 								'Flagged for a person',
-								'wowstudio-accessibility-kit'
+								'wowstudio-accessibility-remediation'
 							) }
 							detection="manual"
 							rules={ manual }
@@ -137,13 +137,13 @@ export default function CoveragePanel() {
 						<CoverageGroup
 							title={ __(
 								'Only when your page is open in a browser',
-								'wowstudio-accessibility-kit'
+								'wowstudio-accessibility-remediation'
 							) }
 							detection="auto"
 							rules={ browser }
 							note={ __(
 								'Colour, text size and layout can only be measured on a page that has actually been drawn. These checks run when you scan from this dashboard. A scheduled scan, or a scan of a page that will not open in a frame, does not include them — and says so on the result.',
-								'wowstudio-accessibility-kit'
+								'wowstudio-accessibility-remediation'
 							) }
 						/>
 					</div>
@@ -171,7 +171,7 @@ function CoverageGroup( { title, detection, rules, note } ) {
 				<span className="wsak-coverage__count">
 					{ sprintf(
 						/* translators: %d: number of items in this group. */
-						__( '(%d)', 'wowstudio-accessibility-kit' ),
+						__( '(%d)', 'wowstudio-accessibility-remediation' ),
 						rules.length
 					) }
 				</span>
@@ -187,7 +187,7 @@ function CoverageGroup( { title, detection, rules, note } ) {
 									/* translators: %s: WCAG success criterion number. */
 									__(
 										'WCAG %s',
-										'wowstudio-accessibility-kit'
+										'wowstudio-accessibility-remediation'
 									),
 									rule.wcag_sc
 								) }

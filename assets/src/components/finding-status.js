@@ -35,10 +35,13 @@ export function statusOf( issue ) {
 	if ( 'img-alt-missing' === issue.rule_id && issue.attachment_id ) {
 		return {
 			key: 'fixable',
-			label: __( 'We can fix this', 'wowstudio-accessibility-kit' ),
+			label: __(
+				'We can fix this',
+				'wowstudio-accessibility-remediation'
+			),
 			help: __(
 				'Write the description once and it is saved to the image itself, so every page using it is fixed.',
-				'wowstudio-accessibility-kit'
+				'wowstudio-accessibility-remediation'
 			),
 		};
 	}
@@ -46,10 +49,13 @@ export function statusOf( issue ) {
 	if ( CSS_FIXABLE.includes( issue.rule_id ) ) {
 		return {
 			key: 'fixable',
-			label: __( 'We can fix this', 'wowstudio-accessibility-kit' ),
+			label: __(
+				'We can fix this',
+				'wowstudio-accessibility-remediation'
+			),
 			help: __(
 				'This is answered by a style rule. Open the page view to see the change proposed, and apply it if you agree.',
-				'wowstudio-accessibility-kit'
+				'wowstudio-accessibility-remediation'
 			),
 		};
 	}
@@ -59,11 +65,11 @@ export function statusOf( issue ) {
 			key: 'check',
 			label: __(
 				'Someone needs to check this',
-				'wowstudio-accessibility-kit'
+				'wowstudio-accessibility-remediation'
 			),
 			help: __(
 				'Automation could not settle this one either way. It may well be fine — look at it, then either fix it or mark it a false positive.',
-				'wowstudio-accessibility-kit'
+				'wowstudio-accessibility-remediation'
 			),
 		};
 	}
@@ -71,22 +77,25 @@ export function statusOf( issue ) {
 	if ( 'theme' === target ) {
 		return {
 			key: 'theme',
-			label: __( 'Your theme needs this', 'wowstudio-accessibility-kit' ),
+			label: __(
+				'Your theme needs this',
+				'wowstudio-accessibility-remediation'
+			),
 			help: __(
 				'This is in your theme rather than your content, so nothing here can reach it. It needs whoever looks after your theme.',
-				'wowstudio-accessibility-kit'
+				'wowstudio-accessibility-remediation'
 			),
 		};
 	}
 
 	return {
 		key: 'yours',
-		label: __( 'You fix this', 'wowstudio-accessibility-kit' ),
+		label: __( 'You fix this', 'wowstudio-accessibility-remediation' ),
 		help:
 			fix.summary ||
 			__(
 				'This one is in your content, so it is edited on the page itself.',
-				'wowstudio-accessibility-kit'
+				'wowstudio-accessibility-remediation'
 			),
 	};
 }

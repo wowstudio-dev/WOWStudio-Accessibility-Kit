@@ -49,7 +49,7 @@ final class StripPositiveTabindex implements RunsInBrowser {
 	 * @return string
 	 */
 	public function title(): string {
-		return __( 'Put the tab order back in reading order', 'wowstudio-accessibility-kit' );
+		return __( 'Put the tab order back in reading order', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -60,7 +60,7 @@ final class StripPositiveTabindex implements RunsInBrowser {
 	 * @return string
 	 */
 	public function description(): string {
-		return __( 'Finds elements given a tabindex above zero and sets it to zero, so tabbing follows the order things appear on the page. A positive tabindex pulls an element ahead of everything else, which makes the first Tab press jump somewhere unexpected.', 'wowstudio-accessibility-kit' );
+		return __( 'Finds elements given a tabindex above zero and sets it to zero, so tabbing follows the order things appear on the page. A positive tabindex pulls an element ahead of everything else, which makes the first Tab press jump somewhere unexpected.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -82,7 +82,7 @@ final class StripPositiveTabindex implements RunsInBrowser {
 	 * @return string
 	 */
 	public function caveat(): string {
-		return __( 'Runs in the browser after the page loads, so it cannot help a reader with JavaScript off, and it is a repair rather than a substitute for correcting the markup. If something on your site deliberately relies on a custom tab order, this will undo it.', 'wowstudio-accessibility-kit' );
+		return __( 'Runs in the browser after the page loads, so it cannot help a reader with JavaScript off, and it is a repair rather than a substitute for correcting the markup. If something on your site deliberately relies on a custom tab order, this will undo it.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**

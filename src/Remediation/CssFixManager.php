@@ -83,7 +83,7 @@ final class CssFixManager {
 		if ( null === $issue ) {
 			return new WP_Error(
 				'wsak_unknown_issue',
-				__( 'That issue could not be found.', 'wowstudio-accessibility-kit' ),
+				__( 'That issue could not be found.', 'wowstudio-accessibility-remediation' ),
 				array( 'status' => 404 )
 			);
 		}
@@ -95,7 +95,7 @@ final class CssFixManager {
 		if ( ScanPass::Browser !== $issue->found_by ) {
 			return new WP_Error(
 				'wsak_not_a_css_issue',
-				__( 'This finding came from reading your markup, not from the page, so it is fixed by correcting the markup rather than by adding a style rule.', 'wowstudio-accessibility-kit' ),
+				__( 'This finding came from reading your markup, not from the page, so it is fixed by correcting the markup rather than by adding a style rule.', 'wowstudio-accessibility-remediation' ),
 				array( 'status' => 422 )
 			);
 		}
@@ -103,7 +103,7 @@ final class CssFixManager {
 		if ( ! CssRules::fixable( $issue->rule_id ) ) {
 			return new WP_Error(
 				'wsak_no_css_fix',
-				__( 'There is no style rule that would answer this finding.', 'wowstudio-accessibility-kit' ),
+				__( 'There is no style rule that would answer this finding.', 'wowstudio-accessibility-remediation' ),
 				array( 'status' => 422 )
 			);
 		}
@@ -113,7 +113,7 @@ final class CssFixManager {
 		if ( ! CssRules::selector_is_safe( $selector ) ) {
 			return new WP_Error(
 				'wsak_unsafe_selector',
-				__( 'That selector cannot be written into a stylesheet safely. Use element, class, id and attribute selectors only.', 'wowstudio-accessibility-kit' ),
+				__( 'That selector cannot be written into a stylesheet safely. Use element, class, id and attribute selectors only.', 'wowstudio-accessibility-remediation' ),
 				array( 'status' => 400 )
 			);
 		}
@@ -129,7 +129,7 @@ final class CssFixManager {
 		if ( ! $this->css->put( $issue->id, $rule ) ) {
 			return new WP_Error(
 				'wsak_css_not_saved',
-				__( 'The rule could not be saved to your Additional CSS.', 'wowstudio-accessibility-kit' ),
+				__( 'The rule could not be saved to your Additional CSS.', 'wowstudio-accessibility-remediation' ),
 				array( 'status' => 500 )
 			);
 		}
@@ -167,7 +167,7 @@ final class CssFixManager {
 		if ( ! isset( $rules[ $issue_id ] ) ) {
 			return new WP_Error(
 				'wsak_no_such_rule',
-				__( 'There is no rule stored for that finding. It may already have been removed, or edited by hand in the Customiser.', 'wowstudio-accessibility-kit' ),
+				__( 'There is no rule stored for that finding. It may already have been removed, or edited by hand in the Customiser.', 'wowstudio-accessibility-remediation' ),
 				array( 'status' => 404 )
 			);
 		}
@@ -175,7 +175,7 @@ final class CssFixManager {
 		if ( ! $this->css->remove( $issue_id ) ) {
 			return new WP_Error(
 				'wsak_css_not_saved',
-				__( 'The rule could not be removed from your Additional CSS.', 'wowstudio-accessibility-kit' ),
+				__( 'The rule could not be removed from your Additional CSS.', 'wowstudio-accessibility-remediation' ),
 				array( 'status' => 500 )
 			);
 		}
@@ -222,7 +222,7 @@ final class CssFixManager {
 					'wsak_property_not_allowed',
 					sprintf(
 						/* translators: 1: CSS property name, 2: accessibility rule name. */
-						__( 'A fix for %2$s is not allowed to set %1$s.', 'wowstudio-accessibility-kit' ),
+						__( 'A fix for %2$s is not allowed to set %1$s.', 'wowstudio-accessibility-remediation' ),
 						$property,
 						$rule_id
 					),
@@ -237,7 +237,7 @@ final class CssFixManager {
 					'wsak_value_not_allowed',
 					sprintf(
 						/* translators: %s: CSS property name. */
-						__( 'The value given for %s is not one WordPress will store in a stylesheet.', 'wowstudio-accessibility-kit' ),
+						__( 'The value given for %s is not one WordPress will store in a stylesheet.', 'wowstudio-accessibility-remediation' ),
 						$property
 					),
 					array( 'status' => 400 )
@@ -250,7 +250,7 @@ final class CssFixManager {
 		if ( array() === $lines ) {
 			return new WP_Error(
 				'wsak_empty_fix',
-				__( 'The fix contained no declarations, so there was nothing to write.', 'wowstudio-accessibility-kit' ),
+				__( 'The fix contained no declarations, so there was nothing to write.', 'wowstudio-accessibility-remediation' ),
 				array( 'status' => 400 )
 			);
 		}

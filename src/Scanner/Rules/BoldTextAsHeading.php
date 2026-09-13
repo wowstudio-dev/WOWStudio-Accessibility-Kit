@@ -113,7 +113,7 @@ final class BoldTextAsHeading implements Rule {
 	 * @return string
 	 */
 	public function title(): string {
-		return __( 'Bold text may be standing in for a heading', 'wowstudio-accessibility-kit' );
+		return __( 'Bold text may be standing in for a heading', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -124,7 +124,7 @@ final class BoldTextAsHeading implements Rule {
 	 * @return string
 	 */
 	public function description(): string {
-		return __( 'This paragraph is entirely bold, short, and has no closing punctuation, which usually means it is a section title formatted by hand rather than marked as a heading. It looks like a heading and is not one, so it does not appear in the list of headings screen reader users navigate by, and the page has no outline where it appears to have one. If it is a heading, change the block type to a heading.', 'wowstudio-accessibility-kit' );
+		return __( 'This paragraph is entirely bold, short, and has no closing punctuation, which usually means it is a section title formatted by hand rather than marked as a heading. It looks like a heading and is not one, so it does not appear in the list of headings screen reader users navigate by, and the page has no outline where it appears to have one. If it is a heading, change the block type to a heading.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -135,7 +135,7 @@ final class BoldTextAsHeading implements Rule {
 	 * @return string
 	 */
 	public function consequence(): string {
-		return __( 'The page looks structured but has no outline, so there is nothing to navigate by.', 'wowstudio-accessibility-kit' );
+		return __( 'The page looks structured but has no outline, so there is nothing to navigate by.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -150,7 +150,7 @@ final class BoldTextAsHeading implements Rule {
 		return new FixPlan(
 			FixKind::Manual,
 			FixTarget::Content,
-			__( 'Whether this is a section title or simply an emphasised line is a judgement about what the page says. If it is a title, change the block from paragraph to heading and pick the level that fits the ones around it.', 'wowstudio-accessibility-kit' )
+			__( 'Whether this is a section title or simply an emphasised line is a judgement about what the page says. If it is a title, change the block from paragraph to heading and pick the level that fits the ones around it.', 'wowstudio-accessibility-remediation' )
 		);
 	}
 
@@ -217,7 +217,7 @@ final class BoldTextAsHeading implements Rule {
 				$this->detection(),
 				sprintf(
 					/* translators: %s: the bold text. */
-					__( '"%s" is a whole paragraph in bold, which often means a heading formatted by hand.', 'wowstudio-accessibility-kit' ),
+					__( '"%s" is a whole paragraph in bold, which often means a heading formatted by hand.', 'wowstudio-accessibility-remediation' ),
 					$text
 				),
 				$document->selector_for( $paragraph ),

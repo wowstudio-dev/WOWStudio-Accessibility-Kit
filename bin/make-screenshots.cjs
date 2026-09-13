@@ -32,23 +32,62 @@ const CHROME_OFF = `
 // The order here is the order in readme.txt's Screenshots section. They have to
 // agree: WordPress.org numbers the files and reads the captions positionally.
 const SHOTS = [
-	{ file: 'screenshot-1.png', url: '/wp-admin/admin.php?page=wowstudio-accessibility-kit', wait: '.wsak-overview__stats' },
-	{ file: 'screenshot-2.png', url: '/wp-admin/admin.php?page=wsak-scan-fix', wait: '.wsak-picker', open: 'result' },
-	{ file: 'screenshot-3.png', url: '/wp-admin/admin.php?page=wsak-scan-fix', wait: '.wsak__nav', tab: 'Your content' },
-	{ file: 'screenshot-4.png', url: '/wp-admin/admin.php?page=wsak-scan-fix', wait: '.wsak__nav', tab: 'Images' },
-	{ file: 'screenshot-5.png', url: '/wp-admin/admin.php?page=wsak-settings', wait: '.wsak-fixes__list' },
-	{ file: 'screenshot-6.png', url: '/wp-admin/admin.php?page=wsak-statement', wait: '.wsak-statement-panel' },
-	{ file: 'screenshot-7.png', url: '/wp-admin/admin.php?page=wowstudio-accessibility-kit&welcome=1', wait: '.wsak-welcome__stage' },
+	{
+		file: 'screenshot-1.png',
+		url: '/wp-admin/admin.php?page=wowstudio-accessibility-remediation',
+		wait: '.wsak-overview__stats',
+	},
+	{
+		file: 'screenshot-2.png',
+		url: '/wp-admin/admin.php?page=wsak-scan-fix',
+		wait: '.wsak-picker',
+		open: 'result',
+	},
+	{
+		file: 'screenshot-3.png',
+		url: '/wp-admin/admin.php?page=wsak-scan-fix',
+		wait: '.wsak__nav',
+		tab: 'Your content',
+	},
+	{
+		file: 'screenshot-4.png',
+		url: '/wp-admin/admin.php?page=wsak-scan-fix',
+		wait: '.wsak__nav',
+		tab: 'Images',
+	},
+	{
+		file: 'screenshot-5.png',
+		url: '/wp-admin/admin.php?page=wsak-settings',
+		wait: '.wsak-fixes__list',
+	},
+	{
+		file: 'screenshot-6.png',
+		url: '/wp-admin/admin.php?page=wsak-statement',
+		wait: '.wsak-statement-panel',
+	},
+	{
+		file: 'screenshot-7.png',
+		url: '/wp-admin/admin.php?page=wowstudio-accessibility-remediation&welcome=1',
+		wait: '.wsak-welcome__stage',
+	},
 ];
 
 ( async () => {
-	const browser = await chromium.launch( { channel: 'chrome', headless: true } );
-	const page = await browser.newPage( { viewport: { width: WIDTH, height: 1000 } } );
+	const browser = await chromium.launch( {
+		channel: 'chrome',
+		headless: true,
+	} );
+	const page = await browser.newPage( {
+		viewport: { width: WIDTH, height: 1000 },
+	} );
 
 	await page.goto( SITE + '/wp-login.php' );
 	await page.fill( '#user_login', 'admin' );
 	await page.fill( '#user_pass', 'password' );
-	await Promise.all( [ page.waitForLoadState( 'networkidle' ), page.click( '#wp-submit' ) ] );
+	await Promise.all( [
+		page.waitForLoadState( 'networkidle' ),
+		page.click( '#wp-submit' ),
+	] );
 
 	for ( const shot of SHOTS ) {
 		await page.setViewportSize( { width: WIDTH, height: 1000 } );
@@ -62,7 +101,9 @@ const SHOTS = [
 		}
 
 		if ( shot.tab ) {
-			await page.getByRole( 'button', { name: shot.tab, exact: true } ).click();
+			await page
+				.getByRole( 'button', { name: shot.tab, exact: true } )
+				.click();
 			await page.waitForTimeout( 2500 );
 		}
 
@@ -81,7 +122,9 @@ const SHOTS = [
 		const box = await page.evaluate( () => {
 			const wrap = document.querySelector( '.wsak' );
 			const foot = document.querySelector( '.wsak__footer' ) || wrap;
-			return { bottom: foot.getBoundingClientRect().bottom + window.scrollY };
+			return {
+				bottom: foot.getBoundingClientRect().bottom + window.scrollY,
+			};
 		} );
 
 		/*

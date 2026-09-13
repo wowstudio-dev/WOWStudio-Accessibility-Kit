@@ -93,7 +93,7 @@ final class TextJustified implements Rule {
 	 * @return string
 	 */
 	public function title(): string {
-		return __( 'Text is justified to both margins', 'wowstudio-accessibility-kit' );
+		return __( 'Text is justified to both margins', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -104,7 +104,7 @@ final class TextJustified implements Rule {
 	 * @return string
 	 */
 	public function description(): string {
-		return __( 'This text is set justified, which stretches the spaces between words so each line ends flush. The uneven gaps form rivers of white space running down the paragraph, and for readers with dyslexia those are disorienting enough to make finding the next line difficult. Ranged left is easier to read for everyone and costs nothing.', 'wowstudio-accessibility-kit' );
+		return __( 'This text is set justified, which stretches the spaces between words so each line ends flush. The uneven gaps form rivers of white space running down the paragraph, and for readers with dyslexia those are disorienting enough to make finding the next line difficult. Ranged left is easier to read for everyone and costs nothing.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -115,7 +115,7 @@ final class TextJustified implements Rule {
 	 * @return string
 	 */
 	public function consequence(): string {
-		return __( 'Uneven word spacing forms rivers down the paragraph, which some readers find hard to read past.', 'wowstudio-accessibility-kit' );
+		return __( 'Uneven word spacing forms rivers down the paragraph, which some readers find hard to read past.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -130,7 +130,7 @@ final class TextJustified implements Rule {
 		return new FixPlan(
 			FixKind::Manual,
 			FixTarget::Content,
-			__( 'Setting this back to ranged left is the whole fix. It is written into the content here rather than into a stylesheet, so it is an edit in the editor.', 'wowstudio-accessibility-kit' )
+			__( 'Setting this back to ranged left is the whole fix. It is written into the content here rather than into a stylesheet, so it is an edit in the editor.', 'wowstudio-accessibility-remediation' )
 		);
 	}
 
@@ -170,7 +170,7 @@ final class TextJustified implements Rule {
 				$this->wcag_sc(),
 				$this->severity(),
 				$this->detection(),
-				__( 'This text is justified to both margins, which opens uneven gaps between words.', 'wowstudio-accessibility-kit' ),
+				__( 'This text is justified to both margins, which opens uneven gaps between words.', 'wowstudio-accessibility-remediation' ),
 				$document->selector_for( $element ),
 				$document->context_for( $element )
 			);

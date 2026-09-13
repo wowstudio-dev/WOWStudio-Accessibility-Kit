@@ -31,14 +31,17 @@ function PageList( { pages, instances } ) {
 			<summary>
 				{ sprintf(
 					/* translators: 1: how many findings this group holds. 2: how many pages carry the markup. */
-					__( '%1$s across %2$s', 'wowstudio-accessibility-kit' ),
+					__(
+						'%1$s across %2$s',
+						'wowstudio-accessibility-remediation'
+					),
 					sprintf(
 						/* translators: %d: number of findings. */
 						_n(
 							'%d finding',
 							'%d findings',
 							instances,
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 						),
 						instances
 					),
@@ -48,7 +51,7 @@ function PageList( { pages, instances } ) {
 							'%d page',
 							'%d pages',
 							pages.length,
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 						),
 						pages.length
 					)
@@ -100,7 +103,7 @@ function DecideEverywhere( { group, onChange, mayDecide } ) {
 			<p className="wsak-markup__cannot">
 				{ __(
 					'Marking this a false positive everywhere needs permission to edit other people’s content. You can still do it one page at a time, from the list of every instance.',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 			</p>
 		);
@@ -115,7 +118,7 @@ function DecideEverywhere( { group, onChange, mayDecide } ) {
 			>
 				{ __(
 					'Add to false positives, everywhere',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 			</Button>
 		);
@@ -142,7 +145,7 @@ function DecideEverywhere( { group, onChange, mayDecide } ) {
 						'This closes the finding on %d page, including pages you have not opened.',
 						'This closes the finding on %d pages, including pages you have not opened.',
 						pages,
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					),
 					pages
 				) }
@@ -152,11 +155,11 @@ function DecideEverywhere( { group, onChange, mayDecide } ) {
 				__nextHasNoMarginBottom
 				label={ __(
 					'Why is this a false positive everywhere it appears?',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 				help={ __(
 					'Required at this scope, not optional. A decision about one page is your shortcut; a decision about the whole site is a claim somebody else will inherit, and the reason is what lets them check it.',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 				value={ note }
 				rows={ 3 }
@@ -185,7 +188,7 @@ function DecideEverywhere( { group, onChange, mayDecide } ) {
 				>
 					{ __(
 						'Add to false positives everywhere',
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					) }
 				</Button>
 				<Button
@@ -195,7 +198,7 @@ function DecideEverywhere( { group, onChange, mayDecide } ) {
 						setError( '' );
 					} }
 				>
-					{ __( 'Cancel', 'wowstudio-accessibility-kit' ) }
+					{ __( 'Cancel', 'wowstudio-accessibility-remediation' ) }
 				</Button>
 			</div>
 		</div>
@@ -225,7 +228,10 @@ function GroupCard( { group, onChange, mayDecide } ) {
 					role="group"
 					aria-label={ sprintf(
 						/* translators: %s: name of the accessibility check. */
-						__( 'Markup for: %s', 'wowstudio-accessibility-kit' ),
+						__(
+							'Markup for: %s',
+							'wowstudio-accessibility-remediation'
+						),
 						sample.rule_title ?? group.rule_id
 					) }
 				>
@@ -266,11 +272,11 @@ export default function MarkupGroups( { groups, mayDecide, onChange } ) {
 			<EmptyState
 				title={ __(
 					'Nothing open here',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 				body={ __(
 					'Everything this check found has been fixed or marked a false positive.',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 			/>
 		);

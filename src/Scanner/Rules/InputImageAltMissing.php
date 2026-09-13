@@ -91,7 +91,7 @@ final class InputImageAltMissing implements Rule {
 	 * @return string
 	 */
 	public function title(): string {
-		return __( 'Image button has no alt text', 'wowstudio-accessibility-kit' );
+		return __( 'Image button has no alt text', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -102,7 +102,7 @@ final class InputImageAltMissing implements Rule {
 	 * @return string
 	 */
 	public function description(): string {
-		return __( 'This is a submit button drawn as an image, and it has no alt attribute. There is nowhere else to put its name, so a screen reader announces it as an unnamed button or reads out the file name. Anybody who cannot see the picture has to press it to find out what it does. Add an alt attribute saying what the button does — "Search", not "magnifying glass".', 'wowstudio-accessibility-kit' );
+		return __( 'This is a submit button drawn as an image, and it has no alt attribute. There is nowhere else to put its name, so a screen reader announces it as an unnamed button or reads out the file name. Anybody who cannot see the picture has to press it to find out what it does. Add an alt attribute saying what the button does — "Search", not "magnifying glass".', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -113,7 +113,7 @@ final class InputImageAltMissing implements Rule {
 	 * @return string
 	 */
 	public function consequence(): string {
-		return __( 'A button that submits something is announced without a name, so its purpose can only be discovered by pressing it.', 'wowstudio-accessibility-kit' );
+		return __( 'A button that submits something is announced without a name, so its purpose can only be discovered by pressing it.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -128,7 +128,7 @@ final class InputImageAltMissing implements Rule {
 		return new FixPlan(
 			FixKind::Manual,
 			FixTarget::Content,
-			__( 'The alt should say what the button does rather than what the picture is — "Search" rather than "magnifying glass". Only you know which.', 'wowstudio-accessibility-kit' )
+			__( 'The alt should say what the button does rather than what the picture is — "Search" rather than "magnifying glass". Only you know which.', 'wowstudio-accessibility-remediation' )
 		);
 	}
 
@@ -164,7 +164,7 @@ final class InputImageAltMissing implements Rule {
 				$this->wcag_sc(),
 				$this->severity(),
 				$this->detection(),
-				__( 'This image button has no alt text, so it is announced without a name.', 'wowstudio-accessibility-kit' ),
+				__( 'This image button has no alt text, so it is announced without a name.', 'wowstudio-accessibility-remediation' ),
 				$document->selector_for( $input ),
 				$document->context_for( $input )
 			);

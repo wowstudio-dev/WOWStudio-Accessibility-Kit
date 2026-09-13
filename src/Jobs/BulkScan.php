@@ -103,7 +103,7 @@ final class BulkScan {
 		if ( ! $this->queue->is_available() ) {
 			return new WP_Error(
 				'wsak_no_scheduler',
-				__( 'The background scheduler is not running, so a bulk scan cannot be started. Scanning one page at a time still works.', 'wowstudio-accessibility-kit' ),
+				__( 'The background scheduler is not running, so a bulk scan cannot be started. Scanning one page at a time still works.', 'wowstudio-accessibility-remediation' ),
 				array( 'status' => 503 )
 			);
 		}
@@ -113,7 +113,7 @@ final class BulkScan {
 		if ( array() === $post_ids ) {
 			return new WP_Error(
 				'wsak_nothing_selected',
-				__( 'No content was selected, so there is nothing to scan.', 'wowstudio-accessibility-kit' ),
+				__( 'No content was selected, so there is nothing to scan.', 'wowstudio-accessibility-remediation' ),
 				array( 'status' => 400 )
 			);
 		}
@@ -123,7 +123,7 @@ final class BulkScan {
 				'wsak_too_many',
 				sprintf(
 					/* translators: %d: maximum number of pages in one run. */
-					__( 'A single run covers at most %d items. Select fewer, and run again when it finishes.', 'wowstudio-accessibility-kit' ),
+					__( 'A single run covers at most %d items. Select fewer, and run again when it finishes.', 'wowstudio-accessibility-remediation' ),
 					self::MAX_PAGES
 				),
 				array( 'status' => 400 )
@@ -135,7 +135,7 @@ final class BulkScan {
 		if ( 0 === $run_id ) {
 			return new WP_Error(
 				'wsak_run_not_started',
-				__( 'The run could not be recorded. Check that the plugin tables exist.', 'wowstudio-accessibility-kit' ),
+				__( 'The run could not be recorded. Check that the plugin tables exist.', 'wowstudio-accessibility-remediation' ),
 				array( 'status' => 500 )
 			);
 		}
@@ -154,16 +154,16 @@ final class BulkScan {
 			if ( $this->queue->enqueue( $run_id, $scan_id ) ) {
 				++$queued;
 			} else {
-				$this->scans->fail( $scan_id, __( 'This page could not be added to the queue.', 'wowstudio-accessibility-kit' ) );
+				$this->scans->fail( $scan_id, __( 'This page could not be added to the queue.', 'wowstudio-accessibility-remediation' ) );
 			}
 		}
 
 		if ( 0 === $queued ) {
-			$this->scans->fail( $run_id, __( 'Nothing could be added to the queue.', 'wowstudio-accessibility-kit' ) );
+			$this->scans->fail( $run_id, __( 'Nothing could be added to the queue.', 'wowstudio-accessibility-remediation' ) );
 
 			return new WP_Error(
 				'wsak_nothing_queued',
-				__( 'None of the selected content could be added to the queue.', 'wowstudio-accessibility-kit' ),
+				__( 'None of the selected content could be added to the queue.', 'wowstudio-accessibility-remediation' ),
 				array( 'status' => 500 )
 			);
 		}
@@ -282,7 +282,7 @@ final class BulkScan {
 		if ( null === $run || ScanScope::Site !== $run->scope ) {
 			return new WP_Error(
 				'wsak_unknown_run',
-				__( 'That run could not be found.', 'wowstudio-accessibility-kit' ),
+				__( 'That run could not be found.', 'wowstudio-accessibility-remediation' ),
 				array( 'status' => 404 )
 			);
 		}

@@ -56,22 +56,22 @@ function locateMessage( status ) {
 		case PAGE_LEVEL:
 			return __(
 				'This one is about the page as a whole rather than one spot on it, so there is nowhere in particular to point.',
-				'wowstudio-accessibility-kit'
+				'wowstudio-accessibility-remediation'
 			);
 		case NOT_FOUND:
 			return __(
 				'This element is not in the page any more. It may have been edited since the scan, or it may only appear for some visitors.',
-				'wowstudio-accessibility-kit'
+				'wowstudio-accessibility-remediation'
 			);
 		case MISMATCH:
 			return __(
 				'The page has changed shape since the scan, so we cannot be sure which element this refers to. Rather than point at the wrong one, we are pointing at none. Re-scan to place it again.',
-				'wowstudio-accessibility-kit'
+				'wowstudio-accessibility-remediation'
 			);
 		default:
 			return __(
 				'This element is in the page but is not being displayed, so there is nothing to point at.',
-				'wowstudio-accessibility-kit'
+				'wowstudio-accessibility-remediation'
 			);
 	}
 }
@@ -192,7 +192,7 @@ export default function Inspector( {
 		setAnnouncement(
 			__(
 				'Checking colour, size and layout on the page…',
-				'wowstudio-accessibility-kit'
+				'wowstudio-accessibility-remediation'
 			)
 		);
 
@@ -211,7 +211,7 @@ export default function Inspector( {
 						/* translators: %d: number of additional findings. */
 						__(
 							'Page checks finished. %d further findings.',
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 						),
 						data.stored ?? 0
 					)
@@ -269,7 +269,7 @@ export default function Inspector( {
 		setAnnouncement(
 			sprintf(
 				/* translators: %s: name of the accessibility check. */
-				__( 'Showing: %s', 'wowstudio-accessibility-kit' ),
+				__( 'Showing: %s', 'wowstudio-accessibility-remediation' ),
 				issue.rule_title
 			)
 		);
@@ -337,7 +337,7 @@ export default function Inspector( {
 			<Notice status="warning" isDismissible={ false }>
 				{ __(
 					'This content has no public address, so it cannot be shown here. The findings below still apply.',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 			</Notice>
 		);
@@ -355,17 +355,20 @@ export default function Inspector( {
 								/* translators: %s: content title. */
 								__(
 									'Inspecting “%s”',
-									'wowstudio-accessibility-kit'
+									'wowstudio-accessibility-remediation'
 								),
 								title
 						  )
-						: __( 'Inspecting', 'wowstudio-accessibility-kit' ) }
+						: __(
+								'Inspecting',
+								'wowstudio-accessibility-remediation'
+						  ) }
 				</h2>
 				{ onExit && (
 					<Button variant="secondary" onClick={ onExit }>
 						{ __(
 							'Back to results',
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 						) }
 					</Button>
 				) }
@@ -381,7 +384,7 @@ export default function Inspector( {
 						<p className="wsak-inspector__pass">
 							{ __(
 								'Checking colour, size and layout on the page…',
-								'wowstudio-accessibility-kit'
+								'wowstudio-accessibility-remediation'
 							) }
 						</p>
 					) }
@@ -395,7 +398,7 @@ export default function Inspector( {
 					<p className="wsak-inspector__hint">
 						{ __(
 							'Choose a finding to see it on the page. Moving through this list with the keyboard works the same way.',
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 						) }
 					</p>
 
@@ -403,7 +406,7 @@ export default function Inspector( {
 						<p className="wsak-inspector__unplaceable-note">
 							{ __(
 								'This scan read only your content, not the whole page, so findings from the markup cannot be pointed at here. Anything found on the page itself — colour, size, layout — still can be.',
-								'wowstudio-accessibility-kit'
+								'wowstudio-accessibility-remediation'
 							) }
 						</p>
 					) }
@@ -523,7 +526,7 @@ export default function Inspector( {
 												<p className="wsak-inspector__no-fix">
 													{ __(
 														'This one is about how the page is styled. Fixing it writes a rule into your site’s Additional CSS, which your account is not allowed to change — an administrator can apply it, or make the change in Appearance → Customise.',
-														'wowstudio-accessibility-kit'
+														'wowstudio-accessibility-remediation'
 													) }
 												</p>
 											) ) }
@@ -540,12 +543,12 @@ export default function Inspector( {
 							<strong>
 								{ __(
 									'Your page would not open here.',
-									'wowstudio-accessibility-kit'
+									'wowstudio-accessibility-remediation'
 								) }
 							</strong>{ ' ' }
 							{ __(
 								'Some sites refuse to be shown inside another page, which is a reasonable security setting and not a fault. Findings from the markup are still listed, but nothing that depends on seeing the page — colour, text size, layout — was checked on this scan.',
-								'wowstudio-accessibility-kit'
+								'wowstudio-accessibility-remediation'
 							) }
 						</Notice>
 					) }
@@ -556,7 +559,7 @@ export default function Inspector( {
 						src={ previewUrl }
 						title={ __(
 							'Preview of the page being inspected',
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 						) }
 						onLoad={ onFrameLoad }
 						hidden={ frameState === 'blocked' }

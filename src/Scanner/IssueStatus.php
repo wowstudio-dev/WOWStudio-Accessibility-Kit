@@ -40,9 +40,9 @@ enum IssueStatus: string {
 	 */
 	public function label(): string {
 		return match ( $this ) {
-			self::Open    => __( 'Open', 'wowstudio-accessibility-kit' ),
-			self::Fixed   => __( 'Fixed', 'wowstudio-accessibility-kit' ),
-			self::Ignored => __( 'Ignored', 'wowstudio-accessibility-kit' ),
+			self::Open    => __( 'Open', 'wowstudio-accessibility-remediation' ),
+			self::Fixed   => __( 'Fixed', 'wowstudio-accessibility-remediation' ),
+			self::Ignored => __( 'Ignored', 'wowstudio-accessibility-remediation' ),
 		};
 	}
 }

@@ -55,7 +55,7 @@ final class LabelFormFields implements RunsInBrowser {
 	 * @return string
 	 */
 	public function title(): string {
-		return __( 'Name fields that only have placeholder text', 'wowstudio-accessibility-kit' );
+		return __( 'Name fields that only have placeholder text', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -66,7 +66,7 @@ final class LabelFormFields implements RunsInBrowser {
 	 * @return string
 	 */
 	public function description(): string {
-		return __( 'Where a form field has placeholder text but no label, this makes the placeholder the field\'s name for assistive technology as well. Nothing changes on screen. It never invents a name out of a field\'s internal id — a field with no placeholder is left alone and keeps its finding, because a plausible label is worse than a missing one.', 'wowstudio-accessibility-kit' );
+		return __( 'Where a form field has placeholder text but no label, this makes the placeholder the field\'s name for assistive technology as well. Nothing changes on screen. It never invents a name out of a field\'s internal id — a field with no placeholder is left alone and keeps its finding, because a plausible label is worse than a missing one.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -88,7 +88,7 @@ final class LabelFormFields implements RunsInBrowser {
 	 * @return string
 	 */
 	public function caveat(): string {
-		return __( 'Only fields that already have placeholder text are covered, so this closes some findings and deliberately leaves the rest. A placeholder acting as a label is itself a compromise; a real, visible label is better. Runs in the browser, so it does nothing with JavaScript off.', 'wowstudio-accessibility-kit' );
+		return __( 'Only fields that already have placeholder text are covered, so this closes some findings and deliberately leaves the rest. A placeholder acting as a label is itself a compromise; a real, visible label is better. Runs in the browser, so it does nothing with JavaScript off.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**

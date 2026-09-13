@@ -72,7 +72,7 @@ final class UninstallTest extends TestCase {
 	 * @return void
 	 */
 	public function test_main_file_registers_the_cleanup_at_file_scope(): void {
-		$main = $this->source( 'wowstudio-accessibility-kit.php' );
+		$main = $this->source( 'wowstudio-accessibility-remediation.php' );
 
 		$this->assertStringContainsString(
 			'register_uninstall_hook( __FILE__',

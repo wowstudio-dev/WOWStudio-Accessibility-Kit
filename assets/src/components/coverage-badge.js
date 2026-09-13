@@ -28,10 +28,13 @@ export default function CoverageBadge( { coverage, label, stale = false } ) {
 				className="wsak-tag wsak-badge wsak-badge--stale"
 				title={ __(
 					'This page has been edited since it was checked, so what we found may no longer be what is there.',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 			>
-				{ __( 'Edited since checking', 'wowstudio-accessibility-kit' ) }
+				{ __(
+					'Edited since checking',
+					'wowstudio-accessibility-remediation'
+				) }
 			</span>
 		);
 	}

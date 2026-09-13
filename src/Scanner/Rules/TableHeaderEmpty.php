@@ -95,7 +95,7 @@ final class TableHeaderEmpty implements Rule {
 	 * @return string
 	 */
 	public function title(): string {
-		return __( 'Table header cell is empty', 'wowstudio-accessibility-kit' );
+		return __( 'Table header cell is empty', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -106,7 +106,7 @@ final class TableHeaderEmpty implements Rule {
 	 * @return string
 	 */
 	public function description(): string {
-		return __( 'This table has a header cell with no text in it. Header cells are what a screen reader announces before each value, so an empty one leaves a whole row or column of data unlabelled — the table looks complete and reads as a list of numbers with no headings. Give the cell text, or make it a plain td if it is not really a header.', 'wowstudio-accessibility-kit' );
+		return __( 'This table has a header cell with no text in it. Header cells are what a screen reader announces before each value, so an empty one leaves a whole row or column of data unlabelled — the table looks complete and reads as a list of numbers with no headings. Give the cell text, or make it a plain td if it is not really a header.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -117,7 +117,7 @@ final class TableHeaderEmpty implements Rule {
 	 * @return string
 	 */
 	public function consequence(): string {
-		return __( 'A row or column of data is announced with no indication of what it is data about.', 'wowstudio-accessibility-kit' );
+		return __( 'A row or column of data is announced with no indication of what it is data about.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -132,7 +132,7 @@ final class TableHeaderEmpty implements Rule {
 		return new FixPlan(
 			FixKind::Manual,
 			FixTarget::Content,
-			__( 'What the column or row should be called is a question about what the data means, so the wording is yours. Edit the table in the editor.', 'wowstudio-accessibility-kit' )
+			__( 'What the column or row should be called is a question about what the data means, so the wording is yours. Edit the table in the editor.', 'wowstudio-accessibility-remediation' )
 		);
 	}
 
@@ -172,7 +172,7 @@ final class TableHeaderEmpty implements Rule {
 				$this->wcag_sc(),
 				$this->severity(),
 				$this->detection(),
-				__( 'This table has a header cell with no text in it.', 'wowstudio-accessibility-kit' ),
+				__( 'This table has a header cell with no text in it.', 'wowstudio-accessibility-remediation' ),
 				$document->selector_for( $cell ),
 				$document->context_for( $cell )
 			);

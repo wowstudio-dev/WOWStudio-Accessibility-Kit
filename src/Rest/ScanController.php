@@ -74,7 +74,7 @@ final class ScanController implements Registrable {
 							'required'          => true,
 							'type'              => 'integer',
 							'minimum'           => 1,
-							'description'       => __( 'The post or page to scan.', 'wowstudio-accessibility-kit' ),
+							'description'       => __( 'The post or page to scan.', 'wowstudio-accessibility-remediation' ),
 							'sanitize_callback' => 'absint',
 						),
 					),
@@ -94,7 +94,7 @@ final class ScanController implements Registrable {
 						'id' => array(
 							'required'          => true,
 							'type'              => 'integer',
-							'description'       => __( 'The scan to read.', 'wowstudio-accessibility-kit' ),
+							'description'       => __( 'The scan to read.', 'wowstudio-accessibility-remediation' ),
 							'sanitize_callback' => 'absint',
 						),
 					),
@@ -113,7 +113,7 @@ final class ScanController implements Registrable {
 					'args'                => array(
 						'search'   => array(
 							'type'              => 'string',
-							'description'       => __( 'Filter the list by title.', 'wowstudio-accessibility-kit' ),
+							'description'       => __( 'Filter the list by title.', 'wowstudio-accessibility-remediation' ),
 							'sanitize_callback' => 'sanitize_text_field',
 						),
 						'per_page' => array(
@@ -145,12 +145,12 @@ final class ScanController implements Registrable {
 							'required'    => true,
 							'type'        => 'string',
 							'enum'        => array( 'ran', 'blocked' ),
-							'description' => __( 'Whether the browser pass completed.', 'wowstudio-accessibility-kit' ),
+							'description' => __( 'Whether the browser pass completed.', 'wowstudio-accessibility-remediation' ),
 						),
 						'findings' => array(
 							'type'        => 'array',
 							'default'     => array(),
-							'description' => __( 'Findings the browser pass produced.', 'wowstudio-accessibility-kit' ),
+							'description' => __( 'Findings the browser pass produced.', 'wowstudio-accessibility-remediation' ),
 						),
 					),
 				),
@@ -184,7 +184,7 @@ final class ScanController implements Registrable {
 
 		return new WP_Error(
 			'wsak_forbidden',
-			__( 'You do not have permission to run accessibility scans.', 'wowstudio-accessibility-kit' ),
+			__( 'You do not have permission to run accessibility scans.', 'wowstudio-accessibility-remediation' ),
 			array( 'status' => rest_authorization_required_code() )
 		);
 	}
@@ -203,7 +203,7 @@ final class ScanController implements Registrable {
 
 		return new WP_Error(
 			'wsak_forbidden',
-			__( 'You do not have permission to view accessibility reports.', 'wowstudio-accessibility-kit' ),
+			__( 'You do not have permission to view accessibility reports.', 'wowstudio-accessibility-remediation' ),
 			array( 'status' => rest_authorization_required_code() )
 		);
 	}
@@ -234,7 +234,7 @@ final class ScanController implements Registrable {
 		if ( null === get_post( $post_id ) ) {
 			return new WP_Error(
 				'wsak_unknown_post',
-				__( 'That content could not be found.', 'wowstudio-accessibility-kit' ),
+				__( 'That content could not be found.', 'wowstudio-accessibility-remediation' ),
 				array( 'status' => 404 )
 			);
 		}
@@ -242,7 +242,7 @@ final class ScanController implements Registrable {
 		if ( ! current_user_can( 'read_post', $post_id ) ) {
 			return new WP_Error(
 				'wsak_forbidden_post',
-				__( 'You do not have permission to read that content.', 'wowstudio-accessibility-kit' ),
+				__( 'You do not have permission to read that content.', 'wowstudio-accessibility-remediation' ),
 				array( 'status' => rest_authorization_required_code() )
 			);
 		}
@@ -255,7 +255,7 @@ final class ScanController implements Registrable {
 		if ( ! ScannableTypes::covers( $post_id ) ) {
 			return new WP_Error(
 				'wsak_unsupported_type',
-				__( 'This plugin checks posts and pages. Templates, patterns and other content types are not pages a visitor can open, so a scan of one says very little about what anybody would meet.', 'wowstudio-accessibility-kit' ),
+				__( 'This plugin checks posts and pages. Templates, patterns and other content types are not pages a visitor can open, so a scan of one says very little about what anybody would meet.', 'wowstudio-accessibility-remediation' ),
 				array( 'status' => 400 )
 			);
 		}
@@ -288,7 +288,7 @@ final class ScanController implements Registrable {
 		if ( 0 === $scan_id ) {
 			return new WP_Error(
 				'wsak_scan_not_started',
-				__( 'The scan could not be recorded. Check that the plugin tables exist.', 'wowstudio-accessibility-kit' ),
+				__( 'The scan could not be recorded. Check that the plugin tables exist.', 'wowstudio-accessibility-remediation' ),
 				array( 'status' => 500 )
 			);
 		}
@@ -356,7 +356,7 @@ final class ScanController implements Registrable {
 		if ( null === $scan ) {
 			return new WP_Error(
 				'wsak_unknown_scan',
-				__( 'That scan could not be found.', 'wowstudio-accessibility-kit' ),
+				__( 'That scan could not be found.', 'wowstudio-accessibility-remediation' ),
 				array( 'status' => 404 )
 			);
 		}
@@ -364,7 +364,7 @@ final class ScanController implements Registrable {
 		if ( $scan->target_id > 0 && ! current_user_can( 'read_post', $scan->target_id ) ) {
 			return new WP_Error(
 				'wsak_forbidden_post',
-				__( 'You do not have permission to read that content.', 'wowstudio-accessibility-kit' ),
+				__( 'You do not have permission to read that content.', 'wowstudio-accessibility-remediation' ),
 				array( 'status' => rest_authorization_required_code() )
 			);
 		}
@@ -477,7 +477,7 @@ final class ScanController implements Registrable {
 		if ( null === $scan ) {
 			return new WP_Error(
 				'wsak_unknown_scan',
-				__( 'That scan could not be found.', 'wowstudio-accessibility-kit' ),
+				__( 'That scan could not be found.', 'wowstudio-accessibility-remediation' ),
 				array( 'status' => 404 )
 			);
 		}
@@ -485,7 +485,7 @@ final class ScanController implements Registrable {
 		if ( $scan->target_id > 0 && ! current_user_can( 'read_post', $scan->target_id ) ) {
 			return new WP_Error(
 				'wsak_forbidden_post',
-				__( 'You do not have permission to read that content.', 'wowstudio-accessibility-kit' ),
+				__( 'You do not have permission to read that content.', 'wowstudio-accessibility-remediation' ),
 				array( 'status' => rest_authorization_required_code() )
 			);
 		}

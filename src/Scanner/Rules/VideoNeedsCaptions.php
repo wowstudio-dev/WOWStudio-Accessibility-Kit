@@ -96,7 +96,7 @@ final class VideoNeedsCaptions implements Rule {
 	 * @return string
 	 */
 	public function title(): string {
-		return __( 'Video may have no captions', 'wowstudio-accessibility-kit' );
+		return __( 'Video may have no captions', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -107,7 +107,7 @@ final class VideoNeedsCaptions implements Rule {
 	 * @return string
 	 */
 	public function description(): string {
-		return __( 'This video declares no caption or subtitle track. Captions are what make a video usable with the sound off, which covers far more people than the Deaf and hard-of-hearing audience alone. The markup cannot see burned-in captions or captions supplied by a player, so this is worth confirming rather than assuming — and note that video embedded from YouTube or Vimeo sits inside an iframe, where nothing here can look at all.', 'wowstudio-accessibility-kit' );
+		return __( 'This video declares no caption or subtitle track. Captions are what make a video usable with the sound off, which covers far more people than the Deaf and hard-of-hearing audience alone. The markup cannot see burned-in captions or captions supplied by a player, so this is worth confirming rather than assuming — and note that video embedded from YouTube or Vimeo sits inside an iframe, where nothing here can look at all.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -118,7 +118,7 @@ final class VideoNeedsCaptions implements Rule {
 	 * @return string
 	 */
 	public function consequence(): string {
-		return __( 'Anybody who cannot hear the video, or has the sound off, gets nothing from it.', 'wowstudio-accessibility-kit' );
+		return __( 'Anybody who cannot hear the video, or has the sound off, gets nothing from it.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -133,7 +133,7 @@ final class VideoNeedsCaptions implements Rule {
 		return new FixPlan(
 			FixKind::Manual,
 			FixTarget::Media,
-			__( 'Captions have to be written and timed against the video, which is work no check can do for you. Add a track element pointing at a VTT file, or use a player that supplies them.', 'wowstudio-accessibility-kit' )
+			__( 'Captions have to be written and timed against the video, which is work no check can do for you. Add a track element pointing at a VTT file, or use a player that supplies them.', 'wowstudio-accessibility-remediation' )
 		);
 	}
 
@@ -164,7 +164,7 @@ final class VideoNeedsCaptions implements Rule {
 				$this->wcag_sc(),
 				$this->severity(),
 				$this->detection(),
-				__( 'This video declares no caption or subtitle track.', 'wowstudio-accessibility-kit' ),
+				__( 'This video declares no caption or subtitle track.', 'wowstudio-accessibility-remediation' ),
 				$document->selector_for( $video ),
 				$document->context_for( $video )
 			);

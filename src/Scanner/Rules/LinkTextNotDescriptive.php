@@ -87,7 +87,7 @@ final class LinkTextNotDescriptive implements Rule {
 	 * @return string
 	 */
 	public function title(): string {
-		return __( 'Link text may not make sense on its own', 'wowstudio-accessibility-kit' );
+		return __( 'Link text may not make sense on its own', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -98,7 +98,7 @@ final class LinkTextNotDescriptive implements Rule {
 	 * @return string
 	 */
 	public function description(): string {
-		return __( 'Screen reader users often browse a list of every link on the page, with no surrounding text. Phrases like \'read more\' or \'click here\' give them nothing to go on. Consider rewriting the link to name its destination. If the wording is genuinely clear in context, mark this as reviewed.', 'wowstudio-accessibility-kit' );
+		return __( 'Screen reader users often browse a list of every link on the page, with no surrounding text. Phrases like \'read more\' or \'click here\' give them nothing to go on. Consider rewriting the link to name its destination. If the wording is genuinely clear in context, mark this as reviewed.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -109,7 +109,7 @@ final class LinkTextNotDescriptive implements Rule {
 	 * @return string
 	 */
 	public function consequence(): string {
-		return __( 'Screen reader users often pull up a list of every link on a page. In that list, this one says nothing about where it goes.', 'wowstudio-accessibility-kit' );
+		return __( 'Screen reader users often pull up a list of every link on a page. In that list, this one says nothing about where it goes.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -124,7 +124,7 @@ final class LinkTextNotDescriptive implements Rule {
 		return new FixPlan(
 			FixKind::Manual,
 			FixTarget::Content,
-			__( 'Better wording depends on where the link goes and what the sentence around it already says. Rewrite the link text in the content.', 'wowstudio-accessibility-kit' )
+			__( 'Better wording depends on where the link goes and what the sentence around it already says. Rewrite the link text in the content.', 'wowstudio-accessibility-remediation' )
 		);
 	}
 
@@ -180,7 +180,7 @@ final class LinkTextNotDescriptive implements Rule {
 				$this->detection(),
 				sprintf(
 					/* translators: %s: the link text. */
-					__( 'The link text "%s" may not make sense when read on its own.', 'wowstudio-accessibility-kit' ),
+					__( 'The link text "%s" may not make sense when read on its own.', 'wowstudio-accessibility-remediation' ),
 					$name
 				),
 				$document->selector_for( $link ),

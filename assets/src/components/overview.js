@@ -22,24 +22,24 @@ import { EmptyState } from './states';
  */
 const STEPS = [
 	{
-		title: __( 'Find', 'wowstudio-accessibility-kit' ),
+		title: __( 'Find', 'wowstudio-accessibility-remediation' ),
 		body: __(
 			'Check your posts, pages and theme. Every finding names the element it came from and the page it is on.',
-			'wowstudio-accessibility-kit'
+			'wowstudio-accessibility-remediation'
 		),
 	},
 	{
-		title: __( 'Fix', 'wowstudio-accessibility-kit' ),
+		title: __( 'Fix', 'wowstudio-accessibility-remediation' ),
 		body: __(
 			'Switch on the site-wide fixes, describe your images, and repair the rest in your own content.',
-			'wowstudio-accessibility-kit'
+			'wowstudio-accessibility-remediation'
 		),
 	},
 	{
-		title: __( 'Say so', 'wowstudio-accessibility-kit' ),
+		title: __( 'Say so', 'wowstudio-accessibility-remediation' ),
 		body: __(
 			'Publish a statement: what works, what does not yet, and how somebody reaches you when they hit a barrier.',
-			'wowstudio-accessibility-kit'
+			'wowstudio-accessibility-remediation'
 		),
 	},
 ];
@@ -72,7 +72,7 @@ export default function Overview( { onGo, onDrill } ) {
 						err?.message ||
 							__(
 								'The summary could not be loaded.',
-								'wowstudio-accessibility-kit'
+								'wowstudio-accessibility-remediation'
 							)
 					)
 			);
@@ -89,7 +89,7 @@ export default function Overview( { onGo, onDrill } ) {
 	if ( ! data ) {
 		return (
 			<p className="wsak-overview__loading">
-				{ __( 'Adding it up…', 'wowstudio-accessibility-kit' ) }
+				{ __( 'Adding it up…', 'wowstudio-accessibility-remediation' ) }
 			</p>
 		);
 	}
@@ -113,14 +113,14 @@ export default function Overview( { onGo, onDrill } ) {
 				<h2 className="wsak-start__title">
 					{ __(
 						'Nothing checked yet',
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					) }
 				</h2>
 
 				<p className="wsak-start__lede">
 					{ __(
 						'Pick a page and check it. You get a list of what is wrong, where each thing sits on the page, and what to do about it. Checking reads your site and changes nothing on it.',
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					) }
 				</p>
 
@@ -128,7 +128,7 @@ export default function Overview( { onGo, onDrill } ) {
 					<Button variant="primary" onClick={ () => onGo( 'bulk' ) }>
 						{ __(
 							'Choose pages to check',
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 						) }
 					</Button>
 					<Button
@@ -137,7 +137,7 @@ export default function Overview( { onGo, onDrill } ) {
 					>
 						{ __(
 							'Check a single page',
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 						) }
 					</Button>
 				</p>
@@ -150,7 +150,7 @@ export default function Overview( { onGo, onDrill } ) {
 									/* translators: %d: step number. */
 									__(
 										'Step %d',
-										'wowstudio-accessibility-kit'
+										'wowstudio-accessibility-remediation'
 									),
 									index + 1
 								) }
@@ -169,7 +169,7 @@ export default function Overview( { onGo, onDrill } ) {
 					<Button variant="link" onClick={ () => onGo( 'coverage' ) }>
 						{ __(
 							'What these checks cover, and what they cannot',
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 						) }
 					</Button>
 
@@ -185,7 +185,7 @@ export default function Overview( { onGo, onDrill } ) {
 						<Button variant="link" href={ welcomeUrl }>
 							{ __(
 								'Walk me through the setup',
-								'wowstudio-accessibility-kit'
+								'wowstudio-accessibility-remediation'
 							) }
 						</Button>
 					) }
@@ -219,7 +219,7 @@ export default function Overview( { onGo, onDrill } ) {
 					<h3 id="wsak-ov-score" className="wsak-card__title">
 						{ __(
 							'Across what has been scanned',
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 						) }
 					</h3>
 
@@ -227,7 +227,7 @@ export default function Overview( { onGo, onDrill } ) {
 						value={ score ?? 0 }
 						label={ __(
 							'Mean score across scanned pages',
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 						) }
 					/>
 				</section>
@@ -244,7 +244,7 @@ export default function Overview( { onGo, onDrill } ) {
 							/* translators: 1: pages scanned. 2: pages published. */
 							__(
 								'The average of the latest score for each of %1$d scanned pages, out of %2$d published. It counts only what automated checks can settle, which is part of WCAG rather than all of it, and it does not tell you whether your site meets any legal requirement.',
-								'wowstudio-accessibility-kit'
+								'wowstudio-accessibility-remediation'
 							),
 							scanned.pages,
 							scanned.published
@@ -258,7 +258,7 @@ export default function Overview( { onGo, onDrill } ) {
 						>
 							{ __(
 								'What these checks cover, and what they cannot',
-								'wowstudio-accessibility-kit'
+								'wowstudio-accessibility-remediation'
 							) }
 						</Button>
 					</p>
@@ -277,27 +277,30 @@ export default function Overview( { onGo, onDrill } ) {
 				<Stat
 					label={ __(
 						'Barriers found',
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					) }
 					value={ issues.found ?? issues.open }
 					note={ __(
 						'Settled by an automated check. These are wrong.',
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					) }
 				/>
 				<Stat
 					label={ __(
 						'Needs a person to look',
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					) }
 					value={ issues.needs_a_look ?? 0 }
 					note={ __(
 						'Automation could not settle these. They may be fine.',
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					) }
 				/>
 				<Stat
-					label={ __( 'Fixed', 'wowstudio-accessibility-kit' ) }
+					label={ __(
+						'Fixed',
+						'wowstudio-accessibility-remediation'
+					) }
 					value={ issues.fixed }
 					tone="good"
 					/*
@@ -313,7 +316,7 @@ export default function Overview( { onGo, onDrill } ) {
 										'%d finding marked a false positive.',
 										'%d findings marked false positives.',
 										issues.ignored,
-										'wowstudio-accessibility-kit'
+										'wowstudio-accessibility-remediation'
 									),
 									issues.ignored
 							  )
@@ -323,14 +326,14 @@ export default function Overview( { onGo, onDrill } ) {
 				<Stat
 					label={ __(
 						'Checks available',
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					) }
 					value={ coverage.rules_total }
 					note={ sprintf(
 						/* translators: 1: server-pass checks. 2: browser-pass checks. 3: pages that have had a browser pass. */
 						__(
 							'%1$d run on the server, %2$d need the page view — which %3$d scanned pages have had.',
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 						),
 						coverage.rules_server,
 						coverage.rules_browser,
@@ -347,14 +350,14 @@ export default function Overview( { onGo, onDrill } ) {
 					<h3 id="wsak-ov-severity" className="wsak-card__title">
 						{ __(
 							'Open findings by severity',
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 						) }
 					</h3>
 					<BarList
 						items={ severityRows( byBand ) }
 						label={ __(
 							'Open findings by severity',
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 						) }
 					/>
 				</section>
@@ -363,14 +366,14 @@ export default function Overview( { onGo, onDrill } ) {
 					<h3 id="wsak-ov-rules" className="wsak-card__title">
 						{ __(
 							'What comes up most',
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 						) }
 					</h3>
 					<BarList
 						items={ ruleRows }
 						label={ __(
 							'Open findings by check',
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 						) }
 						onSelect={
 							onDrill
@@ -384,14 +387,14 @@ export default function Overview( { onGo, onDrill } ) {
 					<h3 id="wsak-ov-worst" className="wsak-card__title">
 						{ __(
 							'Pages with the most to do',
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 						) }
 					</h3>
 					<BarList
 						items={ worstRows }
 						label={ __(
 							'Open findings by page',
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 						) }
 						onSelect={
 							onDrill
@@ -413,7 +416,10 @@ export default function Overview( { onGo, onDrill } ) {
 				aria-labelledby="wsak-ov-trend"
 			>
 				<h3 id="wsak-ov-trend" className="wsak-card__title">
-					{ __( 'Score by scan', 'wowstudio-accessibility-kit' ) }
+					{ __(
+						'Score by scan',
+						'wowstudio-accessibility-remediation'
+					) }
 				</h3>
 				<Sparkline points={ history } />
 				<p className="wsak-card__note">
@@ -423,7 +429,7 @@ export default function Overview( { onGo, onDrill } ) {
 							'The last %d scan, in the order it ran. This plugin does not re-scan on its own, so the spacing is however often somebody pressed the button — it is a sequence, not a timeline.',
 							'The last %d scans, in the order they ran. This plugin does not re-scan on its own, so the spacing is however often somebody pressed the button — it is a sequence, not a timeline.',
 							history.length,
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 						),
 						history.length
 					) }

@@ -142,5 +142,5 @@ jobs:
       - name: Confirm the translation template is up to date
         run: |
           npm run makepot
-          git diff --exit-code -- languages/wowstudio-accessibility-kit.pot \
+          git diff --exit-code -- languages/wowstudio-accessibility-remediation.pot \
             || (echo "::error::languages/*.pot is stale. Run 'npm run makepot' and commit." && exit 1)

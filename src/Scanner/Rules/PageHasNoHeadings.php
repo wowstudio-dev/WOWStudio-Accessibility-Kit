@@ -95,7 +95,7 @@ final class PageHasNoHeadings implements Rule {
 	 * @return string
 	 */
 	public function title(): string {
-		return __( 'Page has no headings', 'wowstudio-accessibility-kit' );
+		return __( 'Page has no headings', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -106,7 +106,7 @@ final class PageHasNoHeadings implements Rule {
 	 * @return string
 	 */
 	public function description(): string {
-		return __( 'There is not a single heading element on this page. Screen reader users navigate long pages by pulling up a list of headings and jumping to the part they want; with none, the only way through is from the top, in order. If the page looks like it has headings, they are probably paragraphs made large and bold — which conveys structure to the eye and nothing to anything else.', 'wowstudio-accessibility-kit' );
+		return __( 'There is not a single heading element on this page. Screen reader users navigate long pages by pulling up a list of headings and jumping to the part they want; with none, the only way through is from the top, in order. If the page looks like it has headings, they are probably paragraphs made large and bold — which conveys structure to the eye and nothing to anything else.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -117,7 +117,7 @@ final class PageHasNoHeadings implements Rule {
 	 * @return string
 	 */
 	public function consequence(): string {
-		return __( 'There is no way to skim or jump around this page; it can only be read from the top.', 'wowstudio-accessibility-kit' );
+		return __( 'There is no way to skim or jump around this page; it can only be read from the top.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -132,7 +132,7 @@ final class PageHasNoHeadings implements Rule {
 		return new FixPlan(
 			FixKind::Manual,
 			FixTarget::Content,
-			__( 'Which parts of the page are headings is a judgement about what the page says, and only you can make it. In the editor, change the blocks that act as headings from paragraph to heading.', 'wowstudio-accessibility-kit' )
+			__( 'Which parts of the page are headings is a judgement about what the page says, and only you can make it. In the editor, change the blocks that act as headings from paragraph to heading.', 'wowstudio-accessibility-remediation' )
 		);
 	}
 
@@ -159,7 +159,7 @@ final class PageHasNoHeadings implements Rule {
 				$this->wcag_sc(),
 				$this->severity(),
 				$this->detection(),
-				__( 'This page contains no heading elements at all.', 'wowstudio-accessibility-kit' ),
+				__( 'This page contains no heading elements at all.', 'wowstudio-accessibility-remediation' ),
 				'',
 				''
 			),

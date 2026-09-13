@@ -110,7 +110,7 @@ final class ImageAltTooLong implements Rule {
 	 * @return string
 	 */
 	public function title(): string {
-		return __( 'Alt text may be too long to listen to', 'wowstudio-accessibility-kit' );
+		return __( 'Alt text may be too long to listen to', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -121,7 +121,7 @@ final class ImageAltTooLong implements Rule {
 	 * @return string
 	 */
 	public function description(): string {
-		return __( 'Alt text is announced in one run, with no way to pause it, skim it or go back a sentence. Anything this long is usually content the page itself should carry — in a caption, or a paragraph beside the image — where everyone can read it and anyone can navigate it. Consider shortening the alt to what the image conveys at a glance and moving the detail onto the page.', 'wowstudio-accessibility-kit' );
+		return __( 'Alt text is announced in one run, with no way to pause it, skim it or go back a sentence. Anything this long is usually content the page itself should carry — in a caption, or a paragraph beside the image — where everyone can read it and anyone can navigate it. Consider shortening the alt to what the image conveys at a glance and moving the detail onto the page.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -132,7 +132,7 @@ final class ImageAltTooLong implements Rule {
 	 * @return string
 	 */
 	public function consequence(): string {
-		return __( 'Someone using a screen reader has to sit through a paragraph they cannot pause, skim or re-read.', 'wowstudio-accessibility-kit' );
+		return __( 'Someone using a screen reader has to sit through a paragraph they cannot pause, skim or re-read.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -147,7 +147,7 @@ final class ImageAltTooLong implements Rule {
 		return new FixPlan(
 			FixKind::Manual,
 			FixTarget::Media,
-			__( 'Whether this detail belongs in the alt text or on the page is a question about the content, and sometimes the long version is right. Shorten it in the media library if it is not.', 'wowstudio-accessibility-kit' )
+			__( 'Whether this detail belongs in the alt text or on the page is a question about the content, and sometimes the long version is right. Shorten it in the media library if it is not.', 'wowstudio-accessibility-remediation' )
 		);
 	}
 
@@ -181,7 +181,7 @@ final class ImageAltTooLong implements Rule {
 				$this->detection(),
 				sprintf(
 					/* translators: 1: how many characters the alt text is. 2: the length at which this rule starts reporting. */
-					__( 'This alt text is %1$d characters long; anything over about %2$d is usually better as a caption or a paragraph.', 'wowstudio-accessibility-kit' ),
+					__( 'This alt text is %1$d characters long; anything over about %2$d is usually better as a caption or a paragraph.', 'wowstudio-accessibility-remediation' ),
 					$length,
 					self::LIMIT
 				),

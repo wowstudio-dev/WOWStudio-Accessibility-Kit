@@ -49,7 +49,7 @@ final class MenuTest extends TestCase {
 	 */
 	public function test_slug_matches_the_text_domain(): void {
 		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Reading a local source file in a unit test; WordPress is not loaded.
-		$bootstrap = (string) file_get_contents( WSAK_PATH . 'wowstudio-accessibility-kit.php' );
+		$bootstrap = (string) file_get_contents( WSAK_PATH . 'wowstudio-accessibility-remediation.php' );
 
 		$this->assertSame(
 			1,

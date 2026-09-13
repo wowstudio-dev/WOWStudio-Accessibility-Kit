@@ -80,7 +80,7 @@ final class OnboardingController implements Registrable {
 
 		return new WP_Error(
 			'wsak_forbidden',
-			__( 'You do not have permission to change accessibility settings.', 'wowstudio-accessibility-kit' ),
+			__( 'You do not have permission to change accessibility settings.', 'wowstudio-accessibility-remediation' ),
 			array( 'status' => rest_authorization_required_code() )
 		);
 	}

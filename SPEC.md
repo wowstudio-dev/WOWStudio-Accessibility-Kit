@@ -1,4 +1,4 @@
-# WOWStudio Accessibility Kit — Product & Build Spec
+# WOWStudio Accessibility Remediation — Product & Build Spec
 ### Accessibility Remediation + Conformance
 *Publisher: WOWStudio · Status: partly superseded, see below · Monetization: none, the plugin is free*
 
@@ -52,9 +52,9 @@ licensing and AI code.
 ### Plugin metadata
 | Field | Value |
 |---|---|
-| Plugin name | WOWStudio Accessibility Kit |
-| WordPress.org slug | `wowstudio-accessibility-kit` |
-| Text domain | `wowstudio-accessibility-kit` |
+| Plugin name | WOWStudio Accessibility Remediation |
+| WordPress.org slug | `wowstudio-accessibility-remediation` |
+| Text domain | `wowstudio-accessibility-remediation` |
 | Namespace / prefix | `WOWStudio\AccessibilityKit` · `wsak_` · DB tables `wp_wsak_*` |
 | Requires WP | 6.8+ — raised from 6.6 by decision F10 (Action Scheduler 4.x) |
 | Requires PHP | 8.1+ (min declared 8.0). Held at 8.1 on 2026-09-06 despite the competitor's 7.4 floor. |
@@ -277,7 +277,7 @@ integrations.
 - **AI:** WP 7.0 AI Client abstraction when present; BYOK provider adapters (OpenAI, Anthropic, Gemini, OpenRouter) otherwise. Vision model for alt text.
 - **Storage:** custom tables via `dbDelta`; settings in options; per-post scan cache in postmeta.
 - **Tooling:** Composer (autoload + PHPCS), npm (wp-scripts). Testing: PHPUnit + `wp-env`; Playwright optional for e2e.
-- **i18n:** text domain `wowstudio-accessibility-kit`, all strings translatable.
+- **i18n:** text domain `wowstudio-accessibility-remediation`, all strings translatable.
 
 ## Scanning engine approach *(resolves open decision #1)*
 - **MVP = PHP server-side static analysis** with `DOMDocument` / `DOMXPath` over rendered post/page HTML. Covers the machine-detectable subset that does **not** need CSS rendering: missing/empty `alt`, unlabeled form controls, empty/undescriptive links & buttons, heading order + multiple `H1`, missing landmarks, `lang` attribute, document `title`, table headers/scope, basic ARIA misuse. Zero per-scan cost, no headless browser.
@@ -297,8 +297,8 @@ The plan below keeps the server pass as the spine and adds the browser pass as a
 
 ## Proposed repository structure
 ```
-wowstudio-accessibility-kit/
-├── wowstudio-accessibility-kit.php     # main file: headers, constants, bootstrap
+wowstudio-accessibility-remediation/
+├── wowstudio-accessibility-remediation.php     # main file: headers, constants, bootstrap
 ├── uninstall.php
 ├── composer.json  package.json  .wp-env.json  phpcs.xml.dist
 ├── src/

@@ -48,8 +48,8 @@ enum ScanPass: string {
 	 */
 	public function label(): string {
 		return match ( $this ) {
-			self::Server  => __( 'Found in the markup', 'wowstudio-accessibility-kit' ),
-			self::Browser => __( 'Found in the rendered page', 'wowstudio-accessibility-kit' ),
+			self::Server  => __( 'Found in the markup', 'wowstudio-accessibility-remediation' ),
+			self::Browser => __( 'Found in the rendered page', 'wowstudio-accessibility-remediation' ),
 		};
 	}
 
@@ -62,8 +62,8 @@ enum ScanPass: string {
 	 */
 	public function description(): string {
 		return match ( $this ) {
-			self::Server  => __( 'Read from the page source on your server. Needs no browser, so it can run on a schedule and across your whole site.', 'wowstudio-accessibility-kit' ),
-			self::Browser => __( 'Measured in a real browser, where colours, sizes and layout are known. Only runs while you have the dashboard open.', 'wowstudio-accessibility-kit' ),
+			self::Server  => __( 'Read from the page source on your server. Needs no browser, so it can run on a schedule and across your whole site.', 'wowstudio-accessibility-remediation' ),
+			self::Browser => __( 'Measured in a real browser, where colours, sizes and layout are known. Only runs while you have the dashboard open.', 'wowstudio-accessibility-remediation' ),
 		};
 	}
 }

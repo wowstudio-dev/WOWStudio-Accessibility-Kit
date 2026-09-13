@@ -6,7 +6,7 @@ parameters:
 	paths:
 		- src
 		- bin
-		- wowstudio-accessibility-kit.php
+		- wowstudio-accessibility-remediation.php
 	bootstrapFiles:
 		- tests/constants.php
 	scanDirectories:

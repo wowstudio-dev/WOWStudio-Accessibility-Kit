@@ -43,11 +43,14 @@ export default function BlockFinding( { block, onSelect } ) {
 							/* translators: %s: block type, such as "Image". */
 							__(
 								'Go to this %s',
-								'wowstudio-accessibility-kit'
+								'wowstudio-accessibility-remediation'
 							),
 							name
 					  )
-					: __( 'Go to this block', 'wowstudio-accessibility-kit' ) }
+					: __(
+							'Go to this block',
+							'wowstudio-accessibility-remediation'
+					  ) }
 			</Button>
 
 			<ul className="wsak-editor__findings">
@@ -117,11 +120,11 @@ function AltFix( { blockId, finding } ) {
 				__nextHasNoMarginBottom
 				label={ __(
 					'Describe this image',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 				help={ __(
 					'Say what somebody would miss if the image did not load. If it is purely decorative, save it empty — that tells a screen reader to skip it.',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 				value={ text }
 				onChange={ setText }
@@ -134,13 +137,13 @@ function AltFix( { blockId, finding } ) {
 						setText( '' );
 					} }
 				>
-					{ __( 'Add it', 'wowstudio-accessibility-kit' ) }
+					{ __( 'Add it', 'wowstudio-accessibility-remediation' ) }
 				</Button>
 			</div>
 			<p className="wsak-editor__fix-note">
 				{ __(
 					'This writes into the block itself, so it is part of your content and undo works on it like any other edit.',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 			</p>
 		</div>

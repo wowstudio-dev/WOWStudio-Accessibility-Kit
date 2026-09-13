@@ -9,7 +9,6 @@ namespace WOWStudio\AccessibilityKit\Core;
 
 use WOWStudio\AccessibilityKit\Admin\ContentColumns;
 use WOWStudio\AccessibilityKit\Admin\Menu;
-use WOWStudio\AccessibilityKit\Admin\Onboarding;
 use WOWStudio\AccessibilityKit\Conformance\StatementBlock;
 use WOWStudio\AccessibilityKit\Remediation\OverrideStore;
 use WOWStudio\AccessibilityKit\Scanner\Preview;
@@ -152,7 +151,6 @@ final class Plugin {
 			'assets'         => new Assets(),
 			'admin.columns'  => new ContentColumns(),
 			'admin.menu'     => new Menu(),
-			'admin.welcome'  => new Onboarding(),
 			'rest.scan'      => new ScanController(),
 			'rest.fix.css'   => new CssFixController(),
 			'rest.media'     => new AltTextController(),

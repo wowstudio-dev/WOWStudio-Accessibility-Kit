@@ -52,7 +52,7 @@ final class ViewportScalable implements RunsInBrowser {
 	 * @return string
 	 */
 	public function title(): string {
-		return __( 'Let people zoom on a phone', 'wowstudio-accessibility-kit' );
+		return __( 'Let people zoom on a phone', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -63,7 +63,7 @@ final class ViewportScalable implements RunsInBrowser {
 	 * @return string
 	 */
 	public function description(): string {
-		return __( 'Removes the part of your theme\'s viewport tag that blocks pinch-zoom, or that caps it below twice the normal size. Readers with low vision rely on zooming to read at all, and this takes it away on exactly the devices where it matters most.', 'wowstudio-accessibility-kit' );
+		return __( 'Removes the part of your theme\'s viewport tag that blocks pinch-zoom, or that caps it below twice the normal size. Readers with low vision rely on zooming to read at all, and this takes it away on exactly the devices where it matters most.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -85,7 +85,7 @@ final class ViewportScalable implements RunsInBrowser {
 	 * @return string
 	 */
 	public function caveat(): string {
-		return __( 'The correction is made in the browser once the page has loaded, so a reader may briefly get the theme\'s original setting. This is a repair, not a substitute for correcting the viewport tag in your theme — and with JavaScript off it does nothing at all.', 'wowstudio-accessibility-kit' );
+		return __( 'The correction is made in the browser once the page has loaded, so a reader may briefly get the theme\'s original setting. This is a repair, not a substitute for correcting the viewport tag in your theme — and with JavaScript off it does nothing at all.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**

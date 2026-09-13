@@ -47,7 +47,7 @@ export default function ThemePanel() {
 			<Skeleton
 				label={ __(
 					'Looking at your theme…',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 			/>
 		);
@@ -70,11 +70,14 @@ export default function ThemePanel() {
 								/* translators: %s: theme name. */
 								__(
 									'Your theme: %s',
-									'wowstudio-accessibility-kit'
+									'wowstudio-accessibility-remediation'
 								),
 								state.theme
 						  )
-						: __( 'Your theme', 'wowstudio-accessibility-kit' ) }
+						: __(
+								'Your theme',
+								'wowstudio-accessibility-remediation'
+						  ) }
 				</h2>
 				<Button
 					variant={ state?.checked ? 'secondary' : 'primary' }
@@ -82,10 +85,13 @@ export default function ThemePanel() {
 					onClick={ check }
 				>
 					{ state?.checked
-						? __( 'Check again', 'wowstudio-accessibility-kit' )
+						? __(
+								'Check again',
+								'wowstudio-accessibility-remediation'
+						  )
 						: __(
 								'Check my theme',
-								'wowstudio-accessibility-kit'
+								'wowstudio-accessibility-remediation'
 						  ) }
 				</Button>
 			</div>
@@ -100,7 +106,7 @@ export default function ThemePanel() {
 				<Busy
 					label={ __(
 						'Looking at a few representative pages…',
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					) }
 				/>
 			) }
@@ -108,7 +114,7 @@ export default function ThemePanel() {
 			<p className="wsak-theme__lede">
 				{ __(
 					'Your header, navigation and footer are the same on every page, so they are checked once here rather than reported against every page that uses them.',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 			</p>
 
@@ -116,7 +122,7 @@ export default function ThemePanel() {
 				<p className="wsak-theme__lede">
 					{ __(
 						'Nothing has looked at your theme yet.',
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					) }
 				</p>
 			) }
@@ -126,13 +132,13 @@ export default function ThemePanel() {
 					<h3 className="wsak-group__title">
 						{ __(
 							'You can fix these yourself, without code',
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 						) }
 					</h3>
 					<p className="wsak-group__blurb">
 						{ __(
 							'Each of these is a field on a screen you already have. Fixing it there is permanent, and it holds whether or not this plugin stays installed.',
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 						) }
 					</p>
 					<ul className="wsak-issues">
@@ -148,13 +154,13 @@ export default function ThemePanel() {
 					<h3 className="wsak-group__title">
 						{ __(
 							'These need whoever maintains your theme',
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 						) }
 					</h3>
 					<p className="wsak-group__blurb">
 						{ __(
 							'These live in theme files, which nothing here can change. There is a copyable summary below with the exact change for each one.',
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 						) }
 					</p>
 					<ul className="wsak-issues">
@@ -174,7 +180,7 @@ export default function ThemePanel() {
 								'Send this to your developer (%d change)',
 								'Send this to your developer (%d changes)',
 								handoffs.length,
-								'wowstudio-accessibility-kit'
+								'wowstudio-accessibility-remediation'
 							),
 							handoffs.length
 						) }
@@ -183,7 +189,7 @@ export default function ThemePanel() {
 						__nextHasNoMarginBottom
 						label={ __(
 							'The changes, written out',
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 						) }
 						hideLabelFromVision
 						value={ state.handover }
@@ -202,10 +208,13 @@ export default function ThemePanel() {
 							} }
 						>
 							{ copied
-								? __( 'Copied', 'wowstudio-accessibility-kit' )
+								? __(
+										'Copied',
+										'wowstudio-accessibility-remediation'
+								  )
 								: __(
 										'Copy it',
-										'wowstudio-accessibility-kit'
+										'wowstudio-accessibility-remediation'
 								  ) }
 						</Button>
 					</div>
@@ -216,7 +225,7 @@ export default function ThemePanel() {
 				<Notice status="success" isDismissible={ false }>
 					{ __(
 						'None of the automated checks found anything in your theme. That is a good sign and not a clean bill of health — most of WCAG needs a person.',
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					) }
 				</Notice>
 			) }
@@ -250,7 +259,10 @@ function Finding( { finding } ) {
 					<span className="wsak-tag wsak-tag--sc">
 						{ sprintf(
 							/* translators: %s: WCAG success criterion number. */
-							__( 'WCAG %s', 'wowstudio-accessibility-kit' ),
+							__(
+								'WCAG %s',
+								'wowstudio-accessibility-remediation'
+							),
 							finding.wcag_sc
 						) }
 					</span>
@@ -272,7 +284,7 @@ function Finding( { finding } ) {
 					<a href={ triage.url }>
 						{ __(
 							'Take me to the setting',
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 						) }
 					</a>
 				</p>
@@ -293,7 +305,7 @@ function Finding( { finding } ) {
 						/* translators: %s: name of the accessibility check. */
 						__(
 							'Suggested change for: %s',
-							'wowstudio-accessibility-kit'
+							'wowstudio-accessibility-remediation'
 						),
 						finding.rule_title
 					) }

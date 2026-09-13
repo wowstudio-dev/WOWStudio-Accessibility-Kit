@@ -93,7 +93,7 @@ final class IssueReview {
 		if ( null === $issue ) {
 			return new WP_Error(
 				'wsak_unknown_issue',
-				__( 'That finding could not be found.', 'wowstudio-accessibility-kit' ),
+				__( 'That finding could not be found.', 'wowstudio-accessibility-remediation' ),
 				array( 'status' => 404 )
 			);
 		}
@@ -103,7 +103,7 @@ final class IssueReview {
 		if ( mb_strlen( $note ) < self::MIN_NOTE ) {
 			return new WP_Error(
 				'wsak_note_required',
-				__( 'Say why this is not a problem. The reason is kept with the finding, and it is what makes this a record somebody can rely on later rather than an unexplained dismissal.', 'wowstudio-accessibility-kit' ),
+				__( 'Say why this is not a problem. The reason is kept with the finding, and it is what makes this a record somebody can rely on later rather than an unexplained dismissal.', 'wowstudio-accessibility-remediation' ),
 				array( 'status' => 400 )
 			);
 		}
@@ -134,7 +134,7 @@ final class IssueReview {
 		if ( ! $allowed ) {
 			return new WP_Error(
 				'wsak_forbidden_post',
-				__( 'You do not have permission to make decisions about that content.', 'wowstudio-accessibility-kit' ),
+				__( 'You do not have permission to make decisions about that content.', 'wowstudio-accessibility-remediation' ),
 				array( 'status' => rest_authorization_required_code() )
 			);
 		}
@@ -142,7 +142,7 @@ final class IssueReview {
 		if ( ! $this->issues->set_status( $issue_id, IssueStatus::Ignored, $note, $user_id ) ) {
 			return new WP_Error(
 				'wsak_not_stored',
-				__( 'That decision could not be saved.', 'wowstudio-accessibility-kit' ),
+				__( 'That decision could not be saved.', 'wowstudio-accessibility-remediation' ),
 				array( 'status' => 500 )
 			);
 		}
@@ -195,7 +195,7 @@ final class IssueReview {
 		if ( null === $issue ) {
 			return new WP_Error(
 				'wsak_unknown_issue',
-				__( 'That finding could not be found.', 'wowstudio-accessibility-kit' ),
+				__( 'That finding could not be found.', 'wowstudio-accessibility-remediation' ),
 				array( 'status' => 404 )
 			);
 		}
@@ -203,7 +203,7 @@ final class IssueReview {
 		if ( $issue->post_id > 0 && ! current_user_can( 'edit_post', $issue->post_id ) ) {
 			return new WP_Error(
 				'wsak_forbidden_post',
-				__( 'You do not have permission to make decisions about that content.', 'wowstudio-accessibility-kit' ),
+				__( 'You do not have permission to make decisions about that content.', 'wowstudio-accessibility-remediation' ),
 				array( 'status' => rest_authorization_required_code() )
 			);
 		}

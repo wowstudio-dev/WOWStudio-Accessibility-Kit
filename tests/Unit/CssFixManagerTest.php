@@ -346,7 +346,7 @@ final class CssFixManagerTest extends TestCase {
 			'closes the rule'        => array( '.a { color: red } body' ),
 			'ends the declaration'   => array( '.a; body' ),
 			'opens an at-rule'       => array( '@import url(evil.css); .a' ),
-			'opens a comment'        => array( '.a /* END WOWStudio Accessibility Kit */' ),
+			'opens a comment'        => array( '.a /* END WOWStudio Accessibility Remediation */' ),
 			'closes a comment'       => array( '.a */' ),
 			'fetches a resource'     => array( '.a[style*="url(x)"]' ),
 			'contains a newline'     => array( ".a\n}\nbody" ),

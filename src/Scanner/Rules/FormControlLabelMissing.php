@@ -85,7 +85,7 @@ final class FormControlLabelMissing implements Rule {
 	 * @return string
 	 */
 	public function title(): string {
-		return __( 'Form field has no label', 'wowstudio-accessibility-kit' );
+		return __( 'Form field has no label', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -96,7 +96,7 @@ final class FormControlLabelMissing implements Rule {
 	 * @return string
 	 */
 	public function description(): string {
-		return __( 'This field is not labelled, so someone using a screen reader cannot tell what to type into it. Add a <label for> pointing at the field, or an aria-label. Placeholder text does not count.', 'wowstudio-accessibility-kit' );
+		return __( 'This field is not labelled, so someone using a screen reader cannot tell what to type into it. Add a <label for> pointing at the field, or an aria-label. Placeholder text does not count.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -107,7 +107,7 @@ final class FormControlLabelMissing implements Rule {
 	 * @return string
 	 */
 	public function consequence(): string {
-		return __( 'Anyone using a screen reader arrives at this field and is never told what to put in it.', 'wowstudio-accessibility-kit' );
+		return __( 'Anyone using a screen reader arrives at this field and is never told what to put in it.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -122,7 +122,7 @@ final class FormControlLabelMissing implements Rule {
 		return new FixPlan(
 			FixKind::Manual,
 			FixTarget::Content,
-			__( 'What a field should be called is a judgement about what it is asking for. Label it wherever the form is built — usually the form plugin rather than the page.', 'wowstudio-accessibility-kit' )
+			__( 'What a field should be called is a judgement about what it is asking for. Label it wherever the form is built — usually the form plugin rather than the page.', 'wowstudio-accessibility-remediation' )
 		);
 	}
 
@@ -170,7 +170,7 @@ final class FormControlLabelMissing implements Rule {
 				$this->detection(),
 				sprintf(
 					/* translators: %s: form field name attribute, or the element name. */
-					__( 'The form field "%s" has no label.', 'wowstudio-accessibility-kit' ),
+					__( 'The form field "%s" has no label.', 'wowstudio-accessibility-remediation' ),
 					'' !== trim( $control->getAttribute( 'name' ) ) ? $control->getAttribute( 'name' ) : $control->nodeName
 				),
 				$document->selector_for( $control ),

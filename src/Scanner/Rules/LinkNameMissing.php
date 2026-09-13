@@ -85,7 +85,7 @@ final class LinkNameMissing implements Rule {
 	 * @return string
 	 */
 	public function title(): string {
-		return __( 'Link has no accessible name', 'wowstudio-accessibility-kit' );
+		return __( 'Link has no accessible name', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -96,7 +96,7 @@ final class LinkNameMissing implements Rule {
 	 * @return string
 	 */
 	public function description(): string {
-		return __( 'This link announces nothing, so someone using a screen reader hears only "link" and cannot tell where it goes. Add visible text, an aria-label, or alt text on the image inside it.', 'wowstudio-accessibility-kit' );
+		return __( 'This link announces nothing, so someone using a screen reader hears only "link" and cannot tell where it goes. Add visible text, an aria-label, or alt text on the image inside it.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -107,7 +107,7 @@ final class LinkNameMissing implements Rule {
 	 * @return string
 	 */
 	public function consequence(): string {
-		return __( 'A screen reader announces this as “link” and nothing else, so there is no way to tell where it goes.', 'wowstudio-accessibility-kit' );
+		return __( 'A screen reader announces this as “link” and nothing else, so there is no way to tell where it goes.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -122,7 +122,7 @@ final class LinkNameMissing implements Rule {
 		return new FixPlan(
 			FixKind::Manual,
 			FixTarget::Content,
-			__( 'A link\'s name has to describe where it goes, which nothing here can know. Edit the link in the content.', 'wowstudio-accessibility-kit' )
+			__( 'A link\'s name has to describe where it goes, which nothing here can know. Edit the link in the content.', 'wowstudio-accessibility-remediation' )
 		);
 	}
 
@@ -153,7 +153,7 @@ final class LinkNameMissing implements Rule {
 				$this->detection(),
 				sprintf(
 					/* translators: %s: link target. */
-					__( 'The link to "%s" has no text or label.', 'wowstudio-accessibility-kit' ),
+					__( 'The link to "%s" has no text or label.', 'wowstudio-accessibility-remediation' ),
 					$link->getAttribute( 'href' )
 				),
 				$document->selector_for( $link ),

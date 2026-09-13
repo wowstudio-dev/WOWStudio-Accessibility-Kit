@@ -99,13 +99,16 @@ export default function Panel() {
 				target="wsak-sidebar"
 				icon="universal-access-alt"
 			>
-				{ __( 'Accessibility', 'wowstudio-accessibility-kit' ) }
+				{ __( 'Accessibility', 'wowstudio-accessibility-remediation' ) }
 			</PluginSidebarMoreMenuItem>
 
 			<PluginSidebar
 				name="wsak-sidebar"
 				icon="universal-access-alt"
-				title={ __( 'Accessibility', 'wowstudio-accessibility-kit' ) }
+				title={ __(
+					'Accessibility',
+					'wowstudio-accessibility-remediation'
+				) }
 			>
 				<PanelBody>
 					{ error && (
@@ -119,7 +122,7 @@ export default function Panel() {
 						{ null === result
 							? __(
 									'Checking what you have written…',
-									'wowstudio-accessibility-kit'
+									'wowstudio-accessibility-remediation'
 							  )
 							: sprintf(
 									/* translators: %d: number of findings. */
@@ -127,7 +130,7 @@ export default function Panel() {
 										'%d thing to look at.',
 										'%d things to look at.',
 										total,
-										'wowstudio-accessibility-kit'
+										'wowstudio-accessibility-remediation'
 									),
 									total
 							  ) }

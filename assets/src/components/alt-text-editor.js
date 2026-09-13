@@ -75,7 +75,7 @@ function ImageRow( { item, draft, onChange, onSave, busy } ) {
 							{ ' ' }
 							{ __(
 								'(opens the media screen in a new tab)',
-								'wowstudio-accessibility-kit'
+								'wowstudio-accessibility-remediation'
 							) }
 						</span>
 					</a>
@@ -87,7 +87,7 @@ function ImageRow( { item, draft, onChange, onSave, busy } ) {
 							/* translators: %s: title of the post the image was uploaded from. */
 							__(
 								'Uploaded from “%s”. It may be used elsewhere too.',
-								'wowstudio-accessibility-kit'
+								'wowstudio-accessibility-remediation'
 							),
 							item.uploaded_to.title
 						) }
@@ -99,11 +99,11 @@ function ImageRow( { item, draft, onChange, onSave, busy } ) {
 					className="wsak-alt-row__field"
 					label={ __(
 						'Describe this image',
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					) }
 					help={ __(
 						'Say what the image tells the reader, not what it looks like.',
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					) }
 					value={ text }
 					disabled={ decorative || busy }
@@ -117,11 +117,11 @@ function ImageRow( { item, draft, onChange, onSave, busy } ) {
 					className="wsak-alt-row__decorative"
 					label={ __(
 						'Decorative — this image carries no meaning of its own',
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					) }
 					help={ __(
 						'Saves an empty description, which tells a screen reader to skip the image. That is a real answer, not a blank one.',
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					) }
 					checked={ decorative }
 					disabled={ busy }
@@ -139,7 +139,10 @@ function ImageRow( { item, draft, onChange, onSave, busy } ) {
 
 				{ draft?.saved && (
 					<p className="wsak-alt-row__saved">
-						{ __( 'Saved.', 'wowstudio-accessibility-kit' ) }
+						{ __(
+							'Saved.',
+							'wowstudio-accessibility-remediation'
+						) }
 					</p>
 				) }
 			</div>
@@ -150,7 +153,7 @@ function ImageRow( { item, draft, onChange, onSave, busy } ) {
 					disabled={ ! changed || busy }
 					onClick={ () => onSave( [ item.id ] ) }
 				>
-					{ __( 'Save', 'wowstudio-accessibility-kit' ) }
+					{ __( 'Save', 'wowstudio-accessibility-remediation' ) }
 				</Button>
 			</div>
 		</li>
@@ -292,7 +295,7 @@ export default function AltTextEditor() {
 							/* translators: 1: how many were saved. 2: how many failed. */
 							__(
 								'%1$d saved, %2$d not saved.',
-								'wowstudio-accessibility-kit'
+								'wowstudio-accessibility-remediation'
 							),
 							saved.length,
 							results.length - saved.length
@@ -312,7 +315,7 @@ export default function AltTextEditor() {
 			<Skeleton
 				label={ __(
 					'Looking for undescribed images…',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 			/>
 		);
@@ -331,14 +334,14 @@ export default function AltTextEditor() {
 			<h2 id="wsak-alt-title" className="wsak-alt__title">
 				{ __(
 					'Images without a description',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 			</h2>
 
 			<p className="wsak-alt__lede">
 				{ __(
 					'Every image here has never been described. Images already marked decorative are left alone — an empty description is somebody’s decision, not a gap. What you write goes into WordPress’s own alt text, so it applies everywhere that image is used and stays behind if this plugin is removed.',
-					'wowstudio-accessibility-kit'
+					'wowstudio-accessibility-remediation'
 				) }
 			</p>
 
@@ -360,11 +363,11 @@ export default function AltTextEditor() {
 				<EmptyState
 					title={ __(
 						'Every image has been described',
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					) }
 					body={ __(
 						'Nothing in the media library is missing a description. That covers images this plugin can see in the library — it does not cover images added by a theme, a plugin, or a page builder that stores them elsewhere.',
-						'wowstudio-accessibility-kit'
+						'wowstudio-accessibility-remediation'
 					) }
 				/>
 			) : (
@@ -377,7 +380,7 @@ export default function AltTextEditor() {
 									'%d image still needs a description.',
 									'%d images still need a description.',
 									data.total,
-									'wowstudio-accessibility-kit'
+									'wowstudio-accessibility-remediation'
 								),
 								data.total
 							) }
@@ -395,13 +398,13 @@ export default function AltTextEditor() {
 											'Save %d description',
 											'Save %d descriptions',
 											changedIds.length,
-											'wowstudio-accessibility-kit'
+											'wowstudio-accessibility-remediation'
 										),
 										changedIds.length
 								  )
 								: __(
 										'Save descriptions',
-										'wowstudio-accessibility-kit'
+										'wowstudio-accessibility-remediation'
 								  ) }
 						</Button>
 					</div>
@@ -424,7 +427,7 @@ export default function AltTextEditor() {
 							className="wsak-alt__pages"
 							aria-label={ __(
 								'Pages of images',
-								'wowstudio-accessibility-kit'
+								'wowstudio-accessibility-remediation'
 							) }
 						>
 							<Button
@@ -434,7 +437,7 @@ export default function AltTextEditor() {
 							>
 								{ __(
 									'Previous',
-									'wowstudio-accessibility-kit'
+									'wowstudio-accessibility-remediation'
 								) }
 							</Button>
 
@@ -443,7 +446,7 @@ export default function AltTextEditor() {
 									/* translators: 1: current page. 2: how many pages. */
 									__(
 										'Page %1$d of %2$d',
-										'wowstudio-accessibility-kit'
+										'wowstudio-accessibility-remediation'
 									),
 									page,
 									data.total_pages
@@ -455,7 +458,10 @@ export default function AltTextEditor() {
 								disabled={ page >= data.total_pages || busy }
 								onClick={ () => setPage( page + 1 ) }
 							>
-								{ __( 'Next', 'wowstudio-accessibility-kit' ) }
+								{ __(
+									'Next',
+									'wowstudio-accessibility-remediation'
+								) }
 							</Button>
 						</nav>
 					) }

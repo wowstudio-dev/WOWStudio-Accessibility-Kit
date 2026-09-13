@@ -1,10 +1,10 @@
-=== WOWStudio Accessibility Kit ===
+=== WOWStudio Accessibility Remediation ===
 Contributors: wowstudioplugin
 Tags: accessibility, wcag, a11y, alt text, accessibility scanner
 Requires at least: 6.8
 Tested up to: 7.1
 Requires PHP: 8.1
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -12,7 +12,7 @@ Find, fix and document WCAG accessibility issues at the code level. Real fixes y
 
 == Description ==
 
-WOWStudio Accessibility Kit helps you **find, fix and document** accessibility issues in your WordPress site. It scans your pages against WCAG 2.2 A and AA success criteria, explains what it found in plain language, and proposes real changes to your markup that you review before anything is applied.
+WOWStudio Accessibility Remediation helps you **find, fix and document** accessibility issues in your WordPress site. It scans your pages against WCAG 2.2 A and AA success criteria, explains what it found in plain language, and proposes real changes to your markup that you review before anything is applied.
 
 It is not an accessibility overlay. Nothing is injected into your front end, and no widget or toolbar is added for your visitors. Fixes are changes to the code itself.
 
@@ -63,9 +63,9 @@ nothing is being paid for per page.
 
 == Installation ==
 
-1. Upload the plugin to `/wp-content/plugins/wowstudio-accessibility-kit`, or install it through **Plugins → Add New**.
+1. Upload the plugin to `/wp-content/plugins/wowstudio-accessibility-remediation`, or install it through **Plugins → Add New**.
 2. Activate it through the **Plugins** menu.
-3. Open **Accessibility Kit** in the admin menu and run your first scan.
+3. Open **Accessibility Remediation** in the admin menu and run your first scan.
 
 == Frequently Asked Questions ==
 
@@ -104,6 +104,13 @@ In WordPress's own alt text field on the media item. It therefore applies everyw
 7. The setup, on first activation. Three steps, none of them mandatory, and nothing switched on for you.
 
 == Changelog ==
+
+= 1.0.1 =
+Changes from the WordPress.org review round, before the first release reached anybody.
+
+* Renamed from "WOWStudio Accessibility Kit". The old name was too close to other plugins in the directory, and "remediation" is the thing that actually distinguishes this one.
+* Site-wide fix styles and the admin column's styles are enqueued rather than printed inline.
+* Activating the plugin no longer redirects you. The setup is still there; the plugin's own dashboard opens on it until you have been through it.
 
 = 1.0.0 =
 First public release.

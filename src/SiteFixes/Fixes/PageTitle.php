@@ -66,7 +66,7 @@ final class PageTitle implements SiteFix {
 	 * @return string
 	 */
 	public function title(): string {
-		return __( 'Give every page a title', 'wowstudio-accessibility-kit' );
+		return __( 'Give every page a title', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -77,7 +77,7 @@ final class PageTitle implements SiteFix {
 	 * @return string
 	 */
 	public function description(): string {
-		return __( 'Asks WordPress to write the page title your theme never asked for. The title names the page in browser tabs, bookmarks, search results and the window list a screen reader reads out — a site where every page is called the same thing cannot be navigated by any of them. WordPress composes the text itself; nothing is written into your content.', 'wowstudio-accessibility-kit' );
+		return __( 'Asks WordPress to write the page title your theme never asked for. The title names the page in browser tabs, bookmarks, search results and the window list a screen reader reads out — a site where every page is called the same thing cannot be navigated by any of them. WordPress composes the text itself; nothing is written into your content.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -99,7 +99,7 @@ final class PageTitle implements SiteFix {
 	 * @return string
 	 */
 	public function caveat(): string {
-		return __( 'Takes effect the next time a page loads: theme support is declared long before a settings request arrives, so it cannot change the request that switched it on. A theme that already declares support needs nothing from this.', 'wowstudio-accessibility-kit' );
+		return __( 'Takes effect the next time a page loads: theme support is declared long before a settings request arrives, so it cannot change the request that switched it on. A theme that already declares support needs nothing from this.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**

@@ -138,7 +138,7 @@ final class LinkToFile implements Rule {
 	 * @return string
 	 */
 	public function title(): string {
-		return __( 'Link downloads a file without saying so', 'wowstudio-accessibility-kit' );
+		return __( 'Link downloads a file without saying so', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -149,7 +149,7 @@ final class LinkToFile implements Rule {
 	 * @return string
 	 */
 	public function description(): string {
-		return __( 'This link points at a document rather than a page, and its text does not say so. Following it will start a download or open another application, which is a surprise for anybody and an expensive one for a reader who cannot easily see what just happened. Name the format in the link text — "Annual report (PDF)" — so the choice is made before the click, not after.', 'wowstudio-accessibility-kit' );
+		return __( 'This link points at a document rather than a page, and its text does not say so. Following it will start a download or open another application, which is a surprise for anybody and an expensive one for a reader who cannot easily see what just happened. Name the format in the link text — "Annual report (PDF)" — so the choice is made before the click, not after.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -160,7 +160,7 @@ final class LinkToFile implements Rule {
 	 * @return string
 	 */
 	public function consequence(): string {
-		return __( 'The reader expects a page and gets a download, with no warning and an awkward way back.', 'wowstudio-accessibility-kit' );
+		return __( 'The reader expects a page and gets a download, with no warning and an awkward way back.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -175,7 +175,7 @@ final class LinkToFile implements Rule {
 		return new FixPlan(
 			FixKind::Manual,
 			FixTarget::Content,
-			__( 'Add the format to the link text, in the words that suit the sentence it sits in. Adding the file size too is a kindness on a slow connection.', 'wowstudio-accessibility-kit' )
+			__( 'Add the format to the link text, in the words that suit the sentence it sits in. Adding the file size too is a kindness on a slow connection.', 'wowstudio-accessibility-remediation' )
 		);
 	}
 
@@ -230,12 +230,12 @@ final class LinkToFile implements Rule {
 				'' === $name
 					? sprintf(
 						/* translators: %s: the file format, for example PDF. */
-						__( 'This link opens a %s file and does not say so.', 'wowstudio-accessibility-kit' ),
+						__( 'This link opens a %s file and does not say so.', 'wowstudio-accessibility-remediation' ),
 						self::FORMATS[ $extension ]
 					)
 					: sprintf(
 						/* translators: 1: the link text. 2: the file format, for example PDF. */
-						__( 'The link "%1$s" opens a %2$s file and does not say so.', 'wowstudio-accessibility-kit' ),
+						__( 'The link "%1$s" opens a %2$s file and does not say so.', 'wowstudio-accessibility-remediation' ),
 						$name,
 						self::FORMATS[ $extension ]
 					),

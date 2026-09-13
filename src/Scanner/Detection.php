@@ -39,8 +39,8 @@ enum Detection: string {
 	 */
 	public function label(): string {
 		return match ( $this ) {
-			self::Auto   => __( 'Auto-detected', 'wowstudio-accessibility-kit' ),
-			self::Manual => __( 'Needs manual review', 'wowstudio-accessibility-kit' ),
+			self::Auto   => __( 'Auto-detected', 'wowstudio-accessibility-remediation' ),
+			self::Manual => __( 'Needs manual review', 'wowstudio-accessibility-remediation' ),
 		};
 	}
 }

@@ -16,9 +16,10 @@ use WOWStudio\AccessibilityKit\Tests\TestCase;
 /**
  * Tests the setup that opens on a fresh install.
  *
- * The behaviour worth pinning down is all about restraint: this thing takes
- * over somebody's screen, so every case where it must not do that is a case
- * worth a test.
+ * The behaviour worth pinning down is all about restraint. This used to take
+ * over somebody's screen on activation, and the tests were about the cases
+ * where it must not; it no longer reaches outside the plugin's own screens at
+ * all, and the test that matters now is the one holding it there.
  *
  * @covers \WOWStudio\AccessibilityKit\Admin\Onboarding
  */
@@ -35,15 +36,10 @@ final class OnboardingTest extends TestCase {
 		Functions\when( 'admin_url' )->alias(
 			static fn( string $path = '' ): string => 'https://example.test/wp-admin/' . $path
 		);
-		Functions\when( 'wp_doing_ajax' )->justReturn( false );
-		Functions\when( 'wp_doing_cron' )->justReturn( false );
-		Functions\when( 'is_network_admin' )->justReturn( false );
-		Functions\when( 'current_user_can' )->justReturn( true );
 		Functions\when( 'wp_unslash' )->returnArg();
 		Functions\when( 'sanitize_key' )->alias(
-			static fn( $value ): string => strtolower( preg_replace( '/[^a-z0-9_\-]/i', '', (string) $value ) )
+			static fn( $value ): string => strtolower( (string) preg_replace( '/[^a-z0-9_-]/i', '', (string) $value ) )
 		);
-		unset( $_GET['activate-multi'] );
 	}
 
 	/**
@@ -52,127 +48,38 @@ final class OnboardingTest extends TestCase {
 	 * @return void
 	 */
 	protected function tearDown(): void {
-		unset( $_GET['activate-multi'], $_GET[ Onboarding::QUERY_ARG ] );
+		unset( $_GET[ Onboarding::QUERY_ARG ] );
 
 		parent::tearDown();
 	}
 
 	/**
-	 * Activating a fresh install arms the redirect.
+	 * The setup hijacks nothing, and that is the whole point of it.
+	 *
+	 * There was a redirect on activation once. It fired once, checked the
+	 * capability, and skipped bulk activations — and it still went in the
+	 * review round for 1.0.1. Guideline 11 asks plugins not to hijack the
+	 * admin, and taking over whatever screen somebody was already on is the
+	 * plainest reading of that however careful the safeguards around it were.
+	 * The dashboard opens on the setup while the setup is undone instead, which
+	 * lands them in the same place without reaching outside our own screens.
+	 *
+	 * Source-reading, because a hook added back here would work perfectly and
+	 * fail a review months later, with nothing failing in between to say so.
 	 *
 	 * @return void
 	 */
-	public function test_activation_arms_the_redirect(): void {
-		Functions\when( 'get_option' )->justReturn( array() );
-		Functions\expect( 'set_transient' )
-			->once()
-			->with( Onboarding::REDIRECT_TRANSIENT, 1, 300 );
+	public function test_the_setup_hijacks_nothing(): void {
+		// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- Reading a local source file in a unit test; WordPress is not loaded.
+		$source = (string) file_get_contents( __DIR__ . '/../../src/Admin/Onboarding.php' );
 
-		Onboarding::note_activation();
-
-		$this->addToAssertionCount( 1 );
-	}
-
-	/**
-	 * Reactivating after the setup was finished does not arm it again.
-	 *
-	 * Deactivating and reactivating a plugin is something people do while
-	 * debugging something else entirely. Being marched back through a setup
-	 * they have already completed, every time, would be its own small insult.
-	 *
-	 * @return void
-	 */
-	public function test_activation_after_setup_arms_nothing(): void {
-		Functions\when( 'get_option' )->justReturn( array( 'done' => true ) );
-		Functions\expect( 'set_transient' )->never();
-
-		Onboarding::note_activation();
-
-		$this->addToAssertionCount( 1 );
-	}
-
-	/**
-	 * With nothing armed, nothing happens.
-	 *
-	 * @return void
-	 */
-	public function test_no_flag_means_no_redirect(): void {
-		Functions\when( 'get_transient' )->justReturn( false );
-		Functions\expect( 'delete_transient' )->never();
-
-		$this->assertFalse( ( new Onboarding() )->should_open_setup() );
-	}
-
-	/**
-	 * The first admin request after activation opens the setup.
-	 *
-	 * @return void
-	 */
-	public function test_the_first_request_after_activation_opens_the_setup(): void {
-		Functions\when( 'get_transient' )->justReturn( 1 );
-		Functions\when( 'delete_transient' )->justReturn( true );
-
-		$this->assertTrue( ( new Onboarding() )->should_open_setup() );
-	}
-
-	/**
-	 * The flag is spent whether or not it is acted on.
-	 *
-	 * Every early return below is a case where redirecting would be wrong for
-	 * this request. None of them is a reason to keep the flag and ambush a
-	 * later one.
-	 *
-	 * @dataProvider reasons_not_to_redirect
-	 *
-	 * @param callable $arrange Sets up the case.
-	 * @return void
-	 */
-	public function test_the_flag_is_spent_even_when_it_is_not_acted_on( callable $arrange ): void {
-		Functions\when( 'get_transient' )->justReturn( 1 );
-		Functions\expect( 'delete_transient' )
-			->once()
-			->with( Onboarding::REDIRECT_TRANSIENT );
-
-		$arrange();
-
-		$this->assertFalse( ( new Onboarding() )->should_open_setup() );
-	}
-
-	/**
-	 * Cases where taking over the screen would be wrong.
-	 *
-	 * @return array<string, array{0: callable}>
-	 */
-	public static function reasons_not_to_redirect(): array {
-		return array(
-			'during an AJAX request' => array(
-				static function (): void {
-					Functions\when( 'wp_doing_ajax' )->justReturn( true );
-				},
-			),
-			'during cron'            => array(
-				static function (): void {
-					Functions\when( 'wp_doing_cron' )->justReturn( true );
-				},
-			),
-			'in the network admin'   => array(
-				static function (): void {
-					Functions\when( 'is_network_admin' )->justReturn( true );
-				},
-			),
-			// WordPress is mid-loop over several plugins and the ones after
-			// this still have to be activated.
-			'activating in bulk'     => array(
-				static function (): void {
-					$_GET['activate-multi'] = '1';
-				},
-			),
-			'without the capability' => array(
-				static function (): void {
-					Functions\when( 'current_user_can' )->justReturn( false );
-				},
-			),
-		);
+		foreach ( array( 'wp_safe_redirect(', 'wp_redirect(', 'add_action(', 'admin_notices' ) as $forbidden ) {
+			$this->assertStringNotContainsString(
+				$forbidden,
+				$source,
+				'The setup must not reach outside the plugin\'s own screens.'
+			);
+		}
 	}
 
 	/**
@@ -188,7 +95,7 @@ final class OnboardingTest extends TestCase {
 	 * @return void
 	 */
 	public function test_the_setup_lives_on_the_dashboard_page(): void {
-		$this->assertStringContainsString( 'page=wowstudio-accessibility-kit', Onboarding::url() );
+		$this->assertStringContainsString( 'page=wowstudio-accessibility-remediation', Onboarding::url() );
 		$this->assertStringContainsString( Onboarding::QUERY_ARG . '=1', Onboarding::url() );
 	}
 

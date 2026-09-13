@@ -92,7 +92,7 @@ final class ImageAltRedundant implements Rule {
 	 * @return string
 	 */
 	public function title(): string {
-		return __( 'Alt text repeats the caption or title', 'wowstudio-accessibility-kit' );
+		return __( 'Alt text repeats the caption or title', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -103,7 +103,7 @@ final class ImageAltRedundant implements Rule {
 	 * @return string
 	 */
 	public function description(): string {
-		return __( 'This image\'s alt text is word-for-word the same as its caption or its title attribute, so a screen reader announces the same sentence twice in a row. Either describe the image differently in the alt — what it shows, rather than what the caption already says about it — or mark it decorative with alt="" and let the caption do the work.', 'wowstudio-accessibility-kit' );
+		return __( 'This image\'s alt text is word-for-word the same as its caption or its title attribute, so a screen reader announces the same sentence twice in a row. Either describe the image differently in the alt — what it shows, rather than what the caption already says about it — or mark it decorative with alt="" and let the caption do the work.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -114,7 +114,7 @@ final class ImageAltRedundant implements Rule {
 	 * @return string
 	 */
 	public function consequence(): string {
-		return __( 'The same sentence is announced twice in a row to anyone listening to the page.', 'wowstudio-accessibility-kit' );
+		return __( 'The same sentence is announced twice in a row to anyone listening to the page.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -129,7 +129,7 @@ final class ImageAltRedundant implements Rule {
 		return new FixPlan(
 			FixKind::Manual,
 			FixTarget::Content,
-			__( 'Which of the two should change depends on what each is for: the caption is usually the context, the alt is usually what the picture shows. Sometimes the right answer is an empty alt.', 'wowstudio-accessibility-kit' )
+			__( 'Which of the two should change depends on what each is for: the caption is usually the context, the alt is usually what the picture shows. Sometimes the right answer is an empty alt.', 'wowstudio-accessibility-remediation' )
 		);
 	}
 
@@ -159,7 +159,7 @@ final class ImageAltRedundant implements Rule {
 				$findings[] = $this->finding(
 					$document,
 					$image,
-					__( 'This image\'s alt text and title attribute are identical, so both are announced.', 'wowstudio-accessibility-kit' )
+					__( 'This image\'s alt text and title attribute are identical, so both are announced.', 'wowstudio-accessibility-remediation' )
 				);
 
 				continue;
@@ -174,7 +174,7 @@ final class ImageAltRedundant implements Rule {
 				$findings[] = $this->finding(
 					$document,
 					$image,
-					__( 'This image\'s alt text is word-for-word its caption, so the same sentence is announced twice.', 'wowstudio-accessibility-kit' )
+					__( 'This image\'s alt text is word-for-word its caption, so the same sentence is announced twice.', 'wowstudio-accessibility-remediation' )
 				);
 			}
 		}

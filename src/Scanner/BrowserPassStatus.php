@@ -63,9 +63,9 @@ enum BrowserPassStatus: string {
 	 */
 	public function label(): string {
 		return match ( $this ) {
-			self::Ran     => __( 'Colour and layout checks ran', 'wowstudio-accessibility-kit' ),
-			self::Blocked => __( 'Colour and layout checks could not run', 'wowstudio-accessibility-kit' ),
-			self::Skipped => __( 'Colour and layout checks were not attempted', 'wowstudio-accessibility-kit' ),
+			self::Ran     => __( 'Colour and layout checks ran', 'wowstudio-accessibility-remediation' ),
+			self::Blocked => __( 'Colour and layout checks could not run', 'wowstudio-accessibility-remediation' ),
+			self::Skipped => __( 'Colour and layout checks were not attempted', 'wowstudio-accessibility-remediation' ),
 		};
 	}
 
@@ -78,9 +78,9 @@ enum BrowserPassStatus: string {
 	 */
 	public function consequence(): string {
 		return match ( $this ) {
-			self::Ran     => __( 'Contrast, text size and layout were measured in a real browser on this scan.', 'wowstudio-accessibility-kit' ),
-			self::Blocked => __( 'This scan could not open your page in a browser, so nothing about colour, text size or layout was checked. Those problems may be present and unreported.', 'wowstudio-accessibility-kit' ),
-			self::Skipped => __( 'This scan ran on the server without a browser, so colour, text size and layout were not checked. Re-run it from the dashboard to include them.', 'wowstudio-accessibility-kit' ),
+			self::Ran     => __( 'Contrast, text size and layout were measured in a real browser on this scan.', 'wowstudio-accessibility-remediation' ),
+			self::Blocked => __( 'This scan could not open your page in a browser, so nothing about colour, text size or layout was checked. Those problems may be present and unreported.', 'wowstudio-accessibility-remediation' ),
+			self::Skipped => __( 'This scan ran on the server without a browser, so colour, text size and layout were not checked. Re-run it from the dashboard to include them.', 'wowstudio-accessibility-remediation' ),
 		};
 	}
 }

@@ -120,7 +120,7 @@ final class ReadingLevelHigh implements Rule {
 	 * @return string
 	 */
 	public function title(): string {
-		return __( 'Text may be hard to read', 'wowstudio-accessibility-kit' );
+		return __( 'Text may be hard to read', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -131,7 +131,7 @@ final class ReadingLevelHigh implements Rule {
 	 * @return string
 	 */
 	public function description(): string {
-		return __( 'By the Flesch–Kincaid formula this page reads above lower secondary school level, which WCAG 3.1.5 treats as the point where a simpler version or a plain-language summary should be available. Treat this as a prompt rather than a verdict: the formula counts sentence length and syllables and understands nothing, so a page written for a specialist audience may be exactly right as it is.', 'wowstudio-accessibility-kit' );
+		return __( 'By the Flesch–Kincaid formula this page reads above lower secondary school level, which WCAG 3.1.5 treats as the point where a simpler version or a plain-language summary should be available. Treat this as a prompt rather than a verdict: the formula counts sentence length and syllables and understands nothing, so a page written for a specialist audience may be exactly right as it is.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -142,7 +142,7 @@ final class ReadingLevelHigh implements Rule {
 	 * @return string
 	 */
 	public function consequence(): string {
-		return __( 'Readers with a cognitive disability, or reading in a second language, may not get through this page.', 'wowstudio-accessibility-kit' );
+		return __( 'Readers with a cognitive disability, or reading in a second language, may not get through this page.', 'wowstudio-accessibility-remediation' );
 	}
 
 	/**
@@ -157,7 +157,7 @@ final class ReadingLevelHigh implements Rule {
 		return new FixPlan(
 			FixKind::Manual,
 			FixTarget::Content,
-			__( 'Two ways to answer this and both are writing: simplify the page, or add a plain-language summary in the Accessibility panel of the editor. Do not chase the number — shortening sentences until the score drops usually makes the writing worse, and the formula cannot tell.', 'wowstudio-accessibility-kit' )
+			__( 'Two ways to answer this and both are writing: simplify the page, or add a plain-language summary in the Accessibility panel of the editor. Do not chase the number — shortening sentences until the score drops usually makes the writing worse, and the formula cannot tell.', 'wowstudio-accessibility-remediation' )
 		);
 	}
 
@@ -188,7 +188,7 @@ final class ReadingLevelHigh implements Rule {
 				$this->detection(),
 				sprintf(
 					/* translators: 1: the estimated reading grade level. 2: the level at which this starts being reported. */
-					__( 'This page reads at about grade %1$s. Above grade %2$s, WCAG 3.1.5 asks for a simpler version or a summary.', 'wowstudio-accessibility-kit' ),
+					__( 'This page reads at about grade %1$s. Above grade %2$s, WCAG 3.1.5 asks for a simpler version or a summary.', 'wowstudio-accessibility-remediation' ),
 					number_format_i18n( $grade, 1 ),
 					number_format_i18n( FleschKincaid::LOWER_SECONDARY, 0 )
 				),

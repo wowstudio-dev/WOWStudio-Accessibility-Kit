@@ -164,7 +164,7 @@ final class IssuePresenter {
 
 		$this->pages[ $post_id ] = array(
 			'id'        => $post_id,
-			'title'     => '' !== $title ? $title : __( '(no title)', 'wowstudio-accessibility-kit' ),
+			'title'     => '' !== $title ? $title : __( '(no title)', 'wowstudio-accessibility-remediation' ),
 			'edit_link' => (string) get_edit_post_link( $post_id, 'raw' ),
 			'view_link' => (string) get_permalink( $post_id ),
 		);

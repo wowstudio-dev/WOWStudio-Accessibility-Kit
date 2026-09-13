@@ -48,9 +48,9 @@ enum ConformanceStatus: string {
 	 */
 	public function label(): string {
 		return match ( $this ) {
-			self::Partial => __( 'Partially conformant — some parts do not yet meet the target', 'wowstudio-accessibility-kit' ),
-			self::Full    => __( 'Fully conformant — you believe the whole site meets the target', 'wowstudio-accessibility-kit' ),
-			self::None    => __( 'Not conformant — the target is not met, or has not been assessed', 'wowstudio-accessibility-kit' ),
+			self::Partial => __( 'Partially conformant — some parts do not yet meet the target', 'wowstudio-accessibility-remediation' ),
+			self::Full    => __( 'Fully conformant — you believe the whole site meets the target', 'wowstudio-accessibility-remediation' ),
+			self::None    => __( 'Not conformant — the target is not met, or has not been assessed', 'wowstudio-accessibility-remediation' ),
 		};
 	}
 
@@ -71,7 +71,7 @@ enum ConformanceStatus: string {
 			case self::Full:
 				return sprintf(
 					/* translators: 1: organisation name, 2: target standard. */
-					__( '%1$s considers this website to be fully conformant with %2$s. Fully conformant means, in the words of the standard, that the content fully meets the accessibility standard without any exceptions.', 'wowstudio-accessibility-kit' ),
+					__( '%1$s considers this website to be fully conformant with %2$s. Fully conformant means, in the words of the standard, that the content fully meets the accessibility standard without any exceptions.', 'wowstudio-accessibility-remediation' ),
 					$organisation,
 					$standard
 				);
@@ -79,7 +79,7 @@ enum ConformanceStatus: string {
 			case self::None:
 				return sprintf(
 					/* translators: 1: organisation name, 2: target standard. */
-					__( '%1$s considers this website to be non-conformant with %2$s. Non-conformant means that the content does not meet the accessibility standard, or has not yet been assessed against it.', 'wowstudio-accessibility-kit' ),
+					__( '%1$s considers this website to be non-conformant with %2$s. Non-conformant means that the content does not meet the accessibility standard, or has not yet been assessed against it.', 'wowstudio-accessibility-remediation' ),
 					$organisation,
 					$standard
 				);
@@ -87,7 +87,7 @@ enum ConformanceStatus: string {
 			default:
 				return sprintf(
 					/* translators: 1: organisation name, 2: target standard. */
-					__( '%1$s considers this website to be partially conformant with %2$s. Partially conformant means that some parts of the content do not yet fully meet the accessibility standard.', 'wowstudio-accessibility-kit' ),
+					__( '%1$s considers this website to be partially conformant with %2$s. Partially conformant means that some parts of the content do not yet fully meet the accessibility standard.', 'wowstudio-accessibility-remediation' ),
 					$organisation,
 					$standard
 				);

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<ruleset name="WOWStudio Accessibility Kit">
-	<description>WordPress Coding Standards for the WOWStudio Accessibility Kit plugin.</description>
+<ruleset name="WOWStudio Accessibility Remediation">
+	<description>WordPress Coding Standards for the WOWStudio Accessibility Remediation plugin.</description>
 
 	<!-- What to scan. -->
 	<file>.</file>
@@ -86,7 +86,7 @@
 	<rule ref="WordPress.WP.I18n">
 		<properties>
 			<property name="text_domain" type="array">
-				<element value="wowstudio-accessibility-kit"/>
+				<element value="wowstudio-accessibility-remediation"/>
 			</property>
 		</properties>
 	</rule>
