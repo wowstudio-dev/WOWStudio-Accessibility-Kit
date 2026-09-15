@@ -266,4 +266,43 @@ HTML;
 		);
 		$this->assertTrue( $summary['full_page'] );
 	}
+
+	/**
+	 * The summary records findings per rule, so history outlives the findings.
+	 *
+	 * Individual findings are pruned once a newer scan supersedes them. Without
+	 * a per-rule count in the summary, a scan a week old has nothing left to
+	 * compare against, and anything asking "did this page get worse" has to
+	 * treat every rule in the newer scan as newly broken.
+	 *
+	 * @return void
+	 */
+	public function test_summary_counts_findings_by_rule(): void {
+		$result = ( new Engine() )->scan( $this->fixture() );
+
+		$this->assertNotNull( $result );
+
+		$summary = $result->summary();
+
+		$this->assertArrayHasKey( 'by_rule', $summary );
+
+		// Every finding is accounted for, and nothing is counted twice.
+		$this->assertSame( $summary['total'], array_sum( $summary['by_rule'] ) );
+
+		// Keyed by rule id, and only by rule ids the registry knows.
+		$known = array_map(
+			static fn( $rule ): string => $rule->id(),
+			RuleRegistry::with_defaults()->all()
+		);
+
+		foreach ( array_keys( $summary['by_rule'] ) as $rule_id ) {
+			$this->assertContains( $rule_id, $known, "Unknown rule id in by_rule: {$rule_id}" );
+		}
+
+		// Counts are positive integers, never a zero-filled roll call.
+		foreach ( $summary['by_rule'] as $count ) {
+			$this->assertIsInt( $count );
+			$this->assertGreaterThan( 0, $count );
+		}
+	}
 }

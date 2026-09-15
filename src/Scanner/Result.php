@@ -83,6 +83,35 @@ final class Result {
 	}
 
 	/**
+	 * Returns findings counted by rule.
+	 *
+	 * Recorded into the scan summary because the summary is the only part of a
+	 * scan that outlives it. Individual findings are pruned once a newer scan
+	 * supersedes them, so a week later the rows are gone and the counts here are
+	 * all that remains of what the page was failing.
+	 *
+	 * That matters for anything comparing a page against its own past: without
+	 * this, the older of two scans has no findings to count, every rule in the
+	 * newer one reads as newly broken, and every page looks like a regression.
+	 *
+	 * @since 1.1.0
+	 *
+	 * @return array<string, int>
+	 */
+	public function count_by_rule(): array {
+		$counts = array();
+
+		foreach ( $this->findings as $finding ) {
+			$key            = $finding->rule_id;
+			$counts[ $key ] = ( $counts[ $key ] ?? 0 ) + 1;
+		}
+
+		ksort( $counts );
+
+		return $counts;
+	}
+
+	/**
 	 * Returns a score out of 100.
 	 *
 	 * Only auto-detected findings reduce the score. Items flagged for human
@@ -131,6 +160,7 @@ final class Result {
 			'total'        => count( $this->findings ),
 			'by_severity'  => $this->count_by_severity(),
 			'by_detection' => $this->count_by_detection(),
+			'by_rule'      => $this->count_by_rule(),
 			'rules_run'    => $this->rules_run,
 			'full_page'    => $this->full_page,
 		);

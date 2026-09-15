@@ -6,6 +6,17 @@ and [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Added
+
+- Scan summaries now record findings per rule, in `by_rule`, alongside the
+  counts by severity and detection that were already there. The summary is the
+  only part of a scan that outlives it — individual findings are pruned once a
+  newer scan supersedes them — so without this, a scan more than one run old has
+  nothing left to say about *what* it was failing, only how much. Anything
+  comparing a page against its own past had to treat every rule in the newer
+  scan as newly broken, which made every page look like it had got worse. Found
+  by running the paid add-on's scheduled scan against a real install.
+
 ### Still outstanding
 
 Rewritten at 1.0.0, because the previous version of this list had gone stale in
