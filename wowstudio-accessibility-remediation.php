@@ -11,11 +11,12 @@
  * Plugin Name:       WOWStudio Accessibility Remediation
  * Plugin URI:        https://wowstudio.dev/accessibility-remediation/
  * Description:       Helps you find, fix and document WCAG accessibility issues at the code level. Real markup fixes with preview and undo — not an overlay.
- * Version:           1.0.1
+ * Version:           1.0.2
  * Requires at least: 6.8
  * Requires PHP:      8.1
  * Author:            WOWStudio
  * Author URI:        https://wowstudio.dev/
+ * Source Code:       https://github.com/wowstudio-dev/WOWStudio-Accessibility-Remediation
  * License:           GPL-2.0-or-later
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:       wowstudio-accessibility-remediation
@@ -31,7 +32,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'WSAK_VERSION', '1.0.1' );
+define( 'WSAK_VERSION', '1.0.2' );
 define( 'WSAK_FILE', __FILE__ );
 define( 'WSAK_PATH', plugin_dir_path( __FILE__ ) );
 define( 'WSAK_URL', plugin_dir_url( __FILE__ ) );

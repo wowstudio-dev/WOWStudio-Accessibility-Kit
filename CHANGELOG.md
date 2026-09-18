@@ -37,6 +37,41 @@ keeping if it is true.
   Elementor was before 0.27.0. Avada, ACF and WooCommerce are untested. The way
   to find out is to build a page and scan it.
 
+## [1.0.2] - 2026-09-18
+
+The second WordPress.org review round. One finding.
+
+### Added
+
+- **The readme names the source repository, and says how to build it.** The
+  plugin ships `build/` — webpack output, minified, including the statement
+  block's bundle — and Guideline 4 requires either the source in the package or
+  a documented public link to it. There was neither. The readme came close
+  enough to make it worse: it said the history was "in CHANGELOG.md in the
+  source repository" and named no repository, which is precisely what the
+  review read as no plausible link.
+
+  There is now a section giving the repository, mapping each compiled file back
+  to the source it is generated from, and listing the commands that produce it.
+  The guidelines only ask for directions as a recommendation; they cost four
+  lines and they are the difference between a link somebody can audit and a
+  link somebody has to reverse-engineer.
+
+  It also says which JavaScript is *not* compiled. `assets/front/site-fixes.js`
+  is the only script this plugin puts on the front end and it ships as written,
+  which is worth stating rather than leaving a reviewer to check.
+
+- `Source Code` in the plugin header. Not required — the guideline asks for the
+  readme — but it is where a developer looks first.
+
+### Changed
+
+- The repository is now `WOWStudio-Accessibility-Remediation`, following the
+  rename in 1.0.1. GitHub redirects the old path permanently, so the two
+  changelog links that used it would still have resolved; they point at the new
+  one anyway, because a link that only works by redirect is a link waiting to
+  stop working.
+
 ## [1.0.1] - 2026-09-13
 
 The first WordPress.org review round.
@@ -1985,5 +2020,5 @@ Phase 1, step 1: tooling and plugin scaffold. Nothing user-facing yet.
   load the bundled catalogue just in time, and calling it explicitly is what
   Plugin Check flags as discouraged since WordPress 4.6.
 
-[Unreleased]: https://github.com/wowstudio-dev/WOWStudio-Accessibility-Kit/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/wowstudio-dev/WOWStudio-Accessibility-Kit/releases/tag/v0.1.0
+[Unreleased]: https://github.com/wowstudio-dev/WOWStudio-Accessibility-Remediation/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/wowstudio-dev/WOWStudio-Accessibility-Remediation/releases/tag/v0.1.0

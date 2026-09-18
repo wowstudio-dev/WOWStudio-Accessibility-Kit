@@ -4,7 +4,7 @@ Tags: accessibility, wcag, a11y, alt text, accessibility scanner
 Requires at least: 6.8
 Tested up to: 7.1
 Requires PHP: 8.1
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -50,6 +50,39 @@ plugin's own code is GPLv2 or later.
 
 Action Scheduler makes no outbound requests of its own. Source and documentation:
 https://actionscheduler.org
+
+== Source code and how to build it ==
+
+Every line of this plugin is public, including the JavaScript and CSS that ship
+compiled:
+
+https://github.com/wowstudio-dev/WOWStudio-Accessibility-Remediation
+
+The admin interface is React, built with @wordpress/scripts (webpack and
+Babel), and the styles are Sass. What ships in `build/` is generated from
+`assets/src/` in that repository:
+
+* `build/index.js` from `assets/src/index.js` — the admin screens
+* `build/editor.js` from `assets/src/editor/index.js` — the block editor panel
+* `build/blocks/statement/index.js` from `assets/src/blocks/statement/` — the
+  accessibility statement block
+* `build/*.css` from `assets/src/style.scss` and the stylesheets it imports,
+  with the `-rtl` files generated for right-to-left locales
+
+To build it yourself, from a clone of that repository:
+
+`npm install` then `npm run build` produces `build/`.
+`composer install --no-dev --optimize-autoloader` produces `vendor/`.
+`bin/build.sh --zip` does both and assembles the distributable zip.
+
+`npm run start` rebuilds on change while developing, and `bash bin/gate.sh`
+runs the ten checks — tests, linters, static analysis and the guards — that
+every commit has to pass.
+
+Not everything is compiled. `assets/front/site-fixes.js` is the only JavaScript
+this plugin puts on the front end, and it ships exactly as it was written:
+readable, commented, and loaded only when a site-wide fix that needs it is
+switched on.
 
 == External services ==
 
@@ -105,6 +138,11 @@ In WordPress's own alt text field on the media item. It therefore applies everyw
 
 == Changelog ==
 
+= 1.0.2 =
+Changes from the second WordPress.org review round.
+
+* The readme now links the public source repository and documents the build, as the guidelines require for plugins that ship compiled JavaScript and CSS.
+
 = 1.0.1 =
 Changes from the WordPress.org review round, before the first release reached anybody.
 
@@ -126,5 +164,5 @@ First public release.
 * Free, all of it. No paid tier, no locked controls, no upgrade prompts.
 
 The plugin was built over 29 development versions before this one. None of them
-were released publicly; the full history is in CHANGELOG.md in the source
-repository.
+were released publicly; the full history is in CHANGELOG.md in the repository
+linked above.

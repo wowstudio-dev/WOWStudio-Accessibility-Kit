@@ -2,7 +2,7 @@
 # This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: WOWStudio Accessibility Remediation 1.0.1\n"
+"Project-Id-Version: WOWStudio Accessibility Remediation 1.0.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wowstudio-accessibility-remediation\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -2092,22 +2092,22 @@ msgid "Type something to search for."
 msgstr ""
 
 #. translators: 1: required PHP version, 2: PHP version running on the server.
-#: wowstudio-accessibility-remediation.php:105
+#: wowstudio-accessibility-remediation.php:106
 #, php-format
 msgid "PHP %1$s or newer is required. This server runs PHP %2$s."
 msgstr ""
 
 #. translators: 1: required WordPress version, 2: WordPress version on this site.
-#: wowstudio-accessibility-remediation.php:113
+#: wowstudio-accessibility-remediation.php:114
 #, php-format
 msgid "WordPress %1$s or newer is required. This site runs WordPress %2$s."
 msgstr ""
 
-#: wowstudio-accessibility-remediation.php:119
+#: wowstudio-accessibility-remediation.php:120
 msgid "The plugin files are incomplete: the Composer autoloader is missing. Reinstall the plugin."
 msgstr ""
 
-#: wowstudio-accessibility-remediation.php:141
+#: wowstudio-accessibility-remediation.php:142
 msgid "WOWStudio Accessibility Remediation could not start."
 msgstr ""
 
