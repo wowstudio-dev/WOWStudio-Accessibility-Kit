@@ -63,11 +63,16 @@ Babel), and the styles are Sass. What ships in `build/` is generated from
 `assets/src/` in that repository:
 
 * `build/index.js` from `assets/src/index.js` — the admin screens
+* `build/style-index.css` from `assets/src/style.scss`
 * `build/editor.js` from `assets/src/editor/index.js` — the block editor panel
-* `build/blocks/statement/index.js` from `assets/src/blocks/statement/` — the
-  accessibility statement block
-* `build/*.css` from `assets/src/style.scss` and the stylesheets it imports,
-  with the `-rtl` files generated for right-to-left locales
+* `build/editor.css` from `assets/src/editor/editor.scss`
+* `build/blocks/statement/index.js` from `assets/src/blocks/statement/index.js`
+  — the accessibility statement block
+* `build/blocks/statement/style-index.css` from
+  `assets/src/blocks/statement/style.scss`
+
+Each stylesheet also has an `-rtl` counterpart, generated for right-to-left
+locales from the same source.
 
 To build it yourself, from a clone of that repository:
 
