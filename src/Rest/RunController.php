@@ -102,10 +102,19 @@ final class RunController implements Registrable {
 			)
 		);
 
-		// The three run routes are the paid feature, and the class that carries
-		// it out is stripped from the free build. Declaring routes whose handler
-		// cannot work would answer requests with a fatal rather than a refusal,
-		// so on a free build they are simply not there.
+		/*
+		 * Checking a whole site is free and always has been. This guard is not
+		 * a tier check: BulkScan ships in this plugin, so the branch is always
+		 * taken here, and it exists only because declaring a route whose
+		 * handler is absent answers requests with a fatal rather than a
+		 * refusal.
+		 *
+		 * The comment that used to sit here said these routes were the paid
+		 * feature and the class was stripped from the free build. That was
+		 * written in 0.14.0, for a two-tier product that was abandoned in
+		 * 0.16.0, and it had been false for thirteen versions by the time
+		 * anybody read it in a review.
+		 */
 		if ( class_exists( BulkScan::class ) ) {
 			$this->register_run_routes();
 		}
@@ -129,7 +138,7 @@ final class RunController implements Registrable {
 	}
 
 	/**
-	 * Declares the routes that only exist in the paid build.
+	 * Declares the routes that drive a run over many pages.
 	 *
 	 * @since 0.14.0
 	 *

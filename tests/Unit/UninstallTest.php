@@ -85,4 +85,45 @@ final class UninstallTest extends TestCase {
 			'Uninstall wiring must not depend on plugins_loaded.'
 		);
 	}
+
+	/**
+	 * Every option this plugin owns goes, and the add-on's stay.
+	 *
+	 * Source-reading, because the failure is invisible from here: the leak this
+	 * replaced was four options named nowhere in the uninstaller, and a test
+	 * asserting the four that *were* named would have passed throughout.
+	 *
+	 * Four options survived an uninstall the owner had opted into — the
+	 * site-wide fixes' settings, the simplified-summary switch, the cached
+	 * theme profile, and a legacy migration flag. Each was added to the plugin
+	 * later than the uninstaller and nobody went back. A list of things to
+	 * delete is a list somebody has to remember to extend; a prefix is not.
+	 *
+	 * The reserved prefix matters as much as the sweep. The paid add-on stores
+	 * its own options under `wsak_pro_`, and uninstalling this plugin is not
+	 * consent to delete the data of a different one that is still installed.
+	 *
+	 * @return void
+	 */
+	public function test_options_go_by_prefix_and_the_add_ons_are_spared(): void {
+		$source = $this->source( 'src/Uninstaller.php' );
+
+		$this->assertStringContainsString(
+			'option_name LIKE %s AND option_name NOT LIKE %s',
+			$source,
+			'Options must be swept by prefix, not deleted from a list that goes stale.'
+		);
+
+		$this->assertStringContainsString(
+			"RESERVED_PREFIX = 'wsak_pro_'",
+			$source,
+			"The add-on's own options must be reserved from the sweep."
+		);
+
+		$this->assertStringNotContainsString(
+			'delete_option( Installer::VERSION_OPTION )',
+			$source,
+			'The named-option list is what leaked; it should not come back alongside the sweep.'
+		);
+	}
 }

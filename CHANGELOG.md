@@ -37,6 +37,53 @@ keeping if it is true.
   Elementor was before 0.27.0. Avada, ACF and WooCommerce are untested. The way
   to find out is to build a page and scan it.
 
+## [1.0.3] - 2026-09-19
+
+An audit before resubmitting, rather than a review round. Three real faults,
+none of which the directory had flagged.
+
+### Fixed
+
+- **An opted-in uninstall left four of this plugin's own options behind.** The
+  uninstaller deleted four options by name, and the plugin had grown eight: the
+  site-wide fixes' settings, the simplified-summary switch, the cached theme
+  profile and a legacy migration flag all survived. Each was added later than
+  the uninstaller and nobody went back to it — a list of things to delete is a
+  list somebody has to remember to extend, and nobody did, four times.
+
+  Options are swept by prefix now. The paid add-on's `wsak_pro_` options are
+  reserved from the sweep: uninstalling this plugin is not consent to delete
+  the data of a different one that is still installed, and somebody removing
+  the free plugin while keeping the add-on would otherwise lose its settings
+  with no warning.
+
+  Only visible from a real install. The four that leaked are written the first
+  time somebody changes a setting or scans a theme, so a fresh install has
+  nothing to leave behind and the existing tests asserted the four options that
+  were named — which passed throughout.
+
+- **A comment claimed the bulk-scan routes were a paid feature stripped from
+  the free build.** Written in 0.14.0 for a two-tier product abandoned in
+  0.16.0, and false for thirteen versions. Checking a whole site has always
+  been free and the class is right there in the package. Left alone it invited
+  exactly the question a reviewer should never have to ask about a plugin
+  submitted as complete.
+
+- **`LICENSE` still carried the old plugin name.** Missed by the 1.0.1 rename,
+  which swept source and documentation but not the licence file.
+
+### Notes
+
+Verified on a database with the plugin's tables and options dropped, which is
+the one path never exercised before: first activation creates all four tables,
+seeds the settings with data retention off, grants the four capabilities, and
+writes nothing to the debug log with `WP_DEBUG` on. Uninstall was run both ways
+— data kept by default, removed on opt-in — and the add-on's table and options
+survive both.
+
+The suite also runs clean on PHP 8.2, 8.3 and 8.4, and all 255 shipped PHP
+files parse on 8.4.
+
 ## [1.0.2] - 2026-09-18
 
 The second WordPress.org review round. One finding.

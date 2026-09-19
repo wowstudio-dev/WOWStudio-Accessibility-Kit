@@ -7,7 +7,6 @@
 
 namespace WOWStudio\AccessibilityKit;
 
-use WOWStudio\AccessibilityKit\Admin\Onboarding;
 use WOWStudio\AccessibilityKit\Core\Installer;
 use WOWStudio\AccessibilityKit\Db\Schema;
 use WOWStudio\AccessibilityKit\Remediation\CustomCss;
@@ -39,6 +38,22 @@ final class Uninstaller {
 	 * @var string
 	 */
 	private const PREFIX = 'wsak_';
+
+	/**
+	 * The sub-prefix the paid add-on's own options use.
+	 *
+	 * Reserved rather than swept. The add-on is a separate plugin with its own
+	 * uninstaller, and removing this plugin is not consent to delete the data
+	 * of a different one — somebody who uninstalls the free plugin while
+	 * keeping the add-on installed would otherwise lose the add-on's settings
+	 * with no warning and no way back.
+	 *
+	 * Found by uninstalling against a site that had both.
+	 *
+	 * @since 1.0.3
+	 * @var string
+	 */
+	private const RESERVED_PREFIX = 'wsak_pro_';
 
 	/**
 	 * Runs cleanup for one site or, on multisite, for every site.
@@ -98,11 +113,7 @@ final class Uninstaller {
 			Schema::drop();
 		}
 
-		delete_option( Installer::SETTINGS_OPTION );
-		delete_option( Installer::VERSION_OPTION );
-		delete_option( Installer::DECISIONS_MIGRATED_OPTION );
-		delete_option( Onboarding::OPTION );
-
+		self::delete_options();
 		self::delete_transients();
 		self::delete_post_meta();
 		self::remove_managed_css();
@@ -155,6 +166,45 @@ final class Uninstaller {
 		}
 
 		return ! empty( $settings['delete_data_on_uninstall'] );
+	}
+
+	/**
+	 * Deletes every option this plugin owns.
+	 *
+	 * By prefix rather than by list, and that is the fix for a real leak. Four
+	 * options were named here explicitly, and the plugin had grown eight: the
+	 * site-wide fixes' settings, the simplified-summary switch, the cached
+	 * theme profile and a legacy migration flag all survived an uninstall that
+	 * the owner had explicitly opted into. A list of things to delete is a list
+	 * somebody has to remember to add to, and nobody did, four times.
+	 *
+	 * Found by seeding every known option on a clean install and uninstalling
+	 * it, which is the only way this shows up — the four that leaked are only
+	 * written once somebody changes a setting or scans a theme, so a fresh
+	 * install has nothing to leave behind.
+	 *
+	 * @since 1.0.3
+	 *
+	 * @return void
+	 */
+	private static function delete_options(): void {
+		global $wpdb;
+
+		$like    = $wpdb->esc_like( self::PREFIX ) . '%';
+		$exclude = $wpdb->esc_like( self::RESERVED_PREFIX ) . '%';
+
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching -- One-off uninstall cleanup; no API covers wildcard option deletion.
+		$names = $wpdb->get_col(
+			$wpdb->prepare(
+				"SELECT option_name FROM {$wpdb->options} WHERE option_name LIKE %s AND option_name NOT LIKE %s",
+				$like,
+				$exclude
+			)
+		);
+
+		foreach ( (array) $names as $name ) {
+			delete_option( (string) $name );
+		}
 	}
 
 	/**

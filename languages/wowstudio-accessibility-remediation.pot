@@ -2,7 +2,7 @@
 # This file is distributed under the GPL-2.0-or-later.
 msgid ""
 msgstr ""
-"Project-Id-Version: WOWStudio Accessibility Remediation 1.0.2\n"
+"Project-Id-Version: WOWStudio Accessibility Remediation 1.0.3\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wowstudio-accessibility-remediation\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -95,7 +95,7 @@ msgstr ""
 
 #: src/Admin/Menu.php:178
 #: src/Rest/ReviewController.php:191
-#: src/Rest/RunController.php:223
+#: src/Rest/RunController.php:232
 #: src/Rest/ScanController.php:206
 #: src/Rest/StatementController.php:116
 msgid "You do not have permission to view accessibility reports."
@@ -358,7 +358,7 @@ msgid "None of the selected content could be added to the queue."
 msgstr ""
 
 #: src/Jobs/BulkScan.php:285
-#: src/Rest/RunController.php:329
+#: src/Rest/RunController.php:338
 msgid "That run could not be found."
 msgstr ""
 
@@ -642,51 +642,51 @@ msgstr ""
 msgid "This fix changes how your theme renders every page, and your account is not allowed to change theme settings. An administrator can apply it."
 msgstr ""
 
-#: src/Rest/RunController.php:204
+#: src/Rest/RunController.php:213
 #: src/Rest/ScanController.php:187
 msgid "You do not have permission to run accessibility scans."
 msgstr ""
 
-#: src/Rest/RunController.php:300
+#: src/Rest/RunController.php:309
 msgid "None of the selected content is a post or page you can read, so there is nothing to scan."
 msgstr ""
 
 #. translators: %s: theme name.
-#: src/Rest/RunController.php:508
+#: src/Rest/RunController.php:517
 #, php-format
 msgid "Accessibility changes needed in the %s theme"
 msgstr ""
 
-#: src/Rest/RunController.php:512
+#: src/Rest/RunController.php:521
 msgid "These are in theme files rather than in page content, so they cannot be changed from the WordPress admin. Each one lists what a person loses because of it, and the smallest change that would fix it."
 msgstr ""
 
-#: src/Rest/RunController.php:514
+#: src/Rest/RunController.php:523
 msgid "Found by WOWStudio Accessibility Remediation. Automated checks cover part of WCAG, not all of it — this list is a starting point rather than a complete audit."
 msgstr ""
 
-#: src/Rest/RunController.php:530
+#: src/Rest/RunController.php:539
 msgid "Why it matters:"
 msgstr ""
 
-#: src/Rest/RunController.php:531
+#: src/Rest/RunController.php:540
 #: assets/src/components/issue-list.js:302
 msgid "Where:"
 msgstr ""
 
-#: src/Rest/RunController.php:534
+#: src/Rest/RunController.php:543
 msgid "Current markup:"
 msgstr ""
 
-#: src/Rest/RunController.php:538
+#: src/Rest/RunController.php:547
 msgid "Change to:"
 msgstr ""
 
-#: src/Rest/RunController.php:548
+#: src/Rest/RunController.php:557
 msgid "What to change:"
 msgstr ""
 
-#: src/Rest/RunController.php:551
+#: src/Rest/RunController.php:560
 msgid "WCAG:"
 msgstr ""
 
